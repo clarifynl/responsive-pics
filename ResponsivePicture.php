@@ -670,7 +670,13 @@
 				return 'image id undefined';
 			}
 
-			$definition = self::get_definition($id, $sizes, true);
+			// Check for multiple background images
+			if (is_array($id)) {
+				$definition = self::get_definition($id[0], $sizes, true);
+
+			} else {
+				$definition = self::get_definition($id, $sizes, true);
+			}
 
 			if (!$definition) {
 				return 'no image found with id ' . $id;
