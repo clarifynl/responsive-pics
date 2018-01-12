@@ -30,10 +30,6 @@
     "source": "https://github.com/Booreiland/responsive-picture",
     "docs": "https://responsive.pics/docs/"
   },
-  "require": {
-    "php": ">=5.5.0",
-    "composer/installers": "~1.0"
-  },
   "autoload": {
     "files": ["ResponsivePicture.php"]
   },
