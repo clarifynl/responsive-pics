@@ -1,7 +1,7 @@
 <?php
 
 	/*
-		Responsive Picture v0.4
+		Responsive Picture v0.4.1
 		© 2017 Booreiland
 
 		Responsive Picture is a Wordpress tool for resizing images on the fly.
@@ -9,7 +9,7 @@
 		You can define number of columns, aspect ratios and crop settings.
 		It handles @2x images and missing breakpoints automatically.
 
-		syntax    : ResponsivePicture::get[_background](id, 'breakpoint:width [/factor|height]|crop_x crop_y, …', 'class-name');
+		syntax    : ResponsivePicture::get[_background](id, 'breakpoint:width [/factor|height]|crop_x crop_y, …', 'class-name', lazyload, intrinsic);
 
 		breakpoint: a number or a key in $breakpoints (e.g. "xs")
 					if not defined, and width is a number, breakpoint will be the same as the width
@@ -25,6 +25,15 @@
 					if crop_y is not defined, crop_x will be treated as a shortcut:
 					"c" = "center center", "t" = "top center", r = "right center", "b" = "center bottom", "l" = "left center"
 		class-name: a class name to add to the html element
+		lazyload  : (boolean, default: false) if true:
+					- adds a 'lazyload' class to the picture img element
+					- swaps the 'src' with 'data-src' attributes on the picture source elements
+					- this will enable you to use a lazy loading plugin such as Lazysizes: https://github.com/aFarkas/lazysizes
+		intrinsic : (boolean, default: false) if true:
+					- adds an 'intrinsic' class to the picture element and a 'intrinsic__item' class to the picture img element
+					- adds 'data-aspectratio' attributes on the picture source and img elements
+					- this will enable you to pre-occupy the space needed for an image by calculating the height from the image width or the width from the height
+					  with an intrinsic plugin such as the lazysizes aspectratio extension
 
 		examples  : ResponsivePicture::get(1, 'xs-12, sm-6, md-4');
 					ResponsivePicture::get(1, '400:200 300, 800:400 600', 'my-picture');
@@ -59,27 +68,25 @@
 		// breakpoints used for "media(min-width: x)" in picture element
 		private static $breakpoints = [
 			'xs'    => 0,
-			'sm'    => 480,
+			'sm'    => 576,
 			'md'    => 768,
 			'lg'    => 992,
 			'xl'    => 1200,
 			'xxl'   => 1400,
-			'xxxl'  => 1600,
-			'xxxxl' => 1920
+			'xxxl'  => 1600
 		];
 
 		// grid system should match the container widths in css
 		private static $columns = 12;
-		private static $gutter  = 30;
+		private static $gutter  = 20;
 		private static $grid_widths = [
-			'xs'    => 480,
-			'sm'    => 720,
-			'md'    => 940,
+			'xs'    => 556,
+			'sm'    => 748,
+			'md'    => 972,
 			'lg'    => 1140,
-			'xl'    => 1140,
-			'xxl'   => 1140,
-			'xxxl'  => 1140,
-			'xxxxl' => 1140
+			'xl'    => 1275,
+			'xxl'   => 1275,
+			'xxxl'  => 1275
 		];
 
 		// map short letters to valid crop values
@@ -109,6 +116,150 @@
 
 		// keeps track of added image IDs
 		private static $id_map = [];
+
+
+		/*
+		 * Construct a responsive picture element
+		 * returns <picture> element as html markup
+		 */
+		public static function get($id, $sizes, $picture_classes = null, $lazyload = false, $intrinsic = false) {
+			if (!isset($id)) {
+				return 'image id undefined';
+			}
+
+			$definition  = self::get_definition($id, $sizes);
+
+			if (!$definition) {
+				return 'no image found with id ' . $id;
+			}
+
+			$sources     = $definition['sources'];
+			$picture     = [];
+
+			// convert $picture_classes to array if it is a string
+			if (!is_array($picture_classes) && !empty($picture_classes)) {
+				$picture_classes = preg_split('/[\s,]+/', $picture_classes);
+			}
+
+			$img_classes   = [];
+
+			// lazyload option
+			if ($lazyload) {
+				$img_classes[] = 'lazyload';
+			}
+
+			// exclude unsupported mime types from intrinsic
+			if ($intrinsic && !in_array($definition['mimetype'], self::$supported_mime_types)) {
+				$intrinsic = false;
+			}
+
+			// set intrinsic classes
+			if ($intrinsic) {
+				$picture_classes[] = 'intrinsic';
+				$img_classes[]     = 'intrinsic__item';
+
+				if ($definition['alpha']) {
+					$img_classes[] = 'has-alpha';
+				}
+			}
+
+			$picture[] = sprintf('<picture%s>', $picture_classes ? ' class="' . implode(' ', $picture_classes) . '"' : '');
+
+			$src_attribute = $lazyload ? 'data-srcset' : 'srcset';
+			$classes = $img_classes ? ' class="' . implode(' ', $img_classes) . '"' : '';
+
+			// add all sources
+			foreach ($sources as $source) {
+				$data_aspectratio = $intrinsic ? ' data-aspectratio="' . $source['ratio'] . '"' : '';
+
+				if (isset($source['breakpoint'])) {
+					$urls = $source['source1x'];
+
+					if (isset($source['source2x'])) {
+						$urls .= ' 1x, ' . $source['source2x'] . ' 2x';
+					}
+
+					$picture[] = sprintf('  <source media="(min-width: %spx)" %s="%s"%s />', $source['breakpoint'], $src_attribute, $urls, $data_aspectratio);
+				} else {
+					$picture[] = sprintf('  <source %s="%s"%s />', $src_attribute, $source['source1x'], $data_aspectratio);
+				}
+			}
+
+			// transparent gif
+			$ratio     = $intrinsic ? ' data-aspectratio=""' : '';
+			$picture[] = sprintf('  <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"%s alt="%s"%s />', $ratio, $definition['alt'], $classes);
+			$picture[] = '</picture>';
+
+			return implode("\n", $picture) . "\n";
+		}
+
+
+		/*
+		 * Construct a background image element and a matching responsive inline style element
+		 *
+		 * Returns an inline <style> element with a dedicated image class with media-queries for all the different image sizes
+		 * and an div with the same dedicated image class
+		 */
+		public static function get_background($id, $sizes, $class = '') {
+			if (!isset($id)) {
+				return 'image id undefined';
+			}
+
+			// Check for multiple background images
+			if (is_array($id)) {
+				// temp solution
+				$definition = self::get_definition($id[0], $sizes, true);
+			} else {
+				$definition = self::get_definition($id, $sizes, true);
+			}
+
+			if (!$definition) {
+				return 'no image found with id ' . $id;
+			}
+
+			$sources = $definition['sources'];
+
+			$copy = $id;
+
+			// prevent same id, append copy number to existing
+			if (isset(self::$id_map[$id])) {
+				self::$id_map[$id]++;
+				$copy .= '-' . self::$id_map[$id];
+			} else {
+				self::$id_map[$id] = 0;
+			}
+
+			$id = sprintf('responsive-picture-background-%s', $copy);
+
+			$background = [];
+			$background[] = '<style scoped="scoped" type="text/css">';
+
+			// add all sources as background-images
+			foreach ($sources as $source) {
+				if (isset($source['breakpoint'])) {
+					$sources = $source['source1x'];
+
+					$background[] = sprintf('  @media (min-width: %spx) {', $source['breakpoint']);
+					$background[] = sprintf('  #%s {background-image: url("%s");}', $id, $source['source1x']);
+					$background[] = '  }';
+
+					if (isset($source['source2x'])) {
+						$background[] = sprintf('  %s {', self::get_media_query_2x($source['breakpoint']));
+						$background[] = sprintf('  #%s {background-image: url("%s");}', $id, $source['source2x']);
+						$background[] = '  }';
+					}
+				} else {
+					$background[] = sprintf('  #%s {background-image: url("%s");}', $id, $source['source1x']);
+				}
+			}
+
+			$background[] = '  }';
+			$background[] = '</style>';
+			$background[] = sprintf('<div%s id="%s"></div>', $class ? ' class="' . $class . '"' : '', $id);
+
+			return implode("\n", $background) . "\n";
+		}
+
 
 		// immediately exit on error
 		private static function show_error($message) {
@@ -434,6 +585,7 @@
 				$editor = wp_get_image_editor($file_path);
 
 				if (!is_wp_error($editor)) {
+					$editor->set_quality(95);
 					$editor->resize($width * $ratio, $height * $ratio, $crop);
 					$editor->save($resized_file_path);
 				} else {
@@ -592,138 +744,5 @@
 			// apparently this targets high dpi screens cross-browser
 			return sprintf('@media only screen and (-webkit-min-device-pixel-ratio: 2) and (min-width: %spx), only screen and (min-resolution: 192dpi) and (min-width: %spx)', $breakpoint, $breakpoint);
 		}
-
-		// construct a responsive picture element
-		public static function get($id, $sizes, $picture_classes = null, $lazyload = false, $intrinsic = false) {
-			if (!isset($id)) {
-				return 'image id undefined';
-			}
-
-			$definition  = self::get_definition($id, $sizes);
-
-			if (!$definition) {
-				return 'no image found with id ' . $id;
-			}
-
-			$sources     = $definition['sources'];
-			$picture     = [];
-
-			// convert $picture_classes to array if it is a string
-			if (!is_array($picture_classes) && !empty($picture_classes)) {
-				$picture_classes = preg_split('/[\s,]+/', $picture_classes);
-			}
-
-			$img_classes   = [];
-
-			// lazyload option
-			if ($lazyload) {
-				$img_classes[] = 'lazyload';
-			}
-
-			// exclude unsupported mime types from intrinsic
-			if ($intrinsic && !in_array($definition['mimetype'], self::$supported_mime_types)) {
-				$intrinsic = false;
-			}
-
-			// set intrinsic classes
-			if ($intrinsic) {
-				$picture_classes[] = 'intrinsic';
-				$img_classes[] = 'intrinsic__item';
-
-				if ($definition['alpha']) {
-					$img_classes[] = 'has-alpha';
-				}
-			}
-
-			$picture[] = sprintf('<picture%s>', $picture_classes ? ' class="' . implode(' ', $picture_classes) . '"' : '');
-
-			$src_attribute = $lazyload ? 'data-srcset' : 'srcset';
-			$classes = $img_classes ? ' class="' . implode(' ', $img_classes) . '"' : '';
-
-			// add all sources
-			foreach ($sources as $source) {
-				$data_aspectratio = $intrinsic ? ' data-aspectratio="' . $source['ratio'] . '"' : '';
-
-				if (isset($source['breakpoint'])) {
-					$urls = $source['source1x'];
-
-					if (isset($source['source2x'])) {
-						$urls .= ' 1x, ' . $source['source2x'] . ' 2x';
-					}
-
-					$picture[] = sprintf('  <source media="(min-width: %spx)" %s="%s"%s />', $source['breakpoint'], $src_attribute, $urls, $data_aspectratio);
-				} else {
-					$picture[] = sprintf('  <source %s="%s"%s />', $src_attribute, $source['source1x'], $data_aspectratio);
-				}
-			}
-
-			// transparent gif
-			$picture[] = sprintf('  <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="%s"%s%s/>', $definition['alt'], $classes, $data_aspectratio);
-			$picture[] = '</picture>';
-
-			return implode("\n", $picture) . "\n";
-		}
-
-		// construct a background image element and a matching responsive inline style element
-		public static function get_background($id, $sizes, $class = '') {
-			if (!isset($id)) {
-				return 'image id undefined';
-			}
-
-			// Check for multiple background images
-			if (is_array($id)) {
-				$definition = self::get_definition($id[0], $sizes, true);
-
-			} else {
-				$definition = self::get_definition($id, $sizes, true);
-			}
-
-			if (!$definition) {
-				return 'no image found with id ' . $id;
-			}
-
-			$sources = $definition['sources'];
-
-			$copy = $id;
-
-			// prevent same id, append copy number to existing
-			if (isset(self::$id_map[$id])) {
-				self::$id_map[$id]++;
-				$copy .= '-' . self::$id_map[$id];
-			} else {
-				self::$id_map[$id] = 0;
-			}
-
-			$id = sprintf('responsive-picture-background-%s', $copy);
-
-			$background = [];
-			$background[] = '<style scoped="scoped" type="text/css">';
-
-			// add all sources as background-images
-			foreach ($sources as $source) {
-				if (isset($source['breakpoint'])) {
-					$sources = $source['source1x'];
-
-					$background[] = sprintf('  @media (min-width: %spx) {', $source['breakpoint']);
-					$background[] = sprintf('  #%s {background-image: url("%s");}', $id, $source['source1x']);
-					$background[] = '  }';
-
-					if (isset($source['source2x'])) {
-						$background[] = sprintf('  %s {', self::get_media_query_2x($source['breakpoint']));
-						$background[] = sprintf('  #%s {background-image: url("%s");}', $id, $source['source2x']);
-						$background[] = '  }';
-					}
-				} else {
-					$background[] = sprintf('  #%s {background-image: url("%s");}', $id, $source['source1x']);
-				}
-			}
-
-			$background[] = '  }';
-			$background[] = '</style>';
-			$background[] = sprintf('<div%s id="%s"></div>', $class ? ' class="' . $class . '"' : '', $id);
-
-			return implode("\n", $background) . "\n";
-		}
-
 	}
 ?>
