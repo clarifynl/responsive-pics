@@ -1,5 +1,35 @@
 {
   "name": "booreiland/responsive-picture",
+  "type": "library",
+  "description": "Responsive Picture is a Wordpress tool for resizing images on the fly.",
+  "keywords": [
+    "php",
+    "wordpress",
+    "picture",
+    "image",
+    "resizing"
+  ],
+  "homepage": "https://responsive.pics",
+  "license": [
+      "GPL-3.0"
+  ],
+  "authors": [
+    {
+      "name": "Wimer Hazenberg",
+      "email": "wimer@booreiland.amsterdam",
+      "homepage": "https://booreiland.amsterdam"
+    },
+    {
+      "name": "Toine Kamps",
+      "email" : "toine@booreiland.amsterdam",
+      "homepage": "https://booreiland.amsterdam"
+    }
+  ],
+  "support": {
+    "issues": "https://github.com/Booreiland/responsive-picture/issues",
+    "source": "https://github.com/Booreiland/responsive-picture",
+    "docs": "https://responsive.pics/docs/"
+  },
   "require": {
     "php": ">=5.5.0",
     "composer/installers": "~1.0"
