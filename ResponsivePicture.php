@@ -80,13 +80,13 @@
 		private static $columns = 12;
 		private static $gutter  = 20;
 		private static $grid_widths = [
-			'xs'    => 556,
-			'sm'    => 748,
-			'md'    => 972,
+			'xs'    => 540,
+			'sm'    => 720,
+			'md'    => 960,
 			'lg'    => 1140,
-			'xl'    => 1275,
-			'xxl'   => 1275,
-			'xxxl'  => 1275
+			'xl'    => 1140,
+			'xxl'   => 1140,
+			'xxxl'  => 1140
 		];
 
 		// map short letters to valid crop values
