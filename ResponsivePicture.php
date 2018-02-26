@@ -1,7 +1,7 @@
 <?php
 
 	/*
-		Responsive Picture v0.4.1
+		Responsive Picture v0.4.2
 		© 2017 Booreiland
 
 		Responsive Picture is a Wordpress tool for resizing images on the fly.
