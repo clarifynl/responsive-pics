@@ -1,7 +1,7 @@
 <?php
 
 	/*
-		Responsive Picture v0.4.4
+		Responsive Picture v0.4.5
 		© 2018 Booreiland
 
 		Responsive Picture is a Wordpress tool for resizing images on the fly.
@@ -263,7 +263,9 @@
 
 		// print error message
 		private static function show_error($message) {
-			sprintf('%s error: %s', get_class(), $message);
+			$error = sprintf('<pre>%s error: %s</pre>', get_class(), $message);
+
+			echo $error;
 		}
 
 		// calculates column shortcut (e.g. "xs-5") to actual pixels
