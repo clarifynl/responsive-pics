@@ -1,8 +1,8 @@
 <?php
 
 	/*
-		Responsive Picture v0.4.2
-		© 2017 Booreiland
+		Responsive Picture v0.4.3
+		© 2018 Booreiland
 
 		Responsive Picture is a Wordpress tool for resizing images on the fly.
 		It uses a concise syntax for determining the image sizes you need in your template.
@@ -261,9 +261,9 @@
 		}
 
 
-		// immediately exit on error
+		// print error message
 		private static function show_error($message) {
-			exit(sprintf('%s error: %s', get_class(), $message));
+			sprintf('%s error: %s', get_class(), $message);
 		}
 
 		// calculates column shortcut (e.g. "xs-5") to actual pixels
