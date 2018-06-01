@@ -47,7 +47,8 @@ This command will output a picture element to show a 200 × 300 image on layouts
 
 ## Full syntax
 
-`ResponsivePics::get[_background](id, 'breakpoint:width [/factor|height]|crop_x crop_y, …', 'class-name');`
+```
+syntax    : ResponsivePicture::get[_background](id, 'breakpoint:width [/factor|height]|crop_x crop_y, …', 'class-name', lazyload, intrinsic);
 
 breakpoint: a number or a key in $breakpoints (e.g. "xs")
 			if not defined, and width is a number, breakpoint will be the same as the width
@@ -73,6 +74,28 @@ intrinsic : (boolean, default: false) if true:
 			- this will enable you to pre-occupy the space needed for an image by calculating the height from the image width or the width from the height
 			  with an intrinsic plugin such as the lazysizes aspectratio extension
 
+API
+
+ResponsivePicture::setColumns(number):    set number of grid columns
+ResponsivePicture::setGutter(pixels):     set grid gutter width
+ResponsivePicture::setGridWidths(array):  set grid widths for various breakpoints, example:
+	[
+		'xs' => 540,
+		'sm' => 720,
+		'md' => 960,
+		'lg' => 1140,
+		'xl' => 1140
+	]
+ResponsivePicture::setBreakpoints(array): set breakpoints, example:
+	[
+		'xs' => 0,
+		'sm' => 576,
+		'md' => 768,
+		'lg' => 992,
+		'xl' => 1200
+	]
+```
+
 ## Examples
 
 ```php
@@ -87,25 +110,43 @@ ResponsivePics::get_background(1, 'xs:200 200|c, lg:400 400');
 ## Setup
 
 ```php
-// breakpoints used for "media(min-width: x)" in picture element
-private static $breakpoints = [
+// number of grid columns
+ResponsivePicture::setColumns(12);
+
+// grid gutter width, in pixels
+ResponsivePicture::setGutter(30);
+
+// grid system should match the grid used in css, in pixels
+ResponsivePicture::setGridWidths([
+	'xs'  => 544,
+	'sm'  => 720,
+	'md'  => 720,
+	'lg'  => 920,
+	'xl'  => 1100
+]);
+
+// breakpoints used for "media(min-width: x)" in picture element, in pixels
+ResponsivePicture::setBreakpoints([
 	'xs'    => 0,
 	'sm'    => 544,
 	'md'    => 768,
 	'lg'    => 992,
 	'xl'    => 1200
-];
+]);
+```
 
-// grid system should match the grid used in css
-private static $columns = 12;
-private static $gutter  = 30;
-private static $grid_widths = [
-	'xs'  => 544, // ~100%
-	'sm'  => 720, // ~100%
-	'md'  => 720,
-	'lg'  => 920,
-	'xl'  => 1100
-];
+## Javascript dependencies:
+
+A responsive image polyfill such as Picturefill:
+http://scottjehl.github.io/picturefill/
+
+A lazy loader for images such as Lazysizes:
+https://github.com/aFarkas/lazysizes
+
+```
+import 'picturefill';
+import 'lazysizes';
+import 'lazysizes/plugins/aspectratio/ls.aspectratio.js';
 ```
 
 © 2017—2018 Booreiland, all rights reserved.
