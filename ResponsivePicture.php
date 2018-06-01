@@ -86,10 +86,10 @@
 
 	class ResponsivePicture {
 
-		private static $columns = self::setColumns();
-		private static $gutter = self::setGutter();
-		private static $grid_widths = self::setGridWidths();
-		private static $breakpoints = self::setBreakpoints();
+		private static $columns = null;
+		private static $gutter = null;
+		private static $grid_widths = null;
+		private static $breakpoints = null;
 
 		// map short letters to valid crop values
 		private static $crop_map = [
@@ -615,18 +615,25 @@
 
 
 
+		public static function init() {
+			self::setColumns();
+			self::setGutter();
+			self::setGridWidths();
+			self::setBreakpoints();
+		}
+
 		// set number of grid columns
-		public static setColumns($value = 12) {
+		public static function setColumns($value = 12) {
 			self::$columns = $value;
 		}
 
 		// set grid gutter width, in pixels
-		public static setGutter($value = 20) {
+		public static function setGutter($value = 20) {
 			self::$gutter = $value;
 		}
 
 		// breakpoints used for "media(min-width: x)" in picture element, in pixels
-		public static setBreakpoints($value = [
+		public static function setBreakpoints($value = [
 			'xs'    => 0,
 			'sm'    => 576,
 			'md'    => 768,
@@ -639,7 +646,7 @@
 		}
 
 		// grid system should match the container widths in css
-		public static setGridWidths($value = [
+		public static function setGridWidths($value = [
 			'xs'    => 540,
 			'sm'    => 720,
 			'md'    => 960,
@@ -792,4 +799,6 @@
 			return implode("\n", $picture) . "\n";
 		}
 	}
+
+	ResponsivePicture::init();
 ?>
