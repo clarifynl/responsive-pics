@@ -1,7 +1,7 @@
 <?php
 
 	/*
-		Responsive Picture v0.5.0
+		Responsive Picture v0.5.1
 		© 2018 Booreiland
 
 		Responsive Picture is a Wordpress tool for resizing images on the fly.
@@ -18,8 +18,8 @@
 		width     : a number or a column definition
 					a column definition is a key in $grid_widths plus a dash and a column span number (e.g. "xs-8")
 					if column span number is "full", the full width of the next matching $breakpoint is used (e.g. "xs-full")
-		height    : a number
-		factor    : a factor of width
+		height    : a number in pixels. when not specifying crop, the image will automatically crop to center
+		factor    : a factor of width. when not specifying crop, the image will automatically crop to center
 		crop_x    : t(op), r(ight), b(ottom), l(eft) or c(enter),
 		crop_y    : t(op), r(ight), b(ottom), l(eft) or c(enter)
 					if crop_y is not defined, crop_x will be treated as a shortcut:
@@ -177,7 +177,7 @@
 			$previous_breakpoint = null;
 
 			foreach (self::$breakpoints as $breakpoint_key => $breakpoint_value) {
-				if ($previous_breakpoint == $key) {
+				if ($previous_breakpoint === $key) {
 					return $breakpoint_key;
 				}
 
@@ -217,6 +217,7 @@
 			$dimensions = trim($input);
 			$width = -1;
 			$height = -1;
+			$crop = false;
 
 			if (self::contains($dimensions, '-')) {
 				$width = self::columns_to_pixels($dimensions);
@@ -226,6 +227,8 @@
 					$wh = explode(' ', $dimensions);
 					$width = trim($wh[0]);
 					$height = trim($wh[1]);
+					// crop by default, necessary when supplied dimensions have different aspect ratio than image
+					$crop = 'c';
 				} else {
 					// height will be calculated based on width
 					$width = self::match($dimensions, '/(\d+)/');
@@ -240,17 +243,24 @@
 				// height is a specified factor of weight
 				$wh = explode('/', $dimensions);
 				$height = $width * trim($wh[1]);
+				// crop by default, necessary when supplied dimensions have different aspect ratio than image
+				$crop = 'c';
 			}
 
 			return [
 				'input'  => $input,
 				'width'  => $width,
-				'height' => $height
+				'height' => $height,
+				'crop'   => $crop
 			];
 		}
 
 		// crop values can be single shortcut values (e.g. "c") or two dimensional values (e.g. "l t");
 		private static function process_crop($input) {
+			if ($input === false) {
+				return false;
+			}
+
 			$shortcuts = explode(' ', trim($input));
 
 			if (sizeof($shortcuts) === 1) {
@@ -341,7 +351,7 @@
 
 					// add in-between breakpoints if we haven't defined them explicitly yet
 					while ($next_breakpoint && !isset($defined_breakpoints[$next_breakpoint])) {
-						if ($columns == 'full' || ($columns !== 'full' && isset(self::$grid_widths[$next_breakpoint]))) {
+						if ($columns === 'full' || ($columns !== 'full' && isset(self::$grid_widths[$next_breakpoint]))) {
 							$result[] = sprintf('%s-%s', $next_breakpoint, $breakpoint['columns']);
 						}
 
@@ -361,12 +371,12 @@
 			$result = [];
 
 			foreach ($variants as $variant) {
-
 				$crop = false;
 				$breakpoint = -1;
 				$dimensions = [
 					'width'  => -1,
-					'height' => -1
+					'height' => -1,
+					'crop'   => false
 				];
 
 				if (self::contains($variant, '|')) {
@@ -402,7 +412,7 @@
 					'breakpoint' => $breakpoint,
 					'width'      => $width,
 					'height'     => $height,
-					'crop'       => $crop
+					'crop'       => $crop ? $crop : self::process_crop($dimensions['crop'])
 				];
 			}
 
@@ -460,7 +470,7 @@
 
 		// check if png file has transparent background
 		private static function is_alpha_png($fn) {
-			return (ord(@file_get_contents($fn, NULL, NULL, 25, 1)) == 6);
+			return (ord(@file_get_contents($fn, NULL, NULL, 25, 1)) === 6);
 		}
 
 		// returns a normalized definition of breakpoints
@@ -481,7 +491,7 @@
 			$alpha     = false;
 
 			// check if png has alpha channel
-			if ($mime_type == 'image/png') {
+			if ($mime_type === 'image/png') {
 				$alpha = self::is_alpha_png($file_path);
 			}
 
