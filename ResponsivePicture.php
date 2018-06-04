@@ -1,7 +1,7 @@
 <?php
 
 	/*
-		Responsive Picture v0.5.1
+		Responsive Picture v0.5.2
 		© 2018 Booreiland
 
 		Responsive Picture is a Wordpress tool for resizing images on the fly.
@@ -18,8 +18,8 @@
 		width     : a number or a column definition
 					a column definition is a key in $grid_widths plus a dash and a column span number (e.g. "xs-8")
 					if column span number is "full", the full width of the next matching $breakpoint is used (e.g. "xs-full")
-		height    : a number in pixels. when not specifying crop, the image will automatically crop to center
-		factor    : a factor of width. when not specifying crop, the image will automatically crop to center
+		height    : a number in pixels
+		factor    : a factor of width
 		crop_x    : t(op), r(ight), b(ottom), l(eft) or c(enter),
 		crop_y    : t(op), r(ight), b(ottom), l(eft) or c(enter)
 					if crop_y is not defined, crop_x will be treated as a shortcut:
@@ -227,8 +227,6 @@
 					$wh = explode(' ', $dimensions);
 					$width = trim($wh[0]);
 					$height = trim($wh[1]);
-					// crop by default, necessary when supplied dimensions have different aspect ratio than image
-					$crop = 'c';
 				} else {
 					// height will be calculated based on width
 					$width = self::match($dimensions, '/(\d+)/');
@@ -243,15 +241,12 @@
 				// height is a specified factor of weight
 				$wh = explode('/', $dimensions);
 				$height = $width * trim($wh[1]);
-				// crop by default, necessary when supplied dimensions have different aspect ratio than image
-				$crop = 'c';
 			}
 
 			return [
 				'input'  => $input,
 				'width'  => $width,
-				'height' => $height,
-				'crop'   => $crop
+				'height' => $height
 			];
 		}
 
@@ -412,7 +407,7 @@
 					'breakpoint' => $breakpoint,
 					'width'      => $width,
 					'height'     => $height,
-					'crop'       => $crop ? $crop : self::process_crop($dimensions['crop'])
+					'crop'       => $crop
 				];
 			}
 
