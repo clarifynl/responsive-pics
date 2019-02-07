@@ -1,7 +1,7 @@
 <?php
 
 	/*
-		Responsive Picture v0.5.2
+		Responsive Picture v0.5.3
 		© 2018 Booreiland
 
 		Responsive Picture is a Wordpress tool for resizing images on the fly.
@@ -797,8 +797,9 @@
 			}
 
 			// transparent gif
+			$style     = $intrinsic ? ' style="width:100%;"' : '';
 			$ratio     = $intrinsic ? ' data-aspectratio=""' : '';
-			$picture[] = sprintf('  <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"%s alt="%s"%s />', $ratio, $definition['alt'], $classes);
+			$picture[] = sprintf('  <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"%s alt="%s"%s%s />', $ratio, $definition['alt'], $classes, $style);
 			$picture[] = '</picture>';
 
 			return implode("\n", $picture) . "\n";
