@@ -1,7 +1,7 @@
 <?php
 
 	/*
-		Responsive Picture v0.5.3
+		Responsive Picture v0.5.4
 		© 2018 Booreiland
 
 		Responsive Picture is a Wordpress tool for resizing images on the fly.
@@ -750,6 +750,8 @@
 			// convert $picture_classes to array if it is a string
 			if (!is_array($picture_classes) && !empty($picture_classes)) {
 				$picture_classes = preg_split('/[\s,]+/', $picture_classes);
+			} else {
+				$picture_classes = [];
 			}
 
 			$img_classes   = [];
