@@ -513,7 +513,7 @@
 
 			// check if gif is animated
 			if ($mime_type === 'image/gif') {
-				$animated = self::is_gif_ani($file_path)
+				$animated = self::is_gif_ani($file_path);
 			}
 
 			// unsupported mime-type, return original source without breakpoints
