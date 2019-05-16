@@ -524,7 +524,8 @@
 						'ratio'    => 1
 					]],
 					'mimetype' => $mime_type,
-					'alt'      => $alt
+					'alt'      => $alt,
+					'alpha'    => $alpha
 				];
 			}
 
