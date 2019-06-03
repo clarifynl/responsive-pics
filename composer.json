@@ -37,6 +37,9 @@
   "autoload": {
     "files": ["ResponsivePicture.php"]
   },
+  "archive": {
+    "exclude": ["/docs"]
+  },
   "repositories": [
     {
       "type": "vcs",
