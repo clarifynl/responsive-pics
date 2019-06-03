@@ -38,7 +38,7 @@
     "files": ["ResponsivePicture.php"]
   },
   "archive": {
-    "exclude": ["/docs"]
+    "exclude": ["./CNAME", "/docs"]
   },
   "repositories": [
     {
