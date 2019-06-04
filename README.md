@@ -5,7 +5,7 @@ ResponsivePics is a PHP library that enables Wordpress theme authors to automati
 
 ResponsivePics is useful when you have a responsive grid layout (like Bootstrap, but can be any framework) and need images to adapt to responsive designs. ResponsivePics automatically resizes and / or crops your uploaded pictures to fit your layouts.
 
-ResponsivePics saves bandwidth and lets your site load faster. ResponsivePics is €25,-. It probably saves you a day of developing it yourself.
+ResponsivePics saves bandwidth and lets your site load faster.
 
 * ReponsivePics does not handle images in the Wordpress wysiwig editor, it's only useful for theme authors that use images or photos in their themes. It automatically handles retina or hdpi images via media queries.
 
@@ -15,7 +15,7 @@ Let's do this thing
 
 Throw this PHP code in your theme:
 
-`ResponsivePics::get(1, 'xs-12, sm-6, md-4');`
+`ResponsivePicture::get(1, 'xs-12, sm-6, md-4');`
 This method will output a <picture> element that spans 12 columns on xs layouts, 6 columns on small layouts and 4 columns on medium and larger layouts. It will automatically resize and crop images for each state and handle hdpi images.
 
 Depending on the maximum size of the uploaded image with ID "1", the output will be something like:
@@ -37,12 +37,12 @@ Depending on the maximum size of the uploaded image with ID "1", the output will
 
 ## Custom dimensions
 
-ResponsivePics::get(1, '400:200 300, 800:400 600');
+ResponsivePicture::get(1, '400:200 300, 800:400 600');
 This command will output a picture element to show a 200 × 300 image on layouts that are 400 pixels wide and a 400 × 600 image on layouts that are wider than 800 pixels.
 
 ## Cropping
 
-`ResponsivePics::get(1, '400:200 300, 800:400 600', 'my-picture');`
+`ResponsivePicture::get(1, '400:200 300, 800:400 600', 'my-picture');`
 This command will output a picture element to show a 200 × 300 image on layouts that are 400 pixels wide and a 400 × 600 image on layouts that are wider than 600 pixels. In addition, it adds the class my-picture to the picture element.
 
 ## Full syntax
@@ -99,12 +99,12 @@ ResponsivePicture::setBreakpoints(array): set breakpoints, example:
 ## Examples
 
 ```php
-ResponsivePics::get(1, 'xs-12, sm-6, md-4');
-ResponsivePics::get(1, '400:200 300, 800:400 600', 'my-picture');
-ResponsivePics::get(1, '400:200 200|c, 800:400 400|l t');
-ResponsivePics::get(1, 'xs-full|c, sm-12/0.5|c md-12/0.25|c');
+ResponsivePicture::get(1, 'xs-12, sm-6, md-4');
+ResponsivePicture::get(1, '400:200 300, 800:400 600', 'my-picture');
+ResponsivePicture::get(1, '400:200 200|c, 800:400 400|l t');
+ResponsivePicture::get(1, 'xs-full|c, sm-12/0.5|c md-12/0.25|c');
 
-ResponsivePics::get_background(1, 'xs:200 200|c, lg:400 400');
+ResponsivePicture::get_background(1, 'xs:200 200|c, lg:400 400');
 ```
 
 ## Setup
