@@ -73,9 +73,11 @@ intrinsic : (boolean, default: false) if true:
 			- adds 'data-aspectratio' attributes on the picture source and img elements
 			- this will enable you to pre-occupy the space needed for an image by calculating the height from the image width or the width from the height
 			  with an intrinsic plugin such as the lazysizes aspectratio extension
+```
 
-API
+## API
 
+```
 ResponsivePicture::setColumns(number):    set number of grid columns
 ResponsivePicture::setGutter(pixels):     set grid gutter width
 ResponsivePicture::setGridWidths(array):  set grid widths for various breakpoints, example:
@@ -94,6 +96,11 @@ ResponsivePicture::setBreakpoints(array): set breakpoints, example:
 		'lg' => 992,
 		'xl' => 1200
 	]
+
+ResponsivePicture::getColumns():      get number of grid columns
+ResponsivePicture::getGutter():       get grid gutter width
+ResponsivePicture::getGridWidths():   get grid widths
+ResponsivePicture::getBreakpoints():  get grid breakpoints
 ```
 
 ## Examples

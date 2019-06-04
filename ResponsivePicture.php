@@ -690,6 +690,27 @@
 			self::$grid_widths = $value;
 		}
 
+
+		// get breakpoints used for "media(min-width: x)" in picture element, in pixels
+		public static function getBreakpoints() {
+			return self::$breakpoints;
+		}
+
+		// get the current set of container widths
+		public static function getGridWidths() {
+			return self::$grid_widths;
+		}
+
+		// get number of grid columns
+		public static function getColumns() {
+			return self::$columns;
+		}
+
+		// get grid gutter width, in pixels
+		public static function getGutter() {
+			return self::$gutter;
+		}
+
 		/*
 		 * Construct a background image element and a matching responsive inline style element
 		 *
