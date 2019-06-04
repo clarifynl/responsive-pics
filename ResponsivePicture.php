@@ -1,7 +1,7 @@
 <?php
 
 	/*
-		Responsive Picture v0.6.1
+		Responsive Picture v0.6.2
 		© 2017-2019 Booreiland
 
 		Responsive Picture is a Wordpress tool for resizing images on the fly.
@@ -166,7 +166,7 @@
 				self::show_error(sprintf('no width found for breakpoint "%s"', $key));
 			}
 
-			$column_pixels = ($grid_width - (self::$columns - 1) * self::$gutter) / self::$columns;
+			$column_pixels = ($grid_width - (self::$columns) * self::$gutter) / self::$columns;
 
 			$pixels = floor($column_pixels * $col + self::$gutter * ($col - 1));
 
@@ -679,10 +679,10 @@
 
 		// grid system should match the container widths in css
 		public static function setGridWidths($value = [
-			'xs'    => 540,
-			'sm'    => 720,
-			'md'    => 960,
-			'lg'    => 1140,
+			'xs'    => 576, // self::$breakpoints['sm']
+			'sm'    => 540,
+			'md'    => 720,
+			'lg'    => 960,
 			'xl'    => 1140,
 			'xxl'   => 1140,
 			'xxxl'  => 1140
