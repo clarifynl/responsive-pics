@@ -1,7 +1,7 @@
 <?php
 
 	/*
-		Responsive Picture v0.6.2
+		Responsive Picture v0.6.3
 		© 2017-2019 Booreiland
 
 		Responsive Picture is a Wordpress tool for resizing images on the fly.
@@ -56,6 +56,8 @@
 				'xl' => 1200
 			]
 
+		ResponsivePicture::setLazyLoadClass(string): set lazyload classname
+
 		examples  : ResponsivePicture::get(1, 'xs-12, sm-6, md-4');
 					ResponsivePicture::get(1, '400:200 300, 800:400 600', 'my-picture');
 					ResponsivePicture::get(1, '400:200 200|c, 800:400 400|l t');
@@ -90,6 +92,7 @@
 		private static $gutter = null;
 		private static $grid_widths = null;
 		private static $breakpoints = null;
+		private static $lazyload_class = null;
 
 		// map short letters to valid crop values
 		private static $crop_map = [
@@ -652,6 +655,7 @@
 			self::setGutter();
 			self::setGridWidths();
 			self::setBreakpoints();
+			self::setLazyLoadClass();
 		}
 
 		// set number of grid columns
@@ -690,6 +694,11 @@
 			self::$grid_widths = $value;
 		}
 
+		// set lazyload classname
+		public static function setLazyLoadClass($value = 'lazyload') {
+			self::$lazyload_class = $value;
+		}
+
 
 		// get breakpoints used for "media(min-width: x)" in picture element, in pixels
 		public static function getBreakpoints() {
@@ -709,6 +718,11 @@
 		// get grid gutter width, in pixels
 		public static function getGutter() {
 			return self::$gutter;
+		}
+
+		// get lazyload classname
+		public static function getLazyLoadClass() {
+			return self::$lazyload_class;
 		}
 
 		/*
@@ -808,7 +822,7 @@
 
 			// lazyload option
 			if ($lazyload) {
-				$img_classes[] = 'lazyload';
+				$img_classes[] = self::$lazyload_class;
 			}
 
 			// exclude unsupported mime types from intrinsic
