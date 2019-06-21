@@ -24,10 +24,10 @@ If applicable, add screenshots to help explain your problem.
 
 **Software (please complete the following information):**
  - OS: [e.g. MacOS 10.14.15, iOS 12]
- - PHP Version [e.g. 7.1.23]
- - ResponsivePicture version [e.g. 0.6.3]
- - Wordpress version [e.g. 5.2.1]
- - Browser [e.g. Chrome, Safari]
+ - PHP Version: [e.g. 7.1.23]
+ - ResponsivePicture version: [e.g. 0.6.3]
+ - Wordpress version: [e.g. 5.2.1]
+ - Browser: [e.g. Chrome, Safari]
 
 **Additional context**
 Add any other context about the problem here.
