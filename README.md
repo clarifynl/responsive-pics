@@ -156,4 +156,4 @@ import 'lazysizes';
 import 'lazysizes/plugins/aspectratio/ls.aspectratio.js';
 ```
 
-© 2017—2018 Booreiland, all rights reserved.
+© 2017—2019 Booreiland, all rights reserved.
