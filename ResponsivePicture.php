@@ -1,7 +1,7 @@
 <?php
 
 	/*
-		Responsive Picture v0.6.3
+		Responsive Picture v0.6.4
 		© 2017-2019 Booreiland
 
 		Responsive Picture is a Wordpress tool for resizing images on the fly.
@@ -59,6 +59,7 @@
 		ResponsivePicture::setLazyLoadClass(string): set lazyload classname
 
 		examples  : ResponsivePicture::get(1, 'xs-12, sm-6, md-4');
+					ResponsivePicture::get(1, 'xs-12 300, sm-6 400, md-4 500');
 					ResponsivePicture::get(1, '400:200 300, 800:400 600', 'my-picture');
 					ResponsivePicture::get(1, '400:200 200|c, 800:400 400|l t');
 					ResponsivePicture::get(1, 'xs-full|c, sm-12/0.5|c, md-12/0.25|c');
@@ -223,7 +224,15 @@
 			$crop = false;
 
 			if (self::contains($dimensions, '-')) {
-				$width = self::columns_to_pixels($dimensions);
+				if (self::contains($dimensions, ' ')) {
+					// width and height supplied
+					$wh        = explode(' ', $dimensions);
+					$dimension = trim($wh[0]);
+					$height    = trim($wh[1]);
+					$width     = self::columns_to_pixels($dimension);
+				} else {
+					$width = self::columns_to_pixels($dimensions);
+				}
 			} else {
 				if (self::contains($dimensions, ' ')) {
 					// width and height supplied
