@@ -1,7 +1,7 @@
 <?php
 
 	/*
-		Responsive Picture v0.6.4
+		Responsive Picture v0.6.5
 		© 2017-2019 Booreiland
 
 		Responsive Picture is a Wordpress tool for resizing images on the fly.
@@ -740,7 +740,7 @@
 		 * Returns an inline <style> element with a dedicated image class with media-queries for all the different image sizes
 		 * and an div with the same dedicated image class
 		 */
-		public static function get_background($id, $sizes, $class = '') {
+		public static function get_background($id, $sizes, $classes = null) {
 			if (!isset($id)) {
 				return 'image id undefined';
 			}
@@ -760,6 +760,15 @@
 			$sources = $definition['sources'];
 
 			$copy = $id;
+
+			// convert $classes to array if it is a string
+			if (!is_array($classes)) {
+				if (!empty($classes)) {
+					$classes = preg_split('/[\s,]+/', $classes);
+				} else {
+					$classes = [];
+				}
+			}
 
 			// prevent same id, append copy number to existing
 			if (isset(self::$id_map[$id])) {
@@ -795,7 +804,7 @@
 
 			$background[] = '  }';
 			$background[] = '</style>';
-			$background[] = sprintf('<div%s id="%s"></div>', $class ? ' class="' . $class . '"' : '', $id);
+			$background[] = sprintf('<div%s id="%s"></div>', $classes ? ' class="' . implode(' ', $classes) . '"' : '', $id);
 
 			return implode("\n", $background) . "\n";
 		}
