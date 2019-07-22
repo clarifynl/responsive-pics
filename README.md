@@ -181,7 +181,9 @@ To install **Lazysizes** in your wordpress theme as a node module, run the follo
 #### Yarn
 `yarn add lazysizes`
 And import the package in your theme’s global javascript file:
-`import 'lazysizes';`
+```javascript
+import 'lazysizes';
+```
 
 ### Intrinsic Aspectratio <a name="intrinsic"></a>
 When enabling the `intrinsic` option in the `ResponsivePicture::get()` function call, this library automatically:
@@ -192,7 +194,9 @@ When enabling the `intrinsic` option in the `ResponsivePicture::get()` function 
 This will enable you to pre-occupy the space needed for an image by calculating the height from the image width or the width from the height with an intrinsic plugin such as the [lazysizes aspectratio extension](https://github.com/aFarkas/lazysizes/tree/gh-pages/plugins/aspectratio).
 
 To use the **Lazysizes aspectratio extension** in your wordpress theme, first install **lazysizes** as a node module as described in the [Lazyloading section](#lazyloading) and import the extension in your theme’s global javascript file:
-`import 'lazysizes/plugins/aspectratio/ls.aspectratio.js';`
+```javascript
+import 'lazysizes/plugins/aspectratio/ls.aspectratio.js';
+```
 
 ## Maintainers
 **ResponsivePicture** is developed and maintained by:
