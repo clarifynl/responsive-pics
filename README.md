@@ -202,6 +202,7 @@ import 'lazysizes/plugins/aspectratio/ls.aspectratio.js';
 **ResponsivePicture** is developed and maintained by:
 
 [@monokai](https://github.com/monokai) (creator)
+
 [@twansparant](https://github.com/Twansparant) (collaborator)
 
 ## Copyright
