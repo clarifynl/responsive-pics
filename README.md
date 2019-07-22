@@ -105,6 +105,7 @@ if (class_exists('ResponsivePicture')) {
 For inserting a responsive <picture> element in your template, use the `get` function:
 `ResponsivePicture::get();`
 with the following parameters:
+
 | Parameter  | Type            | Required | Default  | Definition
 | -----------|:---------------:| --------:|---------:|---------------------------------
 | id         | number          | yes      |          | The WordPress image id (e.g. 1).
