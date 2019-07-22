@@ -201,8 +201,8 @@ import 'lazysizes/plugins/aspectratio/ls.aspectratio.js';
 ## Maintainers
 **ResponsivePicture** is developed and maintained by:
 
-@monokai (creator)
-@twansparant (collaborator)
+[@monokai](https://github.com/monokai) (creator)
+[@twansparant](https://github.com/Twansparant) (collaborator)
 
 ## Copyright
 Code and documentation copyright 2017-2019 by [Booreiland](https://booreiland.amsterdam). Code released under the [MIT License](https://github.com/booreiland/responsive-picture/blob/master/LICENSE). Docs released under Creative Commons.
