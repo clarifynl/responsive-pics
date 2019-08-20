@@ -86,7 +86,6 @@
 	*/
 
 
-
 	class ResponsivePics {
 
 		private static $columns = null;
@@ -892,6 +891,9 @@
 
 	ResponsivePics::init();
 
-	// Support old versions > 0.7
+
+	/*
+	 * Set ResponsivePicture alias for version > 0.7 support
+	 */
 	class_alias('ResponsivePics', 'ResponsivePicture');
 ?>
