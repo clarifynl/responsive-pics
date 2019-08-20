@@ -1,15 +1,15 @@
 <?php
 
 	/*
-		Responsive Picture v0.6.6
+		Responsive Pics v0.7
 		© 2017-2019 Booreiland
 
-		Responsive Picture is a Wordpress tool for resizing images on the fly.
+		Responsive Pics is a Wordpress tool for resizing images on the fly.
 		It uses a concise syntax for determining the image sizes you need in your template.
 		You can define number of columns, aspect ratios and crop settings.
 		It handles @2x images and missing breakpoints automatically.
 
-		syntax    : ResponsivePicture::get[_background](id, 'breakpoint:width [/factor|height]|crop_x crop_y, …', 'class-name', lazyload, intrinsic);
+		syntax    : ResponsivePics::get[_background](id, 'breakpoint:width [/factor|height]|crop_x crop_y, …', 'class-name', lazyload, intrinsic);
 
 		breakpoint: a number or a key in $breakpoints (e.g. "xs")
 					if not defined, and width is a number, breakpoint will be the same as the width
@@ -37,9 +37,9 @@
 
 		API
 
-		ResponsivePicture::setColumns(number):    set number of grid columns
-		ResponsivePicture::setGutter(pixels):     set grid gutter width
-		ResponsivePicture::setGridWidths(array):  set grid widths for various breakpoints, example:
+		ResponsivePics::setColumns(number):    set number of grid columns
+		ResponsivePics::setGutter(pixels):     set grid gutter width
+		ResponsivePics::setGridWidths(array):  set grid widths for various breakpoints, example:
 			[
 				'xs' => 540,
 				'sm' => 720,
@@ -47,7 +47,7 @@
 				'lg' => 1140,
 				'xl' => 1140
 			]
-		ResponsivePicture::setBreakpoints(array): set breakpoints, example:
+		ResponsivePics::setBreakpoints(array): set breakpoints, example:
 			[
 				'xs' => 0,
 				'sm' => 576,
@@ -56,15 +56,15 @@
 				'xl' => 1200
 			]
 
-		ResponsivePicture::setLazyLoadClass(string): set lazyload classname
+		ResponsivePics::setLazyLoadClass(string): set lazyload classname
 
-		examples  : ResponsivePicture::get(1, 'xs-12, sm-6, md-4');
-					ResponsivePicture::get(1, 'xs-12 300, sm-6 400, md-4 500');
-					ResponsivePicture::get(1, '400:200 300, 800:400 600', 'my-picture');
-					ResponsivePicture::get(1, '400:200 200|c, 800:400 400|l t');
-					ResponsivePicture::get(1, 'xs-full|c, sm-12/0.5|c, md-12/0.25|c');
+		examples  : ResponsivePics::get(1, 'xs-12, sm-6, md-4');
+					ResponsivePics::get(1, 'xs-12 300, sm-6 400, md-4 500');
+					ResponsivePics::get(1, '400:200 300, 800:400 600', 'my-picture');
+					ResponsivePics::get(1, '400:200 200|c, 800:400 400|l t');
+					ResponsivePics::get(1, 'xs-full|c, sm-12/0.5|c, md-12/0.25|c');
 
-					ResponsivePicture::get_background(1, 'xs:200 200|c, lg:400 400');
+					ResponsivePics::get_background(1, 'xs:200 200|c, lg:400 400');
 
 
 		Javascript dependencies:
@@ -87,7 +87,7 @@
 
 
 
-	class ResponsivePicture {
+	class ResponsivePics {
 
 		private static $columns = null;
 		private static $gutter = null;
@@ -778,7 +778,7 @@
 				self::$id_map[$id] = 0;
 			}
 
-			$id = sprintf('responsive-picture-background-%s', $copy);
+			$id = sprintf('responsive-pics-background-%s', $copy);
 
 			$background = [];
 			$background[] = '<style scoped="scoped" type="text/css">';
@@ -890,5 +890,5 @@
 		}
 	}
 
-	ResponsivePicture::init();
+	ResponsivePics::init();
 ?>

@@ -1,8 +1,8 @@
-**ResponsivePicture** is a PHP library that enables WordPress theme authors to automatically resize images* in responsive layouts. Just upload a high-res image in your media library, and let ResponsivePics take care of the rest. Supports art-directed crops, background images and respects aspect ratios.
+**ResponsivePics** is a PHP library that enables WordPress theme authors to automatically resize images* in responsive layouts. Just upload a high-res image in your media library, and let ResponsivePics take care of the rest. Supports art-directed crops, background images and respects aspect ratios.
 
-ResponsivePicture is useful when you have a responsive grid layout (like Bootstrap, but can be any framework) and need images to adapt to responsive designs. ResponsivePics automatically resizes and / or crops your uploaded pictures to fit your layouts.
+ResponsivePics is useful when you have a responsive grid layout (like Bootstrap, but can be any framework) and need images to adapt to responsive designs. ResponsivePics automatically resizes and / or crops your uploaded pictures to fit your layouts.
 
-ResponsivePicture saves bandwidth and lets your site load faster.
+ResponsivePics saves bandwidth and lets your site load faster.
 
 *ReponsivePics does not handle images in the WordPress wysiwig editor, it’s only useful for theme authors that use images or photos in their themes. It automatically handles retina or hdpi images via media queries.*
 
@@ -20,7 +20,7 @@ For full documentation and examples visit: [responsive.pics](https://responsive.
 
 ### Composer
 Run this command in your wordpress theme folder:
-`$ composer require "booreiland/responsive-picture"`
+`$ composer require "booreiland/responsive-pics"`
 And make sure to load Composer’s **autoloader** file by adding this line to your theme’s **functions.php**:
 `require_once (__DIR__.'/vendor/autoload.php');`
 
@@ -69,15 +69,15 @@ $container-max-widths: (
 
 If you have customized the bootstrap defaults or if you’re using a different grid system ([Foundation](https://foundation.zurb.com), [Materialize](https://materializecss.com) etc.), or even if you want to add extra breakpoints & container widths, you can pass your own grid variables to the Responsive Pics library.
 
-Add these lines to your theme’s **functions.php** and make sure to check if the `ResponsivePicture` class exists:
+Add these lines to your theme’s **functions.php** and make sure to check if the `ResponsivePics` class exists:
 ```php
 /*
  * Set Responsive Picture variables
  */
-if (class_exists('ResponsivePicture')) {
-	ResponsivePicture::setColumns(12);
-	ResponsivePicture::setGutter(30);
-	ResponsivePicture::setBreakPoints([
+if (class_exists('ResponsivePics')) {
+	ResponsivePics::setColumns(12);
+	ResponsivePics::setGutter(30);
+	ResponsivePics::setBreakPoints([
 		'xs'    => 0,
 		'sm'    => 576,
 		'md'    => 768,
@@ -87,7 +87,7 @@ if (class_exists('ResponsivePicture')) {
 		'xxxl'  => 1600,
 		'xxxxl' => 1920
 	]);
-	ResponsivePicture::setGridWidths([
+	ResponsivePics::setGridWidths([
 		'xs'    => 576,
 		'sm'    => 768,
 		'md'    => 992,
@@ -103,7 +103,7 @@ if (class_exists('ResponsivePicture')) {
 
 ### Picture Element
 For inserting a responsive <picture> element in your template, use the `get` function:
-`ResponsivePicture::get();`
+`ResponsivePics::get();`
 with the following parameters:
 
 | Parameter  | Type            | Required | Default  | Definition
@@ -116,7 +116,7 @@ with the following parameters:
 
 ### Background Image
 For inserting a responsive background image in your template, use the `get_background` function:
-`ResponsivePicture::get_background();`
+`ResponsivePics::get_background();`
 with the following parameters:
 
 | Parameter  | Type            | Required | Default  | Definition
@@ -126,7 +126,7 @@ with the following parameters:
 | classes    | string or array | optional | `null`   | Additional CSS classes you want to add to the background element (e.g. `'my_bg_class'` or `['my_bg_class', 'my_second_bg_class']`).
 
 ### Process
-* When visiting the front-end page where the `ResponsivePicture` function call is made, the library will try and resize and/or crop your image on the fly and save it to in the same uploads folder as the original image.
+* When visiting the front-end page where the `ResponsivePics` function call is made, the library will try and resize and/or crop your image on the fly and save it to in the same uploads folder as the original image.
 * Once the image variation is created, it will skip the creation process of that variation on the next page load. The first page load can therefore take a while.
 * When you change one of the image size parameters, it will automatically try and create the new image variation on the next page load.
 * When the original image does not meet the dimension requirements of the requested image size, it will skip that image size variation and proceed to the next image size.
@@ -162,7 +162,7 @@ with the following parameters:
 ## Features <a name="features"></a>
 
 ### Lazyloading <a name="lazyloading"></a>
-When enabling the `lazyload` option in the `ResponsivePicture::get()` function call, this library automatically:
+When enabling the `lazyload` option in the `ResponsivePics::get()` function call, this library automatically:
 
 * adds a lazyload class to the picture img element.
 * swaps the srcset with data-srcset attributes on the picture source elements.
@@ -171,8 +171,8 @@ This will enable you to use a lazy loading plugin such as Lazysizes.
 
 You can also set your own lazyload class by passing it to Responsive Pics library in your theme’s **functions.php**:
 ```php
-if (class_exists('ResponsivePicture')) {
-	ResponsivePicture::setLazyLoadClass('lazy');
+if (class_exists('ResponsivePics')) {
+	ResponsivePics::setLazyLoadClass('lazy');
 }
 ```
 To install **Lazysizes** in your wordpress theme as a node module, run the following command from your theme directory:
@@ -186,7 +186,7 @@ import 'lazysizes';
 ```
 
 ### Intrinsic Aspectratio <a name="intrinsic"></a>
-When enabling the `intrinsic` option in the `ResponsivePicture::get()` function call, this library automatically:
+When enabling the `intrinsic` option in the `ResponsivePics::get()` function call, this library automatically:
 
 * adds a intrinsic class to the picture element and a intrinsic__item class to the picture img element.
 * adds data-aspectratio attributes on the picture source and img elements with the calculated source image ratio.
@@ -199,10 +199,10 @@ import 'lazysizes/plugins/aspectratio/ls.aspectratio.js';
 ```
 
 ## Maintainers
-**ResponsivePicture** is developed and maintained by:
+**ResponsivePics** is developed and maintained by:
 
 [@monokai](https://github.com/monokai) (creator)
 [@twansparant](https://github.com/Twansparant) (collaborator)
 
 ## Copyright
-Code and documentation copyright 2017-2019 by [Booreiland](https://booreiland.amsterdam). Code released under the [MIT License](https://github.com/booreiland/responsive-picture/blob/master/LICENSE). Docs released under Creative Commons.
+Code and documentation copyright 2017-2019 by [Booreiland](https://booreiland.amsterdam). Code released under the [MIT License](https://github.com/booreiland/responsive-pics/blob/master/LICENSE). Docs released under Creative Commons.
