@@ -891,4 +891,7 @@
 	}
 
 	ResponsivePics::init();
+
+	// Support old versions > 0.7
+	class_alias('ResponsivePics', 'ResponsivePicture');
 ?>
