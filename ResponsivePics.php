@@ -1,7 +1,7 @@
 <?php
 
 	/*
-		Responsive Pics v0.7
+		Responsive Pics v0.7.1
 		© 2017-2019 Booreiland
 
 		Responsive Pics is a Wordpress tool for resizing images on the fly.
@@ -84,6 +84,7 @@
 		  Better would be if you can resize with only a fixed width or height and the 2nd dimension is calculated based upon original dimensions
 		* Support for multiple background images
 	*/
+
 
 
 	class ResponsivePics {
@@ -218,9 +219,10 @@
 		// dimensions can be shortcut (e.g. "xs-5"), width (e.g. "400") or width and height (e.g. "400 300");
 		private static function process_dimensions($input) {
 			$dimensions = trim($input);
-			$width = -1;
-			$height = -1;
-			$crop = false;
+			$width      = -1;
+			$height     = -1;
+			$crop       = false;
+			$crop_ratio = null;
 
 			if (self::contains($dimensions, '-')) {
 				if (self::contains($dimensions, ' ')) {
@@ -235,8 +237,8 @@
 			} else {
 				if (self::contains($dimensions, ' ')) {
 					// width and height supplied
-					$wh = explode(' ', $dimensions);
-					$width = trim($wh[0]);
+					$wh     = explode(' ', $dimensions);
+					$width  = trim($wh[0]);
 					$height = trim($wh[1]);
 				} else {
 					// height will be calculated based on width
@@ -250,14 +252,16 @@
 
 			if (self::contains($dimensions, '/')) {
 				// height is a specified factor of weight
-				$wh = explode('/', $dimensions);
-				$height = $width * trim($wh[1]);
+				$wh         = explode('/', $dimensions);
+				$crop_ratio = trim($wh[1]);
+				$height     = $width * $crop_ratio;
 			}
 
 			return [
-				'input'  => $input,
-				'width'  => $width,
-				'height' => $height
+				'input'      => $input,
+				'width'      => $width,
+				'height'     => $height,
+				'crop_ratio' => $crop_ratio
 			];
 		}
 
@@ -374,10 +378,10 @@
 		// this processes our resizing syntax and returns a normalized array with resizing rules
 		private static function get_image_rules($input, $reverse = false) {
 			$variants = self::add_missing_breakpoints(explode(',', $input));
-			$result = [];
+			$result   = [];
 
 			foreach ($variants as $variant) {
-				$crop = false;
+				$crop       = false;
 				$breakpoint = -1;
 				$dimensions = [
 					'width'  => -1,
@@ -387,8 +391,8 @@
 
 				if (self::contains($variant, '|')) {
 					$components = explode('|', $variant);
-					$variant = trim($components[0]);
-					$crop = self::process_crop($components[1]);
+					$variant    = trim($components[0]);
+					$crop       = self::process_crop($components[1]);
 				}
 
 				if (self::contains($variant, ':')) {
@@ -399,8 +403,9 @@
 					$dimensions = self::process_dimensions($variant);
 				}
 
-				$width = $dimensions['width'];
-				$height = $dimensions['height'];
+				$width      = $dimensions['width'];
+				$height     = $dimensions['height'];
+				$crop_ratio = $dimensions['crop_ratio'];
 
 				if ($breakpoint === -1) {
 					if (self::contains($dimensions['input'], '-')) {
@@ -418,6 +423,7 @@
 					'breakpoint' => $breakpoint,
 					'width'      => $width,
 					'height'     => $height,
+					'crop_ratio' => $crop_ratio,
 					'crop'       => $crop
 				];
 			}
@@ -554,9 +560,10 @@
 			}
 
 			foreach ($rules as $rule) {
-				$width  = $rule['width'];
-				$height = $rule['height'];
-				$crop   = $rule['crop'];
+				$width      = $rule['width'];
+				$height     = $rule['height'];
+				$crop       = $rule['crop'];
+				$crop_ratio = $rule['crop_ratio'];
 
 				if ($height === -1) {
 					// calculate height based on original aspect ratio
@@ -591,7 +598,14 @@
 					$addedSource = true;
 
 				} else {
-					// Use original image to resize
+					// Use original image to resize and crop
+					$ratio = $original_width / $original_height;
+
+					if ($crop_ratio) {
+						$url   = self::get_resized_url($file_path, $url, $original_width, $original_width * $crop_ratio, $crop);
+						$ratio = $original_width / ($original_width * $crop_ratio);
+					}
+
 					$source1x    = $url;
 					$source2x    = null;
 					$breakpoint  = $rule['breakpoint'];
@@ -604,7 +618,7 @@
 						'breakpoint' => $breakpoint,
 						'source1x'   => $source1x,
 						'source2x'   => $source2x,
-						'ratio'      => $original_width / $original_height
+						'ratio'      => $ratio
 					];
 
 					$addedSource = true;
@@ -882,7 +896,7 @@
 			// transparent gif
 			$style     = $intrinsic ? ' style="width:100%;"' : '';
 			$ratio     = $intrinsic ? ' data-aspectratio=""' : '';
-			$picture[] = sprintf('  <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"%s alt="%s"%s%s />', $ratio, $definition['alt'], $classes, $style);
+			$picture[] = sprintf('  <img src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="%s alt="%s"%s%s />', $ratio, $definition['alt'], $classes, $style);
 			$picture[] = '</picture>';
 
 			return implode("\n", $picture) . "\n";
@@ -891,9 +905,6 @@
 
 	ResponsivePics::init();
 
-
-	/*
-	 * Set ResponsivePicture alias for version > 0.7 support
-	 */
+	// Support old versions > 0.7
 	class_alias('ResponsivePics', 'ResponsivePicture');
 ?>
