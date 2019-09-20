@@ -1,5 +1,8 @@
 <?php
 
+require_once($_SERVER['DOCUMENT_ROOT'] . '/wp/wp-load.php');
+
+
 class WP_Resize_Process extends WP_Background_Process {
 
 	/**
@@ -20,31 +23,24 @@ class WP_Resize_Process extends WP_Background_Process {
 	 * @return mixed
 	 */
 	protected function task($request) {
-		// Resize the image
-		file_put_contents(get_stylesheet_directory() . '/logs/debug.log', '['. date(DATE_RFC2822) .'] ' . join('\n', $request['editor']), FILE_APPEND | LOCK_EX);
-		return false;
+		$editor = wp_get_image_editor($request['file_path']);
 
-		// if (!is_wp_error($editor)) {
-		// 	$editor->set_quality($request['quality']);
-		// 	$editor->resize($request['width'] * $request['ratio'], $request['height'] * $request['ratio'], $request['crop']);
-		// 	$editor->save($request['resize_path']);
+		// Check if image exists
+		if (!file_exists($request['resize_path'])) {
+			if (!is_wp_error($editor)) {
+				$editor->set_quality($request['quality']);
+				$editor->resize($request['width'] * $request['ratio'], $request['height'] * $request['ratio'], $request['crop']);
+				$editor->save($request['resize_path']);
 
-		// 	file_put_contents(get_stylesheet_directory() . '/logs/debug.log', '['. date(DATE_RFC2822) .'] ' . $request['file_path'], FILE_APPEND | LOCK_EX);
+				return false; // remove from queue
 
-		// 	// Remove from queue
-		// 	return false;
-		// } else {
-		// 	file_put_contents(get_stylesheet_directory() . '/logs/error.log', '['. date(DATE_RFC2822) .'] ' . $request['file_path'], FILE_APPEND | LOCK_EX);
-		// }
-	}
-
-	/**
-	 * Debug function
-	 *
-	 * @return object
-	 */
-	public function show_queue() {
-		$total = count((array)$this->data);
+			} else {
+				error_log(sprintf('error resizing image "%s"', $request['resize_path']));
+				return $request; // re-add to queue
+			}
+		} else {
+			return false;  // remove from queue
+		}
 	}
 
 	/**

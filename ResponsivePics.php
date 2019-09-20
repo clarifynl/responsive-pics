@@ -97,6 +97,7 @@
 		private static $breakpoints = null;
 		private static $lazyload_class = null;
 		private static $image_quality = null;
+		private static $cron_interval = null;
 
 		// map short letters to valid crop values
 		private static $crop_map = [
@@ -464,9 +465,7 @@
 			$suffix            = sprintf('%sx%s%s%s', round($width), round($height), $crop_indicator, $ratio_indicator);
 			$path_parts        = pathinfo($file_path);
 			$resized_file_path = join(DIRECTORY_SEPARATOR, [$path_parts['dirname'], $path_parts['filename'] . '-' . $suffix . '.' . $path_parts['extension']]);
-
 			$resize_request    = [
-				'editor'      => wp_get_image_editor($file_path),
 				'file_path'   => $file_path,
 				'quality'     => (int)self::$image_quality,
 				'width'       => (float)$width,
@@ -476,35 +475,10 @@
 				'resize_path' => $resized_file_path
 			];
 
-			var_dump($resize_request);
+			// If image size does not exist yet as filename
 			if (!file_exists($resized_file_path)) {
-				// $resize_request = [
-				// 	'file_path'   => $file_path,
-				// 	'quality'     => self::$image_quality,
-				// 	'width'       => $width,
-				// 	'height'      => $height,
-				// 	'ratio'       => $ratio,
-				// 	'crop'        => $crop,
-				// 	'resize_path' => $resized_file_path
-				// ];
-
 				self::$resize_process->push_to_queue($resize_request);
-
-				/* resize the image
-				$editor = wp_get_image_editor($file_path);
-
-				if (!is_wp_error($editor)) {
-					$editor->set_quality($image_quality);
-					$editor->resize($width * $ratio, $height * $ratio, $crop);
-					$editor->save($resized_file_path);
-				} else {
-					self::show_error(sprintf('error creating picture "%s"', $resized_file_path));
-				}*/
 			}
-
-			var_dump(self::$resize_process);
-			self::$resize_process->cancel_process();
-			self::$resize_process->push_to_queue($resize_request);
 
 			$resized_url = join(DIRECTORY_SEPARATOR, [dirname($original_url), basename($resized_file_path)]);
 
@@ -654,11 +628,11 @@
 
 					$addedSource = true;
 				}
-
-				// Save and dispatch the resize process queue
-				self::$resize_process->show_queue();
-				self::$resize_process->save()->dispatch();
 			}
+
+			// Save and dispatch the resize process queue
+			var_dump(self::$resize_process);
+			self::$resize_process->save()->dispatch();
 
 			if (!$addedSource) {
 				// add original source if no sources have been found so far
@@ -712,6 +686,7 @@
 			self::setBreakpoints();
 			self::setLazyLoadClass();
 			self::setImageQuality();
+			self::setCronInterval();
 			self::setResizeProcess();
 		}
 
@@ -761,10 +736,16 @@
 			self::$image_quality = $value;
 		}
 
+		// set cron interval in minutes
+		public static function setCronInterval($value = 0.1) {
+			self::$cron_interval = $value;
+		}
+
 		// set resize process action
 		public static function setResizeProcess() {
 			require_once plugin_dir_path(__FILE__) . 'ResizeProcess.php';
-			self::$resize_process = new WP_Resize_Process();
+			self::$resize_process = new WP_Resize_Process('cron_interval');
+			self::$resize_process->cron_interval = self::$cron_interval;
 		}
 
 
@@ -796,6 +777,11 @@
 		// get image quality
 		public static function getImageQuality() {
 			return self::$image_quality;
+		}
+
+		// get cron interval
+		public static function getCronInterval() {
+			return self::$cron_interval;
 		}
 
 		/*
