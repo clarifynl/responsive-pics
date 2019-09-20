@@ -89,11 +89,14 @@
 
 	class ResponsivePics {
 
+		protected static $resize_process;
+
 		private static $columns = null;
 		private static $gutter = null;
 		private static $grid_widths = null;
 		private static $breakpoints = null;
 		private static $lazyload_class = null;
+		private static $image_quality = null;
 
 		// map short letters to valid crop values
 		private static $crop_map = [
@@ -458,23 +461,49 @@
 			}
 
 			// note: actual dimensions can be different from the dimensions appended to the filename, but we don't know those before we actually resize
-			$suffix = sprintf('%sx%s%s%s', round($width), round($height), $crop_indicator, $ratio_indicator);
-			$path_parts = pathinfo($file_path);
+			$suffix            = sprintf('%sx%s%s%s', round($width), round($height), $crop_indicator, $ratio_indicator);
+			$path_parts        = pathinfo($file_path);
 			$resized_file_path = join(DIRECTORY_SEPARATOR, [$path_parts['dirname'], $path_parts['filename'] . '-' . $suffix . '.' . $path_parts['extension']]);
 
+			$resize_request    = [
+				'file_path'   => $file_path,
+				'quality'     => (int)self::$image_quality,
+				'width'       => (float)$width,
+				'height'      => (float)$height,
+				'ratio'       => (int)$ratio,
+				'crop'        => $crop,
+				'resize_path' => $resized_file_path
+			];
+
+			var_dump($resize_request);
 			if (!file_exists($resized_file_path)) {
-				// resize the image
+				// $resize_request = [
+				// 	'file_path'   => $file_path,
+				// 	'quality'     => self::$image_quality,
+				// 	'width'       => $width,
+				// 	'height'      => $height,
+				// 	'ratio'       => $ratio,
+				// 	'crop'        => $crop,
+				// 	'resize_path' => $resized_file_path
+				// ];
+
+				self::$resize_process->push_to_queue($resize_request);
+
+				/* resize the image
 				$editor = wp_get_image_editor($file_path);
 
 				if (!is_wp_error($editor)) {
-					$editor->set_quality(95);
+					$editor->set_quality($image_quality);
 					$editor->resize($width * $ratio, $height * $ratio, $crop);
 					$editor->save($resized_file_path);
 				} else {
 					self::show_error(sprintf('error creating picture "%s"', $resized_file_path));
-				}
+				}*/
 			}
 
+			var_dump(self::$resize_process);
+			self::$resize_process->cancel_process();
+			self::$resize_process->push_to_queue($resize_request);
 			$resized_url = join(DIRECTORY_SEPARATOR, [dirname($original_url), basename($resized_file_path)]);
 
 			return $resized_url;
@@ -623,6 +652,10 @@
 
 					$addedSource = true;
 				}
+
+				// Save and dispatch the resize process queue
+				self::$resize_process->show_queue();
+				self::$resize_process->save()->dispatch();
 			}
 
 			if (!$addedSource) {
@@ -676,6 +709,8 @@
 			self::setGridWidths();
 			self::setBreakpoints();
 			self::setLazyLoadClass();
+			self::setImageQuality();
+			self::setResizeProcess();
 		}
 
 		// set number of grid columns
@@ -719,6 +754,17 @@
 			self::$lazyload_class = $value;
 		}
 
+		// set lazyload classname
+		public static function setImageQuality($value = 95) {
+			self::$image_quality = $value;
+		}
+
+		// set resize process action
+		public static function setResizeProcess() {
+			// require_once plugin_dir_path(__FILE__) . 'ResizeProcess.php';
+			self::$resize_process = new WP_Resize_Process();
+		}
+
 
 		// get breakpoints used for "media(min-width: x)" in picture element, in pixels
 		public static function getBreakpoints() {
@@ -743,6 +789,11 @@
 		// get lazyload classname
 		public static function getLazyLoadClass() {
 			return self::$lazyload_class;
+		}
+
+		// get image quality
+		public static function getImageQuality() {
+			return self::$image_quality;
 		}
 
 		/*
