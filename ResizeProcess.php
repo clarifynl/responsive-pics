@@ -21,8 +21,7 @@ class WP_Resize_Process extends WP_Background_Process {
 	 */
 	protected function task($request) {
 		// Resize the image
-		$editor = \wp_get_image_editor($request['file_path']);
-		file_put_contents(get_stylesheet_directory() . '/logs/debug.log', '['. date(DATE_RFC2822) .'] ' . join('\n', $editor), FILE_APPEND | LOCK_EX);
+		file_put_contents(get_stylesheet_directory() . '/logs/debug.log', '['. date(DATE_RFC2822) .'] ' . join('\n', $request['editor']), FILE_APPEND | LOCK_EX);
 		return false;
 
 		// if (!is_wp_error($editor)) {

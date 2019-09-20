@@ -466,6 +466,7 @@
 			$resized_file_path = join(DIRECTORY_SEPARATOR, [$path_parts['dirname'], $path_parts['filename'] . '-' . $suffix . '.' . $path_parts['extension']]);
 
 			$resize_request    = [
+				'editor'      => wp_get_image_editor($file_path),
 				'file_path'   => $file_path,
 				'quality'     => (int)self::$image_quality,
 				'width'       => (float)$width,
@@ -504,6 +505,7 @@
 			var_dump(self::$resize_process);
 			self::$resize_process->cancel_process();
 			self::$resize_process->push_to_queue($resize_request);
+
 			$resized_url = join(DIRECTORY_SEPARATOR, [dirname($original_url), basename($resized_file_path)]);
 
 			return $resized_url;
@@ -761,7 +763,7 @@
 
 		// set resize process action
 		public static function setResizeProcess() {
-			// require_once plugin_dir_path(__FILE__) . 'ResizeProcess.php';
+			require_once plugin_dir_path(__FILE__) . 'ResizeProcess.php';
 			self::$resize_process = new WP_Resize_Process();
 		}
 

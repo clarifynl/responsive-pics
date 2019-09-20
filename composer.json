@@ -36,10 +36,7 @@
     "a5hleyrich/wp-background-processing": "^1.0"
   },
   "autoload": {
-    "files": [
-      "ResponsivePics.php",
-      "ResizeProcess.php"
-    ]
+    "files": ["ResponsivePics.php"]
   },
   "repositories": [
     {
