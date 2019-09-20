@@ -631,7 +631,6 @@
 			}
 
 			// Save and dispatch the resize process queue
-			var_dump(self::$resize_process);
 			self::$resize_process->save()->dispatch();
 
 			if (!$addedSource) {
