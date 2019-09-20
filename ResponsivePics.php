@@ -1,7 +1,7 @@
 <?php
 
 	/*
-		Responsive Pics v0.7.2
+		Responsive Pics v0.8.0
 		© 2017-2019 Booreiland
 
 		Responsive Pics is a Wordpress tool for resizing images on the fly.

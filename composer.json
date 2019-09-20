@@ -32,7 +32,8 @@
   },
   "require": {
     "php": ">=5.5.0",
-    "composer/installers": "~1.0"
+    "composer/installers": "~1.0",
+    "a5hleyrich/wp-background-processing": "^1.0"
   },
   "autoload": {
     "files": ["ResponsivePics.php"]
