@@ -1,91 +1,98 @@
 <?php
+/*
+	Plugin Name: Responsive Pics
+	Plugin URI: https://responsive.pics
+	Description: Responsive Pics is a Wordpress tool for resizing images on the fly.
+	Author: Booreiland
+	Version: 0.8.1
+	Author URI: https://booreiland.amsterdam
 
-	/*
-		Responsive Pics v0.8.1
-		© 2017-2019 Booreiland
+	Responsive Pics is a Wordpress tool for resizing images on the fly.
+	It uses a concise syntax for determining the image sizes you need in your template.
+	You can define number of columns, aspect ratios and crop settings.
+	It handles @2x images and missing breakpoints automatically.
 
-		Responsive Pics is a Wordpress tool for resizing images on the fly.
-		It uses a concise syntax for determining the image sizes you need in your template.
-		You can define number of columns, aspect ratios and crop settings.
-		It handles @2x images and missing breakpoints automatically.
+	syntax    : ResponsivePics::get[_background](id, 'breakpoint:width [/factor|height]|crop_x crop_y, …', 'class-name', lazyload, intrinsic);
 
-		syntax    : ResponsivePics::get[_background](id, 'breakpoint:width [/factor|height]|crop_x crop_y, …', 'class-name', lazyload, intrinsic);
+	breakpoint: a number or a key in $breakpoints (e.g. "xs")
+				if not defined, and width is a number, breakpoint will be the same as the width
+				if not defined, and width is a column definition, breakpoint will be the corresponding breakpoint
+				(e.g. if width is "xs-8", breakpoint will be "xs")
+	width     : a number or a column definition
+				a column definition is a key in $grid_widths plus a dash and a column span number (e.g. "xs-8")
+				if column span number is "full", the full width of the next matching $breakpoint is used (e.g. "xs-full")
+	height    : a number in pixels
+	factor    : a factor of width
+	crop_x    : t(op), r(ight), b(ottom), l(eft) or c(enter),
+	crop_y    : t(op), r(ight), b(ottom), l(eft) or c(enter)
+				if crop_y is not defined, crop_x will be treated as a shortcut:
+				"c" = "center center", "t" = "top center", r = "right center", "b" = "center bottom", "l" = "left center"
+	class-name: a class name to add to the html element
+	lazyload  : (boolean, default: false) if true:
+				- adds a 'lazyload' class to the picture img element
+				- swaps the 'src' with 'data-src' attributes on the picture source elements
+				- this will enable you to use a lazy loading plugin such as Lazysizes: https://github.com/aFarkas/lazysizes
+	intrinsic : (boolean, default: false) if true:
+				- adds an 'intrinsic' class to the picture element and a 'intrinsic__item' class to the picture img element
+				- adds 'data-aspectratio' attributes on the picture source and img elements
+				- this will enable you to pre-occupy the space needed for an image by calculating the height from the image width or the width from the height
+				  with an intrinsic plugin such as the lazysizes aspectratio extension
 
-		breakpoint: a number or a key in $breakpoints (e.g. "xs")
-					if not defined, and width is a number, breakpoint will be the same as the width
-					if not defined, and width is a column definition, breakpoint will be the corresponding breakpoint
-					(e.g. if width is "xs-8", breakpoint will be "xs")
-		width     : a number or a column definition
-					a column definition is a key in $grid_widths plus a dash and a column span number (e.g. "xs-8")
-					if column span number is "full", the full width of the next matching $breakpoint is used (e.g. "xs-full")
-		height    : a number in pixels
-		factor    : a factor of width
-		crop_x    : t(op), r(ight), b(ottom), l(eft) or c(enter),
-		crop_y    : t(op), r(ight), b(ottom), l(eft) or c(enter)
-					if crop_y is not defined, crop_x will be treated as a shortcut:
-					"c" = "center center", "t" = "top center", r = "right center", "b" = "center bottom", "l" = "left center"
-		class-name: a class name to add to the html element
-		lazyload  : (boolean, default: false) if true:
-					- adds a 'lazyload' class to the picture img element
-					- swaps the 'src' with 'data-src' attributes on the picture source elements
-					- this will enable you to use a lazy loading plugin such as Lazysizes: https://github.com/aFarkas/lazysizes
-		intrinsic : (boolean, default: false) if true:
-					- adds an 'intrinsic' class to the picture element and a 'intrinsic__item' class to the picture img element
-					- adds 'data-aspectratio' attributes on the picture source and img elements
-					- this will enable you to pre-occupy the space needed for an image by calculating the height from the image width or the width from the height
-					  with an intrinsic plugin such as the lazysizes aspectratio extension
+	API
 
-		API
+	ResponsivePics::setColumns(number):    set number of grid columns
+	ResponsivePics::setGutter(pixels):     set grid gutter width
+	ResponsivePics::setGridWidths(array):  set grid widths for various breakpoints, example:
+		[
+			'xs' => 540,
+			'sm' => 720,
+			'md' => 960,
+			'lg' => 1140,
+			'xl' => 1140
+		]
+	ResponsivePics::setBreakpoints(array): set breakpoints, example:
+		[
+			'xs' => 0,
+			'sm' => 576,
+			'md' => 768,
+			'lg' => 992,
+			'xl' => 1200
+		]
 
-		ResponsivePics::setColumns(number):    set number of grid columns
-		ResponsivePics::setGutter(pixels):     set grid gutter width
-		ResponsivePics::setGridWidths(array):  set grid widths for various breakpoints, example:
-			[
-				'xs' => 540,
-				'sm' => 720,
-				'md' => 960,
-				'lg' => 1140,
-				'xl' => 1140
-			]
-		ResponsivePics::setBreakpoints(array): set breakpoints, example:
-			[
-				'xs' => 0,
-				'sm' => 576,
-				'md' => 768,
-				'lg' => 992,
-				'xl' => 1200
-			]
+	ResponsivePics::setLazyLoadClass(string): set lazyload classname
 
-		ResponsivePics::setLazyLoadClass(string): set lazyload classname
+	examples  : ResponsivePics::get(1, 'xs-12, sm-6, md-4');
+				ResponsivePics::get(1, 'xs-12 300, sm-6 400, md-4 500');
+				ResponsivePics::get(1, '400:200 300, 800:400 600', 'my-picture');
+				ResponsivePics::get(1, '400:200 200|c, 800:400 400|l t');
+				ResponsivePics::get(1, 'xs-full|c, sm-12/0.5|c, md-12/0.25|c');
 
-		examples  : ResponsivePics::get(1, 'xs-12, sm-6, md-4');
-					ResponsivePics::get(1, 'xs-12 300, sm-6 400, md-4 500');
-					ResponsivePics::get(1, '400:200 300, 800:400 600', 'my-picture');
-					ResponsivePics::get(1, '400:200 200|c, 800:400 400|l t');
-					ResponsivePics::get(1, 'xs-full|c, sm-12/0.5|c, md-12/0.25|c');
-
-					ResponsivePics::get_background(1, 'xs:200 200|c, lg:400 400');
-
-
-		Javascript dependencies:
-
-					A responsive image polyfill such as Picturefill:
-					http://scottjehl.github.io/picturefill/
-
-					A lazy loader for images such as Lazysizes:
-					https://github.com/aFarkas/lazysizes
-
-					import 'picturefill';
-					import 'lazysizes';
-					import 'lazysizes/plugins/aspectratio/ls.aspectratio.js';
-
-		TO DO'S:
-		* If you want to resize and/or crop with a fixed heigth, but the width is not sufficient, it skips the resize alltogether.
-		  Better would be if you can resize with only a fixed width or height and the 2nd dimension is calculated based upon original dimensions
-		* Support for multiple background images
-	*/
+				ResponsivePics::get_background(1, 'xs:200 200|c, lg:400 400');
 
 
+	Javascript dependencies:
+
+				A responsive image polyfill such as Picturefill:
+				http://scottjehl.github.io/picturefill/
+
+				A lazy loader for images such as Lazysizes:
+				https://github.com/aFarkas/lazysizes
+
+				import 'picturefill';
+				import 'lazysizes';
+				import 'lazysizes/plugins/aspectratio/ls.aspectratio.js';
+
+	TO DO'S:
+	* Support for multiple background images
+*/
+
+
+// exit if accessed directly
+if (!defined('ABSPATH') ) exit;
+
+
+// check if class already exists
+if (!class_exists('ResponsivePics')) {
 
 	class ResponsivePics {
 
@@ -679,7 +686,9 @@
 		 *            *
 		 **************/
 
-
+		public function __construct() {
+			add_action('plugins_loaded', array('ResponsivePics', 'init'));
+		}
 
 		public static function init() {
 			self::setColumns();
@@ -745,7 +754,7 @@
 
 		// set resize process action
 		public static function setResizeProcess() {
-			require_once(dirname( __FILE__ ) . '/ResizeProcess.php');
+			require_once(plugin_dir_path( __FILE__ ) . '/classes/ResizeProcess.php');
 			self::$resize_process = new WP_Resize_Process('cron_interval');
 			self::$resize_process->cron_interval = self::$cron_interval;
 		}
@@ -942,8 +951,8 @@
 		}
 	}
 
-	ResponsivePics::init();
+	new ResponsivePics();
 
-	// Support old versions > 0.7
+	// Support older versions > 0.7
 	class_alias('ResponsivePics', 'ResponsivePicture');
-?>
+}

@@ -18,7 +18,7 @@ For full documentation and examples visit: [responsive.pics](https://responsive.
 6. [Features](#features)
 
 ## Requirements <a name="requirements"></a>
-* PHP 5.2+
+* PHP 5.5+
 * WordPress 3.5+
 * `WP Cron` enabled or a Real Cron Job set up on your server
 
