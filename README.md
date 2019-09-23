@@ -54,15 +54,15 @@ And import the package in your theme’s global javascript file:
 ## Configuration <a name="configuration"></a>
 Responsive Pics uses the following default variables:
 
-| Variable       | Type   | Default    | Definition
-| --------------:|:-------|:-----------|-----------
-| columns        | number | `12`       | The amount of columns your grid layout uses
-| gutter         | number | `30`       | The gutter width in pixels (space between grid columns)
-| breakpoints    | array  | `['xs' => 0, 'sm' => 576, 'md' => 768, 'lg' => 992, 'xl' => 1200, 'xxl' => 1400, 'xxxl' => 1600]` | The media query breakpoints Responsive Pics will use for creating and serving your image sources
-| grid_widths    | array  | `['xs' => 576, 'sm' => 540, 'md' => 720, 'lg' => 960, 'xl' => 1140, 'xxl' => 1140, 'xxxl' => 1140]` | The maximum widths of your layout in pixels Responsive Pics will use for resizing your images
-| lazyload_class | string | `lazyload` | The css class to be added on the picture `img` tag when `lazyload` is enabled
-| image_quality  | number | `90`       | The image compression quality in percentage used in the `WP_Image_Editor` when resizing images
-| cron_interval  | number | `0.1`      | The time interval in minutes when WordPress will check if there are any remaining image resize tasks left in it's cron job
+| Variable          | Type   | Default    | Definition
+| -----------------:|:-------|:-----------|-----------
+| `$columns`        | number | `12`       | The amount of columns your grid layout uses
+| `$gutter`         | number | `30`       | The gutter width in pixels (space between grid columns)
+| `$breakpoints`    | array  | `['xs' => 0, 'sm' => 576, 'md' => 768, 'lg' => 992, 'xl' => 1200, 'xxl' => 1400, 'xxxl' => 1600]` | The media query breakpoints Responsive Pics will use for creating and serving your image sources
+| `$grid_widths`    | array  | `['xs' => 576, 'sm' => 540, 'md' => 720, 'lg' => 960, 'xl' => 1140, 'xxl' => 1140, 'xxxl' => 1140]` | The maximum widths of your layout in pixels Responsive Pics will use for resizing your images
+| `$lazyload_class` | string | `lazyload` | The css class to be added on the picture `img` tag when `lazyload` is enabled
+| `$image_quality`  | number | `90`       | The image compression quality in percentage used in the `WP_Image_Editor` when resizing images
+| `$cron_interval`  | number | `0.1`      | The time interval in minutes when WordPress will check if there are any remaining image resize tasks left in it's cron job
 
 By default, Responsive Pics will use the Bootstrap 4 SCSS variables for defining:
 
@@ -128,13 +128,41 @@ if (class_exists('ResponsivePics')) {
 ### Helper Functions
 You can retrieve any variables used in Responsive Pics by running one of these helper functions:
 
-`ResponsivePics::getColumns();`       Will return `12`
-`ResponsivePics::getGutter();`        Will return `30`
-`ResponsivePics::getBreakpoints();`   Will return an array of breakpoints
-`ResponsivePics::getGridWidths();`    Will return an array of grid widths
-`ResponsivePics::getLazyLoadClass();` Will return `lazyload`
-`ResponsivePics::getImageQuality();`  Will return `90`
-`ResponsivePics::getCronInterval();`  Will return `0.1`
+```
+ResponsivePics::getColumns();
+```
+Will return `$columns`
+
+```
+ResponsivePics::getGutter();
+```
+Will return `$gutter`
+
+```
+ResponsivePics::getBreakpoints();
+```
+Will return `$breakpoints`
+
+```
+ResponsivePics::getGridWidths();
+```
+Will return `$grid_widths`
+
+```
+ResponsivePics::getLazyLoadClass();
+```
+Will return `$lazyload_class`
+
+```
+ResponsivePics::getImageQuality();
+```
+Will return `$image_quality`
+
+```
+ResponsivePics::getCronInterval();
+```
+Will return `$cron_interval`
+
 
 ## Usage <a name="usage"></a>
 
