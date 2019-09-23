@@ -133,40 +133,14 @@ if (class_exists('ResponsivePics')) {
 You can retrieve any variables used in Responsive Pics by running one of these helper functions:
 
 ```php
-ResponsivePics::getColumns();
+ResponsivePics::getColumns();       // Will return $columns
+ResponsivePics::getGutter();        // Will return $gutter
+ResponsivePics::getBreakpoints();   // Will return $breakpoints
+ResponsivePics::getGridWidths();    // Will return $grid_widths
+ResponsivePics::getLazyLoadClass(); // Will return $lazyload_class
+ResponsivePics::getImageQuality();  // Will return $image_quality
+ResponsivePics::getCronInterval();  // Will return $cron_interval
 ```
-Will return `$columns`
-
-```php
-ResponsivePics::getGutter();
-```
-Will return `$gutter`
-
-```php
-ResponsivePics::getBreakpoints();
-```
-Will return `$breakpoints`
-
-```php
-ResponsivePics::getGridWidths();
-```
-Will return `$grid_widths`
-
-```php
-ResponsivePics::getLazyLoadClass();
-```
-Will return `$lazyload_class`
-
-```php
-ResponsivePics::getImageQuality();
-```
-Will return `$image_quality`
-
-```php
-ResponsivePics::getCronInterval();
-```
-Will return `$cron_interval`
-
 
 ## Usage <a name="usage"></a>
 
