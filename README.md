@@ -71,7 +71,8 @@ The amount of **grid columns**:
 The **grid gutter width** in pixels:
 `$grid-gutter-width: 30px;`
 The **grid breakpoints** in pixels:
-```php
+
+```scss
 $grid-breakpoints: (
  xs: 0,
  sm: 576px,
@@ -81,7 +82,8 @@ $grid-breakpoints: (
 );
 ```
 And the **maximum widths of the containers** in pixels:
-```php
+
+```scss
 $container-max-widths: (
  sm: 540px,
  md: 720px,
@@ -89,11 +91,13 @@ $container-max-widths: (
  xl: 1140px
 );
 ```
+
 *Note: Responsive Pics will add the xs container max width for you (= 576), based upon the default sm grid breakpoint (= 576px).*
 
 If you have customized the bootstrap defaults or if you’re using a different grid system ([Foundation](https://foundation.zurb.com), [Materialize](https://materializecss.com) etc.), or even if you want to add extra breakpoints & container widths, you can pass your own grid variables to the Responsive Pics library.
 
 Add these lines to your theme’s **functions.php** and make sure to check if the `ResponsivePics` class exists:
+
 ```php
 /*
  * Set Responsive Pics variables
@@ -128,37 +132,37 @@ if (class_exists('ResponsivePics')) {
 ### Helper Functions
 You can retrieve any variables used in Responsive Pics by running one of these helper functions:
 
-```
+```php
 ResponsivePics::getColumns();
 ```
 Will return `$columns`
 
-```
+```php
 ResponsivePics::getGutter();
 ```
 Will return `$gutter`
 
-```
+```php
 ResponsivePics::getBreakpoints();
 ```
 Will return `$breakpoints`
 
-```
+```php
 ResponsivePics::getGridWidths();
 ```
 Will return `$grid_widths`
 
-```
+```php
 ResponsivePics::getLazyLoadClass();
 ```
 Will return `$lazyload_class`
 
-```
+```php
 ResponsivePics::getImageQuality();
 ```
 Will return `$image_quality`
 
-```
+```php
 ResponsivePics::getCronInterval();
 ```
 Will return `$cron_interval`
