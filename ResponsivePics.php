@@ -1,7 +1,7 @@
 <?php
 
 	/*
-		Responsive Pics v0.8.0
+		Responsive Pics v0.8.1
 		© 2017-2019 Booreiland
 
 		Responsive Pics is a Wordpress tool for resizing images on the fly.
@@ -745,7 +745,7 @@
 
 		// set resize process action
 		public static function setResizeProcess() {
-			require_once plugin_dir_path(__FILE__) . 'ResizeProcess.php';
+			require_once(dirname( __FILE__ ) . '/ResizeProcess.php');
 			self::$resize_process = new WP_Resize_Process('cron_interval');
 			self::$resize_process->cron_interval = self::$cron_interval;
 		}
