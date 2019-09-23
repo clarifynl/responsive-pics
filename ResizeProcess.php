@@ -39,14 +39,18 @@ class WP_Resize_Process extends WP_Background_Process {
 				$editor->resize($request['width'] * $request['ratio'], $request['height'] * $request['ratio'], $request['crop']);
 				$editor->save($request['resize_path']);
 
-				return false; // remove from queue
+				// remove from queue
+				return false;
 
 			} else {
-				error_log(sprintf('error resizing image "%s"', $request['resize_path']));
-				return $request; // re-add to queue
+				$message = sprintf('error resizing image "%s"', $request['resize_path']);
+				$error   = sprintf('<pre>%s error: %s</pre>', get_class(), $message);
+
+				echo $error;
 			}
 		} else {
-			return false;  // remove from queue
+			// remove from queue
+			return false;
 		}
 	}
 
