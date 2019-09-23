@@ -58,7 +58,7 @@ Responsive Pics uses the following default variables:
 | --------------:|---------:|-----------:|-----------
 | columns        | number   | `12`       | The amount of columns your grid layout uses
 | gutter         | number   | `30`       | The gutter width in pixels (space between grid columns)
-| breakpoints    | array    | `[
+| breakpoints    | array    | ```[
 	'xs'    => 0,
 	'sm'    => 576,
 	'md'    => 768,
@@ -66,8 +66,8 @@ Responsive Pics uses the following default variables:
 	'xl'    => 1200,
 	'xxl'   => 1400,
 	'xxxl'  => 1600
-]`    | The media query breakpoints Responsive Pics will use for creating and serving your image sources
-| grid_widths     | array   | `[
+]```    | The media query breakpoints Responsive Pics will use for creating and serving your image sources
+| grid_widths     | array   | ```[
 	'xs'    => 576,
 	'sm'    => 540,
 	'md'    => 720,
@@ -75,7 +75,7 @@ Responsive Pics uses the following default variables:
 	'xl'    => 1140,
 	'xxl'   => 1140,
 	'xxxl'  => 1140
-]`    | The maximum widths of your layout in pixels Responsive Pics will use for resizing your images
+]```    | The maximum widths of your layout in pixels Responsive Pics will use for resizing your images
 | lazyload_class  | string   | `lazyload` | The css class to be added on the picture `img` tag when `lazyload` is enabled
 | image_quality   | number   | `90`       | The image compression quality in percentage used in the `WP_Image_Editor` when resizing images
 | cron_interval   | number   | `0.1`      | The time interval in minutes when WordPress will check if there are any remaining image resize tasks left in it's cron job
