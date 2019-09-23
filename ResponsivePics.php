@@ -731,7 +731,7 @@
 		}
 
 		// set lazyload classname
-		public static function setImageQuality($value = 95) {
+		public static function setImageQuality($value = 90) {
 			self::$image_quality = $value;
 		}
 
