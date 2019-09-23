@@ -10,11 +10,23 @@ ResponsivePics saves bandwidth and lets your site load faster.
 For full documentation and examples visit: [responsive.pics](https://responsive.pics)
 
 # Table of contents
-1. [Installation](#installation)
-2. [Configuration](#configuration)
-3. [Usage](#usage)
-4. [Sizes](#sizes)
-5. [Features](#features)
+1. [Requirements](#requirements)
+2. [Installation](#installation)
+3. [Configuration](#configuration)
+4. [Usage](#usage)
+5. [Sizes](#sizes)
+6. [Features](#features)
+
+## Requirements <a name="requirements"></a>
+* PHP 5.2+
+* WordPress 3.5+
+* `WP Cron` enabled or a Real Cron Job set up on your server
+
+### Composer
+Run this command in your wordpress theme folder:
+`$ composer require "booreiland/responsive-pics"`
+And make sure to load Composer’s **autoloader** file by adding this line to your theme’s **functions.php**:
+`require_once (__DIR__.'/vendor/autoload.php');`
 
 ## Installation <a name="installation"></a>
 
@@ -40,7 +52,35 @@ And import the package in your theme’s global javascript file:
 `import 'picturefill';`
 
 ## Configuration <a name="configuration"></a>
-By default, Responsive Picture will use the Bootstrap 4 SCSS variables for defining:
+Responsive Pics uses the following default variables:
+
+| Variable       | Type     | Default    | Definition
+| --------------:|---------:|-----------:|-----------
+| columns        | number   | `12`       | The amount of columns your grid layout uses
+| gutter         | number   | `30`       | The gutter width in pixels (space between grid columns)
+| breakpoints    | array    | `[
+	'xs'    => 0,
+	'sm'    => 576,
+	'md'    => 768,
+	'lg'    => 992,
+	'xl'    => 1200,
+	'xxl'   => 1400,
+	'xxxl'  => 1600
+]`    | The media query breakpoints Responsive Pics will use for creating and serving your image sources
+| grid_widths     | array   | `[
+	'xs'    => 576,
+	'sm'    => 540,
+	'md'    => 720,
+	'lg'    => 960,
+	'xl'    => 1140,
+	'xxl'   => 1140,
+	'xxxl'  => 1140
+]`    | The maximum widths of your layout in pixels Responsive Pics will use for resizing your images
+| lazyload_class  | string   | `lazyload` | The css class to be added on the picture `img` tag when `lazyload` is enabled
+| image_quality   | number   | `90`       | The image compression quality in percentage used in the `WP_Image_Editor` when resizing images
+| cron_interval   | number   | `0.1`      | The time interval in minutes when WordPress will check if there are any remaining image resize tasks left in it's cron job
+
+By default, Responsive Pics will use the Bootstrap 4 SCSS variables for defining:
 
 The amount of **grid columns**:
 `$grid-columns: 12;`
@@ -65,14 +105,14 @@ $container-max-widths: (
  xl: 1140px
 );
 ```
-*Note: Responsive Picture will add the xs container max width for you (= 576), based upon the default sm grid breakpoint (= 576px).*
+*Note: Responsive Pics will add the xs container max width for you (= 576), based upon the default sm grid breakpoint (= 576px).*
 
 If you have customized the bootstrap defaults or if you’re using a different grid system ([Foundation](https://foundation.zurb.com), [Materialize](https://materializecss.com) etc.), or even if you want to add extra breakpoints & container widths, you can pass your own grid variables to the Responsive Pics library.
 
 Add these lines to your theme’s **functions.php** and make sure to check if the `ResponsivePics` class exists:
 ```php
 /*
- * Set Responsive Picture variables
+ * Set Responsive Pics variables
  */
 if (class_exists('ResponsivePics')) {
 	ResponsivePics::setColumns(12);
@@ -96,8 +136,21 @@ if (class_exists('ResponsivePics')) {
 		'xxl'   => 1600,
 		'xxxl'  => 1920
 	]);
+	ResponsivePics::setImageQuality(85);
+	ResponsivePics::setCronInterval(0.5);
 }
 ```
+
+### Helper Functions
+You can retrieve any variables used in Responsive Pics by running one of these helper functions:
+
+`ResponsivePics::getColumns();`       Will return `12`
+`ResponsivePics::getGutter();`        Will return `30`
+`ResponsivePics::getBreakpoints();`   Will return an array of breakpoints
+`ResponsivePics::getGridWidths();`    Will return an array of grid widths
+`ResponsivePics::getLazyLoadClass();` Will return `lazyload`
+`ResponsivePics::getImageQuality();`  Will return `90`
+`ResponsivePics::getCronInterval();`  Will return `0.1`
 
 ## Usage <a name="usage"></a>
 
@@ -164,7 +217,7 @@ with the following parameters:
 ### Lazyloading <a name="lazyloading"></a>
 When enabling the `lazyload` option in the `ResponsivePics::get()` function call, this library automatically:
 
-* adds a lazyload class to the picture img element.
+* adds a `lazyload` class to the picture img element.
 * swaps the srcset with data-srcset attributes on the picture source elements.
 
 This will enable you to use a lazy loading plugin such as Lazysizes.
