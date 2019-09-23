@@ -465,6 +465,7 @@
 			$suffix            = sprintf('%sx%s%s%s', round($width), round($height), $crop_indicator, $ratio_indicator);
 			$path_parts        = pathinfo($file_path);
 			$resized_file_path = join(DIRECTORY_SEPARATOR, [$path_parts['dirname'], $path_parts['filename'] . '-' . $suffix . '.' . $path_parts['extension']]);
+			$resized_url       = join(DIRECTORY_SEPARATOR, [dirname($original_url), basename($resized_file_path)]);
 			$resize_request    = [
 				'file_path'   => $file_path,
 				'quality'     => (int)self::$image_quality,
@@ -478,11 +479,10 @@
 			// If image size does not exist yet as filename
 			if (!file_exists($resized_file_path)) {
 				self::$resize_process->push_to_queue($resize_request);
+				return;
+			} else {
+				return $resized_url;
 			}
-
-			$resized_url = join(DIRECTORY_SEPARATOR, [dirname($original_url), basename($resized_file_path)]);
-
-			return $resized_url;
 		}
 
 		// check if png file has transparent background
@@ -578,42 +578,45 @@
 				if ($width < $original_width && $height < $original_height) {
 					// we can safely resize
 					$resized_url = self::get_resized_url($file_path, $url, $width, $height, $crop);
-					$source1x = $resized_url;
-					$source2x = null;
 
-					if ($width * 2 < $original_width && $height * 2 < $original_height) {
-						// we can also resize for @2x
-						$resized_url = self::get_resized_url($file_path, $url, $width, $height, $crop, 2);
-						$source2x = $resized_url;
+					if ($resized_url) {
+						$source1x    = $resized_url;
+						$source2x    = null;
+
+						if ($width * 2 < $original_width && $height * 2 < $original_height) {
+							// we can also resize for @2x
+							$resized_2x_url = self::get_resized_url($file_path, $url, $width, $height, $crop, 2);
+							$source2x       = $resized_2x_url ? $resized_2x_url : null;
+						}
+
+						$breakpoint = $rule['breakpoint'];
+
+						if ($breakpoint < $min_breakpoint || !isset($min_breakpoint)) {
+							$min_breakpoint = $breakpoint;
+						}
+
+						$sources[] = [
+							'breakpoint' => $breakpoint,
+							'source1x'   => $source1x,
+							'source2x'   => $source2x,
+							'ratio'      => $width / $height
+						];
+
+						$addedSource = true;
 					}
-
-					$breakpoint = $rule['breakpoint'];
-
-					if ($breakpoint < $min_breakpoint || !isset($min_breakpoint)) {
-						$min_breakpoint = $breakpoint;
-					}
-
-					$sources[] = [
-						'breakpoint' => $breakpoint,
-						'source1x'   => $source1x,
-						'source2x'   => $source2x,
-						'ratio'      => $width / $height
-					];
-
-					$addedSource = true;
 
 				} else {
 					// Use original image to resize and crop
 					$ratio = $original_width / $original_height;
 
 					if ($crop_ratio) {
-						$url   = self::get_resized_url($file_path, $url, $original_width, $original_width * $crop_ratio, $crop);
-						$ratio = $original_width / ($original_width * $crop_ratio);
+						$resized_url = self::get_resized_url($file_path, $url, $original_width, $original_width * $crop_ratio, $crop);
+						$ratio       = $original_width / ($original_width * $crop_ratio);
 					}
 
-					$source1x    = $url;
-					$source2x    = null;
-					$breakpoint  = $rule['breakpoint'];
+					$source1x   = $resized_url ? $resized_url : $url;
+					$source2x   = null;
+					$breakpoint = $rule['breakpoint'];
 
 					if ($breakpoint < $min_breakpoint || !isset($min_breakpoint)) {
 						$min_breakpoint = $breakpoint;
