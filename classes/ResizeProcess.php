@@ -1,15 +1,5 @@
 <?php
 
-/**
- * Load Wordpress in order to use wp_get_image_editor
-
-if (!defined('ABSPATH')) {
-	require_once($_SERVER['DOCUMENT_ROOT'] . '/wp-load.php');
-} else {
-	require_once(ABSPATH . 'wp-load.php');
-} */
-
-
 class WP_Resize_Process extends WP_Background_Process {
 
 	/**
@@ -75,5 +65,3 @@ class WP_Resize_Process extends WP_Background_Process {
 		parent::complete();
 	}
 }
-
-?>
