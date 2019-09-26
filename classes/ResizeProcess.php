@@ -3,6 +3,9 @@
 // exit if accessed directly
 if (!defined('ABSPATH')) exit;
 
+// load wp-background-processing
+require_once(plugin_dir_path( __FILE__ ) . '../includes/wp-background-processing/wp-background-processing.php');
+
 
 class WP_Resize_Process extends WP_Background_Process {
 
@@ -46,6 +49,16 @@ class WP_Resize_Process extends WP_Background_Process {
 			// remove from queue
 			return false;
 		}
+	}
+
+	/**
+	 * Debug function
+	 *
+	 * @return object
+	 */
+	public function show_queue() {
+		$queue_items = (array)$this->data;
+		return $queue_items;
 	}
 
 	/**

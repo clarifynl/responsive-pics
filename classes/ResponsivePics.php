@@ -741,12 +741,13 @@ if (!class_exists('ResponsivePics')) {
 		}
 
 		// set cron interval in minutes
-		public static function setCronInterval($value = 0.1) {
+		public static function setCronInterval($value = 10 / 60) {
 			self::$cron_interval = $value;
 		}
 
 		// set resize process action
 		public static function setResizeProcess() {
+			require_once(plugin_dir_path( __FILE__ ) . 'ResizeProcess.php');
 			self::$resize_process = new WP_Resize_Process();
 			self::$resize_process->cron_interval = self::$cron_interval;
 		}
@@ -942,6 +943,8 @@ if (!class_exists('ResponsivePics')) {
 			return implode("\n", $picture) . "\n";
 		}
 	}
+
+	new ResponsivePics();
 
 	// Support older versions > 0.7
 	class_alias('ResponsivePics', 'ResponsivePicture');
