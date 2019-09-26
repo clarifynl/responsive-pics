@@ -23,7 +23,8 @@ if (!class_exists('ResponsivePicsPlugin')) {
 		 */
 		public function __construct() {
 			add_action('plugins_loaded', array($this, 'init'));
-			add_action('admin_bar_menu', array($this, 'admin_bar'), 100);
+			add_action('admin_menu',     array($this, 'admin_menu'));
+			add_action('admin_bar_menu', array($this, 'admin_bar_menu'), 100);
 			add_action('init',           array($this, 'process_handler'));
 		}
 
@@ -35,11 +36,28 @@ if (!class_exists('ResponsivePicsPlugin')) {
 		}
 
 		/**
-		 * Admin bar
+		 * Admin menu
 		 *
 		 * @param WP_Admin_Bar $wp_admin_bar
 		 */
-		public function admin_bar( $wp_admin_bar ) {
+		public function admin_menu($wp_admin_bar) {
+			add_menu_page(
+				__('Responsive Pics', 'responsive-pics'),
+				'Responsive Pics',
+				'manage_options',
+				WPMU_PLUGIN_DIR . '/responsive-pics/admin/admin.php',
+				'',
+				WPMU_PLUGIN_DIR . '/responsive-pics/images/icon.png',
+				80
+			);
+		}
+
+		/**
+		 * Admin bar menu
+		 *
+		 * @param WP_Admin_Bar $wp_admin_bar
+		 */
+		public function admin_bar_menu($wp_admin_bar) {
 			if (!current_user_can('manage_options')) {
 				return;
 			}
@@ -49,11 +67,12 @@ if (!class_exists('ResponsivePicsPlugin')) {
 				'title' => __('Responsive Pics', 'responsive-pics'),
 				'href'  => '#',
 			));
+
 			$wp_admin_bar->add_menu(array(
 				'parent' => 'responsive-pics',
 				'id'     => 'responsive-pics-queue',
 				'title'  => __('View resize queue', 'responsive-pics'),
-				'href'   => wp_nonce_url(admin_url( '?process=queue'), 'process'),
+				'href'   => wp_nonce_url(admin_url( '?resize_process=show_queue'), 'process'),
 			));
 		}
 
@@ -61,7 +80,7 @@ if (!class_exists('ResponsivePicsPlugin')) {
 		 * Process handler
 		 */
 		public function process_handler() {
-			if (!isset($_GET['process'] ) || !isset($_GET['_wpnonce'])) {
+			if (!isset($_GET['resize_process'] ) || !isset($_GET['_wpnonce'])) {
 				return;
 			}
 
@@ -69,8 +88,8 @@ if (!class_exists('ResponsivePicsPlugin')) {
 				return;
 			}
 
-			if ('queue' === $_GET['process']) {
-				// $this->show_queue();
+			if ('show_queue' === $_GET['resize_process']) {
+				ResponsivePics::getResizeProcessQueue();
 			}
 		}
 	}
