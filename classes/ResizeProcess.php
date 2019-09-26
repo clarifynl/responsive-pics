@@ -1,5 +1,9 @@
 <?php
 
+// exit if accessed directly
+if (!defined('ABSPATH')) exit;
+
+
 class WP_Resize_Process extends WP_Background_Process {
 
 	/**
