@@ -1,12 +1,5 @@
 <?php
 /*
-	Plugin Name: Responsive Pics
-	Plugin URI: https://responsive.pics
-	Description: Responsive Pics is a Wordpress tool for resizing images on the fly.
-	Author: Booreiland
-	Version: 0.8.2
-	Author URI: https://booreiland.amsterdam
-
 	Responsive Pics is a Wordpress tool for resizing images on the fly.
 	It uses a concise syntax for determining the image sizes you need in your template.
 	You can define number of columns, aspect ratios and crop settings.
@@ -687,7 +680,7 @@ if (!class_exists('ResponsivePics')) {
 		 **************/
 
 		public function __construct() {
-			add_action('plugins_loaded', array('ResponsivePics', 'init'));
+			self::init();
 		}
 
 		public static function init() {
@@ -754,8 +747,7 @@ if (!class_exists('ResponsivePics')) {
 
 		// set resize process action
 		public static function setResizeProcess() {
-			require_once(plugin_dir_path( __FILE__ ) . '/classes/ResizeProcess.php');
-			self::$resize_process = new WP_Resize_Process('cron_interval');
+			self::$resize_process = new WP_Resize_Process();
 			self::$resize_process->cron_interval = self::$cron_interval;
 		}
 
@@ -950,8 +942,6 @@ if (!class_exists('ResponsivePics')) {
 			return implode("\n", $picture) . "\n";
 		}
 	}
-
-	new ResponsivePics();
 
 	// Support older versions > 0.7
 	class_alias('ResponsivePics', 'ResponsivePicture');
