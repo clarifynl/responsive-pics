@@ -752,6 +752,10 @@ if (!class_exists('ResponsivePics')) {
 			self::$resize_process->cron_interval = self::$cron_interval;
 		}
 
+		// clear resize process queue
+		public static function clearResizeProcessQueue() {
+			self::$resize_process->cancel_process();
+		}
 
 		// get breakpoints used for "media(min-width: x)" in picture element, in pixels
 		public static function getBreakpoints() {
@@ -786,6 +790,11 @@ if (!class_exists('ResponsivePics')) {
 		// get cron interval
 		public static function getCronInterval() {
 			return self::$cron_interval;
+		}
+
+		// get resize process queue
+		public static function getResizeProcessQueue() {
+			return self::$resize_process->show_queue();
 		}
 
 		/*

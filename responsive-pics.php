@@ -70,9 +70,16 @@ if (!class_exists('ResponsivePicsPlugin')) {
 
 			$wp_admin_bar->add_menu(array(
 				'parent' => 'responsive-pics',
-				'id'     => 'responsive-pics-queue',
+				'id'     => 'responsive-pics-clear',
+				'title'  => __('Clear resize queue', 'responsive-pics'),
+				'href'   => wp_nonce_url(admin_url('?resize_process=clear_queue'), 'process')
+			));
+
+			$wp_admin_bar->add_menu(array(
+				'parent' => 'responsive-pics',
+				'id'     => 'responsive-pics-show',
 				'title'  => __('View resize queue', 'responsive-pics'),
-				'href'   => wp_nonce_url(admin_url( '?resize_process=show_queue'), 'process'),
+				'href'   => wp_nonce_url(admin_url('?resize_process=show_queue'), 'process')
 			));
 		}
 
@@ -86,6 +93,10 @@ if (!class_exists('ResponsivePicsPlugin')) {
 
 			if (!wp_verify_nonce($_GET['_wpnonce'], 'process')) {
 				return;
+			}
+
+			if ('clear_queue' === $_GET['resize_process']) {
+				ResponsivePics::clearResizeProcessQueue();
 			}
 
 			if ('show_queue' === $_GET['resize_process']) {
