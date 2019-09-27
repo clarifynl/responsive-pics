@@ -89,6 +89,7 @@ if (!class_exists('ResponsivePics')) {
 
 	class ResponsivePics {
 
+		// setup variables
 		protected static $resize_process;
 
 		private static $columns = null;

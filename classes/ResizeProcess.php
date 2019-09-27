@@ -58,6 +58,7 @@ class WP_Resize_Process extends WP_Background_Process {
 	 */
 	public function show_queue() {
 		$queue_items = (array)$this->data;
+
 		return $queue_items;
 	}
 
@@ -70,6 +71,8 @@ class WP_Resize_Process extends WP_Background_Process {
 	public function cancel_process() {
 		parent::unlock_process();
 		parent::cancel_process();
+
+		add_action('admin_notices', array('ResponsivePicsPlugin', 'admin_notices'));
 	}
 
 	/**

@@ -22,10 +22,10 @@ if (!class_exists('ResponsivePicsPlugin')) {
 		 * ResponsivePicsPlugin constructor.
 		 */
 		public function __construct() {
+			add_action('init',           array($this, 'process_handler'));
 			add_action('plugins_loaded', array($this, 'init'));
 			add_action('admin_menu',     array($this, 'admin_menu'));
 			add_action('admin_bar_menu', array($this, 'admin_bar_menu'), 100);
-			add_action('init',           array($this, 'process_handler'));
 		}
 
 		/**
@@ -36,20 +36,43 @@ if (!class_exists('ResponsivePicsPlugin')) {
 		}
 
 		/**
-		 * Admin menu
-		 *
-		 * @param WP_Admin_Bar $wp_admin_bar
+		 * Process handler
 		 */
-		public function admin_menu($wp_admin_bar) {
+		public function process_handler() {
+			if (!isset($_GET['resize_process'] ) || !isset($_GET['_wpnonce'])) {
+				return;
+			}
+
+			if (!wp_verify_nonce($_GET['_wpnonce'], 'process')) {
+				return;
+			}
+
+			if ('clear_queue' === $_GET['resize_process']) {
+				ResponsivePics::clearResizeProcessQueue();
+			}
+		}
+
+		/**
+		 * Admin menu
+		 */
+		public function admin_menu() {
 			add_menu_page(
 				__('Responsive Pics', 'responsive-pics'),
 				'Responsive Pics',
 				'manage_options',
-				WPMU_PLUGIN_DIR . '/responsive-pics/admin/admin.php',
-				'',
-				WPMU_PLUGIN_DIR . '/responsive-pics/images/icon.png',
+				'responsive-pics',
+				array($this, 'show_process_queue'),
+				'dashicons-images-alt2',
 				80
 			);
+		}
+
+		public function show_process_queue() {
+			echo '<div class="wrap">'.
+				 '<h1 class="wp-heading-inline">' . __('Responsive Pics', 'responsive-pics') . '</h1>' .
+				 '</div>';
+
+			var_dump(ResponsivePics::getResizeProcessQueue());
 		}
 
 		/**
@@ -79,28 +102,19 @@ if (!class_exists('ResponsivePicsPlugin')) {
 				'parent' => 'responsive-pics',
 				'id'     => 'responsive-pics-show',
 				'title'  => __('View resize queue', 'responsive-pics'),
-				'href'   => wp_nonce_url(admin_url('?resize_process=show_queue'), 'process')
+				'href'   => wp_nonce_url(admin_url('?page=responsive-pics'), 'process')
 			));
 		}
 
 		/**
-		 * Process handler
+		 * Admin notices
 		 */
-		public function process_handler() {
-			if (!isset($_GET['resize_process'] ) || !isset($_GET['_wpnonce'])) {
-				return;
-			}
-
-			if (!wp_verify_nonce($_GET['_wpnonce'], 'process')) {
-				return;
-			}
-
+		public static function admin_notices() {
+			// On Clear
 			if ('clear_queue' === $_GET['resize_process']) {
-				ResponsivePics::clearResizeProcessQueue();
-			}
-
-			if ('show_queue' === $_GET['resize_process']) {
-				ResponsivePics::getResizeProcessQueue();
+				echo '<div class="notice notice-success is-dismissible">'.
+					'<p>'. __('The responsive pics resize background process queue has been cleared succesfully.', 'responsive-pics') .'</p>'.
+				'</div>';
 			}
 		}
 	}
