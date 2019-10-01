@@ -52,20 +52,38 @@ class WP_Resize_Process extends WP_Background_Process {
 	}
 
 	/**
-	 * Debug function
+	 * Show Process Queue
 	 *
-	 * @return object
+	 * This will return the current cron batch in the database, not the full data object.
+	 *
+	 * @return array
 	 */
 	public function show_queue() {
-		$queue_items = (array)$this->data;
+		global $wpdb;
 
-		return $queue_items;
+		$identifier = (string)$this->identifier;
+		$table      = $wpdb->options;
+		$column     = 'option_name';
+
+		if (is_multisite()) {
+			$table  = $wpdb->sitemeta;
+			$column = 'meta_key';
+		}
+
+		$key  = $wpdb->esc_like($identifier . '_batch_') . '%';
+		$data = $wpdb->get_results($wpdb->prepare("
+			SELECT option_value
+			FROM {$table}
+			WHERE {$column} LIKE %s",
+		$key), ARRAY_A);
+
+		return $data;
 	}
 
 	/**
 	 * Cancel Process
 	 *
-	 * Stop processing queue items, clear cronjob and delete batch.
+	 * This will cancel the current cron batch in the database, not the full data object.
 	 *
 	 */
 	public function cancel_process() {
