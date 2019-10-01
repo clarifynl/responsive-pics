@@ -1,6 +1,6 @@
 {
   "name": "booreiland/responsive-pics",
-  "type": "wordpress-muplugin",
+  "type": "wordpress-plugin",
   "description": "Responsive Pics is a Wordpress tool for resizing images on the fly.",
   "keywords": [
     "php",
