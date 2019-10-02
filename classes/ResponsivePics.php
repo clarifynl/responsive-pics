@@ -416,7 +416,7 @@ if (!class_exists('ResponsivePics')) {
 					if (self::contains($dimensions['input'], '-')) {
 						// use breakpoint based on defined column size
 						$components = explode('-', $dimensions['input']);
-						$bp = trim($components[0]);
+						$bp         = trim($components[0]);
 						$breakpoint = self::$breakpoints[$bp];
 					} else {
 						// use breakpoint based on width
@@ -449,7 +449,7 @@ if (!class_exists('ResponsivePics')) {
 		}
 
 		// creates a resized file if it doesn't exist and returns the final image url
-		private static function get_resized_url($file_path, $original_url, $width, $height, $crop, $ratio = 1) {
+		private static function get_resized_url($id, $file_path, $original_url, $width, $height, $crop, $ratio = 1) {
 			if ($ratio === 1) {
 				$ratio_indicator = '';
 			} else {
@@ -468,12 +468,13 @@ if (!class_exists('ResponsivePics')) {
 			$resized_file_path = join(DIRECTORY_SEPARATOR, [$path_parts['dirname'], $path_parts['filename'] . '-' . $suffix . '.' . $path_parts['extension']]);
 			$resized_url       = join(DIRECTORY_SEPARATOR, [dirname($original_url), basename($resized_file_path)]);
 			$resize_request    = [
+				'id'          => (int)$id,
 				'file_path'   => $file_path,
 				'quality'     => (int)self::$image_quality,
 				'width'       => (float)$width,
 				'height'      => (float)$height,
-				'ratio'       => (int)$ratio,
 				'crop'        => $crop,
+				'ratio'       => (int)$ratio,
 				'resize_path' => $resized_file_path
 			];
 
@@ -578,7 +579,7 @@ if (!class_exists('ResponsivePics')) {
 
 				if ($width < $original_width && $height < $original_height) {
 					// we can safely resize
-					$resized_url = self::get_resized_url($file_path, $url, $width, $height, $crop);
+					$resized_url = self::get_resized_url($id, $file_path, $url, $width, $height, $crop);
 
 					if ($resized_url) {
 						$source1x    = $resized_url;
@@ -586,7 +587,7 @@ if (!class_exists('ResponsivePics')) {
 
 						if ($width * 2 < $original_width && $height * 2 < $original_height) {
 							// we can also resize for @2x
-							$resized_2x_url = self::get_resized_url($file_path, $url, $width, $height, $crop, 2);
+							$resized_2x_url = self::get_resized_url($id, $file_path, $url, $width, $height, $crop, 2);
 							$source2x       = $resized_2x_url ? $resized_2x_url : null;
 						}
 
@@ -611,7 +612,7 @@ if (!class_exists('ResponsivePics')) {
 					$ratio = $original_width / $original_height;
 
 					if ($crop_ratio) {
-						$resized_url = self::get_resized_url($file_path, $url, $original_width, $original_width * $crop_ratio, $crop);
+						$resized_url = self::get_resized_url($id, $file_path, $url, $original_width, $original_width * $crop_ratio, $crop);
 						$ratio       = $original_width / ($original_width * $crop_ratio);
 					}
 
