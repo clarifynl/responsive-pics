@@ -70,6 +70,7 @@ class WP_Resize_Process extends WP_Background_Process {
 			$column = 'meta_key';
 		}
 
+		// Get current cron batch
 		$key  = $wpdb->esc_like($identifier . '_batch_') . '%';
 		$data = $wpdb->get_results($wpdb->prepare("
 			SELECT option_value
