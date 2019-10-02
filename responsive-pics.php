@@ -52,10 +52,76 @@ if (!class_exists('ResponsivePicsPlugin')) {
 
 		public function show_process_queue() {
 			echo '<div class="wrap">'.
-				 '<h1 class="wp-heading-inline">' . __('Responsive Pics', 'responsive-pics') . '</h1>' .
+				 '<h1 class="wp-heading-inline">' . __('Responsive Pics Resize Queue', 'responsive-pics') . '</h1>' .
 				 '</div>';
 
-			var_dump(ResponsivePics::getResizeProcessQueue());
+			$table = '';
+			$queue = ResponsivePics::getResizeProcessQueue();
+
+			if (!empty($queue)) {
+				$first  = unserialize($queue[0]['option_value']);
+				if (is_array($first)) {
+					$values = $first[0];
+				} else {
+					$values = $first;
+				}
+
+				// Get table head values
+				$table .= '<table class="wp-list-table widefat fixed striped pages"><thead><tr>';
+				if (is_array($values)) {
+					foreach ($values as $key => $value) {
+						if ($key !== 'file_path' && $key !== 'resize_path') {
+							$table .= '<th scope="col" id="'. $key .'" class="manage-column column-title'. $key .'">'. $key .'</th>';
+						}
+					}
+				}
+				$table .= '</tr></thead><tbody id="the-list">';
+
+				foreach ($queue as $key => $item) {
+					$values = unserialize($item['option_value']);
+
+					// More then 1 item
+					if (isset($values[0])) {
+						foreach ($values as $value) {
+							$table .= '<tr>';
+							foreach ($value as $key => $col) {
+								if ($key !== 'file_path' && $key !== 'resize_path') {
+									$table .= '<td scope="col" data-colname="'. $key .'" class="title column-title has-row-actions column-primary page-title '. $key . '">';
+
+									if (!empty($col) && is_array($col)) {
+										$col = implode(' ', $col);
+									} elseif ($key === 'id') {
+										$col = wp_get_attachment_image($col, [50, 50]);
+									}
+
+									$table .= $col . '</td>';
+								}
+							}
+							$table .= '</tr>';
+						}
+					} else {
+						$table .= '<tr>';
+						foreach ($values as $key => $col) {
+							if ($key !== 'file_path' && $key !== 'resize_path') {
+								$table .= '<td scope="col" data-colname="'. $key .'" class="title column-title has-row-actions column-primary page-title '. $key . '">';
+
+								if (!empty($col) && is_array($col)) {
+									$col = implode(' ', $col);
+								} elseif ($key === 'id') {
+									$col = wp_get_attachment_image($col, [50, 50]);
+								}
+
+								$table .= $col . '</td>';
+							}
+						}
+						$table .= '</tr>';
+					}
+				}
+
+				$table .= '</tbody></table>';
+			}
+
+			echo $table;
 		}
 
 		/**
