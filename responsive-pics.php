@@ -50,6 +50,37 @@ if (!class_exists('ResponsivePicsPlugin')) {
 			);
 		}
 
+		/**
+		 * Admin bar menu
+		 *
+		 * @param WP_Admin_Bar $wp_admin_bar
+		 */
+		public function admin_bar_menu($wp_admin_bar) {
+			if (!current_user_can('manage_options')) {
+				return;
+			}
+
+			$wp_admin_bar->add_menu(array(
+				'id'    => 'responsive-pics',
+				'title' => __('Responsive Pics', 'responsive-pics'),
+				'href'  => '#',
+			));
+
+			$wp_admin_bar->add_menu(array(
+				'parent' => 'responsive-pics',
+				'id'     => 'responsive-pics-clear',
+				'title'  => __('Clear resize queue', 'responsive-pics'),
+				'href'   => wp_nonce_url(admin_url('?resize_process=clear_queue'), 'process')
+			));
+
+			$wp_admin_bar->add_menu(array(
+				'parent' => 'responsive-pics',
+				'id'     => 'responsive-pics-show',
+				'title'  => __('View resize queue', 'responsive-pics'),
+				'href'   => wp_nonce_url(admin_url('?page=responsive-pics'), 'process')
+			));
+		}
+
 		public function show_process_queue() {
 			echo '<div class="wrap">'.
 				 '<h1 class="wp-heading-inline">' . __('Responsive Pics Resize Queue', 'responsive-pics') . '</h1>' .
@@ -122,37 +153,6 @@ if (!class_exists('ResponsivePicsPlugin')) {
 			}
 
 			echo $table;
-		}
-
-		/**
-		 * Admin bar menu
-		 *
-		 * @param WP_Admin_Bar $wp_admin_bar
-		 */
-		public function admin_bar_menu($wp_admin_bar) {
-			if (!current_user_can('manage_options')) {
-				return;
-			}
-
-			$wp_admin_bar->add_menu(array(
-				'id'    => 'responsive-pics',
-				'title' => __('Responsive Pics', 'responsive-pics'),
-				'href'  => '#',
-			));
-
-			$wp_admin_bar->add_menu(array(
-				'parent' => 'responsive-pics',
-				'id'     => 'responsive-pics-clear',
-				'title'  => __('Clear resize queue', 'responsive-pics'),
-				'href'   => wp_nonce_url(admin_url('?resize_process=clear_queue'), 'process')
-			));
-
-			$wp_admin_bar->add_menu(array(
-				'parent' => 'responsive-pics',
-				'id'     => 'responsive-pics-show',
-				'title'  => __('View resize queue', 'responsive-pics'),
-				'href'   => wp_nonce_url(admin_url('?page=responsive-pics'), 'process')
-			));
 		}
 
 		/**
