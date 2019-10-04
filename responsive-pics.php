@@ -25,7 +25,6 @@ if (!class_exists('ResponsivePicsPlugin')) {
 			add_action('init',           array($this, 'process_handler'));
 			add_action('plugins_loaded', array($this, 'init'));
 			add_action('admin_menu',     array($this, 'admin_menu'));
-			add_action('admin_bar_menu', array($this, 'admin_bar_menu'), 100);
 		}
 
 		/**
@@ -39,120 +38,94 @@ if (!class_exists('ResponsivePicsPlugin')) {
 		 * Admin menu
 		 */
 		public function admin_menu() {
-			add_menu_page(
+			add_management_page(
 				__('Responsive Pics', 'responsive-pics'),
-				'Responsive Pics',
+				__('Responsive Pics', 'responsive-pics'),
 				'manage_options',
 				'responsive-pics',
-				array($this, 'show_process_queue'),
-				'dashicons-images-alt2',
-				80
+				array($this, 'show_process_queue')
 			);
 		}
 
 		/**
-		 * Admin bar menu
-		 *
-		 * @param WP_Admin_Bar $wp_admin_bar
+		 * Construct markup for current resize queue
 		 */
-		public function admin_bar_menu($wp_admin_bar) {
-			if (!current_user_can('manage_options')) {
-				return;
-			}
-
-			$wp_admin_bar->add_menu(array(
-				'id'    => 'responsive-pics',
-				'title' => __('Responsive Pics', 'responsive-pics'),
-				'href'  => '#',
-			));
-
-			$wp_admin_bar->add_menu(array(
-				'parent' => 'responsive-pics',
-				'id'     => 'responsive-pics-clear',
-				'title'  => __('Clear resize queue', 'responsive-pics'),
-				'href'   => wp_nonce_url(admin_url('?resize_process=clear_queue'), 'process')
-			));
-
-			$wp_admin_bar->add_menu(array(
-				'parent' => 'responsive-pics',
-				'id'     => 'responsive-pics-show',
-				'title'  => __('View resize queue', 'responsive-pics'),
-				'href'   => wp_nonce_url(admin_url('?page=responsive-pics'), 'process')
-			));
-		}
-
 		public function show_process_queue() {
 			echo '<div class="wrap">'.
-				 '<h1 class="wp-heading-inline">' . __('Responsive Pics Resize Queue', 'responsive-pics') . '</h1>' .
+				 '<h1 class="wp-heading-inline">' . __('Responsive Pics', 'responsive-pics') . '</h1>' .
 				 '</div>';
 
-			$table = '';
-			$queue = ResponsivePics::getResizeProcessQueue();
+			$output  = '<h2>' . __('Resize Queue', 'responsive-pics') . '</h2>';
+			$queue   = ResponsivePics::getResizeProcessQueue();
+
+			$columns = [
+				'id'     => __('Image', 'responsive-pics'),
+				'width'  => __('Resize Width', 'responsive-pics'),
+				'height' => __('Resize Height', 'responsive-pics'),
+				'crop'   => __('Crop Position', 'responsive-pics'),
+				'ratio'  => __('Density', 'responsive-pics')
+			];
 
 			if (!empty($queue)) {
-				$first  = unserialize($queue[0]['option_value']);
-				if (is_array($first)) {
-					$values = $first[0];
-				} else {
-					$values = $first;
-				}
-
 				// Get table head values
-				$table .= '<table class="wp-list-table widefat fixed striped pages"><thead><tr>';
-				if (is_array($values)) {
-					foreach ($values as $key => $value) {
-						if ($key !== 'file_path' && $key !== 'resize_path') {
-							$table .= '<th scope="col" id="'. $key .'" class="manage-column column-title'. $key .'">'. $key .'</th>';
-						}
-					}
+				$output .= '<form method="post" action="tools.php?page=responsive-pics">';
+				$output .= '<table class="widefat striped"><thead><tr>';
+				$output .= '<td id="cb" class="manage-column column-cb check-column"><label class="screen-reader-text" for="cb-select-all-1">'. __('Select All', 'responsive-pics') .'</label><input id="cb-select-all-1" type="checkbox"></td>';
+				foreach ($columns as $key => $name) {
+					$output .= '<th scope="col" id="'. $key .'" class="manage-column column-cb check-column'. $key .'">'. $name .'</th>';
 				}
-				$table .= '</tr></thead><tbody id="the-list">';
+				$output .= '</tr></thead><tbody>';
 
+				// Loop through batches
 				foreach ($queue as $key => $item) {
+					$id     = $item['option_id'];
+					$name   = $item['option_name'];
 					$values = unserialize($item['option_value']);
 
-					// More then 1 item
-					if (isset($values[0])) {
-						foreach ($values as $value) {
-							$table .= '<tr>';
-							foreach ($value as $key => $col) {
-								if ($key !== 'file_path' && $key !== 'resize_path') {
-									$table .= '<td scope="col" data-colname="'. $key .'" class="title column-title has-row-actions column-primary page-title '. $key . '">';
+					$output .= '<tr>';
+					$output .= '<td scope="row">'. sprintf('<input type="checkbox" name="delete[%1$s][%2$s]" value="%1$s">', esc_attr($id), esc_attr(rawurlencode($name)),) .'</td>';
+					$output .= '<td scope="row" colspan="'. count($columns) .'"><table class="widefat striped">';
 
-									if (!empty($col) && is_array($col)) {
-										$col = implode(' ', $col);
-									} elseif ($key === 'id') {
-										$col = wp_get_attachment_image($col, [50, 50]);
-									}
+					// Loop through batch items
+					foreach ($values as $value) {
+						$output .= '<tr>';
 
-									$table .= $col . '</td>';
-								}
+						// Loop through admin columns
+						foreach ($columns as $key => $name) {
+							$output .= '<td scope="col" data-colname="'. $key .'">';
+
+							// Construct column value
+							if (!empty($value[$key]) && is_array($value[$key])) {
+								$col = implode(' ', $value[$key]);
+							} elseif ($key === 'id') {
+								$col = wp_get_attachment_image($value[$key], [50, 50]);
+							} else {
+								$col = $value[$key];
 							}
-							$table .= '</tr>';
-						}
-					} else {
-						$table .= '<tr>';
-						foreach ($values as $key => $col) {
-							if ($key !== 'file_path' && $key !== 'resize_path') {
-								$table .= '<td scope="col" data-colname="'. $key .'" class="title column-title has-row-actions column-primary page-title '. $key . '">';
 
-								if (!empty($col) && is_array($col)) {
-									$col = implode(' ', $col);
-								} elseif ($key === 'id') {
-									$col = wp_get_attachment_image($col, [50, 50]);
-								}
-
-								$table .= $col . '</td>';
-							}
+							$output .= $col;
+							$output .= '</td>';
 						}
-						$table .= '</tr>';
+
+						$output .= '</tr>';
 					}
+
+					$output .= '</table></td>';
+					$output .= '</tr>';
 				}
 
-				$table .= '</tbody></table>';
+				$output .= '</tbody></table>';
+
+				// Submit form
+				$output .= wp_nonce_field('bulk-delete-resize-batch', '_wpnonce', true, false);
+				$output .= get_submit_button(__('Delete Selected Items', 'responsive-pics'), 'primary large', 'delete_resize_batches');
+				$output .= '</form>';
+
+			} else {
+				$output .=  '<div class="wrap"><p>' . __('No items left in resize queue', 'responsive-pics') . '</p></div>';
 			}
 
-			echo $table;
+			echo $output;
 		}
 
 		/**
@@ -165,6 +138,38 @@ if (!class_exists('ResponsivePicsPlugin')) {
 
 			if (!wp_verify_nonce($_GET['_wpnonce'], 'process')) {
 				return;
+			}
+
+			if (isset($_POST['delete_resize_batches'])) {
+				if (!current_user_can('manage_options')) {
+					wp_die(esc_html__('You are not allowed to delete resize batches.', 'responsive-pics'), 401);
+				}
+				check_admin_referer('bulk-delete-resize-batch');
+
+				if (empty($_POST['delete'])) {
+					return;
+				}
+
+				$delete  = wp_unslash($_POST['delete']);
+				$deleted = 0;
+
+				// foreach ($delete as $next_run => $batch) {
+				// 	foreach ($events as $id => $sig ) {
+				// 		if ( 'crontrol_cron_job' === $id && ! current_user_can( 'edit_files' ) ) {
+				// 			continue;
+				// 		}
+				// 		if ( $this->delete_cron( urldecode( $id ), $sig, $next_run ) ) {
+				// 			$deleted++;
+				// 		}
+				// 	}
+				// }
+
+				$redirect = array(
+					'page'    => 'responsive-pics',
+					'deleted' => $deleted
+				);
+				wp_safe_redirect(add_query_arg($redirect, admin_url('tools.php')));
+				exit;
 			}
 
 			if ('clear_queue' === $_GET['resize_process']) {
