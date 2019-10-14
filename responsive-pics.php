@@ -83,7 +83,7 @@ if (!class_exists('ResponsivePicsPlugin')) {
 					$values = unserialize($item['option_value']);
 
 					$output .= '<tr>';
-					$output .= '<td scope="row">'. sprintf('<input type="checkbox" name="delete[%1$s][%2$s]" value="%1$s">', esc_attr($id), esc_attr(rawurlencode($name)),) .'</td>';
+					$output .= '<td scope="row">'. sprintf('<input type="checkbox" name="delete[%1$s][%2$s]" value="%1$s">', esc_attr($id), esc_attr(rawurlencode($name))) .'</td>';
 					$output .= '<td scope="row" colspan="'. count($columns) .'"><table class="widefat striped">';
 
 					// Loop through batch items
