@@ -99,6 +99,7 @@ if (!class_exists('ResponsivePics')) {
 		private static $lazyload_class = null;
 		private static $image_quality = null;
 		private static $cron_interval = null;
+		private static $has_resize_queue = false;
 
 		// map short letters to valid crop values
 		private static $crop_map = [
@@ -480,6 +481,7 @@ if (!class_exists('ResponsivePics')) {
 
 			// If image size does not exist yet as filename
 			if (!file_exists($resized_file_path)) {
+				self::$has_resize_queue = true;
 				self::$resize_process->push_to_queue($resize_request);
 				return;
 			} else {
@@ -636,7 +638,10 @@ if (!class_exists('ResponsivePics')) {
 			}
 
 			// Save and dispatch the resize process queue
-			self::$resize_process->save()->dispatch();
+			var_dump(self::$has_resize_queue);
+			if (self::$has_resize_queue) {
+				self::$resize_process->save()->dispatch();
+			}
 
 			if (!$addedSource) {
 				// add original source if no sources have been found so far
