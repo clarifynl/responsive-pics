@@ -638,7 +638,6 @@ if (!class_exists('ResponsivePics')) {
 			}
 
 			// Save and dispatch the resize process queue
-			var_dump(self::$has_resize_queue);
 			if (self::$has_resize_queue) {
 				self::$resize_process->save()->dispatch();
 			}
