@@ -3,9 +3,6 @@
 // exit if accessed directly
 if (!defined('ABSPATH')) exit;
 
-// load wp-background-processing
-require_once(plugin_dir_path( __FILE__ ) . '../includes/wp-background-processing/wp-background-processing.php');
-
 
 class WP_Resize_Process extends WP_Background_Process {
 

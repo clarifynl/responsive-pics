@@ -12,6 +12,8 @@
 // exit if accessed directly
 if (!defined('ABSPATH') ) exit;
 
+// load Action Scheduler
+require_once(plugin_dir_path( __FILE__ ) . '/libraries/action-scheduler/action-scheduler.php' );
 
 // check if class already exists
 if (!class_exists('ResponsivePicsPlugin')) {
@@ -22,9 +24,9 @@ if (!class_exists('ResponsivePicsPlugin')) {
 		 * ResponsivePicsPlugin constructor.
 		 */
 		public function __construct() {
-			add_action('init',           array($this, 'process_handler'));
+			// add_action('init',           array($this, 'process_handler'));
 			add_action('plugins_loaded', array($this, 'init'));
-			add_action('admin_menu',     array($this, 'admin_menu'));
+			// add_action('admin_menu',     array($this, 'admin_menu'));
 		}
 
 		/**

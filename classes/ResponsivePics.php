@@ -83,7 +83,6 @@
 // exit if accessed directly
 if (!defined('ABSPATH') ) exit;
 
-
 // check if class already exists
 if (!class_exists('ResponsivePics')) {
 
@@ -482,7 +481,8 @@ if (!class_exists('ResponsivePics')) {
 			// If image size does not exist yet as filename
 			if (!file_exists($resized_file_path)) {
 				self::$has_resize_queue = true;
-				self::$resize_process->push_to_queue($resize_request);
+				// self::$resize_process->push_to_queue($resize_request);
+				as_schedule_single_action(time(), 'process_resize_request', $resize_request, $id)
 				return;
 			} else {
 				return $resized_url;
