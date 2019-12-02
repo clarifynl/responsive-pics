@@ -637,9 +637,10 @@ if (!class_exists('ResponsivePics')) {
 				}
 			}
 
-			// Save and dispatch the resize process queue
+			// Save, dispatch & reset the resize process queue
 			if (self::$has_resize_queue) {
 				self::$resize_process->save()->dispatch();
+				self::$has_resize_queue = false;
 			}
 
 			if (!$addedSource) {
