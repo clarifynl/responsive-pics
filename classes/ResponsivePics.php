@@ -83,22 +83,19 @@
 // exit if accessed directly
 if (!defined('ABSPATH') ) exit;
 
+// load Action Scheduler
+require_once(plugin_dir_path( __FILE__ ) . '/../libraries/action-scheduler/action-scheduler.php' );
+
 // check if class already exists
 if (!class_exists('ResponsivePics')) {
 
 	class ResponsivePics {
-
-		// setup variables
-		protected static $resize_process;
-
 		private static $columns = null;
 		private static $gutter = null;
 		private static $grid_widths = null;
 		private static $breakpoints = null;
 		private static $lazyload_class = null;
 		private static $image_quality = null;
-		private static $cron_interval = null;
-		private static $has_resize_queue = false;
 
 		// map short letters to valid crop values
 		private static $crop_map = [
@@ -480,9 +477,7 @@ if (!class_exists('ResponsivePics')) {
 
 			// If image size does not exist yet as filename
 			if (!file_exists($resized_file_path)) {
-				self::$has_resize_queue = true;
-				// self::$resize_process->push_to_queue($resize_request);
-				as_schedule_single_action(time(), 'process_resize_request', $resize_request, $id)
+				as_schedule_single_action(time(), array('ResponsivePics', 'process_resize_request'), $resize_request, $id);
 				return;
 			} else {
 				return $resized_url;
@@ -637,12 +632,6 @@ if (!class_exists('ResponsivePics')) {
 				}
 			}
 
-			// Save, dispatch & reset the resize process queue
-			if (self::$has_resize_queue) {
-				self::$resize_process->save()->dispatch();
-				self::$has_resize_queue = false;
-			}
-
 			if (!$addedSource) {
 				// add original source if no sources have been found so far
 				$sources[] = [
@@ -697,8 +686,6 @@ if (!class_exists('ResponsivePics')) {
 			self::setBreakpoints();
 			self::setLazyLoadClass();
 			self::setImageQuality();
-			self::setCronInterval();
-			self::setResizeProcess();
 		}
 
 		// set number of grid columns
@@ -747,23 +734,6 @@ if (!class_exists('ResponsivePics')) {
 			self::$image_quality = $value;
 		}
 
-		// set cron interval in minutes
-		public static function setCronInterval($value = 10 / 60) {
-			self::$cron_interval = $value;
-		}
-
-		// set resize process action
-		public static function setResizeProcess() {
-			require_once(plugin_dir_path( __FILE__ ) . 'ResizeProcess.php');
-			self::$resize_process = new WP_Resize_Process();
-			self::$resize_process->cron_interval = self::$cron_interval;
-		}
-
-		// clear resize process queue
-		public static function clearResizeProcessQueue() {
-			self::$resize_process->cancel_process();
-		}
-
 		// get breakpoints used for "media(min-width: x)" in picture element, in pixels
 		public static function getBreakpoints() {
 			return self::$breakpoints;
@@ -794,14 +764,23 @@ if (!class_exists('ResponsivePics')) {
 			return self::$image_quality;
 		}
 
-		// get cron interval
-		public static function getCronInterval() {
-			return self::$cron_interval;
-		}
+		public static function process_resize_request($request) {
+			$editor = wp_get_image_editor($request['file_path']);
 
-		// get resize process queue
-		public static function getResizeProcessQueue() {
-			return self::$resize_process->show_queue();
+			// Check if image exists
+			if (!file_exists($request['resize_path'])) {
+				if (!is_wp_error($editor)) {
+					$editor->set_quality($request['quality']);
+					$editor->resize($request['width'] * $request['ratio'], $request['height'] * $request['ratio'], $request['crop']);
+					$editor->save($request['resize_path']);
+
+				} else {
+					$message = sprintf('error resizing image "%s"', $request['resize_path']);
+					$error   = sprintf('<pre>%s error: %s</pre>', get_class(), $message);
+
+					echo $error;
+				}
+			}
 		}
 
 		/*
