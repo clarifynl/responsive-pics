@@ -83,9 +83,6 @@
 // exit if accessed directly
 if (!defined('ABSPATH') ) exit;
 
-// load Action Scheduler
-require_once(plugin_dir_path( __FILE__ ) . '/../libraries/action-scheduler/action-scheduler.php' );
-
 // check if class already exists
 if (!class_exists('ResponsivePics')) {
 
@@ -445,8 +442,7 @@ if (!class_exists('ResponsivePics')) {
 			return $b['breakpoint'] < $a['breakpoint'];
 		}
 
-		// creates a resized file if it doesn't exist and returns the final image url
-		private static function get_resized_url($id, $file_path, $original_url, $width, $height, $crop, $ratio = 1) {
+		private static function get_resized_suffix($width, $height, $ratio, $crop) {
 			if ($ratio === 1) {
 				$ratio_indicator = '';
 			} else {
@@ -460,24 +456,40 @@ if (!class_exists('ResponsivePics')) {
 			}
 
 			// note: actual dimensions can be different from the dimensions appended to the filename, but we don't know those before we actually resize
-			$suffix            = sprintf('%sx%s%s%s', round($width), round($height), $crop_indicator, $ratio_indicator);
+			$suffix = sprintf('%sx%s%s%s', round($width), round($height), $crop_indicator, $ratio_indicator);
+
+			return $suffix;
+		}
+
+		// creates a resized file if it doesn't exist and returns the final image url
+		private static function get_resized_url($id, $file_path, $original_url, $width, $height, $crop, $ratio = 1) {
+			$suffix            = self::get_resized_suffix($width, $height, $ratio, $crop);
 			$path_parts        = pathinfo($file_path);
 			$resized_file_path = join(DIRECTORY_SEPARATOR, [$path_parts['dirname'], $path_parts['filename'] . '-' . $suffix . '.' . $path_parts['extension']]);
 			$resized_url       = join(DIRECTORY_SEPARATOR, [dirname($original_url), basename($resized_file_path)]);
 			$resize_request    = [
 				'id'          => (int)$id,
-				'file_path'   => $file_path,
 				'quality'     => (int)self::$image_quality,
 				'width'       => (float)$width,
 				'height'      => (float)$height,
 				'crop'        => $crop,
-				'ratio'       => (int)$ratio,
-				'resize_path' => $resized_file_path
+				'ratio'       => (int)$ratio
 			];
+
+			$scheduled = as_get_scheduled_actions([
+				'group'    => 'process_resize_request_' . $id,
+				'status'   => ActionScheduler_Store::STATUS_PENDING,
+				'per_page' => -1
+			]);
+
+			foreach($scheduled as $action) {
+				$diff = array_diff($resize_request, (array) $action->args);
+				var_dump($diff);
+			}
 
 			// If image size does not exist yet as filename
 			if (!file_exists($resized_file_path)) {
-				as_schedule_single_action(time(), array('ResponsivePics', 'process_resize_request'), $resize_request, $id);
+				as_schedule_single_action(time(), 'process_resize_request', $resize_request, 'process_resize_request_' . $id);
 				return;
 			} else {
 				return $resized_url;
@@ -686,6 +698,8 @@ if (!class_exists('ResponsivePics')) {
 			self::setBreakpoints();
 			self::setLazyLoadClass();
 			self::setImageQuality();
+
+			add_action('process_resize_request', array('ResponsivePics', 'processResizeRequest'), 10, 6);
 		}
 
 		// set number of grid columns
@@ -764,21 +778,25 @@ if (!class_exists('ResponsivePics')) {
 			return self::$image_quality;
 		}
 
-		public static function process_resize_request($request) {
-			$editor = wp_get_image_editor($request['file_path']);
+		public static function processResizeRequest($id, $quality, $width, $height, $crop, $ratio) {
+			$file_path   = get_attached_file($id);
+			$path_parts  = pathinfo($file_path);
+			$suffix      = self::get_resized_suffix($width, $height, $ratio, $crop);
+			$resize_path = join(DIRECTORY_SEPARATOR, [$path_parts['dirname'], $path_parts['filename'] . '-' . $suffix . '.' . $path_parts['extension']]);
+			$wp_editor   = wp_get_image_editor($file_path);
 
 			// Check if image exists
-			if (!file_exists($request['resize_path'])) {
-				if (!is_wp_error($editor)) {
-					$editor->set_quality($request['quality']);
-					$editor->resize($request['width'] * $request['ratio'], $request['height'] * $request['ratio'], $request['crop']);
-					$editor->save($request['resize_path']);
+			if (!file_exists($resize_path)) {
+				if (!is_wp_error($wp_editor)) {
+					$wp_editor->set_quality($quality);
+					$wp_editor->resize($width * $ratio, $height * $ratio, $crop);
+					$wp_editor->save($resize_path);
 
 				} else {
-					$message = sprintf('error resizing image "%s"', $request['resize_path']);
-					$error   = sprintf('<pre>%s error: %s</pre>', get_class(), $message);
+					$message = sprintf('error resizing image "%s"', $resize_path);
+					// $error   = sprintf('<pre>%s error: %s</pre>', get_class(), $message);
 
-					echo $error;
+					error_log($message);
 				}
 			}
 		}
