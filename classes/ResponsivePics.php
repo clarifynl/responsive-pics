@@ -470,30 +470,48 @@ if (!class_exists('ResponsivePics')) {
 			$resize_request    = [
 				'id'          => (int)$id,
 				'quality'     => (int)self::$image_quality,
-				'width'       => (float)$width,
-				'height'      => (float)$height,
+				'width'       => (int)$width,
+				'height'      => (int)$height,
 				'crop'        => $crop,
 				'ratio'       => (int)$ratio
 			];
 
+			// if image size does not exist yet as filename
+			if (!file_exists($resized_file_path)) {
+				$is_pending = self::is_scheduled_action($resize_request, $id);
+
+				// if image size is not a pending request
+				if (!$is_pending) {
+					as_schedule_single_action(time(), 'process_resize_request', $resize_request, 'process_resize_request_' . $id);
+				}
+
+				return;
+			} else {
+				return $resized_url;
+			}
+		}
+
+		// check if resize requerst is not a pending scheduled action
+		private static function is_scheduled_action($request, $id) {
 			$scheduled = as_get_scheduled_actions([
 				'group'    => 'process_resize_request_' . $id,
 				'status'   => ActionScheduler_Store::STATUS_PENDING,
 				'per_page' => -1
 			]);
 
-			foreach($scheduled as $action) {
-				$diff = array_diff($resize_request, (array) $action->args);
-				var_dump($diff);
+			foreach ($scheduled as $action) {
+				// Get protected value from object
+				$reflection = new ReflectionClass($action);
+				$property   = $reflection->getProperty('args');
+				$property->setAccessible(true);
+				$action_args = $property->getValue($action);
+
+				if ($action_args === $request) {
+					return true;
+				}
 			}
 
-			// If image size does not exist yet as filename
-			if (!file_exists($resized_file_path)) {
-				as_schedule_single_action(time(), 'process_resize_request', $resize_request, 'process_resize_request_' . $id);
-				return;
-			} else {
-				return $resized_url;
-			}
+			return false;
 		}
 
 		// check if png file has transparent background
@@ -501,19 +519,14 @@ if (!class_exists('ResponsivePics')) {
 			return (ord(@file_get_contents($fn, NULL, NULL, 25, 1)) === 6);
 		}
 
+		// check if gif file is animated
 		private static function is_gif_ani($fn) {
 			if (!($fh = @fopen($fn, 'rb')))
 				return false;
 
 			$count = 0;
-			//an animated gif contains multiple "frames", with each frame having a header made up of:
-			// * a static 4-byte sequence (\x00\x21\xF9\x04)
-			// * 4 variable bytes
-			// * a static 2-byte sequence (\x00\x2C)
-
-			// We read through the file til we reach the end of the file, or we've found at least 2 frame headers
 			while (!feof($fh) && $count < 2) {
-				$chunk = fread($fh, 1024 * 100); //read 100kb at a time
+				$chunk = fread($fh, 1024 * 100);
 				$count += preg_match_all('#\x00\x21\xF9\x04.{4}\x00[\x2C\x21]#s', $chunk, $matches);
 			}
 

@@ -16,7 +16,6 @@ if (!defined('ABSPATH') ) exit;
 if (!class_exists('ResponsivePicsPlugin')) {
 
 	class ResponsivePicsPlugin {
-
 		/**
 		 * ResponsivePicsPlugin constructor.
 		 */
@@ -28,6 +27,7 @@ if (!class_exists('ResponsivePicsPlugin')) {
 		 * Init
 		 */
 		public function init() {
+			require_once(plugin_dir_path( __FILE__ ) . 'libraries/action-scheduler/action-scheduler.php');
 			require_once(plugin_dir_path( __FILE__ ) . 'classes/ResponsivePics.php');
 		}
 	}
