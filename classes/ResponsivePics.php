@@ -712,7 +712,7 @@ if (!class_exists('ResponsivePics')) {
 			self::setLazyLoadClass();
 			self::setImageQuality();
 
-			add_action('process_resize_request', array('ResponsivePics', 'processResizeRequest'), 10, 6);
+			add_action('process_resize_request', array('ResponsivePics', 'process_resize_request'), 10, 6);
 		}
 
 		// set number of grid columns
@@ -791,7 +791,8 @@ if (!class_exists('ResponsivePics')) {
 			return self::$image_quality;
 		}
 
-		public static function processResizeRequest($id, $quality, $width, $height, $crop, $ratio) {
+		// process the scheduled resize action
+		public static function process_resize_request($id, $quality, $width, $height, $crop, $ratio) {
 			$file_path   = get_attached_file($id);
 			$path_parts  = pathinfo($file_path);
 			$suffix      = self::get_resized_suffix($width, $height, $ratio, $crop);
@@ -806,10 +807,7 @@ if (!class_exists('ResponsivePics')) {
 					$wp_editor->save($resize_path);
 
 				} else {
-					$message = sprintf('error resizing image "%s"', $resize_path);
-					// $error   = sprintf('<pre>%s error: %s</pre>', get_class(), $message);
-
-					error_log($message);
+					self::show_error(sprintf('error resizing image "%s"', $resize_path));
 				}
 			}
 		}
