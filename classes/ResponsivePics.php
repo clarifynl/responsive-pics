@@ -638,7 +638,7 @@ if (!class_exists('ResponsivePics')) {
 						$ratio       = $original_width / ($original_width * $crop_ratio);
 					}
 
-					$source1x   = $resized_url ? $resized_url : $url;
+					$source1x   = isset($resized_url) ? $resized_url : $url;
 					$source2x   = null;
 					$breakpoint = $rule['breakpoint'];
 
