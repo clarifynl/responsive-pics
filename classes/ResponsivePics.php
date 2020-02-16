@@ -636,9 +636,15 @@ if (!class_exists('ResponsivePics')) {
 					if ($crop_ratio) {
 						$ratio           = $original_width / ($original_width * $crop_ratio);
 						$cropped_height  = $original_width * $crop_ratio;
+						$cropped_width   = $original_width;
+						
 						// check if new height will be enough to get the right aspect ratio
-						$cropped_width   = $cropped_height <= $original_height ? $original_width : $original_height * $ratio;
-						$resized_url     = self::get_resized_url($id, $file_path, $url, $cropped_width, $cropped_height, $crop);
+						if($cropped_height > $original_height) {
+							$cropped_height = $original_height;
+							$cropped_width  = $original_height * $ratio;
+						}
+				
+						$resized_url = self::get_resized_url($id, $file_path, $url, $cropped_width, $cropped_height, $crop);
 					}
 
 					$source1x   = isset($resized_url) ? $resized_url : $url;
