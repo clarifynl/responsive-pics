@@ -637,13 +637,13 @@ if (!class_exists('ResponsivePics')) {
 						$ratio           = $original_width / ($original_width * $crop_ratio);
 						$cropped_height  = $original_width * $crop_ratio;
 						$cropped_width   = $original_width;
-						
+
 						// check if new height will be enough to get the right aspect ratio
-						if($cropped_height > $original_height) {
+						if ($cropped_height > $original_height) {
 							$cropped_height = $original_height;
 							$cropped_width  = $original_height * $ratio;
 						}
-				
+
 						$resized_url = self::get_resized_url($id, $file_path, $url, $cropped_width, $cropped_height, $crop);
 					}
 
