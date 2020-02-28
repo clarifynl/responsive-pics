@@ -456,7 +456,7 @@ if (!class_exists('ResponsivePics')) {
 			}
 
 			// note: actual dimensions can be different from the dimensions appended to the filename, but we don't know those before we actually resize
-			$suffix = sprintf('%sx%s%s%s', round($width), round($height), $crop_indicator, $ratio_indicator);
+			$suffix = sprintf('%sx%s%s%s', (int)$width, (int)$height, $crop_indicator, $ratio_indicator);
 
 			return $suffix;
 		}
@@ -816,7 +816,7 @@ if (!class_exists('ResponsivePics')) {
 					$wp_editor->save($resize_path);
 
 				} else {
-					self::show_error(sprintf('error resizing image "%s"', $resize_path));
+					syslog(LOG_ERR, sprintf('error resizing image "%s"', $resize_path));
 				}
 			}
 		}
