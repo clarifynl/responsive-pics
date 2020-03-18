@@ -44,7 +44,8 @@ class ActionScheduler_DataController {
 	 * @return bool
 	 */
 	public static function dependencies_met() {
-		return version_compare( PHP_VERSION, self::MIN_PHP_VERSION, '>=' );
+		$php_support = version_compare( PHP_VERSION, self::MIN_PHP_VERSION, '>=' );
+		return $php_support && apply_filters( 'action_scheduler_migration_dependencies_met', true );
 	}
 
 	/**
@@ -61,6 +62,15 @@ class ActionScheduler_DataController {
 	 */
 	public static function mark_migration_complete() {
 		update_option( self::STATUS_FLAG, self::STATUS_COMPLETE );
+	}
+
+	/**
+	 * Unmark migration when a plugin is de-activated. Will not work in case of silent activation, for example in an update.
+	 * We do this to mitigate the bug of lost actions which happens if there was an AS 2.x to AS 3.x migration in the past, but that plugin is now
+	 * deactivated and the site was running on AS 2.x again.
+	 */
+	public static function mark_migration_incomplete() {
+		delete_option( self::STATUS_FLAG );
 	}
 
 	/**
@@ -156,6 +166,7 @@ class ActionScheduler_DataController {
 		if ( self::is_migration_complete() ) {
 			add_filter( 'action_scheduler_store_class', array( 'ActionScheduler_DataController', 'set_store_class' ), 100 );
 			add_filter( 'action_scheduler_logger_class', array( 'ActionScheduler_DataController', 'set_logger_class' ), 100 );
+			add_action( 'deactivate_plugin', array( 'ActionScheduler_DataController', 'mark_migration_incomplete' ) );
 		} elseif ( self::dependencies_met() ) {
 			Controller::init();
 		}

@@ -13,21 +13,23 @@
 abstract class ActionScheduler_Abstract_Schema {
 
 	/**
-	 * @var int Increment this value to trigger a schema update
+	 * @var int Increment this value in derived class to trigger a schema update.
 	 */
 	protected $schema_version = 1;
 
 	/**
-	 * @var array Names of tables that will be registered by this class
+	 * @var array Names of tables that will be registered by this class.
 	 */
 	protected $tables = [];
 
 	/**
-	 * Register tables with WordPress, and create them if needed
+	 * Register tables with WordPress, and create them if needed.
+	 *
+	 * @param bool $force_update Optional. Default false. Use true to always run the schema update.
 	 *
 	 * @return void
 	 */
-	public function register_tables() {
+	public function register_tables( $force_update = false ) {
 		global $wpdb;
 
 		// make WP aware of our tables
@@ -38,7 +40,7 @@ abstract class ActionScheduler_Abstract_Schema {
 		}
 
 		// create the tables
-		if ( $this->schema_update_required() ) {
+		if ( $this->schema_update_required() || $force_update ) {
 			foreach ( $this->tables as $table ) {
 				$this->update_table( $table );
 			}

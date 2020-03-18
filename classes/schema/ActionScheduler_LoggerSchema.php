@@ -10,7 +10,10 @@
 class ActionScheduler_LoggerSchema extends ActionScheduler_Abstract_Schema {
 	const LOG_TABLE = 'actionscheduler_logs';
 
-	protected $schema_version = 1;
+	/**
+	 * @var int Increment this value to trigger a schema update.
+	 */
+	protected $schema_version = 2;
 
 	public function __construct() {
 		$this->tables = [
@@ -22,7 +25,6 @@ class ActionScheduler_LoggerSchema extends ActionScheduler_Abstract_Schema {
 		global $wpdb;
 		$table_name       = $wpdb->$table;
 		$charset_collate  = $wpdb->get_charset_collate();
-		$max_index_length = 191; // @see wp_get_db_schema()
 		switch ( $table ) {
 
 			case self::LOG_TABLE:
