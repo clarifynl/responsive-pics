@@ -984,9 +984,9 @@ if (!class_exists('ResponsivePics')) {
 		}
 
 		/*
-		 * Construct a sources object
+		 * Construct a sources array
 		 *
-		 * Returns an json object with all the available image sources and classes for the request
+		 * Returns an array with all the available image sources and classes for the request
 		 */
 		public static function get_sources($id, $sizes, $classes = null, $lazyload = false) {
 			if (!isset($id)) {
@@ -1045,7 +1045,7 @@ if (!class_exists('ResponsivePics')) {
 				}
 			}
 
-			return json_decode(json_encode($properties));
+			return $properties;
 		}
 	}
 
