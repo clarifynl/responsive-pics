@@ -822,6 +822,93 @@ if (!class_exists('ResponsivePics')) {
 		}
 
 		/*
+		 * Alias old get function to get_picture
+		 */
+		public static function get($id, $sizes, $picture_classes = null, $lazyload = false, $intrinsic = false) {
+			return self::get_picture($id, $sizes, $picture_classes, $lazyload, $intrinsic);
+		}
+
+		/*
+		 * Construct a responsive picture element
+		 * returns <picture> element as html markup
+		 */
+		public static function get_picture($id, $sizes, $picture_classes = null, $lazyload = false, $intrinsic = false) {
+			if (!isset($id)) {
+				return 'image id undefined';
+			}
+
+			$definition  = self::get_definition($id, $sizes);
+
+			if (!$definition) {
+				return 'no image found with id ' . $id;
+			}
+
+			$sources = $definition['sources'];
+			$picture = [];
+
+			// convert $picture_classes to array if it is a string
+			if (!is_array($picture_classes)) {
+				if (!empty($picture_classes)) {
+					$picture_classes = preg_split('/[\s,]+/', $picture_classes);
+				} else {
+					$picture_classes = [];
+				}
+			}
+
+			$img_classes   = [];
+
+			// lazyload option
+			if ($lazyload) {
+				$img_classes[] = self::$lazyload_class;
+			}
+
+			// exclude unsupported mime types from intrinsic
+			if ($intrinsic && !in_array($definition['mimetype'], self::$supported_mime_types)) {
+				$intrinsic = false;
+			}
+
+			// set intrinsic classes
+			if ($intrinsic) {
+				$picture_classes[] = 'intrinsic';
+				$img_classes[]     = 'intrinsic__item';
+
+				if ($definition['alpha']) {
+					$img_classes[] = 'has-alpha';
+				}
+			}
+
+			$picture[] = sprintf('<picture%s>', $picture_classes ? ' class="' . implode(' ', $picture_classes) . '"' : '');
+
+			$src_attribute = $lazyload ? 'data-srcset' : 'srcset';
+			$classes = $img_classes ? ' class="' . implode(' ', $img_classes) . '"' : '';
+
+			// add all sources
+			foreach ($sources as $source) {
+				$data_aspectratio = $intrinsic ? ' data-aspectratio="' . $source['ratio'] . '"' : '';
+
+				if (isset($source['breakpoint'])) {
+					$urls = $source['source1x'];
+
+					if (isset($source['source2x'])) {
+						$urls .= ' 1x, ' . $source['source2x'] . ' 2x';
+					}
+
+					$picture[] = sprintf('  <source media="(min-width: %spx)" %s="%s"%s />', $source['breakpoint'], $src_attribute, $urls, $data_aspectratio);
+				} else {
+					$picture[] = sprintf('  <source %s="%s"%s />', $src_attribute, $source['source1x'], $data_aspectratio);
+				}
+			}
+
+			// transparent gif
+			$style     = $intrinsic ? ' style="width:100%;"' : '';
+			$ratio     = $intrinsic ? ' data-aspectratio=""' : '';
+			$picture[] = sprintf('  <img src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="%s alt="%s"%s%s />', $ratio, $definition['alt'], $classes, $style);
+			$picture[] = '</picture>';
+
+			return implode("\n", $picture) . "\n";
+		}
+
+		/*
 		 * Construct a background image element and a matching responsive inline style element
 		 *
 		 * Returns an inline <style> element with a dedicated image class with media-queries for all the different image sizes
@@ -897,83 +984,68 @@ if (!class_exists('ResponsivePics')) {
 		}
 
 		/*
-		 * Construct a responsive picture element
-		 * returns <picture> element as html markup
+		 * Construct a sources object
+		 *
+		 * Returns an json object with all the available image sources and classes for the request
 		 */
-		public static function get($id, $sizes, $picture_classes = null, $lazyload = false, $intrinsic = false) {
+		public static function get_sources($id, $sizes, $classes = null, $lazyload = false) {
 			if (!isset($id)) {
 				return 'image id undefined';
 			}
 
 			$definition  = self::get_definition($id, $sizes);
-
 			if (!$definition) {
 				return 'no image found with id ' . $id;
 			}
 
-			$sources     = $definition['sources'];
-			$picture     = [];
+			$sources = $definition['sources'];
 
-			// convert $picture_classes to array if it is a string
-			if (!is_array($picture_classes)) {
-				if (!empty($picture_classes)) {
-					$picture_classes = preg_split('/[\s,]+/', $picture_classes);
+			// convert $classes to array if it is a string
+			if (!is_array($classes)) {
+				if (!empty($classes)) {
+					$classes = preg_split('/[\s,]+/', $classes);
 				} else {
-					$picture_classes = [];
+					$classes = [];
 				}
 			}
-
-			$img_classes   = [];
 
 			// lazyload option
 			if ($lazyload) {
-				$img_classes[] = self::$lazyload_class;
+				$classes[] = self::$lazyload_class;
 			}
 
-			// exclude unsupported mime types from intrinsic
-			if ($intrinsic && !in_array($definition['mimetype'], self::$supported_mime_types)) {
-				$intrinsic = false;
-			}
-
-			// set intrinsic classes
-			if ($intrinsic) {
-				$picture_classes[] = 'intrinsic';
-				$img_classes[]     = 'intrinsic__item';
-
-				if ($definition['alpha']) {
-					$img_classes[] = 'has-alpha';
-				}
-			}
-
-			$picture[] = sprintf('<picture%s>', $picture_classes ? ' class="' . implode(' ', $picture_classes) . '"' : '');
-
-			$src_attribute = $lazyload ? 'data-srcset' : 'srcset';
-			$classes = $img_classes ? ' class="' . implode(' ', $img_classes) . '"' : '';
+			$properties = (object) [
+				'alt'     => $definition['alt'],
+				'classes' => $classes
+			];
 
 			// add all sources
 			foreach ($sources as $source) {
-				$data_aspectratio = $intrinsic ? ' data-aspectratio="' . $source['ratio'] . '"' : '';
-
 				if (isset($source['breakpoint'])) {
-					$urls = $source['source1x'];
+					$src = [
+						'breakpoint'  => $source['breakpoint'],
+						'srcset'      => [
+							'1x'      => $source['source1x']
+						],
+						'aspectratio' => $source['ratio']
+					];
 
 					if (isset($source['source2x'])) {
-						$urls .= ' 1x, ' . $source['source2x'] . ' 2x';
+						$src['srcset']['2x'] = $source['source2x'];
 					}
 
-					$picture[] = sprintf('  <source media="(min-width: %spx)" %s="%s"%s />', $source['breakpoint'], $src_attribute, $urls, $data_aspectratio);
+					$properties['sources'][] = $src;
 				} else {
-					$picture[] = sprintf('  <source %s="%s"%s />', $src_attribute, $source['source1x'], $data_aspectratio);
+					$properties['sources'][] = [
+						'srcset'      => [
+							'1x'      => $source['source1x']
+						],
+						'aspectratio' => $source['ratio']
+					];
 				}
 			}
 
-			// transparent gif
-			$style     = $intrinsic ? ' style="width:100%;"' : '';
-			$ratio     = $intrinsic ? ' data-aspectratio=""' : '';
-			$picture[] = sprintf('  <img src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="%s alt="%s"%s%s />', $ratio, $definition['alt'], $classes, $style);
-			$picture[] = '</picture>';
-
-			return implode("\n", $picture) . "\n";
+			return json_decode(json_encode($properties));
 		}
 	}
 
