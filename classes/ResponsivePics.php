@@ -547,10 +547,13 @@ if (!class_exists('ResponsivePics')) {
 				self::show_error(sprintf('url does not exist for id %s', $id));
 			}
 
-			$mime_type = get_post_mime_type($id);
-			$alt       = get_post_meta($id, '_wp_attachment_image_alt', true);
-			$alpha     = false;
-			$animated  = false;
+			$meta_data       = wp_get_attachment_metadata($id);
+			$original_width  = $meta_data['width'];
+			$original_height = $meta_data['height'];
+			$mime_type       = get_post_mime_type($id);
+			$alt             = get_post_meta($id, '_wp_attachment_image_alt', true);
+			$alpha           = false;
+			$animated        = false;
 
 			// check if png has alpha channel
 			if ($mime_type === 'image/png') {
@@ -567,6 +570,8 @@ if (!class_exists('ResponsivePics')) {
 				return [
 					'sources' => [[
 						'source1x' => $url,
+						'width'    => $original_width,
+						'height'   => $original_height,
 						'ratio'    => 1
 					]],
 					'mimetype' => $mime_type,
@@ -575,9 +580,6 @@ if (!class_exists('ResponsivePics')) {
 				];
 			}
 
-			$meta_data       = wp_get_attachment_metadata($id);
-			$original_width  = $meta_data['width'];
-			$original_height = $meta_data['height'];
 			$rules           = self::get_image_rules($sizes, $reverse);
 			$sources         = [];
 
@@ -623,6 +625,8 @@ if (!class_exists('ResponsivePics')) {
 							'breakpoint' => $breakpoint,
 							'source1x'   => $source1x,
 							'source2x'   => $source2x,
+							'width'      => $width,
+							'height'     => $height,
 							'ratio'      => $width / $height
 						];
 
@@ -634,9 +638,9 @@ if (!class_exists('ResponsivePics')) {
 					$ratio = $original_width / $original_height;
 
 					if ($crop_ratio) {
-						$ratio           = $original_width / ($original_width * $crop_ratio);
 						$cropped_height  = $original_width * $crop_ratio;
 						$cropped_width   = $original_width;
+						$ratio           = $cropped_width / $cropped_height;
 
 						// check if new height will be enough to get the right aspect ratio
 						if ($cropped_height > $original_height) {
@@ -659,6 +663,8 @@ if (!class_exists('ResponsivePics')) {
 						'breakpoint' => $breakpoint,
 						'source1x'   => $source1x,
 						'source2x'   => $source2x,
+						'width'      => $cropped_width,
+						'height'     => $cropped_height,
 						'ratio'      => $ratio
 					];
 
@@ -670,6 +676,8 @@ if (!class_exists('ResponsivePics')) {
 				// add original source if no sources have been found so far
 				$sources[] = [
 					'source1x' => $url,
+					'width'    => $original_width,
+					'height'   => $original_height,
 					'ratio'    => $original_width / $original_height
 				];
 			} else if ($min_breakpoint != 0) {
@@ -677,6 +685,8 @@ if (!class_exists('ResponsivePics')) {
 				$minimum_breakpoint = [
 					'breakpoint' => 0,
 					'source1x'   => $url,
+					'width'      => $original_width,
+					'height'     => $original_height,
 					'ratio'      => $original_width / $original_height
 				];
 
