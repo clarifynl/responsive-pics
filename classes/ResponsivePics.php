@@ -547,9 +547,6 @@ if (!class_exists('ResponsivePics')) {
 				self::show_error(sprintf('url does not exist for id %s', $id));
 			}
 
-			$meta_data       = wp_get_attachment_metadata($id);
-			$original_width  = $meta_data['width'];
-			$original_height = $meta_data['height'];
 			$mime_type       = get_post_mime_type($id);
 			$alt             = get_post_meta($id, '_wp_attachment_image_alt', true);
 			$alpha           = false;
@@ -570,8 +567,6 @@ if (!class_exists('ResponsivePics')) {
 				return [
 					'sources' => [[
 						'source1x' => $url,
-						'width'    => $original_width,
-						'height'   => $original_height,
 						'ratio'    => 1
 					]],
 					'mimetype' => $mime_type,
@@ -580,6 +575,9 @@ if (!class_exists('ResponsivePics')) {
 				];
 			}
 
+			$meta_data       = wp_get_attachment_metadata($id);
+			$original_width  = $meta_data['width'];
+			$original_height = $meta_data['height'];
 			$rules           = self::get_image_rules($sizes, $reverse);
 			$sources         = [];
 
