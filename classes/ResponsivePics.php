@@ -1014,7 +1014,7 @@ if (!class_exists('ResponsivePics')) {
 				$classes[] = self::$lazyload_class;
 			}
 
-			$properties = (object) [
+			$properties = [
 				'alt'     => $definition['alt'],
 				'classes' => $classes
 			];
