@@ -1037,6 +1037,8 @@ if (!class_exists('ResponsivePics')) {
 						'srcset'      => [
 							'1x'      => $source['source1x']
 						],
+						'width'       => $source['width'],
+						'height'      => $source['height'],
 						'aspectratio' => $source['ratio']
 					];
 
@@ -1050,6 +1052,8 @@ if (!class_exists('ResponsivePics')) {
 						'srcset'      => [
 							'1x'      => $source['source1x']
 						],
+						'width'       => $source['width'],
+						'height'      => $source['height'],
 						'aspectratio' => $source['ratio']
 					];
 				}
