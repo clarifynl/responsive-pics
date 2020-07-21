@@ -319,7 +319,11 @@ if (!class_exists('ResponsivePics')) {
 			// collect defined breakpoints into array
 			foreach ($variants as $variant) {
 				$breakpoint = self::get_breakpoint_from_rule($variant);
-				$breakpoint_name = $breakpoint['breakpoint'];
+				$breakpoint_name = null;
+
+				if (isset($breakpoint)) {
+					$breakpoint_name = $breakpoint['breakpoint'];
+				}
 
 				if (isset($breakpoint) && isset(self::$breakpoints[$breakpoint_name])) {
 					$defined_breakpoints[$breakpoint_name] = $breakpoint;
