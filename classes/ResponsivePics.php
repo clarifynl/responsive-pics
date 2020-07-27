@@ -651,9 +651,6 @@ if (!class_exists('ResponsivePics')) {
 						}
 
 						$resized_url = self::get_resized_url($id, $file_path, $url, $cropped_width, $cropped_height, $crop);
-					} else {
-						$cropped_height = $original_height;
-						$cropped_width  = $original_width;
 					}
 
 					$source1x   = isset($resized_url) ? $resized_url : $url;
@@ -668,8 +665,8 @@ if (!class_exists('ResponsivePics')) {
 						'breakpoint' => $breakpoint,
 						'source1x'   => $source1x,
 						'source2x'   => $source2x,
-						'width'      => $cropped_width,
-						'height'     => $cropped_height,
+						'width'      => $crop_ratio ? $cropped_width : $original_height,
+						'height'     => $crop_ratio ? $cropped_height : $original_width,
 						'ratio'      => $ratio
 					];
 
