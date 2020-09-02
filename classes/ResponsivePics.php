@@ -392,14 +392,14 @@ if (!class_exists('ResponsivePics')) {
 					'crop'   => false
 				];
 
+				// get crop positions
 				if (self::contains($variant, '|')) {
 					$components = explode('|', $variant);
 					$variant    = trim($components[0]);
 					$crop       = self::process_crop($components[1]);
-				} elseif ($img_crop) {
-					$crop = self::process_crop($img_crop);
 				}
 
+				// get dimensions
 				if (self::contains($variant, ':')) {
 					$components = explode(':', $variant);
 					$breakpoint = self::process_breakpoint($components[0]);
@@ -411,6 +411,13 @@ if (!class_exists('ResponsivePics')) {
 				$width      = $dimensions['width'];
 				$height     = $dimensions['height'];
 				$crop_ratio = $dimensions['crop_ratio'];
+
+				// get global crop positions
+				if ($img_crop && self::contains($img_crop, '|')) {
+					$components = explode('|', $img_crop);
+					$crop_ratio = trim($components[0]);
+					$crop       = self::process_crop($components[1]);
+				}
 
 				if ($breakpoint === -1) {
 					if (self::contains($dimensions['input'], '-')) {
