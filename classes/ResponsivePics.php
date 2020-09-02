@@ -920,6 +920,63 @@ if (!class_exists('ResponsivePics')) {
 			return implode("\n", $picture) . "\n";
 		}
 
+
+		/*
+		 * Construct a responsive image element
+		 * returns <img> element as html markup
+		 */
+		public static function get_image($id, $sizes, $img_classes = null, $lazyload = false) {
+			if (!isset($id)) {
+				return 'image id undefined';
+			}
+
+			$definition  = self::get_definition($id, $sizes);
+
+			if (!$definition) {
+				return 'no image found with id ' . $id;
+			}
+
+			$sources = $definition['sources'];
+
+			// convert $picture_classes to array if it is a string
+			if (!is_array($img_classes)) {
+				if (!empty($img_classes)) {
+					$img_classes = preg_split('/[\s,]+/', $img_classes);
+				} else {
+					$img_classes = [];
+				}
+			}
+
+			// lazyload option
+			if ($lazyload) {
+				$img_classes[] = self::$lazyload_class;
+			}
+
+			$src_attribute = $lazyload ? 'data-srcset' : 'srcset';
+			$classes = $img_classes ? 'class="' . implode(' ', $img_classes) . '"' : '';
+
+			// add all sources
+			foreach ($sources as $source) {
+				$data_aspectratio = $intrinsic ? ' data-aspectratio="' . $source['ratio'] . '"' : '';
+
+				if (isset($source['breakpoint'])) {
+					$urls = $source['source1x'];
+
+					if (isset($source['source2x'])) {
+						$urls .= ' 1x, ' . $source['source2x'] . ' 2x';
+					}
+
+					$image[] = sprintf('  <source media="(min-width: %spx)" %s="%s"%s />', $source['breakpoint'], $src_attribute, $urls, $data_aspectratio);
+				} else {
+					$image[] = sprintf('  <source %s="%s"%s />', $src_attribute, $source['source1x'], $data_aspectratio);
+				}
+			}
+
+			$image = sprintf('<img %s%s%s alt="%s" />', $classes, $sources, $sizes, $definition['alt']);
+
+			return $image;
+		}
+
 		/*
 		 * Construct a background image element and a matching responsive inline style element
 		 *
