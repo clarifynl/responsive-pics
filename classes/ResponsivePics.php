@@ -379,7 +379,7 @@ if (!class_exists('ResponsivePics')) {
 		}
 
 		// this processes our resizing syntax and returns a normalized array with resizing rules
-		private static function get_image_rules($input, $reverse = false) {
+		private static function get_image_rules($input, $img_crop = false, $reverse = false) {
 			$variants = self::add_missing_breakpoints(explode(',', $input));
 			$result   = [];
 
@@ -396,6 +396,8 @@ if (!class_exists('ResponsivePics')) {
 					$components = explode('|', $variant);
 					$variant    = trim($components[0]);
 					$crop       = self::process_crop($components[1]);
+				} elseif ($img_crop) {
+					$crop = self::process_crop($img_crop);
 				}
 
 				if (self::contains($variant, ':')) {
@@ -539,7 +541,7 @@ if (!class_exists('ResponsivePics')) {
 		}
 
 		// returns a normalized definition of breakpoints
-		private static function get_definition($id, $sizes, $reverse = false) {
+		private static function get_definition($id, $sizes, $img_crop = false, $reverse = false) {
 			$url       = wp_get_attachment_url($id);
 			$file_path = get_attached_file($id);
 
@@ -582,7 +584,7 @@ if (!class_exists('ResponsivePics')) {
 			$meta_data       = wp_get_attachment_metadata($id);
 			$original_width  = $meta_data['width'];
 			$original_height = $meta_data['height'];
-			$rules           = self::get_image_rules($sizes, $reverse);
+			$rules           = self::get_image_rules($sizes, $img_crop, $reverse);
 			$sources         = [];
 
 			$addedSource     = false;
@@ -925,12 +927,12 @@ if (!class_exists('ResponsivePics')) {
 		 * Construct a responsive image element
 		 * returns <img> element as html markup
 		 */
-		public static function get_image($id, $sizes, $img_classes = null, $lazyload = false) {
+		public static function get_image($id, $sizes, $crop = false, $img_classes = null, $lazyload = false) {
 			if (!isset($id)) {
 				return 'image id undefined';
 			}
 
-			$definition  = self::get_definition($id, $sizes);
+			$definition  = self::get_definition($id, $sizes, $crop, true);
 
 			if (!$definition) {
 				return 'no image found with id ' . $id;
@@ -953,26 +955,26 @@ if (!class_exists('ResponsivePics')) {
 			}
 
 			$src_attribute = $lazyload ? 'data-srcset' : 'srcset';
-			$classes = $img_classes ? 'class="' . implode(' ', $img_classes) . '"' : '';
+			$classes = $img_classes ? ' class="' . implode(' ', $img_classes) . '"' : '';
 
-			// add all sources
+			// add all sources & sizes
+			$srcsets = [];
+			$sizes = [];
+
 			foreach ($sources as $source) {
-				$data_aspectratio = $intrinsic ? ' data-aspectratio="' . $source['ratio'] . '"' : '';
+				$srcsets[] = $source['source1x'] . ' ' . $source['width'] . 'w';
+				if (isset($source['source2x'])) {
+					$srcsets[] = $source['source2x'] . ' ' . ($source['width'] * 2) . 'w';
+				}
 
 				if (isset($source['breakpoint'])) {
-					$urls = $source['source1x'];
-
-					if (isset($source['source2x'])) {
-						$urls .= ' 1x, ' . $source['source2x'] . ' 2x';
-					}
-
-					$image[] = sprintf('  <source media="(min-width: %spx)" %s="%s"%s />', $source['breakpoint'], $src_attribute, $urls, $data_aspectratio);
+					$sizes[] = '(min-width: '. $source['breakpoint'] .'px) '. $source['width'] . 'px';
 				} else {
-					$image[] = sprintf('  <source %s="%s"%s />', $src_attribute, $source['source1x'], $data_aspectratio);
+					$sizes[] = $source['width'] . 'px';
 				}
 			}
 
-			$image = sprintf('<img %s%s%s alt="%s" />', $classes, $sources, $sizes, $definition['alt']);
+			$image = sprintf('<img %s="%s" sizes="%s" alt="%s"%s />', $src_attribute, implode(', ', $srcsets), implode(', ', $sizes), $definition['alt'], $classes);
 
 			return $image;
 		}
@@ -991,9 +993,9 @@ if (!class_exists('ResponsivePics')) {
 			// Check for multiple background images
 			if (is_array($id)) {
 				// temp solution
-				$definition = self::get_definition($id[0], $sizes, true);
+				$definition = self::get_definition($id[0], $sizes, false, true);
 			} else {
-				$definition = self::get_definition($id, $sizes, true);
+				$definition = self::get_definition($id, $sizes, false, true);
 			}
 
 			if (!$definition) {
