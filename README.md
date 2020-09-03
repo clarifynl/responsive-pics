@@ -271,14 +271,14 @@ Tools > Scheduled Actions
 Every resize job will be grouped by it's wordpress image id
 
 ### Cron <a name="cron"></a>
-When you are using the built-in WP-Cron (https://developer.wordpress.org/plugins/cron/), the background process queue will only process any tasks on every page load.
-If you have disabled WP-Cron in your setup and you are using your own cron job on your server, Action Scheduler will use the interval set in that cron job to process the next batch of jobs.
+When you are using the built-in [WP-Cron](https://developer.wordpress.org/plugins/cron/), the background process queue will only process any tasks on every page load.  
+If you have disabled `WP-Cron` in your setup and you are using your own cron job on your server, Action Scheduler will use the interval set in that cron job to process the next batch of jobs.
 
 ```php
 define('DISABLE_WP_CRON', true);
 ```
 
-If you're using [Trellis](https://roots.io/trellis/) like us ❤️ the default cron interval is set to every [15 mins](https://github.com/roots/trellis/blob/master/roles/wordpress-setup/tasks/main.yml#L48).
+If you're using [Trellis](https://roots.io/trellis/) like us ❤️, the default cron interval is set to every [15 mins](https://github.com/roots/trellis/blob/master/roles/wordpress-setup/tasks/main.yml#L48).  
 You could override this to for example 1 mins with an environment variable per wordpress site like this:
 
 In for example `group_vars/development/wordpress_sites.yml`:
