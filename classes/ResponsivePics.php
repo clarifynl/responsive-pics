@@ -939,7 +939,7 @@ if (!class_exists('ResponsivePics')) {
 				return 'image id undefined';
 			}
 
-			$definition  = self::get_definition($id, $sizes, $crop, true);
+			$definition  = self::get_definition($id, $sizes, $crop);
 
 			if (!$definition) {
 				return 'no image found with id ' . $id;
