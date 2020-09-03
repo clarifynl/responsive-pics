@@ -379,7 +379,7 @@ if (!class_exists('ResponsivePics')) {
 		}
 
 		// this processes our resizing syntax and returns a normalized array with resizing rules
-		private static function get_image_rules($input, $img_crop = false, $reverse = false) {
+		private static function get_image_rules($input, $reverse = false, $art_direction = true, $img_crop = null) {
 			$variants = self::add_missing_breakpoints(explode(',', $input));
 			$result   = [];
 
@@ -393,6 +393,7 @@ if (!class_exists('ResponsivePics')) {
 				];
 
 				// get crop positions
+				var_dump($variant);
 				if (self::contains($variant, '|')) {
 					$components = explode('|', $variant);
 					$variant    = trim($components[0]);
@@ -412,7 +413,7 @@ if (!class_exists('ResponsivePics')) {
 				$height     = $dimensions['height'];
 				$crop_ratio = $dimensions['crop_ratio'];
 
-				// get global crop positions
+				// get image crop positions
 				if ($img_crop && self::contains($img_crop, '|')) {
 					$components = explode('|', $img_crop);
 					$crop_ratio = trim($components[0]);
@@ -548,7 +549,7 @@ if (!class_exists('ResponsivePics')) {
 		}
 
 		// returns a normalized definition of breakpoints
-		private static function get_definition($id, $sizes, $img_crop = false, $reverse = false) {
+		private static function get_definition($id, $sizes, $reverse = false, $art_direction = true, $img_crop = null) {
 			$url       = wp_get_attachment_url($id);
 			$file_path = get_attached_file($id);
 
@@ -591,7 +592,7 @@ if (!class_exists('ResponsivePics')) {
 			$meta_data       = wp_get_attachment_metadata($id);
 			$original_width  = $meta_data['width'];
 			$original_height = $meta_data['height'];
-			$rules           = self::get_image_rules($sizes, $img_crop, $reverse);
+			$rules           = self::get_image_rules($sizes, $reverse, $art_direction, $img_crop);
 			$sources         = [];
 
 			$addedSource     = false;
@@ -939,7 +940,7 @@ if (!class_exists('ResponsivePics')) {
 				return 'image id undefined';
 			}
 
-			$definition  = self::get_definition($id, $sizes, $crop);
+			$definition  = self::get_definition($id, $sizes, false, false, $crop);
 
 			if (!$definition) {
 				return 'no image found with id ' . $id;
@@ -1005,9 +1006,9 @@ if (!class_exists('ResponsivePics')) {
 			// Check for multiple background images
 			if (is_array($id)) {
 				// temp solution
-				$definition = self::get_definition($id[0], $sizes, false, true);
+				$definition = self::get_definition($id[0], $sizes, true);
 			} else {
-				$definition = self::get_definition($id, $sizes, false, true);
+				$definition = self::get_definition($id, $sizes, true);
 			}
 
 			if (!$definition) {
