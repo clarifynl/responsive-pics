@@ -94,8 +94,8 @@ ResponsivePics uses the following default variables:
 
 By default, ResponsivePics will use the [Bootstrap 4 SCSS variables](https://getbootstrap.com/docs/4.5/layout/overview/) for defining:
 
-The amount of **grid columns**: `$grid-columns: 12;`
-The **grid gutter width** in pixels: `$grid-gutter-width: 30px;`
+The amount of **grid columns**: `$grid-columns: 12;`  
+The **grid gutter width** in pixels: `$grid-gutter-width: 30px;`  
 The **grid breakpoints** in pixels:
 
 ```scss
@@ -118,7 +118,7 @@ $container-max-widths: (
 );
 ```
 
-^Note: ResponsivePics will add the `xs` container max width for you (= 576), based upon the default sm grid breakpoint (= 576px).^
+*Note: ResponsivePics will add the `xs` container max width for you (= 576), based upon the default sm grid breakpoint (= 576px).*
 
 If you have customized the bootstrap defaults or if you’re using a different grid system ([Foundation](https://foundation.zurb.com), [Materialize](https://materializecss.com) etc.), or even if you want to add extra breakpoints & container widths, you can pass your own grid variables to the ResponsivePics library.
 
@@ -195,7 +195,7 @@ ResponsivePics::get_image(id, sizes, crop, classes, lazyload);
 | -----------|:---------------:| --------:|---------:|---------------------------------
 | id         | number          | yes      |          | The WordPress image id (e.g. 1).
 | sizes      | string          | yes      |          | A comma-separated string of preferred image sizes (e.g. `'xs-12, sm-6, md-4, lg-3'`). See the [Sizes section](#sizes) for more information.
-| crop       | string          | optional | `false`  | A crop-factor of the width for the desired height between 0-2 (e.g. `0.75`) with optional crop positions (e.g. `0.75|c t`)
+| crop       | string          | optional | `false`  | A crop-factor of the width for the desired height between 0-2 (e.g. `0.75`) with optional crop positions (e.g. `0.75\|c t`)
 | classes    | string or array | optional | `null`   | Additional CSS classes you want to add to the picture element (e.g. `'my_picture_class'` or `['my_picture_class', 'my_second_picture_class']`).
 | lazyload   | boolean         | optional | `false`  | When `true` enables `lazyload` classes and data-srcset attributes. See the [Lazyloading section](#lazyloading) for more information.
 
@@ -278,8 +278,8 @@ If you have disabled WP-Cron in your setup and you are using your own cron job o
 define('DISABLE_WP_CRON', true);
 ```
 
-If you're using [Trellis](https://roots.io/trellis/) (like us ❤️) the default cron interval is set to every [15 mins](https://github.com/roots/trellis/blob/master/roles/wordpress-setup/tasks/main.yml#L48).
-You could override this with an environment variable per wordpress site like this:
+If you're using [Trellis](https://roots.io/trellis/) like us ❤️ the default cron interval is set to every [15 mins](https://github.com/roots/trellis/blob/master/roles/wordpress-setup/tasks/main.yml#L48).
+You could override this to for example 1 mins with an environment variable per wordpress site like this:
 
 In for example `group_vars/development/wordpress_sites.yml`:
 
