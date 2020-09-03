@@ -252,14 +252,19 @@ if (!class_exists('ResponsivePics')) {
 			if (self::contains($dimensions, '/')) {
 				// height is a specified factor of weight
 				$wh         = explode('/', $dimensions);
-				$crop_ratio = trim($wh[1]);
-				$height     = $width * $crop_ratio;
+				$crop_ratio = (float) trim($wh[1]);
+
+				if ((0 < $crop_ratio) && ($crop_ratio <= 2)) {
+					$height = $width * $crop_ratio;
+				} else {
+					self::show_error(sprintf('the crop ratio %d needs to be higher then 0 and equal or lower then 2', $crop_ratio));
+				}
 			}
 
 			return [
 				'input'      => $input,
-				'width'      => $width,
-				'height'     => $height,
+				'width'      => (int) $width,
+				'height'     => (int) $height,
 				'crop_ratio' => $crop_ratio
 			];
 		}
@@ -378,8 +383,8 @@ if (!class_exists('ResponsivePics')) {
 			return $result;
 		}
 
-		// this processes our resizing syntax and returns a normalized array with resizing rules
-		private static function get_image_rules($input, $reverse = false, $art_direction = true, $img_crop = null) {
+		// this processes our resizing syntax with art direction support and returns a normalized array with resizing rules
+		private static function get_art_image_rules($input, $reverse = false) {
 			$variants = self::add_missing_breakpoints(explode(',', $input));
 			$result   = [];
 
@@ -393,7 +398,6 @@ if (!class_exists('ResponsivePics')) {
 				];
 
 				// get crop positions
-				var_dump($variant);
 				if (self::contains($variant, '|')) {
 					$components = explode('|', $variant);
 					$variant    = trim($components[0]);
@@ -413,12 +417,81 @@ if (!class_exists('ResponsivePics')) {
 				$height     = $dimensions['height'];
 				$crop_ratio = $dimensions['crop_ratio'];
 
-				// get image crop positions
+				if ($breakpoint === -1) {
+					if (self::contains($dimensions['input'], '-')) {
+						// use breakpoint based on defined column size
+						$components = explode('-', $dimensions['input']);
+						$bp         = trim($components[0]);
+						$breakpoint = self::$breakpoints[$bp];
+					} else {
+						// use breakpoint based on width
+						$breakpoint = $width;
+					}
+				}
+
+				$result[] = [
+					'breakpoint' => $breakpoint,
+					'width'      => $width,
+					'height'     => $height,
+					'crop_ratio' => $crop_ratio,
+					'crop'       => $crop
+				];
+			}
+
+			usort($result, ['self', $reverse ? 'sort_by_breakpoint_reverse' : 'sort_by_breakpoint']);
+
+			return $result;
+		}
+
+		// this processes our resizing syntax and returns a normalized array with resizing rules
+		private static function get_image_rules($input, $reverse = false, $img_crop = null) {
+			$variants = self::add_missing_breakpoints(explode(',', $input));
+			$result   = [];
+
+			foreach ($variants as $variant) {
+				$crop       = false;
+				$crop_ratio = null;
+				$breakpoint = -1;
+				$dimensions = [
+					'width'  => -1,
+					'height' => -1,
+					'crop'   => false
+				];
+
+				$variant = trim($variant);
+
+				// check for height and/or crops syntax
+				if (self::contains($variant, ' ') || self::contains($variant, '|') || self::contains($variant, '/')) {
+					self::show_error(sprintf('art directed parameters (height, factor, crop_x, crop_y) are not supported on image sizes: %s', $variant));
+				}
+
+				// get global img crop positions
 				if ($img_crop && self::contains($img_crop, '|')) {
 					$components = explode('|', $img_crop);
-					$crop_ratio = trim($components[0]);
-					$crop       = self::process_crop($components[1]);
+					$ratio      = trim($components[0]);
+
+					// check if ratio is within range
+					if ((0 < $ratio) && ($ratio <= 2)) {
+						$crop       = self::process_crop($components[1]);
+						$variant   .= '/'. $ratio;
+					} else {
+						self::show_error(sprintf('your crop ratio %d needs to be a (decimal) number between 0 and 2', $ratio));
+					}
 				}
+
+
+				// get dimensions
+				if (self::contains($variant, ':')) {
+					$components = explode(':', $variant);
+					$breakpoint = self::process_breakpoint($components[0]);
+					$dimensions = self::process_dimensions($components[1]);
+				} else {
+					$dimensions = self::process_dimensions($variant);
+				}
+
+				$width      = $dimensions['width'];
+				$height     = $dimensions['height'];
+				$crop_ratio = $dimensions['crop_ratio'];
 
 				if ($breakpoint === -1) {
 					if (self::contains($dimensions['input'], '-')) {
@@ -592,7 +665,7 @@ if (!class_exists('ResponsivePics')) {
 			$meta_data       = wp_get_attachment_metadata($id);
 			$original_width  = $meta_data['width'];
 			$original_height = $meta_data['height'];
-			$rules           = self::get_image_rules($sizes, $reverse, $art_direction, $img_crop);
+			$rules           = $art_direction ? self::get_art_image_rules($sizes, $reverse) : self::get_image_rules($sizes, $reverse, $img_crop);
 			$sources         = [];
 
 			$addedSource     = false;
@@ -969,7 +1042,7 @@ if (!class_exists('ResponsivePics')) {
 			$srcsets  = [];
 			$sizes    = [];
 			$full_img = wp_get_attachment_image_src($id, 'full', false);
-			$fallback = 'src="'. $full_img[0] . '"';
+			$fallback = ' src="'. $full_img[0] . '"';
 
 			foreach ($sources as $source) {
 				$srcsets[] = $source['source1x'] . ' ' . $source['width'] . 'w';
