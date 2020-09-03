@@ -265,7 +265,7 @@ The following parameters are availbale for the sizes syntax:
 ### Action Scheduler <a name="action-scheduler"></a>
 
 Action Scheduler has a built in administration screen for monitoring, debugging and manually triggering scheduled image resize jobs. The administration interface is accesible via:
-```
+```php
 Tools > Scheduled Actions
 ```
 Every resize job will be grouped by it's wordpress image id
@@ -363,7 +363,7 @@ import 'lazysizes/plugins/aspectratio/ls.aspectratio.js';
 ## Maintainers
 **ResponsivePics** is developed and maintained by:
 
-[@monokai](https://github.com/monokai) (creator)
+[@monokai](https://github.com/monokai) (creator)  
 [@twansparant](https://github.com/Twansparant) (creator)
 
 ## Copyright
