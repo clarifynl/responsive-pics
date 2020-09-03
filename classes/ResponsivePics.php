@@ -254,10 +254,8 @@ if (!class_exists('ResponsivePics')) {
 				$wh         = explode('/', $dimensions);
 				$crop_ratio = (float) trim($wh[1]);
 
-				if ((0 < $crop_ratio) && ($crop_ratio <= 2)) {
+				if (self::process_ratio($crop_ratio)) {
 					$height = $width * $crop_ratio;
-				} else {
-					self::show_error(sprintf('the crop ratio %d needs to be higher then 0 and equal or lower then 2', $crop_ratio));
 				}
 			}
 
@@ -267,6 +265,16 @@ if (!class_exists('ResponsivePics')) {
 				'height'     => (int) $height,
 				'crop_ratio' => $crop_ratio
 			];
+		}
+
+		// check if ratio is between reasonable values 0-2
+		private static function process_ratio($ratio) {
+			if ((0 < $ratio) && ($ratio <= 2)) {
+				return true;
+			} else {
+				self::show_error(sprintf('the crop ratio %d needs to be higher then 0 and equal or lower then 2', $ratio));
+				return false;
+			}
 		}
 
 		// crop values can be single shortcut values (e.g. "c") or two dimensional values (e.g. "l t");
@@ -458,27 +466,33 @@ if (!class_exists('ResponsivePics')) {
 					'crop'   => false
 				];
 
-				$variant = trim($variant);
-
 				// check for height and/or crops syntax
+				$variant = trim($variant);
 				if (self::contains($variant, ' ') || self::contains($variant, '|') || self::contains($variant, '/')) {
 					self::show_error(sprintf('art directed parameters (height, factor, crop_x, crop_y) are not supported on image sizes: %s', $variant));
 				}
 
 				// get global img crop positions
-				if ($img_crop && self::contains($img_crop, '|')) {
-					$components = explode('|', $img_crop);
-					$ratio      = trim($components[0]);
+				if ($img_crop) {
+					if (self::contains($img_crop, '|')) {
+						$components = explode('|', $img_crop);
+						$ratio      = trim($components[0]);
 
-					// check if ratio is within range
-					if ((0 < $ratio) && ($ratio <= 2)) {
-						$crop       = self::process_crop($components[1]);
-						$variant   .= '/'. $ratio;
+						// check if ratio is within range
+						if (self::process_ratio($ratio)) {
+							$crop     = self::process_crop($components[1]);
+							$variant .= '/'. $ratio;
+						}
 					} else {
-						self::show_error(sprintf('your crop ratio %d needs to be a (decimal) number between 0 and 2', $ratio));
+						$ratio = $img_crop;
+
+						// check if ratio is within range
+						if (self::process_ratio($ratio)) {
+							$crop     = self::process_crop($components[1]);
+							$variant .= '/'. $ratio . '|c';
+						}
 					}
 				}
-
 
 				// get dimensions
 				if (self::contains($variant, ':')) {
@@ -555,12 +569,12 @@ if (!class_exists('ResponsivePics')) {
 			$resized_file_path = join(DIRECTORY_SEPARATOR, [$path_parts['dirname'], $path_parts['filename'] . '-' . $suffix . '.' . $path_parts['extension']]);
 			$resized_url       = join(DIRECTORY_SEPARATOR, [dirname($original_url), basename($resized_file_path)]);
 			$resize_request    = [
-				'id'          => (int)$id,
-				'quality'     => (int)self::$image_quality,
-				'width'       => (int)$width,
-				'height'      => (int)$height,
+				'id'          => (int) $id,
+				'quality'     => (int) self::$image_quality,
+				'width'       => (int) $width,
+				'height'      => (int) $height,
 				'crop'        => $crop,
-				'ratio'       => (int)$ratio
+				'ratio'       => (int) $ratio
 			];
 
 			// if image size does not exist yet as filename
@@ -917,7 +931,7 @@ if (!class_exists('ResponsivePics')) {
 		}
 
 		/*
-		 * Alias old get function to get_picture
+		 * Alias old `get` function to `get_picture`
 		 */
 		public static function get($id, $sizes, $picture_classes = null, $lazyload = false, $intrinsic = false) {
 			return self::get_picture($id, $sizes, $picture_classes, $lazyload, $intrinsic);
