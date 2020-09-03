@@ -38,8 +38,8 @@ For full documentation and examples visit: [responsive.pics](https://responsive.
       <td><code>wp core version</code></td>
     </tr>
     <tr>
-      <td>`WP-Cron` enabled or a [Real Cron Job](https://kinsta.com/knowledgebase/disable-wp-cron/) set up on your server</td>
-      <td>[Testing of WP-Cron](https://developer.wordpress.org/plugins/cron/simple-testing/)</td>
+      <td><code>WP-Cron</code> enabled or a <a href="https://kinsta.com/knowledgebase/disable-wp-cron/" target="_blank">real Cron Job</a> set up on your server</td>
+      <td><a href="https://developer.wordpress.org/plugins/cron/simple-testing/" target="_blank">Testing of WP-Cron</a></td>
     </tr>
   </tbody>
 </table>
