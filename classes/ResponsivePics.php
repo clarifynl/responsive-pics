@@ -982,8 +982,11 @@ if (!class_exists('ResponsivePics')) {
 				}
 			}
 
-			$image = sprintf('<img%s %s="%s" sizes="%s"%s alt="%s"/>', $classes, $src_attribute, implode(', ', $srcsets), implode(', ', $sizes), $fallback, $definition['alt']);
+			// add fallback size
+			$sizes[] = '100vw';
 
+			// construct image
+			$image = sprintf('<img%s %s="%s" sizes="%s"%s alt="%s"/>', $classes, $src_attribute, implode(', ', $srcsets), implode(', ', $sizes), $fallback, $definition['alt']);
 			return $image;
 		}
 
