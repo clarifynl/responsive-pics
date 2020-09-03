@@ -967,7 +967,8 @@ if (!class_exists('ResponsivePics')) {
 			// add all sources & sizes
 			$srcsets  = [];
 			$sizes    = [];
-			$fallback = wp_get_attachment_image_src($id, 'full', false);
+			$full_img = wp_get_attachment_image_src($id, 'full', false);
+			$fallback = 'src="'. $full_img[0] . '"';
 
 			foreach ($sources as $source) {
 				$srcsets[] = $source['source1x'] . ' ' . $source['width'] . 'w';
@@ -986,7 +987,7 @@ if (!class_exists('ResponsivePics')) {
 			$sizes[] = '100vw';
 
 			// construct image
-			$image = sprintf('<img%s %s="%s" sizes="%s"%s alt="%s"/>', $classes, $src_attribute, implode(', ', $srcsets), implode(', ', $sizes), $fallback[0], $definition['alt']);
+			$image = sprintf('<img%s %s="%s" sizes="%s"%s alt="%s"/>', $classes, $src_attribute, implode(', ', $srcsets), implode(', ', $sizes), $fallback, $definition['alt']);
 			return $image;
 		}
 
