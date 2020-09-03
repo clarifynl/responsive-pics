@@ -965,8 +965,9 @@ if (!class_exists('ResponsivePics')) {
 			$classes = $img_classes ? ' class="' . implode(' ', $img_classes) . '"' : '';
 
 			// add all sources & sizes
-			$srcsets = [];
-			$sizes = [];
+			$srcsets  = [];
+			$sizes    = [];
+			$fallback = isset($sources[0]['source1x']) ? ' src="'. $sources[0]['source1x'] .'"' : '';
 
 			foreach ($sources as $source) {
 				$srcsets[] = $source['source1x'] . ' ' . $source['width'] . 'w';
@@ -981,7 +982,7 @@ if (!class_exists('ResponsivePics')) {
 				}
 			}
 
-			$image = sprintf('<img %s="%s" sizes="%s" alt="%s"%s />', $src_attribute, implode(', ', $srcsets), implode(', ', $sizes), $definition['alt'], $classes);
+			$image = sprintf('<img%s %s="%s" sizes="%s"%s alt="%s"/>', $classes, $src_attribute, implode(', ', $srcsets), implode(', ', $sizes), $fallback, $definition['alt']);
 
 			return $image;
 		}
