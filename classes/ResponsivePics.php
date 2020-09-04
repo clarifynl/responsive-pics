@@ -252,7 +252,7 @@ if (!class_exists('ResponsivePics')) {
 			if (self::contains($dimensions, '/')) {
 				// height is a specified factor of weight
 				$wh         = explode('/', $dimensions);
-				$crop_ratio = (float) trim($wh[1]);
+				$crop_ratio = trim($wh[1]);
 
 				if (self::process_ratio($crop_ratio)) {
 					$height = $width * $crop_ratio;
@@ -272,7 +272,7 @@ if (!class_exists('ResponsivePics')) {
 			if (is_numeric($ratio) && (0 < $ratio) && ($ratio <= 2)) {
 				return true;
 			} else {
-				self::show_error(sprintf('the crop ratio %d needs to be higher then 0 and equal or lower then 2', $ratio));
+				self::show_error(sprintf('the crop ratio "%s" needs to be higher then 0 and equal or lower then 2', $ratio));
 				return false;
 			}
 		}
@@ -477,7 +477,7 @@ if (!class_exists('ResponsivePics')) {
 					// check if crop position is set
 					if (self::contains($img_crop, '|')) {
 						$components = explode('|', $img_crop);
-						$ratio      = (float) trim($components[0]);
+						$ratio      = trim($components[0]);
 
 						// check if ratio is within range
 						if (self::process_ratio($ratio)) {
@@ -486,7 +486,7 @@ if (!class_exists('ResponsivePics')) {
 						}
 					// add default crop position
 					} else {
-						$ratio = (float) $img_crop;
+						$ratio = $img_crop;
 
 						// check if ratio is within range
 						if (self::process_ratio($ratio)) {
