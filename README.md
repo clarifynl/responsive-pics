@@ -1,4 +1,4 @@
-**ResponsivePics** is a PHP library that enables WordPress theme authors to automatically resize images* in responsive layouts. Just upload a high-res image in your media library, and let ResponsivePics take care of the rest. Supports art-directed crops, background images and respects aspect ratios.
+**ResponsivePics** is a PHP library that enables WordPress theme authors to automatically resize images* in responsive layouts. Just upload a high-res image in your media library, and let ResponsivePics take care of the rest. Supports art-directed crops, img srcset & sizes Attributes background images and respects aspect ratios.
 
 ResponsivePics is useful when you have a responsive grid layout (like Bootstrap, but can be any framework) and need images to adapt to responsive designs. ResponsivePics automatically resizes and / or crops your uploaded pictures to fit your layouts.
 
@@ -30,15 +30,15 @@ For full documentation and examples visit: [responsive.pics](https://responsive.
   </thead>
   <tbody>
     <tr>
-      <td>PHP &gt;= 5.6.x</td>
+      <td><strong>PHP</strong> &gt;= 5.6.x</td>
       <td><code>php -v</code></td>
     </tr>
     <tr>
-      <td>Wordpress &gt;= 3.5.x</td>
+      <td><strong>Wordpress</strong> &gt;= 3.5.x</td>
       <td><code>wp core version</code></td>
     </tr>
     <tr>
-      <td><code>WP-Cron</code> enabled or a <a href="https://kinsta.com/knowledgebase/disable-wp-cron/" target="_blank">real cron job</a> set up</td>
+      <td><strong>WP-Cron</strong> enabled or a <a href="https://kinsta.com/knowledgebase/disable-wp-cron/" target="_blank">real cron job</a> set up</td>
       <td><a href="https://developer.wordpress.org/plugins/cron/simple-testing/" target="_blank"><code>test WP-Cron</code></a></td>
     </tr>
   </tbody>
@@ -61,9 +61,10 @@ wp plugin activate responsive-pics
 
 ### via WordPress Admin Panel
 1. Download the [latest zip](https://github.com/booreiland/responsive-pics/releases/latest) of this repo.
-2. In your WordPress admin panel, navigate to Plugins->Add New
-3. Click Upload Plugin
+2. In your WordPress admin panel, navigate to **Plugins->Add New**
+3. Click **Upload Plugin**
 4. Upload the zip file that you downloaded.
+5. **Activate** the plugin after installation.
 
 ### Browser Support
 Currently the `<picture>` element and `srcset` and `sizes` attributes on the `<img>` element are supported in all modern browsers except **Internet Explorer 11**.
