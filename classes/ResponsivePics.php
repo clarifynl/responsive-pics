@@ -267,9 +267,9 @@ if (!class_exists('ResponsivePics')) {
 			];
 		}
 
-		// check if ratio is between reasonable values 0-2
+		// check if ratio is a number and between reasonable values 0-2
 		private static function process_ratio($ratio) {
-			if ((0 < $ratio) && ($ratio <= 2)) {
+			if (is_numeric($ratio) && (0 < $ratio) && ($ratio <= 2)) {
 				return true;
 			} else {
 				self::show_error(sprintf('the crop ratio %d needs to be higher then 0 and equal or lower then 2', $ratio));
@@ -476,7 +476,7 @@ if (!class_exists('ResponsivePics')) {
 				if ($img_crop) {
 					if (self::contains($img_crop, '|')) {
 						$components = explode('|', $img_crop);
-						$ratio      = trim($components[0]);
+						$ratio      = (float) trim($components[0]);
 
 						// check if ratio is within range
 						if (self::process_ratio($ratio)) {
@@ -484,7 +484,7 @@ if (!class_exists('ResponsivePics')) {
 							$variant .= '/'. $ratio;
 						}
 					} else {
-						$ratio = $img_crop;
+						$ratio = (float) $img_crop;
 
 						// check if ratio is within range
 						if (self::process_ratio($ratio)) {
