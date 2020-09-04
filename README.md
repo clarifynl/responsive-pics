@@ -361,14 +361,16 @@ import 'lazysizes/plugins/aspectratio/ls.aspectratio.js';
 ```
 
 ## TODO
-* Add Wordpress `REST Api` endpoints for functions
+* Add `Wordpress REST API` endpoints for function calls
 * Add functions `get_picture_data`, `get_image_data` and `get_background_data` to retrieve available sources and sizes as data instead of html markup
 
 ## Maintainers
 **ResponsivePics** is developed and maintained by:
 
-[@monokai](https://github.com/monokai) (creator)
+[@monokai](https://github.com/monokai) (creator)  
 [@twansparant](https://github.com/Twansparant) (creator)
 
 ## Copyright
-Code and documentation copyright 2017-2020 by [Booreiland](https://booreiland.amsterdam). Code released under the [MIT License](https://github.com/booreiland/responsive-pics/blob/master/LICENSE). Docs released under Creative Commons.
+Code and documentation copyright 2017-2020 by [Booreiland](https://booreiland.amsterdam).  
+Code released under the [MIT License](https://github.com/booreiland/responsive-pics/blob/master/LICENSE).  
+Docs released under Creative Commons.
