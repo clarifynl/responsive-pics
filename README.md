@@ -93,7 +93,7 @@ ResponsivePics uses the following default variables:
 | `$lazyload_class` | string | `lazyload` | The css class to be added on the picture `img` tag when `lazyload` is enabled
 | `$image_quality`  | number | `90`       | The image compression quality in percentage used in the `WP_Image_Editor` when resizing images
 
-By default, ResponsivePics will use the [Bootstrap 4 SCSS variables](https://getbootstrap.com/docs/4.5/layout/overview/) for defining:
+By default, ResponsivePics will use the [Bootstrap 4 SCSS variables](https://github.com/twbs/bootstrap/blob/main/scss/_variables.scss#L285/) for defining:
 
 The amount of **grid columns**: `$grid-columns: 12;`  
 The **grid gutter width** in pixels: `$grid-gutter-width: 30px;`  
@@ -196,7 +196,7 @@ ResponsivePics::get_image(id, sizes, crop, classes, lazyload);
 | -----------|:---------------:| --------:|---------:|---------------------------------
 | id         | number          | yes      |          | The WordPress image id (e.g. 1).
 | sizes      | string          | yes      |          | A comma-separated string of preferred image sizes (e.g. `'xs-12, sm-6, md-4, lg-3'`). See the [Sizes section](#sizes) for more information.
-| crop       | string          | optional | `false`  | A crop-factor of the width for the desired height between 0-2 (e.g. `0.75`) with optional crop positions (e.g. <code>0.75&#124;c t</code>)
+| crop       | string          | optional | `false`  | A crop-factor of the width for the desired height between `0-2` (e.g. `0.75`) with optional crop positions (e.g. <code>0.75&#124;c t</code>)
 | classes    | string or array | optional | `null`   | Additional CSS classes you want to add to the picture element (e.g. `'my_picture_class'` or `['my_picture_class', 'my_second_picture_class']`).
 | lazyload   | boolean         | optional | `false`  | When `true` enables `lazyload` classes and data-srcset attributes. See the [Lazyloading section](#lazyloading) for more information.
 
@@ -229,14 +229,19 @@ Any other image formats, will not be resizes or cropped.
 ## Sizes <a name="sizes"></a>
 
 ### Image sizes
-The following syntax is available for each image size in the `$sizes` parameter:
+The following syntax is available for each image size in the `sizes` parameter:
 
 ```php
 breakpoint:width
 ```
 
+| Parameter  | Type             | Required | Default | Definition
+| -----------|:----------------:| --------:|--------:|---------------------------------
+| breakpoint | number or string | yes      |         | If undefined, and `width` is a number, breakpoint will be the same as the width. If undefined, and `width` is a column definition, breakpoint will be the corresponding breakpoint (e.g. if width is `'xs-8'`, breakpoint will be `'xs'`).
+| width      | number or string | yes      |         | A column definition is a key in `$grid_widths` plus a dash and a column span number (e.g. `'xs-8'`). If column span number is `full`, the full width of the next matching `$breakpoint` is used (e.g. `'xs-full'`).
+
 ### Picture & background sizes
-Since the `<picture>` element and background images support art directed images, the following full syntax is available for each image size in the `$sizes` parameter:
+Since the `<picture>` element and background images support art directed images, the following full syntax is available for each image size in the `sizes` parameter:
 
 ```php
 breakpoint:width [/factor|height]|crop_x crop_y
@@ -249,15 +254,15 @@ The following parameters are available in the sizes syntax:
 | breakpoint | number or string | yes      |         | If undefined, and `width` is a number, breakpoint will be the same as the width. If undefined, and `width` is a column definition, breakpoint will be the corresponding breakpoint (e.g. if width is `'xs-8'`, breakpoint will be `'xs'`).
 | width      | number or string | yes      |         | A column definition is a key in `$grid_widths` plus a dash and a column span number (e.g. `'xs-8'`). If column span number is `full`, the full width of the next matching `$breakpoint` is used (e.g. `'xs-full'`).
 | height     | number           | optional |         | The desired height of the image (e.g. `500`).
-| factor     | number           | optional |         | A factor of the width for the desired height between 0-2 (e.g. `0.75`).
+| factor     | number           | optional |         | A factor of the width for the desired height between `0-2` (e.g. `0.75`).
 | crop_x     | string           | optional | c       | Crop position in horizontal direction: `l(eft)`, `c(enter)` or `r(ight)`.
 | crop_y     | string           | optional | c       | Crop position in vertical direction: `t(op), c(enter)` or `b(ottom)`. If undefined, `crop_x` will be treated as a shortcut: `'c' = 'center center', 't' = 'top center', r = 'right center', 'b' = 'center bottom', 'l' = 'left center'`.
 
 
 ## Process <a name="process"></a>
 
-1. When visiting the front-end page where the `ResponsivePics` function call is made, this library will add the resize and/or crop image task as a job to the background process queue using [Action Scheduler](https://actionscheduler.org/).
-2. On every page load or on the next cron interval, Action Scheduler will run the next batch of jobs in the background process queue. See the [Cron section](#cron) for more information.
+1. When visiting a front-end page and a `ResponsivePics` function call is made, this library will add the resize and/or crop image task as a job to the background process queue using [Action Scheduler](https://actionscheduler.org/).
+2. On every page load or on the next cron interval, **Action Scheduler** will run the next batch of jobs in the background process queue. See the [Cron section](#cron) for more information.
 3. When a job is up next in the queue and ready to be processed it will execute the resize and/or crop task and save the image in the same location as the original image when successful and it will remove the job from the queue.
 4. Once the image variation is created, it will skip the process of that variation on the next page load.
 5. When you change one of the image size parameters, it will automatically try and create the new image variation on the next page load.
@@ -283,7 +288,7 @@ define('DISABLE_WP_CRON', true);
 If you're using [Trellis](https://roots.io/trellis/) like us ❤️, the default cron interval is set to every [15 mins](https://github.com/roots/trellis/blob/master/roles/wordpress-setup/tasks/main.yml#L48).  
 You could override this to for example 1 mins with an environment variable per wordpress site like this:
 
-In for example `group_vars/development/wordpress_sites.yml`:
+In for example **trellis/group_vars/development/wordpress_sites.yml**:
 
 ```yaml
 wordpress_sites:
@@ -305,7 +310,7 @@ wordpress_sites:
       interval: 1
 ```
 
-In `roles/wordpress-setup/tasks/main.yml`:
+In **trellis/roles/wordpress-setup/tasks/main.yml**:
 
 
 ```yaml
@@ -332,7 +337,7 @@ When enabling the `lazyload` option in the `get_picture` or `get_image` function
 
 This will enable you to use a lazy loading plugin such as Lazysizes.
 
-You can also set your own lazyload class by passing it to ResponsivePics library in your theme’s **functions.php**:
+You can also set your own lazyload class by passing it to **ResponsivePics** library in your theme’s **functions.php**:
 ```php
 if (class_exists('ResponsivePics')) {
 	ResponsivePics::setLazyLoadClass('lazy');
@@ -362,9 +367,12 @@ To use the **Lazysizes aspectratio extension** in your wordpress theme, first in
 import 'lazysizes/plugins/aspectratio/ls.aspectratio.js';
 ```
 
-## TODO
-* Add `Wordpress REST API` endpoints for function calls
-* Add functions `get_picture_data`, `get_image_data` and `get_background_data` to retrieve available sources and sizes as data instead of html markup
+## Issues
+Please submit any issues you experience with the **ResponsivePics** library over at [Github](https://github.com/booreiland/responsive-pics/issues).
+
+## Todo's
+* Add `Wordpress REST API` endpoints for all functions.
+* Add functions `get_picture_data`, `get_image_data` and `get_background_data` to retrieve available sources and sizes as data instead of html markup.
 
 ## Maintainers
 **ResponsivePics** is developed and maintained by:
