@@ -474,6 +474,7 @@ if (!class_exists('ResponsivePics')) {
 
 				// get global img crop positions
 				if ($img_crop) {
+					// check if crop position is set
 					if (self::contains($img_crop, '|')) {
 						$components = explode('|', $img_crop);
 						$ratio      = (float) trim($components[0]);
@@ -483,6 +484,7 @@ if (!class_exists('ResponsivePics')) {
 							$crop     = self::process_crop($components[1]);
 							$variant .= '/'. $ratio;
 						}
+					// add default crop position
 					} else {
 						$ratio = (float) $img_crop;
 
