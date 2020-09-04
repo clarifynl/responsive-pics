@@ -360,10 +360,14 @@ To use the **Lazysizes aspectratio extension** in your wordpress theme, first in
 import 'lazysizes/plugins/aspectratio/ls.aspectratio.js';
 ```
 
+## TODO
+* Add Wordpress `REST Api` endpoints for functions
+* Add functions `get_picture_data`, `get_image_data` and `get_background_data` to retrieve available sources and sizes as data instead of html markup
+
 ## Maintainers
 **ResponsivePics** is developed and maintained by:
 
-[@monokai](https://github.com/monokai) (creator)  
+[@monokai](https://github.com/monokai) (creator)
 [@twansparant](https://github.com/Twansparant) (creator)
 
 ## Copyright
