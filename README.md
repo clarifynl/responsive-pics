@@ -227,18 +227,21 @@ Any other image formats, will not be resizes or cropped.
 
 ## Sizes <a name="sizes"></a>
 
-### Full Syntax
-For each comma-separated image size being passed to the `get_picture` or `get_background` function, the following syntax is applied:
+### Image Options
+The following syntax is available for each image size in the `$sizes` parameter:
+
+```php
+breakpoint:width
+```
+
+### Picture & Background Options
+Since the `<picture>` element and background images support art directed images, the following full syntax is available for each image size in the `$sizes` parameter:
 
 ```php
 breakpoint:width [/factor|height]|crop_x crop_y
 ```
 
-Since the `<img>` element doesn't support art directed images, the following syntax is applied for the `get_image` function:
 
-```php
-breakpoint:width
-```
 
 The following parameters are available for all functions in the sizes syntax:
 
@@ -246,13 +249,9 @@ The following parameters are available for all functions in the sizes syntax:
 | -----------|:----------------:| --------:|--------:|---------------------------------
 | breakpoint | number or string | yes      |         | If undefined, and `width` is a number, breakpoint will be the same as the width. If undefined, and `width` is a column definition, breakpoint will be the corresponding breakpoint (e.g. if width is `'xs-8'`, breakpoint will be `'xs'`).
 | width      | number or string | yes      |         | A column definition is a key in `$grid_widths` plus a dash and a column span number (e.g. `'xs-8'`). If column span number is `full`, the full width of the next matching `$breakpoint` is used (e.g. `'xs-full'`).
-| factor     | number           | optional |         | A factor of the width for the desired height between 0-2 (e.g. `0.75`).
-
-The following additional parameters are available for the `get_picture` and `get_background` functions in the sizes syntax:
-
-| Parameter  | Type             | Required | Default | Definition
 | -----------|:----------------:| --------:|--------:|---------------------------------
 | height     | number           | optional |         | The desired height of the image (e.g. `500`).
+| factor     | number           | optional |         | A factor of the width for the desired height between 0-2 (e.g. `0.75`).
 | crop_x     | string           | optional | c       | Crop position in horizontal direction: `l(eft)`, `c(enter)` or `r(ight)`.
 | crop_y     | string           | optional | c       | Crop position in vertical direction: `t(op), c(enter)` or `b(ottom)`. If undefined, `crop_x` will be treated as a shortcut: `'c' = 'center center', 't' = 'top center', r = 'right center', 'b' = 'center bottom', 'l' = 'left center'`.
 
