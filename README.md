@@ -373,6 +373,7 @@ Please submit any issues you experience with the **ResponsivePics** library over
 ## Todo's
 * Add `Wordpress REST API` endpoints for all functions.
 * Add functions `get_picture_data`, `get_image_data` and `get_background_data` to retrieve available sources and sizes as data instead of html markup.
+* Add **bulk delete** functionality for all resized/cropped images.
 
 ## Maintainers
 **ResponsivePics** is developed and maintained by:
