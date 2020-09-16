@@ -88,8 +88,8 @@ ResponsivePics uses the following default variables:
 | -----------------:|:-------|:-----------|-----------
 | `$columns`        | number | `12`       | The amount of columns your grid layout uses
 | `$gutter`         | number | `30`       | The gutter width in pixels (space between grid columns)
-| `$breakpoints`    | array  | `['xs' => 0, 'sm' => 576, 'md' => 768, 'lg' => 992, 'xl' => 1200, 'xxl' => 1400, 'xxxl' => 1600]` | The media query breakpoints ResponsivePics will use for creating and serving your image sources
-| `$grid_widths`    | array  | `['xs' => 576, 'sm' => 540, 'md' => 720, 'lg' => 960, 'xl' => 1140, 'xxl' => 1140, 'xxxl' => 1140]` | The maximum widths of your layout in pixels ResponsivePics will use for resizing your images
+| `$breakpoints`    | array  | `['xs' => 0, 'sm' => 576, 'md' => 768, 'lg' => 992, 'xl' => 1200, 'xxl' => 1400]` | The media query breakpoints ResponsivePics will use for creating and serving your image sources
+| `$grid_widths`    | array  | `['xs' => 576, 'sm' => 540, 'md' => 720, 'lg' => 960, 'xl' => 1140, 'xxl' => 1320]` | The maximum widths of your layout in pixels ResponsivePics will use for resizing your images
 | `$lazyload_class` | string | `lazyload` | The css class to be added on the picture `img` tag when `lazyload` is enabled
 | `$image_quality`  | number | `90`       | The image compression quality in percentage used in the `WP_Image_Editor` when resizing images
 
@@ -105,7 +105,8 @@ $grid-breakpoints: (
  sm: 576px,
  md: 768px,
  lg: 992px,
- xl: 1200px
+ xl: 1200px,
+ xxl: 1400px
 );
 ```
 And the **maximum widths of the containers** in pixels:
@@ -115,7 +116,8 @@ $container-max-widths: (
  sm: 540px,
  md: 720px,
  lg: 960px,
- xl: 1140px
+ xl: 1140px,
+ xxl: 1320px
 );
 ```
 
