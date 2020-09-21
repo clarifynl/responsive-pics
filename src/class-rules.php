@@ -89,20 +89,22 @@ class RP_Rules extends ResponsivePics {
 				if (ResponsivePics()->helpers->contains($img_crop, '|')) {
 					$components = explode('|', $img_crop);
 					$ratio      = trim($components[0]);
+					$crop_pos   = $components[1];
 
 					// check if ratio is within range
 					if (ResponsivePics()->process->process_ratio($ratio)) {
-						$crop     = ResponsivePics()->process->process_crop($components[1]);
+						$crop     = ResponsivePics()->process->process_crop($crop_pos);
 						$variant .= '/'. $ratio;
 					}
 				// add default crop position
 				} else {
-					$ratio = $img_crop;
+					$ratio        = $img_crop;
+					$default_crop = 'c';
 
 					// check if ratio is within range
 					if (ResponsivePics()->process->process_ratio($ratio)) {
-						$crop     = ResponsivePics()->process->process_crop($components[1]);
-						$variant .= '/'. $ratio . '|c';
+						$crop     = ResponsivePics()->process->process_crop($default_crop);
+						$variant .= '/'. $ratio;
 					}
 				}
 			}
