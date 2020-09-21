@@ -48,18 +48,7 @@ class RP_Helpers extends ResponsivePics {
 		return $pixels;
 	}
 
-	// returns true if a string contains a substring
-	public function contains($haystack, $needle) {
-		return strpos($haystack, $needle) !== false;
-	}
-
-	// returns regex match of string
-	public function match($string, $regex) {
-		$found = preg_match($regex, $string, $matches);
-
-		return $found ? $matches[0] : null;
-	}
-
+	// get suffix for resized image
 	public function get_resized_suffix($width, $height, $ratio, $crop) {
 		if ($ratio === 1) {
 			$ratio_indicator = '';
@@ -79,7 +68,13 @@ class RP_Helpers extends ResponsivePics {
 		return $suffix;
 	}
 
-	// check if resize requerst is not a pending scheduled action
+	// get a css rule for targeting high dpi screens
+	public function get_media_query_2x($breakpoint) {
+		// apparently this targets high dpi screens cross-browser
+		return sprintf('@media only screen and (-webkit-min-device-pixel-ratio: 2) and (min-width: %spx), only screen and (min-resolution: 192dpi) and (min-width: %spx)', $breakpoint, $breakpoint);
+	}
+
+	// check if resize request is not a pending scheduled action
 	public function is_scheduled_action($request, $id) {
 		$scheduled = as_get_scheduled_actions([
 			'group'    => 'process_resize_request_' . $id,
@@ -102,6 +97,15 @@ class RP_Helpers extends ResponsivePics {
 		return false;
 	}
 
+	// check if request comes from rest api
+	public function is_rest_api_request($request) {
+		if (false !== strpos($_SERVER['REQUEST_URI'], '/wp-json/')) {
+			return false;
+		}
+
+		return $request;
+	}
+
 	// check if png file has transparent background
 	public function is_alpha_png($fn) {
 		return (ord(@file_get_contents($fn, NULL, NULL, 25, 1)) === 6);
@@ -122,9 +126,15 @@ class RP_Helpers extends ResponsivePics {
 		return $count > 1;
 	}
 
-	// get a css rule for targeting high dpi screens
-	public function get_media_query_2x($breakpoint) {
-		// apparently this targets high dpi screens cross-browser
-		return sprintf('@media only screen and (-webkit-min-device-pixel-ratio: 2) and (min-width: %spx), only screen and (min-resolution: 192dpi) and (min-width: %spx)', $breakpoint, $breakpoint);
+	// returns true if a string contains a substring
+	public function contains($haystack, $needle) {
+		return strpos($haystack, $needle) !== false;
+	}
+
+	// returns regex match of string
+	public function match($string, $regex) {
+		$found = preg_match($regex, $string, $matches);
+
+		return $found ? $matches[0] : null;
 	}
 }

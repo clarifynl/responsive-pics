@@ -45,7 +45,7 @@ class ResponsivePics {
 	// init
 	public static function init() {
 		$includes = [
-			//'class-rest-api',
+			'class-rest-api',
 			'class-definitions',
 			'class-rules',
 			'class-breakpoints',
@@ -67,6 +67,7 @@ class ResponsivePics {
 		self::setImageQuality();
 
 		// Init classes
+		ResponsivePics()->api = new RP_Rest_Api();
 		ResponsivePics()->definitions = new RP_Definitions();
 		ResponsivePics()->rules = new RP_Rules();
 		ResponsivePics()->breakpoints = new RP_Breakpoints();
@@ -75,7 +76,8 @@ class ResponsivePics {
 		ResponsivePics()->error = new RP_Error();
 
 		// Hooks
-		add_action('process_resize_request', ['Process', 'process_resize_request'], 10, 6);
+		add_action('process_resize_request', ['RP_Process', 'process_resize_request'], 10, 6);
+		add_action('rest_api_init',          ['RP_Rest_Api', 'register_api_routes']);
 		add_filter('big_image_size_threshold', '__return_false');
 	}
 
