@@ -6,27 +6,27 @@ class RP_Rest_Api extends ResponsivePics {
 		// picture
 		register_rest_route('responsive-pics', '/v1/get', [
 			'methods'             => 'GET',
-			'callback'            => [$this, 'rest_get_picture'],
+			'callback'            => ['RP_Rest_Api', 'rest_get_picture'],
 			'permission_callback' => '__return_true'
 		]);
 
 		register_rest_route('responsive-pics', '/v1/get-picture', [
 			'methods'             => 'GET',
-			'callback'            => [$this, 'rest_get_picture'],
+			'callback'            => ['RP_Rest_Api', 'rest_get_picture'],
 			'permission_callback' => '__return_true'
 		]);
 
 		// image
 		register_rest_route('responsive-pics', '/v1/get-image', [
 			'methods'             => 'GET',
-			'callback'            => [$this, 'rest_get_image'],
+			'callback'            => ['RP_Rest_Api', 'rest_get_image'],
 			'permission_callback' => '__return_true'
 		]);
 
 		// background
 		register_rest_route('responsive-pics', '/v1/get-background', [
 			'methods'             => 'GET',
-			'callback'            => [$this, 'rest_get_background'],
+			'callback'            => ['RP_Rest_Api', 'rest_get_background'],
 			'permission_callback' => '__return_true'
 		]);
 	}
