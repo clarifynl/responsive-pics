@@ -2,7 +2,7 @@
 
 class RP_Rest_Api extends ResponsivePics {
 
-	public function register_api_routes() {
+	public static function register_api_routes() {
 		// picture
 		register_rest_route('responsive-pics', '/v1/get', [
 			'methods'             => 'GET',
