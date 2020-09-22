@@ -168,7 +168,7 @@ class ResponsivePics {
 	 * Construct a responsive picture element
 	 * returns <picture> element as html markup
 	 */
-	public static function get_picture($id, $sizes, $picture_classes = null, $lazyload = false, $intrinsic = false) {0
+	public static function get_picture($id, $sizes, $picture_classes = null, $lazyload = false, $intrinsic = false) {
 		if (!isset($id)) {
 			return ResponsivePics()->error->show_error('image id is not defined');
 		} elseif (!is_int($id)) {
