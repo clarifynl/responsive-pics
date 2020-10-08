@@ -43,10 +43,20 @@ class RP_Rest_Api extends ResponsivePics {
 		if (class_exists('ResponsivePics')) {
 			if ($id && $sizes) {
 				$picture = ResponsivePics::get_picture($id, $sizes, $classes, $lazyload, $intrinsic);
-				$result  = new WP_REST_Response($picture, 200);
-				// Set caching
-				$result->set_headers(array('Cache-Control' => 'max-age=3600'));
-				return $result;
+
+				// Check for errors
+				if (is_wp_error($picture)) {
+					$error_code    = $picture->get_error_code();
+					$error_message = $picture->get_error_message();
+					$error_data    = $picture->get_error_data();
+
+					return new WP_Error($error_code, $error_message, $error_data);
+				} else {
+					$result = new WP_REST_Response($picture, 200);
+					// Set caching
+					$result->set_headers(array('Cache-Control' => 'max-age=3600'));
+					return $result;
+				}
 			} else {
 				return new WP_Error('401', __('Your ResponsivePics get_picture request is missing required parameters.', 'responsive-pics'));
 			}
@@ -67,10 +77,20 @@ class RP_Rest_Api extends ResponsivePics {
 		if (class_exists('ResponsivePics')) {
 			if ($id && $sizes) {
 				$image  = ResponsivePics::get_image($id, $sizes, $crop, $classes, $lazyload);
-				$result = new WP_REST_Response($image, 200);
-				// Set caching
-				$result->set_headers(array('Cache-Control' => 'max-age=3600'));
-				return $result;
+
+				// Check for errors
+				if (is_wp_error($image)) {
+					$error_code    = $image->get_error_code();
+					$error_message = $image->get_error_message();
+					$error_data    = $image->get_error_data();
+
+					return new WP_Error($error_code, $error_message, $error_data);
+				} else {
+					$result = new WP_REST_Response($image, 200);
+					// Set caching
+					$result->set_headers(array('Cache-Control' => 'max-age=3600'));
+					return $result;
+				}
 			} else {
 				return new WP_Error('401', __('Your ResponsivePics get_image request is missing required parameters.', 'responsive-pics'));
 			}
@@ -89,10 +109,20 @@ class RP_Rest_Api extends ResponsivePics {
 		if (class_exists('ResponsivePics')) {
 			if ($id && $sizes) {
 				$background = ResponsivePics::get_background($id, $sizes, $classes);
-				$result     = new WP_REST_Response($background, 200);
-				// Set caching
-				$result->set_headers(array('Cache-Control' => 'max-age=3600'));
-				return $result;
+
+				// Check for errors
+				if (is_wp_error($background)) {
+					$error_code    = $background->get_error_code();
+					$error_message = $background->get_error_message();
+					$error_data    = $background->get_error_data();
+
+					return new WP_Error($error_code, $error_message, $error_data);
+				} else {
+					$result = new WP_REST_Response($background, 200);
+					// Set caching
+					$result->set_headers(array('Cache-Control' => 'max-age=3600'));
+					return $result;
+				}
 			} else {
 				return new WP_Error('401', __('Your ResponsivePics get_background request is missing required parameters.', 'responsive-pics'));
 			}

@@ -80,7 +80,7 @@ class RP_Rules extends ResponsivePics {
 			// check for height and/or crops syntax
 			$variant = trim($variant);
 			if (ResponsivePics()->helpers->contains($variant, ' ') || ResponsivePics()->helpers->contains($variant, '|') || ResponsivePics()->helpers->contains($variant, '/')) {
-				ResponsivePics()->error->show_error(sprintf('art directed parameters (height, factor, crop_x, crop_y) are not supported on image sizes: %s', $variant));
+				return ResponsivePics()->error->get_error(sprintf('art directed parameters (height, factor, crop_x, crop_y) are not supported on image sizes: %s', $variant));
 			}
 
 			// get global img crop positions
