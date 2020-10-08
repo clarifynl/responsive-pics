@@ -98,12 +98,17 @@ class RP_Helpers extends ResponsivePics {
 	}
 
 	// check if request comes from rest api
-	public function is_rest_api_request($request) {
-		if (false !== strpos($_SERVER['REQUEST_URI'], '/wp-json/')) {
+	public function is_rest_api_request() {
+		if (empty($_SERVER['REQUEST_URI'])) {
+			// Probably a CLI request
 			return false;
 		}
 
-		return $request;
+		// check if request contains rest url prefix (/wp-json)
+		$rest_prefix = trailingslashit(rest_get_url_prefix());
+		$is_rest_api_request = (false !== strpos($_SERVER['REQUEST_URI'], $rest_prefix));
+
+		return apply_filters('is_rest_api_request', $is_rest_api_request);
 	}
 
 	// check if png file has transparent background
