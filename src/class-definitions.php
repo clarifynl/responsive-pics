@@ -22,12 +22,12 @@ class RP_Definitions extends ResponsivePics {
 
 		// check if png has alpha channel
 		if ($mime_type === 'image/png') {
-			$alpha = $this->is_alpha_png($file_path);
+			$alpha = ResponsivePics()->helpers->is_alpha_png($file_path);
 		}
 
 		// check if gif is animated
 		if ($mime_type === 'image/gif') {
-			$animated = $this->is_gif_ani($file_path);
+			$animated = ResponsivePics()->helpers->is_gif_ani($file_path);
 		}
 
 		// unsupported mime-type, return original source without breakpoints
