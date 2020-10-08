@@ -52,6 +52,11 @@ class RP_Definitions extends ResponsivePics {
 		$addedSource     = false;
 		$min_breakpoint  = null;
 
+		// check for errors
+		if (is_wp_error($rules)) {
+			return $rules;
+		}
+
 		if (!$original_width || !$original_height) {
 			return ResponsivePics()->error->get_error(sprintf('no dimensions for file id %s', $id));
 		}

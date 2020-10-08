@@ -56,6 +56,8 @@ class RP_Process extends ResponsivePics {
 
 			if ($this->process_ratio($crop_ratio)) {
 				$height = $width * $crop_ratio;
+			} else {
+				return ResponsivePics()->error->get_error(sprintf('the crop ratio "%s" needs to be higher then 0 and equal or lower then 2', (string) $ratio));
 			}
 		}
 
@@ -72,8 +74,7 @@ class RP_Process extends ResponsivePics {
 		if (is_numeric($ratio) && (0 < $ratio) && ($ratio <= 2)) {
 			return true;
 		} else {
-			return ResponsivePics()->error->get_error(sprintf('the crop ratio "%s" needs to be higher then 0 and equal or lower then 2', $ratio));
-			// return false;
+			return false;
 		}
 	}
 
@@ -113,7 +114,6 @@ class RP_Process extends ResponsivePics {
 				$wp_editor->set_quality($quality);
 				$wp_editor->resize($width * $ratio, $height * $ratio, $crop);
 				$wp_editor->save($resize_path);
-
 			} else {
 				syslog(LOG_ERR, sprintf('error resizing image "%s"', $resize_path));
 			}

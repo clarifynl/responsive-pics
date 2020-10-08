@@ -5,7 +5,7 @@ class RP_Error extends ResponsivePics {
 	// format error
 	public function get_error($message) {
 		if (ResponsivePics()->helpers->is_rest_api_request()) {
-			$this->return_error($message);
+			return $this->return_error($message);
 		} else {
 			$this->show_error($message);
 		}

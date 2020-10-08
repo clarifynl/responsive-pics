@@ -32,9 +32,14 @@ class RP_Rules extends ResponsivePics {
 				$dimensions = ResponsivePics()->process->process_dimensions($variant);
 			}
 
-			$width      = $dimensions['width'];
-			$height     = $dimensions['height'];
-			$crop_ratio = $dimensions['crop_ratio'];
+			// check for errors
+			if (is_wp_error($dimensions)) {
+				return $dimensions;
+			} elseif (is_array($dimensions)) {
+				$width      = $dimensions['width'];
+				$height     = $dimensions['height'];
+				$crop_ratio = $dimensions['crop_ratio'];
+			}
 
 			if ($breakpoint === -1) {
 				if (ResponsivePics()->helpers->contains($dimensions['input'], '-')) {
@@ -118,9 +123,14 @@ class RP_Rules extends ResponsivePics {
 				$dimensions = ResponsivePics()->process->process_dimensions($variant);
 			}
 
-			$width      = $dimensions['width'];
-			$height     = $dimensions['height'];
-			$crop_ratio = $dimensions['crop_ratio'];
+			// check for errors
+			if (is_wp_error($dimensions)) {
+				return $dimensions;
+			} elseif (is_array($dimensions)) {
+				$width      = $dimensions['width'];
+				$height     = $dimensions['height'];
+				$crop_ratio = $dimensions['crop_ratio'];
+			}
 
 			if ($breakpoint === -1) {
 				if (ResponsivePics()->helpers->contains($dimensions['input'], '-')) {
