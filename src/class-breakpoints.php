@@ -5,7 +5,7 @@ class RP_Breakpoints extends ResponsivePics {
 	// get breakpoint name and number of columns
 	public function get_breakpoint_from_rule($rule) {
 		if (!ResponsivePics()->helpers->contains($rule, ':')) {
-			if (!ResponsivePics()->helpers->contains($rule, '-')) {
+			if (ResponsivePics()->helpers->contains($rule, '-')) {
 				$components = explode('-', $rule);
 
 				return [
@@ -79,7 +79,7 @@ class RP_Breakpoints extends ResponsivePics {
 				$next_breakpoint = $this->get_next_breakpoint($breakpoint['breakpoint']);
 				$columns = $breakpoint['columns'];
 
-				if ($this->contains($columns, '/')) {
+				if (ResponsivePics()->helpers->contains($columns, '/')) {
 					$columns = explode('/', $columns)[0];
 				}
 
