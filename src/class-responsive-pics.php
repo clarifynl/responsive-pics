@@ -166,16 +166,15 @@ class ResponsivePics {
 	 * Construct a responsive picture element
 	 * returns <picture> element as html markup
 	 */
-	public static function get_picture($id, $sizes, $picture_classes = null, $lazyload = false, $intrinsic = false) {
+	public static function get_picture($id = null, $sizes, $picture_classes = null, $lazyload = false, $intrinsic = false) {
 		// check for valid image id
-		if (!isset($id)) {
-			return ResponsivePics()->error->get_error('invalid', 'image id is not defined');
-		} elseif (!is_int($id)) {
-			return ResponsivePics()->error->get_error('invalid', sprintf('image id %s is not an integer', $id), $id);
+		$image_id = ResponsivePics()->process->process_image_id($id);
+		if (is_wp_error($image_id)) {
+			return $image_id;
 		}
 
-		// check for valid definition
-		$definition = ResponsivePics()->definitions->get_definition($id, $sizes);
+		// check for valid sizes
+		$definition = ResponsivePics()->definitions->get_definition($image_id, $sizes);
 		if (is_wp_error($definition)) {
 			return $definition;
 		}
@@ -250,14 +249,13 @@ class ResponsivePics {
 	 */
 	public static function get_image($id, $sizes, $crop = false, $img_classes = null, $lazyload = false) {
 		// check for valid image id
-		if (!isset($id)) {
-			return ResponsivePics()->error->get_error('invalid', 'image id is not defined');
-		} elseif (!is_int($id)) {
-			return ResponsivePics()->error->get_error('invalid', sprintf('image id %s is not an integer', $id), $id);
+		$image_id = ResponsivePics()->process->process_image_id($id);
+		if (is_wp_error($image_id)) {
+			return $image_id;
 		}
 
 		// check for valid definition
-		$definition = ResponsivePics()->definitions->get_definition($id, $sizes, false, false, $crop);
+		$definition = ResponsivePics()->definitions->get_definition($image_id, $sizes, false, false, $crop);
 		if (is_wp_error($definition)) {
 			return $definition;
 		}
@@ -315,26 +313,19 @@ class ResponsivePics {
 	 */
 	public static function get_background($id, $sizes, $bg_classes = null) {
 		// check for valid image id
-		if (!isset($id)) {
-			return ResponsivePics()->error->get_error('invalid', 'image id is not defined');
-		} elseif (!is_int($id)) {
-			return ResponsivePics()->error->get_error('invalid', sprintf('image id %s is not an integer', $id), $id);
-		}
-
-		// check for multiple background images (temp solution)
-		if (is_array($id)) {
-			$definition = ResponsivePics()->definitions->get_definition($id[0], $sizes, true);
-		} else {
-			$definition = ResponsivePics()->definitions->get_definition($id, $sizes, true);
+		$image_id = ResponsivePics()->process->process_image_id($id);
+		if (is_wp_error($image_id)) {
+			return $image_id;
 		}
 
 		// check for valid definition
+		$definition = ResponsivePics()->definitions->get_definition($image_id, $sizes, true);
 		if (is_wp_error($definition)) {
 			return $definition;
 		}
 
 		$sources = $definition['sources'];
-		$copy = $id;
+		$copy = $image_id;
 
 		// convert $classes to array if it is a string
 		if ($bg_classes) {
@@ -345,11 +336,11 @@ class ResponsivePics {
 		}
 
 		// prevent same id, append copy number to existing
-		if (isset(self::$id_map[$id])) {
-			self::$id_map[$id]++;
-			$copy .= '-' . self::$id_map[$id];
+		if (isset(self::$id_map[$image_id])) {
+			self::$id_map[$image_id]++;
+			$copy .= '-' . self::$id_map[$image_id];
 		} else {
-			self::$id_map[$id] = 0;
+			self::$id_map[$image_id] = 0;
 		}
 
 		$id = sprintf('responsive-pics-background-%s', $copy);

@@ -2,6 +2,34 @@
 
 class RP_Process extends ResponsivePics {
 
+	// validates and returns image id
+	public function process_image_id($id = null) {
+		if (!$id) {
+			return ResponsivePics()->error->add_error('invalid', 'image id is undefined');
+		} elseif (is_array($id)) {
+			return $id[0];
+		} elseif (!is_int($id)) {
+			return ResponsivePics()->error->add_error('invalid', sprintf('image id %s is not an integer', $id), $id);
+		}
+
+		return $id;
+	}
+
+	// validates and returns classes as an array
+	public function process_classes($classes = null) {
+		if (!is_array($classes) && !is_string($classes)) {
+			return ResponsivePics()->error->add_error('invalid', 'classes parameter is neither a string nor an array', $classes);
+		} elseif (!is_array($classes) && is_string($classes)) {
+			if (!empty($classes)) {
+				$classes = preg_split('/[\s,]+/', $classes);
+			} else {
+				$classes = [];
+			}
+
+			return $classes;
+		}
+	}
+
 	// breakpoint can be shortcut (e.g. "xs") or number
 	public function process_breakpoint($input) {
 		$input = trim($input);
@@ -44,7 +72,7 @@ class RP_Process extends ResponsivePics {
 				$width = ResponsivePics()->helpers->match($dimensions, '/(\d+)/');
 
 				if (!isset($width)) {
-					return ResponsivePics()->error->get_error('invalid', sprintf('width is undefined in %s', $dimensions), $dimensions);
+					return ResponsivePics()->error->add_error('invalid', sprintf('width is undefined in %s', $dimensions), $dimensions);
 				}
 			}
 		}
@@ -57,7 +85,7 @@ class RP_Process extends ResponsivePics {
 			if ($this->process_ratio($crop_ratio)) {
 				$height = $width * $crop_ratio;
 			} else {
-				return ResponsivePics()->error->get_error('invalid', sprintf('the crop ratio %s needs to be higher then 0 and equal or lower then 2', (string) $ratio), $ratio);
+				return ResponsivePics()->error->add_error('invalid', sprintf('the crop ratio %s needs to be higher then 0 and equal or lower then 2', (string) $ratio), $ratio);
 			}
 		}
 
@@ -67,21 +95,6 @@ class RP_Process extends ResponsivePics {
 			'height'     => (int) $height,
 			'crop_ratio' => $crop_ratio
 		];
-	}
-
-	// validates and returns classes as an array
-	public function process_classes($classes = null) {
-		if (!is_array($classes) && !is_string($classes)) {
-			return ResponsivePics()->error->get_error('invalid', 'classes parameter is neither a string nor an array', $classes);
-		} elseif (!is_array($classes) && is_string($classes)) {
-			if (!empty($classes)) {
-				$classes = preg_split('/[\s,]+/', $classes);
-			} else {
-				$classes = [];
-			}
-
-			return $classes;
-		}
 	}
 
 	// returns true if ratio is a number and between reasonable values 0-2
