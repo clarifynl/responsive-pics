@@ -8,11 +8,11 @@ class RP_Definitions extends ResponsivePics {
 		$file_path = get_attached_file($id);
 
 		if (!$url) {
-			return ResponsivePics()->error->get_error('missing', sprintf('url does not exist for id %s', $id), $id);
+			return ResponsivePics()->error->add_error('missing', sprintf('url does not exist for id %s', $id), $id);
 		}
 
 		if (!$file_path) {
-			return ResponsivePics()->error->get_error('missing', sprintf('file does not exist for id %s', $id), $id);
+			return ResponsivePics()->error->add_error('missing', sprintf('file does not exist for id %s', $id), $id);
 		}
 
 		$mime_type       = get_post_mime_type($id);
@@ -58,7 +58,7 @@ class RP_Definitions extends ResponsivePics {
 		}
 
 		if (!$original_width || !$original_height) {
-			return ResponsivePics()->error->get_error('missing', sprintf('no dimensions for file id %s', $id), $meta_data);
+			return ResponsivePics()->error->add_error('missing', sprintf('no dimensions for file id %s', $id), $meta_data);
 		}
 
 		foreach ($rules as $rule) {

@@ -1,13 +1,23 @@
 <?php
 
 class RP_Error extends ResponsivePics {
+	private $wp_error = null;
+
+	// construct
+	public function __construct() {
+		$this->wp_error = new WP_Error();
+	}
+
 	// format error
-	public function get_error($code = 'error', $message = '', $data = null) {
-		if (ResponsivePics()->helpers->is_rest_api_request()) {
-			return $this->return_error($code, $message, $data);
-		} else {
-			$this->show_error($message);
-		}
+	public function add_error($code = 'error', $message = '', $data = null) {
+		$this->wp_error->add($code, $message, $data);
+		return $this->wp_error;
+
+		// if (ResponsivePics()->helpers->is_rest_api_request()) {
+		// 	return $this->return_error($code, $message, $data);
+		// } else {
+		// 	$this->show_error($message);
+		// }
 	}
 
 	// echo error message
