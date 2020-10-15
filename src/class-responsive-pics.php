@@ -167,15 +167,17 @@ class ResponsivePics {
 	 * returns <picture> element as html markup
 	 */
 	public static function get_picture($id, $sizes, $picture_classes = null, $lazyload = false, $intrinsic = false) {
+		// check for valid image id
 		if (!isset($id)) {
-			return ResponsivePics()->error->get_error('image id is not defined');
+			return ResponsivePics()->error->get_error('invalid', 'image id is not defined');
 		} elseif (!is_int($id)) {
-			return ResponsivePics()->error->get_error('image id is not an integer');
+			return ResponsivePics()->error->get_error('invalid', sprintf('image id %s is not an integer', $id), $id);
 		}
 
-		$definition  = ResponsivePics()->definitions->get_definition($id, $sizes);
+		// check for valid defintion
+		$definition = ResponsivePics()->definitions->get_definition($id, $sizes);
 		if (!$definition) {
-			return ResponsivePics()->error->get_error(sprintf('no image found with id %d', $id));
+			return ResponsivePics()->error->get_error('missing', sprintf('no image found with id %d', $id), $id);
 		} else if (is_wp_error($definition)) {
 			return $definition;
 		}
@@ -251,15 +253,17 @@ class ResponsivePics {
 	 * returns <img> element as html markup
 	 */
 	public static function get_image($id, $sizes, $crop = false, $img_classes = null, $lazyload = false) {
+		// check for valid image id
 		if (!isset($id)) {
-			return ResponsivePics()->error->get_error('image id is not defined');
+			return ResponsivePics()->error->get_error('invalid', 'image id is not defined');
 		} elseif (!is_int($id)) {
-			return ResponsivePics()->error->get_error('image id is not an integer');
+			return ResponsivePics()->error->get_error('invalid', sprintf('image id %s is not an integer', $id), $id);
 		}
 
+		// check for valid defintion
 		$definition  = ResponsivePics()->definitions->get_definition($id, $sizes, false, false, $crop);
 		if (!$definition) {
-			return ResponsivePics()->error->get_error(sprintf('no image found with id %d', $id));
+			return ResponsivePics()->error->get_error('missing', sprintf('no image found with id %d', $id), $id);
 		} else if (is_wp_error($definition)) {
 			return $definition;
 		}
@@ -317,13 +321,14 @@ class ResponsivePics {
 	 * and an div with the same dedicated image class
 	 */
 	public static function get_background($id, $sizes, $classes = null) {
+		// check for valid image id
 		if (!isset($id)) {
-			return ResponsivePics()->error->get_error('image id is not defined');
+			return ResponsivePics()->error->get_error('invalid', 'image id is not defined');
 		} elseif (!is_int($id)) {
-			return ResponsivePics()->error->get_error('image id is not an integer');
+			return ResponsivePics()->error->get_error('invalid', sprintf('image id %s is not an integer', $id), $id);
 		}
 
-		// Check for multiple background images
+		// check for multiple background images
 		if (is_array($id)) {
 			// temp solution
 			$definition = ResponsivePics()->definitions->get_definition($id[0], $sizes, true);
@@ -331,8 +336,9 @@ class ResponsivePics {
 			$definition = ResponsivePics()->definitions->get_definition($id, $sizes, true);
 		}
 
+		// check for valid defintion
 		if (!$definition) {
-			return ResponsivePics()->error->get_error(sprintf('no image found with id %d', $id));
+			return ResponsivePics()->error->get_error('missing', sprintf('no image found with id %d', $id), $id);
 		} else if (is_wp_error($definition)) {
 			return $definition;
 		}

@@ -1,11 +1,16 @@
 <?php
 
 class RP_Error extends ResponsivePics {
+	//$error = new WP_Error();
 
 	// format error
-	public function get_error($message) {
+	public function get_error($code = 'error', $message = '', $data = null) {
+		//$error->add($code, $message, $data);
+		//var_dump($error);
+		//return $error;
+
 		if (ResponsivePics()->helpers->is_rest_api_request()) {
-			return $this->return_error($message);
+			return $this->return_error($code, $message, $data);
 		} else {
 			$this->show_error($message);
 		}
@@ -18,7 +23,7 @@ class RP_Error extends ResponsivePics {
 	}
 
 	// return WP_Error
-	public function return_error($message) {
-		return new WP_Error('401', sprintf('%s error: %s', get_parent_class(), $message));
+	public function return_error($code, $message, $data) {
+		return new WP_Error($code, sprintf('%s error: %s', get_parent_class(), $message), $data);
 	}
 }

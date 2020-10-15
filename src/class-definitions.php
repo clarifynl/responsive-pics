@@ -7,12 +7,12 @@ class RP_Definitions extends ResponsivePics {
 		$url       = wp_get_attachment_url($id);
 		$file_path = get_attached_file($id);
 
-		if (!$file_path) {
-			return ResponsivePics()->error->get_error(sprintf('file does not exist for id %s', $id));
+		if (!$url) {
+			return ResponsivePics()->error->get_error('missing', sprintf('url does not exist for id %s', $id), $id);
 		}
 
-		if (!$url) {
-			return ResponsivePics()->error->get_error(sprintf('url does not exist for id %s', $id));
+		if (!$file_path) {
+			return ResponsivePics()->error->get_error('missing', sprintf('file does not exist for id %s', $id), $id);
 		}
 
 		$mime_type       = get_post_mime_type($id);
@@ -58,7 +58,7 @@ class RP_Definitions extends ResponsivePics {
 		}
 
 		if (!$original_width || !$original_height) {
-			return ResponsivePics()->error->get_error(sprintf('no dimensions for file id %s', $id));
+			return ResponsivePics()->error->get_error('missing', sprintf('no dimensions for file id %s', $id), $meta_data);
 		}
 
 		foreach ($rules as $rule) {

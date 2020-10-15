@@ -24,22 +24,22 @@ class RP_Helpers extends ResponsivePics {
 			$next_width = self::$breakpoints[$next_breakpoint];
 
 			if (!isset($next_width)) {
-				return ResponsivePics()->error->get_error(sprintf('no breakpoint set for "%s"', $key));
+				return ResponsivePics()->error->get_error('missing', sprintf('no breakpoint set for %s', $key), $key);
 			}
 
 			return $next_width;
 		} else if ($this->match($col, '/(\d+)/')) {
 			if ($col < 1 || $col > self::$columns) {
-				return ResponsivePics()->error->get_error(sprintf('number of columns should be between 1 and %s', self::$columns));
+				return ResponsivePics()->error->get_error('invalid', sprintf('number of columns should be between 1 and %s', self::$columns), self::$columns);
 			}
 		} else {
-			return ResponsivePics()->error->get_error(sprintf('invalid columns: %s', $col));
+			return ResponsivePics()->error->get_error('invalid', sprintf('invalid columns: %s', $col), $col);
 		}
 
 		$grid_width = self::$grid_widths[$key];
 
 		if (!isset($grid_width)) {
-			return ResponsivePics()->error->get_error(sprintf('no width found for breakpoint "%s"', $key));
+			return ResponsivePics()->error->get_error('missing', sprintf('no width found for breakpoint %s', $key), $key);
 		}
 
 		$column_pixels = ($grid_width - (self::$columns) * self::$gutter) / self::$columns;

@@ -44,7 +44,7 @@ class RP_Process extends ResponsivePics {
 				$width = ResponsivePics()->helpers->match($dimensions, '/(\d+)/');
 
 				if (!isset($width)) {
-					return ResponsivePics()->error->get_error('width undefined: ' . $dimensions);
+					return ResponsivePics()->error->get_error('invalid', sprintf('width is undefined in %s', $dimensions), $dimensions);
 				}
 			}
 		}
@@ -57,7 +57,7 @@ class RP_Process extends ResponsivePics {
 			if ($this->process_ratio($crop_ratio)) {
 				$height = $width * $crop_ratio;
 			} else {
-				return ResponsivePics()->error->get_error(sprintf('the crop ratio "%s" needs to be higher then 0 and equal or lower then 2', (string) $ratio));
+				return ResponsivePics()->error->get_error('invalid', sprintf('the crop ratio %s needs to be higher then 0 and equal or lower then 2', (string) $ratio), $ratio);
 			}
 		}
 
