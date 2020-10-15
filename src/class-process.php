@@ -69,6 +69,21 @@ class RP_Process extends ResponsivePics {
 		];
 	}
 
+	// validates and returns classes as an array
+	public function process_classes($classes = null) {
+		if (!is_array($classes) && !is_string($classes)) {
+			return ResponsivePics()->error->get_error('invalid', 'classes parameter is neither a string nor an array', $classes);
+		} elseif (!is_array($classes) && is_string($classes)) {
+			if (!empty($classes)) {
+				$classes = preg_split('/[\s,]+/', $classes);
+			} else {
+				$classes = [];
+			}
+
+			return $classes;
+		}
+	}
+
 	// returns true if ratio is a number and between reasonable values 0-2
 	public function process_ratio($ratio) {
 		if (is_numeric($ratio) && (0 < $ratio) && ($ratio <= 2)) {

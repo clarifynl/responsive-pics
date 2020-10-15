@@ -174,27 +174,23 @@ class ResponsivePics {
 			return ResponsivePics()->error->get_error('invalid', sprintf('image id %s is not an integer', $id), $id);
 		}
 
-		// check for valid defintion
+		// check for valid definition
 		$definition = ResponsivePics()->definitions->get_definition($id, $sizes);
-		if (!$definition) {
-			return ResponsivePics()->error->get_error('missing', sprintf('no image found with id %d', $id), $id);
-		} else if (is_wp_error($definition)) {
+		if (is_wp_error($definition)) {
 			return $definition;
 		}
 
 		$sources = $definition['sources'];
 		$picture = [];
 
-		// convert $picture_classes to array if it is a string
-		if (!is_array($picture_classes)) {
-			if (!empty($picture_classes)) {
-				$picture_classes = preg_split('/[\s,]+/', $picture_classes);
-			} else {
-				$picture_classes = [];
+		// check for valid classes
+		$img_classes = [];
+		if ($picture_classes) {
+			$picture_classes = ResponsivePics()->process->process_classes($picture_classes);
+			if (is_wp_error($picture_classes)) {
+				return $picture_classes;
 			}
 		}
-
-		$img_classes   = [];
 
 		// lazyload option
 		if ($lazyload) {
@@ -260,22 +256,19 @@ class ResponsivePics {
 			return ResponsivePics()->error->get_error('invalid', sprintf('image id %s is not an integer', $id), $id);
 		}
 
-		// check for valid defintion
-		$definition  = ResponsivePics()->definitions->get_definition($id, $sizes, false, false, $crop);
-		if (!$definition) {
-			return ResponsivePics()->error->get_error('missing', sprintf('no image found with id %d', $id), $id);
-		} else if (is_wp_error($definition)) {
+		// check for valid definition
+		$definition = ResponsivePics()->definitions->get_definition($id, $sizes, false, false, $crop);
+		if (is_wp_error($definition)) {
 			return $definition;
 		}
 
 		$sources = $definition['sources'];
 
 		// convert $picture_classes to array if it is a string
-		if (!is_array($img_classes)) {
-			if (!empty($img_classes)) {
-				$img_classes = preg_split('/[\s,]+/', $img_classes);
-			} else {
-				$img_classes = [];
+		if ($img_classes) {
+			$img_classes = ResponsivePics()->process->process_classes($img_classes);
+			if (is_wp_error($img_classes)) {
+				return $img_classes;
 			}
 		}
 
@@ -320,7 +313,7 @@ class ResponsivePics {
 	 * Returns an inline <style> element with a dedicated image class with media-queries for all the different image sizes
 	 * and an div with the same dedicated image class
 	 */
-	public static function get_background($id, $sizes, $classes = null) {
+	public static function get_background($id, $sizes, $bg_classes = null) {
 		// check for valid image id
 		if (!isset($id)) {
 			return ResponsivePics()->error->get_error('invalid', 'image id is not defined');
@@ -328,18 +321,15 @@ class ResponsivePics {
 			return ResponsivePics()->error->get_error('invalid', sprintf('image id %s is not an integer', $id), $id);
 		}
 
-		// check for multiple background images
+		// check for multiple background images (temp solution)
 		if (is_array($id)) {
-			// temp solution
 			$definition = ResponsivePics()->definitions->get_definition($id[0], $sizes, true);
 		} else {
 			$definition = ResponsivePics()->definitions->get_definition($id, $sizes, true);
 		}
 
-		// check for valid defintion
-		if (!$definition) {
-			return ResponsivePics()->error->get_error('missing', sprintf('no image found with id %d', $id), $id);
-		} else if (is_wp_error($definition)) {
+		// check for valid definition
+		if (is_wp_error($definition)) {
 			return $definition;
 		}
 
@@ -347,11 +337,10 @@ class ResponsivePics {
 		$copy = $id;
 
 		// convert $classes to array if it is a string
-		if (!is_array($classes)) {
-			if (!empty($classes)) {
-				$classes = preg_split('/[\s,]+/', $classes);
-			} else {
-				$classes = [];
+		if ($bg_classes) {
+			$bg_classes = ResponsivePics()->process->process_classes($bg_classes);
+			if (is_wp_error($bg_classes)) {
+				return $bg_classes;
 			}
 		}
 
@@ -389,7 +378,7 @@ class ResponsivePics {
 
 		$background[] = '  }';
 		$background[] = '</style>';
-		$background[] = sprintf('<div%s id="%s"></div>', $classes ? ' class="' . implode(' ', $classes) . '"' : '', $id);
+		$background[] = sprintf('<div%s id="%s"></div>', $bg_classes ? ' class="' . implode(' ', $bg_classes) . '"' : '', $id);
 
 		return implode("\n", $background) . "\n";
 	}
