@@ -1,10 +1,14 @@
-**ResponsivePics** is a PHP library that enables WordPress theme authors to automatically resize images* in responsive layouts. Just upload a high-res image in your media library, and let ResponsivePics take care of the rest. Supports art-directed crops, img srcset & sizes Attributes background images and respects aspect ratios.
+**ResponsivePics** is a WordPress plugin that enables WordPress theme authors to automatically resize images* in responsive layouts.
 
-ResponsivePics is useful when you have a responsive grid layout (like Bootstrap, but can be any framework) and need images to adapt to responsive designs. ResponsivePics automatically resizes and / or crops your uploaded pictures to fit your layouts.
-
-ResponsivePics saves bandwidth and lets your site load faster.
-
-ResponsivePics will add every image resize task as a job to a background process queue using [Action Scheduler](https://actionscheduler.org/) so your server won't timeout.
+* Saves bandwidth and lets your site load faster
+* No need anymore for defining custom image sizes
+* Adds retina support to your theme images
+* Supports art-directed responsive images
+* Supports image srcset & sizes attributes
+* Supports aspect ratio based crops
+* Supports lazyloading
+* Supports intrinsic ratio boxes
+* Uses background processing for resizing and cropping images
 
 *ReponsivePics does not handle images in the WordPress wysiwig editor, it’s only useful for theme authors that use images or photos in their themes. It automatically handles retina or hdpi images via media queries.*
 
