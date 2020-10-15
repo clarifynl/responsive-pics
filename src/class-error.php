@@ -1,14 +1,8 @@
 <?php
 
 class RP_Error extends ResponsivePics {
-	//$error = new WP_Error();
-
 	// format error
 	public function get_error($code = 'error', $message = '', $data = null) {
-		//$error->add($code, $message, $data);
-		//var_dump($error);
-		//return $error;
-
 		if (ResponsivePics()->helpers->is_rest_api_request()) {
 			return $this->return_error($code, $message, $data);
 		} else {
