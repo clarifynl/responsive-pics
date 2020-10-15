@@ -170,13 +170,13 @@ class ResponsivePics {
 		// check for valid image id
 		$image_id = ResponsivePics()->process->process_image_id($id);
 		if (is_wp_error($image_id)) {
-			return $image_id;
+			return ResponsivePics()->error->get_error($image_id);
 		}
 
 		// check for valid sizes
 		$definition = ResponsivePics()->definitions->get_definition($image_id, $sizes);
 		if (is_wp_error($definition)) {
-			return $definition;
+			return ResponsivePics()->error->get_error($definition);
 		}
 
 		$sources = $definition['sources'];
@@ -187,7 +187,7 @@ class ResponsivePics {
 		if ($picture_classes) {
 			$picture_classes = ResponsivePics()->process->process_classes($picture_classes);
 			if (is_wp_error($picture_classes)) {
-				return $picture_classes;
+				return ResponsivePics()->error->get_error($picture_classes);
 			}
 		}
 
