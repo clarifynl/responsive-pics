@@ -93,26 +93,24 @@ class ResponsivePics {
 
 	// breakpoints used for "media(min-width: x)" in picture element, in pixels
 	public static function setBreakpoints($value = [
-		'xs'    => 0,
-		'sm'    => 576,
-		'md'    => 768,
-		'lg'    => 992,
-		'xl'    => 1200,
-		'xxl'   => 1400,
-		'xxxl'  => 1600
+		'xs'  => 0,
+		'sm'  => 576,
+		'md'  => 768,
+		'lg'  => 992,
+		'xl'  => 1200,
+		'xxl' => 1400
 	]) {
 		self::$breakpoints = $value;
 	}
 
 	// grid system should match the container widths in css
 	public static function setGridWidths($value = [
-		'xs'    => 576, // self::$breakpoints['sm']
-		'sm'    => 540,
-		'md'    => 720,
-		'lg'    => 960,
-		'xl'    => 1140,
-		'xxl'   => 1140,
-		'xxxl'  => 1140
+		'xs'  => 576, // self::$breakpoints['sm']
+		'sm'  => 540,
+		'md'  => 720,
+		'lg'  => 960,
+		'xl'  => 1140,
+		'xxl' => 1320
 	]) {
 		self::$grid_widths = $value;
 	}
