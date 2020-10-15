@@ -54,10 +54,10 @@ class RP_Rest_Api extends ResponsivePics {
 					return $result;
 				}
 			} else {
-				return new WP_Error('invalid', __('Your ResponsivePics get_picture request is missing required parameters.', 'responsive-pics'), $request);
+				return new WP_Error('responsive_pics_invalid', __('the request is missing required parameters', 'responsive-pics'));
 			}
 		} else {
-			return new WP_Error('401', __('ResponsivePics plugin was not found.', 'responsive-pics'));
+			return new WP_Error('responsive_pics_missing', __('the responsive pics plugin was not found', 'responsive-pics'));
 		}
 	}
 
@@ -84,10 +84,10 @@ class RP_Rest_Api extends ResponsivePics {
 					return $result;
 				}
 			} else {
-				return new WP_Error('invalid', __('Your ResponsivePics get_image request is missing required parameters.', 'responsive-pics'), $request);
+				return new WP_Error('responsive_pics_invalid',  __('the request is missing required parameters', 'responsive-pics'));
 			}
 		} else {
-			return new WP_Error('401', __('ResponsivePics plugin was not found.', 'responsive-pics'));
+			return new WP_Error('responsive_pics_missing', __('the responsive pics plugin was not found', 'responsive-pics'));
 		}
 	}
 
@@ -112,10 +112,10 @@ class RP_Rest_Api extends ResponsivePics {
 					return $result;
 				}
 			} else {
-				return new WP_Error('invalid', __('Your ResponsivePics get_background request is missing required parameters.', 'responsive-pics'), $request);
+				return new WP_Error('responsive_pics_invalid',  __('the request is missing required parameters', 'responsive-pics'));
 			}
 		} else {
-			return new WP_Error('401', __('ResponsivePics plugin was not found.', 'responsive-pics'));
+			return new WP_Error('responsive_pics_missing', __('the responsive pics plugin was not found', 'responsive-pics'));
 		}
 	}
 }
