@@ -65,7 +65,7 @@ class RP_Rest_Api extends ResponsivePics {
 					'sanitize_callback' => function($crop, $request, $key) {
 						return urldecode($crop);
 					}
-				]
+				],
 				'classes' => [
 					'validate_callback' => function($classes, $request, $key) {
 						return is_string($classes);
