@@ -247,7 +247,7 @@ class ResponsivePics {
 	 * Construct a responsive image element
 	 * returns <img> element as html markup
 	 */
-	public static function get_image($id, $sizes, $crop = false, $img_classes = null, $lazyload = false) {
+	public static function get_image($id = null, $sizes, $crop = false, $img_classes = null, $lazyload = false) {
 		// check for valid image id
 		$image_id = ResponsivePics()->process->process_image_id($id);
 		if (is_wp_error($image_id)) {
@@ -311,7 +311,7 @@ class ResponsivePics {
 	 * Returns an inline <style> element with a dedicated image class with media-queries for all the different image sizes
 	 * and an div with the same dedicated image class
 	 */
-	public static function get_background($id, $sizes, $bg_classes = null) {
+	public static function get_background($id = null, $sizes, $bg_classes = null) {
 		// check for valid image id
 		$image_id = ResponsivePics()->process->process_image_id($id);
 		if (is_wp_error($image_id)) {
