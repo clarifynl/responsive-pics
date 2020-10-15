@@ -8,6 +8,7 @@ class ResponsivePics {
 	public static $breakpoints = null;
 	public static $lazyload_class = null;
 	public static $image_quality = null;
+	public static $wp_error = null;
 
 	// map short letters to valid crop values
 	public static $crop_map = [
@@ -167,6 +168,9 @@ class ResponsivePics {
 	 * returns <picture> element as html markup
 	 */
 	public static function get_picture($id = null, $sizes, $picture_classes = null, $lazyload = false, $intrinsic = false) {
+		// init WP_Error
+		self::$wp_error = new WP_Error();
+
 		// check for valid image id
 		$image_id = ResponsivePics()->process->process_image_id($id);
 		if (is_wp_error($image_id)) {
@@ -248,16 +252,19 @@ class ResponsivePics {
 	 * returns <img> element as html markup
 	 */
 	public static function get_image($id = null, $sizes, $crop = false, $img_classes = null, $lazyload = false) {
+		// init WP_Error
+		self::$wp_error = new WP_Error();
+
 		// check for valid image id
 		$image_id = ResponsivePics()->process->process_image_id($id);
 		if (is_wp_error($image_id)) {
-			return $image_id;
+			return ResponsivePics()->error->get_error($image_id);
 		}
 
 		// check for valid definition
 		$definition = ResponsivePics()->definitions->get_definition($image_id, $sizes, false, false, $crop);
 		if (is_wp_error($definition)) {
-			return $definition;
+			return ResponsivePics()->error->get_error($definition);
 		}
 
 		$sources = $definition['sources'];
@@ -266,7 +273,7 @@ class ResponsivePics {
 		if ($img_classes) {
 			$img_classes = ResponsivePics()->process->process_classes($img_classes);
 			if (is_wp_error($img_classes)) {
-				return $img_classes;
+				return ResponsivePics()->error->get_error($img_classes);
 			}
 		}
 
@@ -312,16 +319,19 @@ class ResponsivePics {
 	 * and an div with the same dedicated image class
 	 */
 	public static function get_background($id = null, $sizes, $bg_classes = null) {
+		// init WP_Error
+		self::$wp_error = new WP_Error();
+
 		// check for valid image id
 		$image_id = ResponsivePics()->process->process_image_id($id);
 		if (is_wp_error($image_id)) {
-			return $image_id;
+			return ResponsivePics()->error->get_error($image_id);
 		}
 
 		// check for valid definition
 		$definition = ResponsivePics()->definitions->get_definition($image_id, $sizes, true);
 		if (is_wp_error($definition)) {
-			return $definition;
+			return ResponsivePics()->error->get_error($definition);
 		}
 
 		$sources = $definition['sources'];
@@ -331,7 +341,7 @@ class ResponsivePics {
 		if ($bg_classes) {
 			$bg_classes = ResponsivePics()->process->process_classes($bg_classes);
 			if (is_wp_error($bg_classes)) {
-				return $bg_classes;
+				return ResponsivePics()->error->get_error($bg_classes);
 			}
 		}
 

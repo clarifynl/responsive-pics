@@ -1,17 +1,10 @@
 <?php
 
 class RP_Error extends ResponsivePics {
-	private $wp_error = null;
-
-	// construct
-	public function __construct() {
-		$this->wp_error = new WP_Error();
-	}
-
 	// add to error
 	public function add_error($code = 'error', $message = '', $data = null) {
-		$this->wp_error->add($code, $message, $data);
-		return $this->wp_error;
+		self::$wp_error->add($code, $message, $data);
+		return self::$wp_error;
 	}
 
 	// get errors
