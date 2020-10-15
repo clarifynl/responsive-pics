@@ -1,4 +1,4 @@
-**ResponsivePics** is a WordPress plugin that enables WordPress theme authors to automatically resize images* in responsive layouts.
+**ResponsivePics** is a WordPress plugin that enables WordPress theme authors to automatically resize images<sup>*</sup> in responsive layouts.
 
 * Saves bandwidth and lets your site load faster
 * No need anymore for defining custom image sizes
@@ -10,7 +10,7 @@
 * Supports intrinsic ratio boxes
 * Uses background processing for resizing and cropping images
 
-*ReponsivePics does not handle images in the WordPress wysiwig editor, it’s only useful for theme authors that use images or photos in their themes. It automatically handles retina or hdpi images via media queries.*
+<sub><sup>*ReponsivePics does not handle images in the WordPress wysiwig editor, it’s only useful for theme authors that use images or photos in their themes. It automatically handles retina or hdpi images via media queries.</sup></sub>
 
 # Documentation
 For full documentation and examples visit: [responsive.pics](https://responsive.pics)
