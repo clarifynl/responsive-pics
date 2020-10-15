@@ -178,10 +178,17 @@ ResponsivePics::getImageQuality();  // Will return $image_quality
 ## Usage <a name="usage"></a>
 
 ### Picture Element
-For inserting a responsive `<picture>` element in your template, use the `get_picture` function with the following parameters:
+
+#### PHP
+For inserting a responsive `<picture>` element in your template, use the `get_picture` function with the available parameters.
 
 ```php
 ResponsivePics::get_picture(id, sizes, classes, lazyload, intrinsic);
+```
+
+#### REST API
+```
+GET /wp-json/responsive-pics/v1/get-picture/<id>?sizes=<sizes>&classes=<classes>?lazyload=<boolean>&intrinsic=<boolean>
 ```
 
 | Parameter  | Type            | Required | Default  | Definition
