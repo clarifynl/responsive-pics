@@ -54,7 +54,7 @@ class RP_Rest_Api extends ResponsivePics {
 					return $result;
 				}
 			} else {
-				return new WP_Error('responsive_pics_invalid', __('the request is missing required parameters', 'responsive-pics'));
+				return new WP_Error('responsive_pics_invalid', __('the request is missing required parameters', 'responsive-pics'), $data);
 			}
 		} else {
 			return new WP_Error('responsive_pics_missing', __('the responsive pics plugin was not found', 'responsive-pics'));
@@ -84,7 +84,7 @@ class RP_Rest_Api extends ResponsivePics {
 					return $result;
 				}
 			} else {
-				return new WP_Error('responsive_pics_invalid',  __('the request is missing required parameters', 'responsive-pics'));
+				return new WP_Error('responsive_pics_invalid',  __('the request is missing required parameters', 'responsive-pics'), $data);
 			}
 		} else {
 			return new WP_Error('responsive_pics_missing', __('the responsive pics plugin was not found', 'responsive-pics'));
@@ -112,7 +112,7 @@ class RP_Rest_Api extends ResponsivePics {
 					return $result;
 				}
 			} else {
-				return new WP_Error('responsive_pics_invalid',  __('the request is missing required parameters', 'responsive-pics'));
+				return new WP_Error('responsive_pics_invalid',  __('the request is missing required parameters', 'responsive-pics'), $data);
 			}
 		} else {
 			return new WP_Error('responsive_pics_missing', __('the responsive pics plugin was not found', 'responsive-pics'));
