@@ -46,11 +46,7 @@ class RP_Rest_Api extends ResponsivePics {
 
 				// Check for errors
 				if (is_wp_error($picture)) {
-					$error_codes    = $picture->get_error_codes();
-					$error_messages = $picture->get_error_messages();
-					$error_data     = $picture->get_error_data();
-
-					return new WP_Error($error_codes, $error_messages, $error_data);
+					return $picture;
 				} else {
 					$result = new WP_REST_Response($picture, 200);
 					// Set caching
@@ -80,11 +76,7 @@ class RP_Rest_Api extends ResponsivePics {
 
 				// Check for errors
 				if (is_wp_error($image)) {
-					$error_codes    = $image->get_error_codes();
-					$error_messages = $image->get_error_messages();
-					$error_data     = $image->get_error_data();
-
-					return new WP_Error($error_codes, $error_messages, $error_data);
+					return $image;
 				} else {
 					$result = new WP_REST_Response($image, 200);
 					// Set caching
@@ -112,11 +104,7 @@ class RP_Rest_Api extends ResponsivePics {
 
 				// Check for errors
 				if (is_wp_error($background)) {
-					$error_codes    = $background->get_error_codes();
-					$error_messages = $background->get_error_messages();
-					$error_data     = $background->get_error_data();
-
-					return new WP_Error($error_codes, $error_messages, $error_data);
+					return $background;
 				} else {
 					$result = new WP_REST_Response($background, 200);
 					// Set caching
