@@ -3,7 +3,7 @@
 class RP_Error extends ResponsivePics {
 	// add to error
 	public function add_error($code = 'error', $message = '', $data = null) {
-		self::$wp_error->add($code, $message, $data);
+		self::$wp_error->add('responsive_pics_' . $code, $message, $data);
 		return self::$wp_error;
 	}
 
