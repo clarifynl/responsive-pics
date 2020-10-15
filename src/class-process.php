@@ -28,6 +28,8 @@ class RP_Process extends ResponsivePics {
 
 			return $classes;
 		}
+
+		return $classes;
 	}
 
 	// breakpoint can be shortcut (e.g. "xs") or number
