@@ -1,3 +1,5 @@
+# ResponsivePics
+
 **ResponsivePics** is a WordPress plugin that enables WordPress theme authors to automatically resize images<sup>*</sup> in responsive layouts.
 
 * Saves bandwidth and lets your site load faster
