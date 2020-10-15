@@ -159,7 +159,7 @@ class ResponsivePics {
 	/*
 	 * Alias old `get` function to `get_picture`
 	 */
-	public static function get($id, $sizes, $picture_classes = null, $lazyload = false, $intrinsic = false) {
+	public static function get($id = null, $sizes = null, $picture_classes = null, $lazyload = false, $intrinsic = false) {
 		return self::get_picture($id, $sizes, $picture_classes, $lazyload, $intrinsic);
 	}
 
@@ -167,7 +167,7 @@ class ResponsivePics {
 	 * Construct a responsive picture element
 	 * returns <picture> element as html markup
 	 */
-	public static function get_picture($id = null, $sizes, $picture_classes = null, $lazyload = false, $intrinsic = false) {
+	public static function get_picture($id = null, $sizes = null, $picture_classes = null, $lazyload = false, $intrinsic = false) {
 		// init WP_Error
 		self::$wp_error = new WP_Error();
 
@@ -251,7 +251,7 @@ class ResponsivePics {
 	 * Construct a responsive image element
 	 * returns <img> element as html markup
 	 */
-	public static function get_image($id = null, $sizes, $crop = false, $img_classes = null, $lazyload = false) {
+	public static function get_image($id = null, $sizes = null, $crop = false, $img_classes = null, $lazyload = false) {
 		// init WP_Error
 		self::$wp_error = new WP_Error();
 
@@ -318,7 +318,7 @@ class ResponsivePics {
 	 * Returns an inline <style> element with a dedicated image class with media-queries for all the different image sizes
 	 * and an div with the same dedicated image class
 	 */
-	public static function get_background($id = null, $sizes, $bg_classes = null) {
+	public static function get_background($id = null, $sizes = null, $bg_classes = null) {
 		// init WP_Error
 		self::$wp_error = new WP_Error();
 
