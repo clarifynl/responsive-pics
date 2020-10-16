@@ -34,6 +34,15 @@ class RP_Rules extends ResponsivePics {
 				if (is_wp_error($breakpoint)) {
 					return $breakpoint;
 				}
+			} elseif (ResponsivePics()->helpers->contains($variant, '-')) {
+				$components = explode('-', $variant);
+				$breakpoint = ResponsivePics()->process->process_breakpoint($components[0]);
+				$dimensions = ResponsivePics()->process->process_dimensions($components[1]);
+
+				// check for errors
+				if (is_wp_error($breakpoint)) {
+					return $breakpoint;
+				}
 			} else {
 				$dimensions = ResponsivePics()->process->process_dimensions($variant);
 			}
