@@ -91,7 +91,7 @@ class RP_Process extends ResponsivePics {
 			if ($this->process_ratio($crop_ratio)) {
 				$height = $width * $crop_ratio;
 			} else {
-				return ResponsivePics()->error->add_error('invalid', sprintf('the crop ratio %s needs to be higher then 0 and equal or lower then 2', (string) $ratio), $ratio);
+				return ResponsivePics()->error->add_error('invalid', sprintf('the crop ratio %s needs to be higher then 0 and equal or lower then 2', (string) $crop_ratio), $crop_ratio);
 			}
 		}
 
