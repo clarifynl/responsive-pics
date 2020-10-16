@@ -309,9 +309,9 @@ The following parameters are available in the sizes syntax:
 6. When the original image does not meet the dimension requirements of the requested image size, it will skip that image size variation and proceed to the next image size.
 7. Alt text will automatically be added on the picture img element if the original image in the media library has one.
 
-### Action Scheduler <a name="action-scheduler"></a>
+### Background Processing <a name="background-processing"></a>
 
-Action Scheduler has a built in administration screen for monitoring, debugging and manually triggering scheduled image resize jobs. The administration interface is accesible via:
+The background processing library [Action Scheduler](https://actionscheduler.org/) has a built in administration screen for monitoring, debugging and manually triggering scheduled image resize jobs. The administration interface is accesible via:
 ```php
 Tools > Scheduled Actions
 ```
@@ -366,6 +366,36 @@ In **trellis/roles/wordpress-setup/tasks/main.yml**:
  ```
 
 Don't forget to re-provision your server after changing this value.
+
+### Error handling
+
+If an error occurs during the resizing process or if there's invalid syntax, ResponsivePics will display or return an error.
+
+#### PHP
+```html
+<pre class="responsive-pics-error">
+	<h6>ResponsivePics errors</h6>
+	<ul>
+		<li>breakpoint xxs is neither defined nor a number</li>
+	</ul>
+</pre>
+```
+
+#### REST API
+```json
+{
+	"code": "responsive_pics_invalid",
+	"message": "breakpoint xxs is neither defined nor a number",
+	"data": {
+		"xs": 0,
+		"sm": 576,
+		"md": 768,
+		"lg": 992,
+		"xl": 1200,
+		"xxl": 1400
+	}
+}
+```
 
 ## Features <a name="features"></a>
 
