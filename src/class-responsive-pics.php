@@ -8,6 +8,8 @@ class ResponsivePics {
 	public static $breakpoints = null;
 	public static $lazyload_class = null;
 	public static $image_quality = null;
+	public static $wp_rest_cache = null;
+	public static $wp_rest_cache_duration = null;
 	public static $wp_error = null;
 
 	// map short letters to valid crop values
@@ -66,6 +68,8 @@ class ResponsivePics {
 		self::setBreakpoints();
 		self::setLazyLoadClass();
 		self::setImageQuality();
+		self::setRestApiCache();
+		self::setRestApiCacheDuration();
 
 		// Init classes
 		ResponsivePics()->api = new RP_Rest_Api();
@@ -121,9 +125,23 @@ class ResponsivePics {
 		self::$lazyload_class = $value;
 	}
 
-	// set lazyload classname
+	// set image quality
 	public static function setImageQuality($value = 90) {
 		self::$image_quality = $value;
+	}
+
+	// set rest api cache
+	public static function setRestApiCache($boolean = false) {
+		self::$wp_rest_cache = $boolean;
+	}
+
+	// set rest api cache duration (max-age)
+	public static function setRestApiCacheDuration($value = 3600) {
+		if (self::$wp_rest_cache) {
+			self::$wp_rest_cache_duration = $value;
+		} else {
+			self::$wp_rest_cache_duration = 0;
+		}
 	}
 
 	// get breakpoints used for "media(min-width: x)" in picture element, in pixels
@@ -154,6 +172,16 @@ class ResponsivePics {
 	// get image quality
 	public static function getImageQuality() {
 		return self::$image_quality;
+	}
+
+	// get rest api cache
+	public static function getRestApiCache() {
+		return self::$wp_rest_cache;
+	}
+
+	// get rest api cache duration
+	public static function getRestApiCacheDuration() {
+		return self::$wp_rest_cache_duration;
 	}
 
 	/*

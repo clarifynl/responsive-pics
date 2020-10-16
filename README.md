@@ -10,6 +10,7 @@
 * Supports aspect ratio based crops
 * Supports lazyloading
 * Supports intrinsic ratio boxes
+* With full REST API support
 * Uses background processing for resizing and cropping images
 
 <sub><sup>*ReponsivePics does not handle images in the WordPress wysiwig editor, it’s only useful for theme authors that use images or photos in their themes. It automatically handles retina or hdpi images via media queries.</sup></sub>
@@ -90,14 +91,16 @@ And import the package in your theme’s global javascript file:
 ## Configuration <a name="configuration"></a>
 ResponsivePics uses the following default variables:
 
-| Variable          | Type   | Default    | Definition
-| -----------------:|:-------|:-----------|-----------
-| `$columns`        | number | `12`       | The amount of columns your grid layout uses
-| `$gutter`         | number | `30`       | The gutter width in pixels (space between grid columns)
-| `$breakpoints`    | array  | `['xs' => 0, 'sm' => 576, 'md' => 768, 'lg' => 992, 'xl' => 1200, 'xxl' => 1400]` | The media query breakpoints ResponsivePics will use for creating and serving your image sources
-| `$grid_widths`    | array  | `['xs' => 576, 'sm' => 540, 'md' => 720, 'lg' => 960, 'xl' => 1140, 'xxl' => 1320]` | The maximum widths of your layout in pixels ResponsivePics will use for resizing your images
-| `$lazyload_class` | string | `lazyload` | The css class to be added on the picture `img` tag when `lazyload` is enabled
-| `$image_quality`  | number | `90`       | The image compression quality in percentage used in the `WP_Image_Editor` when resizing images
+| Variable                  | Type    | Default    | Definition
+| -------------------------:|:--------|:-----------|-----------
+| `$columns`                | number  | `12`       | The amount of columns your grid layout uses
+| `$gutter`                 | number  | `30`       | The gutter width in pixels (space between grid columns)
+| `$breakpoints`            | array   | `['xs' => 0, 'sm' => 576, 'md' => 768, 'lg' => 992, 'xl' => 1200, 'xxl' => 1400]` | The media query breakpoints ResponsivePics will use for creating and serving your image sources
+| `$grid_widths`            | array   | `['xs' => 576, 'sm' => 540, 'md' => 720, 'lg' => 960, 'xl' => 1140, 'xxl' => 1320]` | The maximum widths of your layout in pixels ResponsivePics will use for resizing your images
+| `$lazyload_class`         | string  | `lazyload` | The css class to be added on the picture `img` tag when `lazyload` is enabled
+| `$image_quality`          | number  | `90`       | The image compression quality in percentage used in the `WP_Image_Editor` when resizing images
+| `$wp_rest_cache`          | boolean | `false`    | Wether to enable cache in the WP Rest API response headers
+| `$wp_rest_cache_duration` | number  | `3600`     | The cache duration (max-age) in seconds of the WP Rest API Cache-Control header
 
 By default, ResponsivePics will use the [Bootstrap 4 SCSS variables](https://github.com/twbs/bootstrap/blob/main/scss/_variables.scss#L285/) for defining:
 
@@ -160,6 +163,8 @@ if (class_exists('ResponsivePics')) {
 		'xxxl'  => 1920
 	]);
 	ResponsivePics::setImageQuality(85);
+	ResponsivePics::setRestApiCache(true);
+	ResponsivePics::setRestApiCacheDuration(86400);
 }
 ```
 
@@ -167,12 +172,14 @@ if (class_exists('ResponsivePics')) {
 You can retrieve any variables used in ResponsivePics by running one of these helper functions:
 
 ```php
-ResponsivePics::getColumns();       // Will return $columns
-ResponsivePics::getGutter();        // Will return $gutter
-ResponsivePics::getBreakpoints();   // Will return $breakpoints
-ResponsivePics::getGridWidths();    // Will return $grid_widths
-ResponsivePics::getLazyLoadClass(); // Will return $lazyload_class
-ResponsivePics::getImageQuality();  // Will return $image_quality
+ResponsivePics::getColumns();              // Will return $columns
+ResponsivePics::getGutter();               // Will return $gutter
+ResponsivePics::getBreakpoints();          // Will return $breakpoints
+ResponsivePics::getGridWidths();           // Will return $grid_widths
+ResponsivePics::getLazyLoadClass();        // Will return $lazyload_class
+ResponsivePics::getImageQuality();         // Will return $image_quality
+ResponsivePics::getRestApiCache();         // Will return $wp_rest_cache
+ResponsivePics::getRestApiCacheDuration(); // Will return $wp_rest_cache_duration
 ```
 
 ## Usage <a name="usage"></a>
@@ -404,7 +411,6 @@ import 'lazysizes/plugins/aspectratio/ls.aspectratio.js';
 Please submit any issues you experience with the **ResponsivePics** library over at [Github](https://github.com/booreiland/responsive-pics/issues).
 
 ## Todo's
-* Add `Wordpress REST API` endpoints for all functions.
 * Add functions `get_picture_data`, `get_image_data` and `get_background_data` to retrieve available sources and sizes as data instead of html markup.
 * Add **bulk delete** functionality for all resized/cropped images.
 * Add support for **multiple background images** syntax.
