@@ -17,6 +17,13 @@ class RP_Rules extends ResponsivePics {
 				'crop'   => false
 			];
 
+			// get crop positions
+			if (ResponsivePics()->helpers->contains($variant, '|')) {
+				$components = explode('|', $variant);
+				$variant    = trim($components[0]);
+				$crop       = ResponsivePics()->process->process_crop($components[1]);
+			}
+
 			// get dimensions
 			if (ResponsivePics()->helpers->contains($variant, ':')) {
 				$components = explode(':', $variant);
@@ -29,13 +36,6 @@ class RP_Rules extends ResponsivePics {
 				}
 			} else {
 				$dimensions = ResponsivePics()->process->process_dimensions($variant);
-			}
-
-			// get crop positions
-			if (ResponsivePics()->helpers->contains($variant, '|')) {
-				$components = explode('|', $variant);
-				$variant    = trim($components[0]);
-				$crop       = ResponsivePics()->process->process_crop($components[1]);
 			}
 
 			// check for errors
