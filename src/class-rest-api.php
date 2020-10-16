@@ -65,7 +65,7 @@ class RP_Rest_Api extends ResponsivePics {
 		$intrinsic = isset($params['intrinsic']) ? ($params['intrinsic'] === 'true') : null;
 
 		if (class_exists('ResponsivePics')) {
-			if ($id && $sizes) {
+			if ($sizes) {
 				$picture = ResponsivePics::get_picture($id, $sizes, $classes, $lazyload, $intrinsic);
 
 				// Check for errors
@@ -85,7 +85,7 @@ class RP_Rest_Api extends ResponsivePics {
 					return $result;
 				}
 			} else {
-				return new WP_Error('responsive_pics_invalid', __('the request is missing required parameters', 'responsive-pics'), $params);
+				return new WP_Error('responsive_pics_invalid',  __('the request is missing the required sizes parameter', 'responsive-pics'), $params);
 			}
 		} else {
 			return new WP_Error('responsive_pics_missing', __('the responsive pics plugin was not found', 'responsive-pics'));
@@ -102,7 +102,7 @@ class RP_Rest_Api extends ResponsivePics {
 		$lazyload  = isset($params['lazyload']) ? ($params['lazyload'] === 'true') : null;
 
 		if (class_exists('ResponsivePics')) {
-			if ($id && $sizes) {
+			if ($sizes) {
 				$image  = ResponsivePics::get_image($id, $sizes, $crop, $classes, $lazyload);
 
 				// Check for errors
@@ -122,7 +122,7 @@ class RP_Rest_Api extends ResponsivePics {
 					return $result;
 				}
 			} else {
-				return new WP_Error('responsive_pics_invalid',  __('the request is missing required parameters', 'responsive-pics'), $params);
+				return new WP_Error('responsive_pics_invalid',  __('the request is missing the required sizes parameter', 'responsive-pics'), $params);
 			}
 		} else {
 			return new WP_Error('responsive_pics_missing', __('the responsive pics plugin was not found', 'responsive-pics'));
@@ -137,7 +137,7 @@ class RP_Rest_Api extends ResponsivePics {
 		$classes = isset($params['classes']) ? urldecode($params['classes']) : null;
 
 		if (class_exists('ResponsivePics')) {
-			if ($id && $sizes) {
+			if ($sizes) {
 				$background = ResponsivePics::get_background($id, $sizes, $classes);
 
 				// Check for errors
@@ -157,7 +157,7 @@ class RP_Rest_Api extends ResponsivePics {
 					return $result;
 				}
 			} else {
-				return new WP_Error('responsive_pics_invalid',  __('the request is missing required parameters', 'responsive-pics'), $request);
+				return new WP_Error('responsive_pics_invalid',  __('the request is missing the required sizes parameter', 'responsive-pics'), $params);
 			}
 		} else {
 			return new WP_Error('responsive_pics_missing', __('the responsive pics plugin was not found', 'responsive-pics'));
