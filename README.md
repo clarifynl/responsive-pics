@@ -179,9 +179,9 @@ ResponsivePics::getImageQuality();  // Will return $image_quality
 
 ### Picture Element
 
-#### PHP
 For inserting a responsive `<picture>` element in your template, use the `get_picture` function with the available parameters.
 
+#### PHP
 ```php
 ResponsivePics::get_picture(id, sizes, classes, lazyload, intrinsic);
 ```
