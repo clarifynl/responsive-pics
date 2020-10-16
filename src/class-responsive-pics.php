@@ -137,11 +137,7 @@ class ResponsivePics {
 
 	// set rest api cache duration (max-age)
 	public static function setRestApiCacheDuration($value = 3600) {
-		if (self::$wp_rest_cache) {
-			self::$wp_rest_cache_duration = $value;
-		} else {
-			self::$wp_rest_cache_duration = 0;
-		}
+		self::$wp_rest_cache_duration = $value;
 	}
 
 	// get breakpoints used for "media(min-width: x)" in picture element, in pixels

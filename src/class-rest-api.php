@@ -73,8 +73,15 @@ class RP_Rest_Api extends ResponsivePics {
 					return $picture;
 				} else {
 					$result = new WP_REST_Response($picture, 200);
-					// Set caching
-					$result->set_headers(array('Cache-Control' => 'max-age=' . self::$wp_rest_cache_duration));
+
+					// Set cache duration
+					if (self::$wp_rest_cache) {
+						$cache_duration = self::$wp_rest_cache_duration;
+					} else {
+						$cache_duration = 0;
+					}
+
+					$result->set_headers(array('Cache-Control' => 'max-age=' . $cache_duration));
 					return $result;
 				}
 			} else {
@@ -103,8 +110,15 @@ class RP_Rest_Api extends ResponsivePics {
 					return $image;
 				} else {
 					$result = new WP_REST_Response($image, 200);
+
 					// Set cache duration
-					$result->set_headers(array('Cache-Control' => 'max-age=' . self::$wp_rest_cache_duration));
+					if (self::$wp_rest_cache) {
+						$cache_duration = self::$wp_rest_cache_duration;
+					} else {
+						$cache_duration = 0;
+					}
+
+					$result->set_headers(array('Cache-Control' => 'max-age=' . $cache_duration));
 					return $result;
 				}
 			} else {
@@ -131,8 +145,15 @@ class RP_Rest_Api extends ResponsivePics {
 					return $background;
 				} else {
 					$result = new WP_REST_Response($background, 200);
+
 					// Set cache duration
-					$result->set_headers(array('Cache-Control' => 'max-age=' . self::$wp_rest_cache_duration));
+					if (self::$wp_rest_cache) {
+						$cache_duration = self::$wp_rest_cache_duration;
+					} else {
+						$cache_duration = 0;
+					}
+
+					$result->set_headers(array('Cache-Control' => 'max-age=' . $cache_duration));
 					return $result;
 				}
 			} else {
