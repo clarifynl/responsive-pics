@@ -187,8 +187,8 @@ ResponsivePics::get_picture(id, sizes, classes, lazyload, intrinsic);
 ```
 
 #### REST API
-```
-GET /wp-json/responsive-pics/v1/get-picture/<id>?sizes=<sizes>&classes=<classes>?lazyload=<boolean>&intrinsic=<boolean>
+```console
+GET /wp-json/responsive-pics/v1/get-picture/<id>?sizes=<sizes>&classes=<classes>&lazyload=<lazyload>&intrinsic=<intrinsic>
 ```
 
 | Parameter  | Type        | Required | Default  | Definition
@@ -201,10 +201,16 @@ GET /wp-json/responsive-pics/v1/get-picture/<id>?sizes=<sizes>&classes=<classes>
 
 
 ### Image Element
-For inserting a responsive `<img>` element in your template, use the `get_image` function with the following parameters:
+For inserting a responsive `<img>` element in your template, use the `get_image` function with the available parameters.
 
+#### PHP
 ```php
 ResponsivePics::get_image(id, sizes, crop, classes, lazyload);
+```
+
+#### REST API
+```console
+GET /wp-json/responsive-pics/v1/get-image/<id>?sizes=<sizes>&crop=<crop>&classes=<classes>&lazyload=<lazyload>
 ```
 
 | Parameter  | Type        | Required | Default  | Definition
@@ -217,10 +223,16 @@ ResponsivePics::get_image(id, sizes, crop, classes, lazyload);
 
 
 ### Background Image
-For inserting a responsive background image in your template, use the `get_background` function with the following parameters:
+For inserting a responsive background image in your template, use the `get_background` function with the available parameters.
 
+#### PHP
 ```php
 ResponsivePics::get_background(id, sizes, classes);
+```
+
+#### REST API
+```console
+GET /wp-json/responsive-pics/v1/get-background/<id>?sizes=<sizes>&classes=<classes>
 ```
 
 | Parameter  | Type        | Required | Default  | Definition
