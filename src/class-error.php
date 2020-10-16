@@ -23,24 +23,19 @@ class RP_Error extends ResponsivePics {
 	// display error messages
 	public function show_error($error) {
 		if (is_wp_error($error)) {
-			$error_codes = $error->get_error_codes();
+			$error_messages = $error->get_error_messages();
 
-			if (!empty($error_codes)) {
-				$output = '<pre class="responsive-pics-error"><h6>' . get_parent_class() . ' errors</h6>';
+			if (!empty($error_messages)) {
+				$output  = '<pre class="responsive-pics-error"><h6>' . get_parent_class() . ' errors</h6>';
+				$output .= '<ul>';
 
-				foreach ($error_codes as $code) {
-					$error_messages = $error->get_error_messages($code);
-
-					if (!empty($error_messages)) {
-						$output .= '<section><strong>'. $code . ':</strong><ul>';
-						foreach ($error_messages as $message) {
-							$output .= '<li>' . $message . '</li>';
-						}
-						$output .= '</ul></section>';
-					}
+				foreach ($error_messages as $message) {
+					$output .= '<li>' . $message . '</li>';
 				}
 
+				$output .= '</ul>';
 				$output .= '</pre>';
+
 				echo $output;
 			}
 		}
