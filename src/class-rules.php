@@ -89,20 +89,6 @@ class RP_Rules extends ResponsivePics {
 				'crop'   => false
 			];
 
-			// get dimensions
-			if (ResponsivePics()->helpers->contains($variant, ':')) {
-				$components = explode(':', $variant);
-				$breakpoint = ResponsivePics()->process->process_breakpoint($components[0]);
-				$dimensions = ResponsivePics()->process->process_dimensions($components[1]);
-
-				// check for errors
-				if (is_wp_error($breakpoint)) {
-					return $breakpoint;
-				}
-			} else {
-				$dimensions = ResponsivePics()->process->process_dimensions($variant);
-			}
-
 			// check for height and/or crops syntax
 			if (ResponsivePics()->helpers->contains($variant, ' ') || ResponsivePics()->helpers->contains($variant, '|') || ResponsivePics()->helpers->contains($variant, '/')) {
 				return ResponsivePics()->error->add_error('invalid', sprintf('art directed parameters (height, factor, crop_x, crop_y) are not supported on image sizes: %s', $variant), $variant);
@@ -132,6 +118,20 @@ class RP_Rules extends ResponsivePics {
 						$variant .= '/'. $ratio;
 					}
 				}
+			}
+
+			// get dimensions
+			if (ResponsivePics()->helpers->contains($variant, ':')) {
+				$components = explode(':', $variant);
+				$breakpoint = ResponsivePics()->process->process_breakpoint($components[0]);
+				$dimensions = ResponsivePics()->process->process_dimensions($components[1]);
+
+				// check for errors
+				if (is_wp_error($breakpoint)) {
+					return $breakpoint;
+				}
+			} else {
+				$dimensions = ResponsivePics()->process->process_dimensions($variant);
 			}
 
 			// check for errors
