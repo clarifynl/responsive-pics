@@ -195,7 +195,7 @@ GET /wp-json/responsive-pics/v1/get-picture/<id>?sizes=<sizes>&classes=<classes>
 | -----------|:---------------:| --------:|---------:|---------------------------------
 | id         | number          | yes      |          | The WordPress image id (e.g. 1).
 | sizes      | string          | yes      |          | A comma-separated string of preferred image sizes (e.g. `'xs-12, sm-6, md-4, lg-3'`). See the [Sizes section](#sizes) for more information.
-| classes    | string or array | optional | `null`   | Additional CSS classes you want to add to the picture element (e.g. `'my_picture_class'` or `['my_picture_class', 'my_second_picture_class']`).
+| classes    | string, comma-separated string or array | optional | `null`   | Additional CSS classes you want to add to the picture element (e.g. `'my_picture_class'`, `'my_picture_class, my_second_picture_class` or `['my_picture_class', 'my_second_picture_class']`).
 | lazyload   | boolean         | optional | `false`  | When `true` enables `lazyload` classes and data-srcset attributes. See the [Lazyloading section](#lazyloading) for more information.
 | intrinsic  | boolean         | optional | `false`  | When `true` enables `intrinsic` classes and data-aspectratio attributes. See the [Intrinsic Aspectratio section](#intrinsic) for more information.
 
