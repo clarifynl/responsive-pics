@@ -372,28 +372,22 @@ Don't forget to re-provision your server after changing this value.
 If an error occurs during the resizing process or if there's invalid syntax, ResponsivePics will display or return an error.
 
 #### PHP
-```html
-<pre class="responsive-pics-error">
-	<h6>ResponsivePics errors</h6>
-	<ul>
-		<li>breakpoint xxs is neither defined nor a number</li>
-	</ul>
-</pre>
-```
+**ResponsivePics errors**
+- breakpoint xxs is neither defined nor a number
 
 #### REST API
 ```json
 {
- "code": "responsive_pics_invalid",
- "message": "breakpoint xxs is neither defined nor a number",
- "data": {
-  "xs": 0,
-  "sm": 576,
-  "md": 768,
-  "lg": 992,
-  "xl": 1200,
-  "xxl": 1400
- }
+  "code": "responsive_pics_invalid",
+  "message": "breakpoint xxs is neither defined nor a number",
+  "data": {
+    "xs": 0,
+    "sm": 576,
+    "md": 768,
+    "lg": 992,
+    "xl": 1200,
+    "xxl": 1400
+  }
 }
 ```
 
