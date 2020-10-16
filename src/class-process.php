@@ -60,8 +60,18 @@ class RP_Process extends ResponsivePics {
 				$dimension = trim($wh[0]);
 				$height    = trim($wh[1]);
 				$width     = ResponsivePics()->helpers->columns_to_pixels($dimension);
+
+				// check for errors
+				if (is_wp_error($width)) {
+					return $width;
+				}
 			} else {
 				$width = ResponsivePics()->helpers->columns_to_pixels($dimensions);
+
+				// check for errors
+				if (is_wp_error($width)) {
+					return $width;
+				}
 			}
 		} else {
 			if (ResponsivePics()->helpers->contains($dimensions, ' ')) {

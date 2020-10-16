@@ -9,6 +9,12 @@ class RP_Helpers extends ResponsivePics {
 		$key = $components[0];
 		$col = $components[1];
 
+		// check breakpoint
+		$breakpoint = ResponsivePics()->process->process_breakpoint($key);
+		if (is_wp_error($breakpoint)) {
+			return $breakpoint;
+		}
+
 		if ($this->contains($col, '/')) {
 			$col = explode('/', $col)[0];
 		}
@@ -28,6 +34,7 @@ class RP_Helpers extends ResponsivePics {
 			}
 
 			return $next_width;
+
 		} else if ($this->match($col, '/(\d+)/')) {
 			if ($col < 1 || $col > self::$columns) {
 				return ResponsivePics()->error->add_error('invalid', sprintf('number of columns should be between 1 and %s', self::$columns), self::$columns);
@@ -37,7 +44,6 @@ class RP_Helpers extends ResponsivePics {
 		}
 
 		$grid_width = self::$grid_widths[$key];
-
 		if (!isset($grid_width)) {
 			return ResponsivePics()->error->add_error('missing', sprintf('no width found for breakpoint %s', $key), $key);
 		}
