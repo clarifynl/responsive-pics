@@ -8,6 +8,7 @@ class RP_Rules extends ResponsivePics {
 		$result   = [];
 
 		foreach ($variants as $variant) {
+			$variant    = trim($variant);
 			$crop       = false;
 			$breakpoint = -1;
 			$dimensions = [
@@ -16,20 +17,25 @@ class RP_Rules extends ResponsivePics {
 				'crop'   => false
 			];
 
-			// get crop positions
-			if (ResponsivePics()->helpers->contains($variant, '|')) {
-				$components = explode('|', $variant);
-				$variant    = trim($components[0]);
-				$crop       = ResponsivePics()->process->process_crop($components[1]);
-			}
-
 			// get dimensions
 			if (ResponsivePics()->helpers->contains($variant, ':')) {
 				$components = explode(':', $variant);
 				$breakpoint = ResponsivePics()->process->process_breakpoint($components[0]);
 				$dimensions = ResponsivePics()->process->process_dimensions($components[1]);
+
+				// check for errors
+				if (is_wp_error($breakpoint)) {
+					return $breakpoint;
+				}
 			} else {
 				$dimensions = ResponsivePics()->process->process_dimensions($variant);
+			}
+
+			// get crop positions
+			if (ResponsivePics()->helpers->contains($variant, '|')) {
+				$components = explode('|', $variant);
+				$variant    = trim($components[0]);
+				$crop       = ResponsivePics()->process->process_crop($components[1]);
 			}
 
 			// check for errors
@@ -73,6 +79,7 @@ class RP_Rules extends ResponsivePics {
 		$result   = [];
 
 		foreach ($variants as $variant) {
+			$variant    = trim($variant);
 			$crop       = false;
 			$crop_ratio = null;
 			$breakpoint = -1;
@@ -82,8 +89,21 @@ class RP_Rules extends ResponsivePics {
 				'crop'   => false
 			];
 
+			// get dimensions
+			if (ResponsivePics()->helpers->contains($variant, ':')) {
+				$components = explode(':', $variant);
+				$breakpoint = ResponsivePics()->process->process_breakpoint($components[0]);
+				$dimensions = ResponsivePics()->process->process_dimensions($components[1]);
+
+				// check for errors
+				if (is_wp_error($breakpoint)) {
+					return $breakpoint;
+				}
+			} else {
+				$dimensions = ResponsivePics()->process->process_dimensions($variant);
+			}
+
 			// check for height and/or crops syntax
-			$variant = trim($variant);
 			if (ResponsivePics()->helpers->contains($variant, ' ') || ResponsivePics()->helpers->contains($variant, '|') || ResponsivePics()->helpers->contains($variant, '/')) {
 				return ResponsivePics()->error->add_error('invalid', sprintf('art directed parameters (height, factor, crop_x, crop_y) are not supported on image sizes: %s', $variant), $variant);
 			}
@@ -112,15 +132,6 @@ class RP_Rules extends ResponsivePics {
 						$variant .= '/'. $ratio;
 					}
 				}
-			}
-
-			// get dimensions
-			if (ResponsivePics()->helpers->contains($variant, ':')) {
-				$components = explode(':', $variant);
-				$breakpoint = ResponsivePics()->process->process_breakpoint($components[0]);
-				$dimensions = ResponsivePics()->process->process_dimensions($components[1]);
-			} else {
-				$dimensions = ResponsivePics()->process->process_dimensions($variant);
 			}
 
 			// check for errors

@@ -36,13 +36,17 @@ class RP_Process extends ResponsivePics {
 	public function process_breakpoint($input) {
 		$input = trim($input);
 
-		if (isset(self::$breakpoints[$input])) {
-			return self::$breakpoints[$input];
-		} else {
+		if (is_string($input)) {
+			if (isset(self::$breakpoints[$input])) {
+				return self::$breakpoints[$input];
+			} else {
+				return ResponsivePics()->error->add_error('invalid', sprintf('breakpoint %s is undefined', $input), self::$breakpoints);
+			}
+		} elseif (is_numeric($input)) {
 			return $input;
+		} else {
+			return ResponsivePics()->error->add_error('invalid', sprintf('breakpoint %s is neither defined nor a number', $input), self::$breakpoints);
 		}
-
-		return false;
 	}
 
 	// dimensions can be shortcut (e.g. "xs-5"), width (e.g. "400") or width and height (e.g. "400 300");
