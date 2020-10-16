@@ -191,13 +191,13 @@ ResponsivePics::get_picture(id, sizes, classes, lazyload, intrinsic);
 GET /wp-json/responsive-pics/v1/get-picture/<id>?sizes=<sizes>&classes=<classes>?lazyload=<boolean>&intrinsic=<boolean>
 ```
 
-| Parameter  | Type            | Required | Default  | Definition
-| -----------|:---------------:| --------:|---------:|---------------------------------
-| id         | number          | yes      |          | The WordPress image id (e.g. 1).
-| sizes      | string          | yes      |          | A comma-separated string of preferred image sizes (e.g. `'xs-12, sm-6, md-4, lg-3'`). See the [Sizes section](#sizes) for more information.
-| classes    | string          | optional | `null`   | A comma-separated string of additional CSS classes you want to add to the picture element (e.g. `'my_picture_class'` or `'my_picture_class, my_second_picture_class'`).
-| lazyload   | boolean         | optional | `false`  | When `true` enables `lazyload` classes and data-srcset attributes. See the [Lazyloading section](#lazyloading) for more information.
-| intrinsic  | boolean         | optional | `false`  | When `true` enables `intrinsic` classes and data-aspectratio attributes. See the [Intrinsic Aspectratio section](#intrinsic) for more information.
+| Parameter  | Type        | Required | Default  | Definition
+| -----------|:-----------:| --------:|---------:|---------------------------------
+| id         | number      | yes      |          | The WordPress image id (e.g. 1).
+| sizes      | string      | yes      |          | A comma-separated string of preferred image sizes (e.g. `'xs-12, sm-6, md-4, lg-3'`). See the [Sizes section](#sizes) for more information.
+| classes    | string      | optional | `null`   | A comma-separated string of additional CSS classes you want to add to the picture element (e.g. `'my_picture_class'` or `'my_picture_class, my_second_picture_class'`).
+| lazyload   | boolean     | optional | `false`  | When `true` enables `lazyload` classes and data-srcset attributes. See the [Lazyloading section](#lazyloading) for more information.
+| intrinsic  | boolean     | optional | `false`  | When `true` enables `intrinsic` classes and data-aspectratio attributes. See the [Intrinsic Aspectratio section](#intrinsic) for more information.
 
 
 ### Image Element
@@ -207,13 +207,13 @@ For inserting a responsive `<img>` element in your template, use the `get_image`
 ResponsivePics::get_image(id, sizes, crop, classes, lazyload);
 ```
 
-| Parameter  | Type            | Required | Default  | Definition
-| -----------|:---------------:| --------:|---------:|---------------------------------
-| id         | number          | yes      |          | The WordPress image id (e.g. 1).
-| sizes      | string          | yes      |          | A comma-separated string of preferred image sizes (e.g. `'xs-12, sm-6, md-4, lg-3'`). See the [Sizes section](#sizes) for more information.
-| crop       | string          | optional | `false`  | A crop-factor of the width for the desired height between `0-2` (e.g. `0.75`) with optional crop positions (e.g. <code>0.75&#124;c t</code>)
-| classes    | string or array | optional | `null`   | Additional CSS classes you want to add to the picture element (e.g. `'my_picture_class'` or `['my_picture_class', 'my_second_picture_class']`).
-| lazyload   | boolean         | optional | `false`  | When `true` enables `lazyload` classes and data-srcset attributes. See the [Lazyloading section](#lazyloading) for more information.
+| Parameter  | Type        | Required | Default  | Definition
+| -----------|:-----------:| --------:|---------:|---------------------------------
+| id         | number      | yes      |          | The WordPress image id (e.g. 1).
+| sizes      | string      | yes      |          | A comma-separated string of preferred image sizes (e.g. `'xs-12, sm-6, md-4, lg-3'`). See the [Sizes section](#sizes) for more information.
+| crop       | string      | optional | `false`  | A crop-factor of the width for the desired height between `0-2` (e.g. `0.75`) with optional crop positions (e.g. <code>0.75&#124;c t</code>)
+| classes    | string      | optional | `null`   | A comma-separated string of additional CSS classes you want to add to the img element (e.g. `'my_img_class'` or `'my_img_class, my_second_img_class'`).
+| lazyload   | boolean     | optional | `false`  | When `true` enables `lazyload` classes and data-srcset attributes. See the [Lazyloading section](#lazyloading) for more information.
 
 
 ### Background Image
@@ -223,11 +223,11 @@ For inserting a responsive background image in your template, use the `get_backg
 ResponsivePics::get_background(id, sizes, classes);
 ```
 
-| Parameter  | Type            | Required | Default  | Definition
-| -----------|:---------------:| --------:|---------:|---------------------------------
-| id         | number          | yes      |          | The WordPress image id (e.g. 1).
-| sizes      | string          | yes      |          | A comma-separated string of preferred image sizes (e.g. `'xs-12, sm-6, md-4, lg-3'`). See the [Sizes section](#sizes) for more information.
-| classes    | string or array | optional | `null`   | Additional CSS classes you want to add to the background element (e.g. `'my_bg_class'` or `['my_bg_class', 'my_second_bg_class']`).
+| Parameter  | Type        | Required | Default  | Definition
+| -----------|:-----------:| --------:|---------:|---------------------------------
+| id         | number      | yes      |          | The WordPress image id (e.g. 1).
+| sizes      | string      | yes      |          | A comma-separated string of preferred image sizes (e.g. `'xs-12, sm-6, md-4, lg-3'`). See the [Sizes section](#sizes) for more information.
+| classes    | string      | optional | `null`   | A comma-separated string of additional CSS classes you want to add to the background element (e.g. `'my_bg_class'` or `'my_bg_class, my_second_bg_class'`).
 
 
 ### Supported image formats
