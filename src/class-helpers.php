@@ -37,7 +37,7 @@ class RP_Helpers extends ResponsivePics {
 
 		} else if ($this->match($col, '/(\d+)/')) {
 			if ($col < 1 || $col > self::$columns) {
-				return ResponsivePics()->error->add_error('invalid', sprintf('number of columns should be between 1 and %s', self::$columns), self::$columns);
+				return ResponsivePics()->error->add_error('invalid', sprintf('number of columns should be between 1 and %s', self::$columns), $col);
 			}
 		} else {
 			return ResponsivePics()->error->add_error('invalid', sprintf('invalid columns: %s', $col), $col);
