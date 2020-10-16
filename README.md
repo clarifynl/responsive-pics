@@ -372,9 +372,11 @@ Don't forget to re-provision your server after changing this value.
 If an error occurs during the resizing process or if there's invalid syntax, ResponsivePics will display or return an error.
 
 #### PHP
-```
-**ResponsivePics errors**
+```html
+<pre>
+<b>ResponsivePics errors</b>
 - breakpoint xxs is neither defined nor a number
+</pre>
 ```
 
 #### REST API
