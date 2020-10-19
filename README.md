@@ -92,7 +92,7 @@ And import the package in your theme’s global javascript file:
 ResponsivePics uses the following default variables:
 
 | Variable                  | Type    | Default    | Definition
-| -------------------------:|:--------|:-----------|-----------
+| ------------------------- | ------- | ---------- | ----------
 | `$columns`                | number  | `12`       | The amount of columns your grid layout uses
 | `$gutter`                 | number  | `30`       | The gutter width in pixels (space between grid columns)
 | `$breakpoints`            | array   | `['xs' => 0, 'sm' => 576, 'md' => 768, 'lg' => 992, 'xl' => 1200, 'xxl' => 1400]` | The media query breakpoints ResponsivePics will use for creating and serving your image sources
@@ -201,7 +201,7 @@ GET /wp-json/responsive-pics/v1/get-picture/<id>?sizes=<sizes>&classes=<classes>
 #### Picture Parameters
 
 | Parameter  | Type        | Required | Default  | Definition
-| -----------|:-----------:| --------:|---------:|---------------------------------
+| ---------- | ----------- | -------- | -------- | --------------------------------
 | id         | number      | yes      |          | The WordPress image id (e.g. 1).
 | sizes      | string      | yes      |          | A comma-separated string of preferred image sizes (e.g. `'xs-12, sm-6, md-4, lg-3'`). See the [Sizes section](#sizes) for more information.
 | classes    | string      | optional | `null`   | A comma-separated string of additional CSS classes you want to add to the picture element (e.g. `'my_picture_class'` or `'my_picture_class, my_second_picture_class'`).
@@ -225,7 +225,7 @@ GET /wp-json/responsive-pics/v1/get-image/<id>?sizes=<sizes>&crop=<crop>&classes
 #### Image Parameters
 
 | Parameter  | Type        | Required | Default  | Definition
-| -----------|:-----------:| --------:|---------:|---------------------------------
+| ---------- | ----------- | -------- | -------- | --------------------------------
 | id         | number      | yes      |          | The WordPress image id (e.g. 1).
 | sizes      | string      | yes      |          | A comma-separated string of preferred image sizes (e.g. `'xs-12, sm-6, md-4, lg-3'`). See the [Sizes section](#sizes) for more information.
 | crop       | string      | optional | `false`  | A crop-factor of the width for the desired height between `0-2` (e.g. `0.75`) with optional crop positions (e.g. <code>0.75&#124;c t</code>)
@@ -249,7 +249,7 @@ GET /wp-json/responsive-pics/v1/get-background/<id>?sizes=<sizes>&classes=<class
 #### Background Parameters
 
 | Parameter  | Type        | Required | Default  | Definition
-| -----------|:-----------:| --------:|---------:|---------------------------------
+| -----------| ----------- | -------- | -------- | --------------------------------
 | id         | number      | yes      |          | The WordPress image id (e.g. 1).
 | sizes      | string      | yes      |          | A comma-separated string of preferred image sizes (e.g. `'xs-12, sm-6, md-4, lg-3'`). See the [Sizes section](#sizes) for more information.
 | classes    | string      | optional | `null`   | A comma-separated string of additional CSS classes you want to add to the background element (e.g. `'my_bg_class'` or `'my_bg_class, my_second_bg_class'`).
@@ -259,7 +259,7 @@ GET /wp-json/responsive-pics/v1/get-background/<id>?sizes=<sizes>&classes=<class
 The following image file formats are supported:
 
 | File format | MIME Type  | Properties
-| ------------|:----------:| ---------------------------------
+| ----------- | ---------- | ---------------------------------
 | jp(e)g      | image/jpeg |
 | png         | image/png  | When the png contains an **alpha channel**, an extra `'has-alpha'` class will be added to the picture image element for additional styling.
 | gif         | image/gif  | When the gif is **animated** (it will check for multiple header frames), no image resizing or cropping will be done to prevent discarding the animation.
@@ -276,7 +276,7 @@ breakpoint:width
 ```
 
 | Parameter  | Type             | Required | Default | Definition
-| -----------|:----------------:| --------:|--------:|---------------------------------
+| ---------- | ---------------- | -------- | ------- | --------------------------------
 | breakpoint | number or string | yes      |         | If undefined, and `width` is a number, breakpoint will be the same as the width. If undefined, and `width` is a column definition, breakpoint will be the corresponding breakpoint (e.g. if width is `'xs-8'`, breakpoint will be `'xs'`).
 | width      | number or string | yes      |         | A column definition is a key in `$grid_widths` plus a dash and a column span number (e.g. `'xs-8'`). If column span number is `full`, the full width of the next matching `$breakpoint` is used (e.g. `'xs-full'`).
 
@@ -290,7 +290,7 @@ breakpoint:width [/factor|height]|crop_x crop_y
 The following parameters are available in the sizes syntax:
 
 | Parameter  | Type             | Required | Default | Definition
-| -----------|:----------------:| --------:|--------:|---------------------------------
+| ---------- | ---------------- | -------- | ------- | --------------------------------
 | breakpoint | number or string | yes      |         | If undefined, and `width` is a number, breakpoint will be the same as the width. If undefined, and `width` is a column definition, breakpoint will be the corresponding breakpoint (e.g. if width is `'xs-8'`, breakpoint will be `'xs'`).
 | width      | number or string | yes      |         | A column definition is a key in `$grid_widths` plus a dash and a column span number (e.g. `'xs-8'`). If column span number is `full`, the full width of the next matching `$breakpoint` is used (e.g. `'xs-full'`).
 | height     | number           | optional |         | The desired height of the image (e.g. `500`).
