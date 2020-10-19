@@ -197,27 +197,23 @@ class ResponsivePics {
 
 		// check for valid image id
 		$image_id = ResponsivePics()->process->process_image_id($id);
-		if (is_wp_error($image_id)) {
-			return ResponsivePics()->error->get_error($image_id);
-		}
 
 		// check for valid sizes
 		$definition = ResponsivePics()->definitions->get_definition($image_id, $sizes);
-		if (is_wp_error($definition)) {
-			return ResponsivePics()->error->get_error($definition);
-		}
-
-		$sources = $definition['sources'];
-		$picture = [];
 
 		// check for valid classes
 		$img_classes = [];
 		if ($picture_classes) {
 			$picture_classes = ResponsivePics()->process->process_classes($picture_classes);
-			if (is_wp_error($picture_classes)) {
-				return ResponsivePics()->error->get_error($picture_classes);
-			}
 		}
+
+		// check for errors
+		if (count(self::$wp_error->get_error_messages()) > 1) {
+			return ResponsivePics()->error->get_error(self::$wp_error);
+		}
+
+		$sources = $definition['sources'];
+		$picture = [];
 
 		// lazyload option
 		if ($lazyload) {
@@ -281,25 +277,21 @@ class ResponsivePics {
 
 		// check for valid image id
 		$image_id = ResponsivePics()->process->process_image_id($id);
-		if (is_wp_error($image_id)) {
-			return ResponsivePics()->error->get_error($image_id);
-		}
 
 		// check for valid definition
 		$definition = ResponsivePics()->definitions->get_definition($image_id, $sizes, false, false, $crop);
-		if (is_wp_error($definition)) {
-			return ResponsivePics()->error->get_error($definition);
-		}
-
-		$sources = $definition['sources'];
 
 		// convert $picture_classes to array if it is a string
 		if ($img_classes) {
 			$img_classes = ResponsivePics()->process->process_classes($img_classes);
-			if (is_wp_error($img_classes)) {
-				return ResponsivePics()->error->get_error($img_classes);
-			}
 		}
+
+		// check for errors
+		if (count(self::$wp_error->get_error_messages()) > 1) {
+			return ResponsivePics()->error->get_error(self::$wp_error);
+		}
+
+		$sources = $definition['sources'];
 
 		// lazyload option
 		if ($lazyload) {
@@ -348,26 +340,22 @@ class ResponsivePics {
 
 		// check for valid image id
 		$image_id = ResponsivePics()->process->process_image_id($id);
-		if (is_wp_error($image_id)) {
-			return ResponsivePics()->error->get_error($image_id);
-		}
 
 		// check for valid definition
 		$definition = ResponsivePics()->definitions->get_definition($image_id, $sizes, true);
-		if (is_wp_error($definition)) {
-			return ResponsivePics()->error->get_error($definition);
-		}
-
-		$sources = $definition['sources'];
-		$copy = $image_id;
 
 		// convert $classes to array if it is a string
 		if ($bg_classes) {
 			$bg_classes = ResponsivePics()->process->process_classes($bg_classes);
-			if (is_wp_error($bg_classes)) {
-				return ResponsivePics()->error->get_error($bg_classes);
-			}
 		}
+
+		// check for errors
+		if (count(self::$wp_error->get_error_messages()) > 1) {
+			return ResponsivePics()->error->get_error(self::$wp_error);
+		}
+
+		$sources = $definition['sources'];
+		$copy = $image_id;
 
 		// prevent same id, append copy number to existing
 		if (isset(self::$id_map[$image_id])) {

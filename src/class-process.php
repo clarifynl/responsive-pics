@@ -5,11 +5,11 @@ class RP_Process extends ResponsivePics {
 	// validates and returns image id
 	public function process_image_id($id = null) {
 		if (!$id) {
-			return ResponsivePics()->error->add_error('invalid', 'image id is undefined');
+			ResponsivePics()->error->add_error('invalid', 'image id is undefined');
 		} elseif (is_array($id)) {
 			return $id[0];
 		} elseif (!is_int($id)) {
-			return ResponsivePics()->error->add_error('invalid', sprintf('image id %s is not an integer', $id), $id);
+			ResponsivePics()->error->add_error('invalid', sprintf('image id %s is not an integer', $id), $id);
 		}
 
 		return $id;
@@ -18,7 +18,7 @@ class RP_Process extends ResponsivePics {
 	// validates and returns classes as an array
 	public function process_classes($classes = null) {
 		if (!is_array($classes) && !is_string($classes)) {
-			return ResponsivePics()->error->add_error('invalid', 'classes parameter is neither a string nor an array', $classes);
+			ResponsivePics()->error->add_error('invalid', 'classes parameter is neither a string nor an array', $classes);
 		} elseif (!is_array($classes) && is_string($classes)) {
 			if (!empty($classes)) {
 				$classes = preg_split('/[\s,]+/', $classes);
@@ -41,8 +41,11 @@ class RP_Process extends ResponsivePics {
 		} elseif (is_numeric($input)) {
 			return $input;
 		} else {
-			return ResponsivePics()->error->add_error('invalid', sprintf('breakpoint %s is neither defined nor a number', $input), self::$breakpoints);
+			ResponsivePics()->error->add_error('invalid', sprintf('breakpoint %s is neither defined nor a number', $input), self::$breakpoints);
+			return false;
 		}
+
+		return $input;
 	}
 
 	// dimensions can be shortcut (e.g. "xs-5"), width (e.g. "400") or width and height (e.g. "400 300");
@@ -60,18 +63,8 @@ class RP_Process extends ResponsivePics {
 				$dimension = trim($wh[0]);
 				$height    = trim($wh[1]);
 				$width     = ResponsivePics()->helpers->columns_to_pixels($dimension);
-
-				// check for errors
-				if (is_wp_error($width)) {
-					return $width;
-				}
 			} else {
 				$width = ResponsivePics()->helpers->columns_to_pixels($dimensions);
-
-				// check for errors
-				if (is_wp_error($width)) {
-					return $width;
-				}
 			}
 		} else {
 			if (ResponsivePics()->helpers->contains($dimensions, ' ')) {
@@ -84,7 +77,7 @@ class RP_Process extends ResponsivePics {
 				$width = ResponsivePics()->helpers->match($dimensions, '/(\d+)/');
 
 				if (!isset($width)) {
-					return ResponsivePics()->error->add_error('invalid', sprintf('width is undefined in %s', $dimensions), $dimensions);
+					ResponsivePics()->error->add_error('invalid', sprintf('width is undefined in %s', $dimensions), $dimensions);
 				}
 			}
 		}
@@ -97,7 +90,7 @@ class RP_Process extends ResponsivePics {
 			if ($this->process_ratio($crop_ratio)) {
 				$height = $width * $crop_ratio;
 			} else {
-				return ResponsivePics()->error->add_error('invalid', sprintf('the crop ratio %s needs to be higher then 0 and equal or lower then 2', (string) $crop_ratio), $crop_ratio);
+				ResponsivePics()->error->add_error('invalid', sprintf('the crop ratio %s needs to be higher then 0 and equal or lower then 2', (string) $crop_ratio), $crop_ratio);
 			}
 		}
 

@@ -11,47 +11,46 @@ class RP_Helpers extends ResponsivePics {
 
 		// check breakpoint
 		$breakpoint = ResponsivePics()->process->process_breakpoint($key);
-		if (is_wp_error($breakpoint)) {
-			return $breakpoint;
-		}
 
-		if ($this->contains($col, '/')) {
-			$col = explode('/', $col)[0];
-		}
-
-		if ($col === 'full') {
-			$next_breakpoint = ResponsivePics()->breakpoints->get_next_breakpoint($key);
-
-			// use max breakpoint if there's no bigger one left
-			if (!isset($next_breakpoint)) {
-				$next_breakpoint = $key;
+		if (is_numeric($breakpoint)) {
+			if ($this->contains($col, '/')) {
+				$col = explode('/', $col)[0];
 			}
 
-			$next_width = self::$breakpoints[$next_breakpoint];
+			if ($col === 'full') {
+				$next_breakpoint = ResponsivePics()->breakpoints->get_next_breakpoint($key);
 
-			if (!isset($next_width)) {
-				return ResponsivePics()->error->add_error('missing', sprintf('no breakpoint set for %s', $key), $key);
+				// use max breakpoint if there's no bigger one left
+				if (!isset($next_breakpoint)) {
+					$next_breakpoint = $key;
+				}
+
+				$next_width = self::$breakpoints[$next_breakpoint];
+
+				if (!isset($next_width)) {
+					ResponsivePics()->error->add_error('missing', sprintf('no breakpoint set for %s', $breakpoint), $breakpoint);
+				}
+
+				return $next_width;
+
+			} else if ($this->match($col, '/(\d+)/')) {
+				if ($col < 1 || $col > self::$columns) {
+					ResponsivePics()->error->add_error('invalid', sprintf('number of columns should be between 1 and %s', self::$columns), $col);
+				}
+			} else {
+				ResponsivePics()->error->add_error('invalid', sprintf('invalid columns: %s', $col), $col);
 			}
 
-			return $next_width;
-
-		} else if ($this->match($col, '/(\d+)/')) {
-			if ($col < 1 || $col > self::$columns) {
-				return ResponsivePics()->error->add_error('invalid', sprintf('number of columns should be between 1 and %s', self::$columns), $col);
+			$grid_width = self::$grid_widths[$key];
+			if (!isset($grid_width)) {
+				ResponsivePics()->error->add_error('missing', sprintf('no width found for breakpoint %s', $breakpoint), $breakpoint);
 			}
-		} else {
-			return ResponsivePics()->error->add_error('invalid', sprintf('invalid columns: %s', $col), $col);
+
+			$column_pixels = ($grid_width - (self::$columns) * self::$gutter) / self::$columns;
+			$pixels = floor($column_pixels * $col + self::$gutter * ($col - 1));
+
+			return $pixels;
 		}
-
-		$grid_width = self::$grid_widths[$key];
-		if (!isset($grid_width)) {
-			return ResponsivePics()->error->add_error('missing', sprintf('no width found for breakpoint %s', $key), $key);
-		}
-
-		$column_pixels = ($grid_width - (self::$columns) * self::$gutter) / self::$columns;
-		$pixels = floor($column_pixels * $col + self::$gutter * ($col - 1));
-
-		return $pixels;
 	}
 
 	// get suffix for resized image

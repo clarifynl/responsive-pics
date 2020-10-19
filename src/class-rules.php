@@ -29,19 +29,11 @@ class RP_Rules extends ResponsivePics {
 				$components = explode(':', $variant);
 				$breakpoint = ResponsivePics()->process->process_breakpoint($components[0]);
 				$dimensions = ResponsivePics()->process->process_dimensions($components[1]);
-
-				// check for errors
-				if (is_wp_error($breakpoint)) {
-					return $breakpoint;
-				}
 			} else {
 				$dimensions = ResponsivePics()->process->process_dimensions($variant);
 			}
 
-			// check for errors
-			if (is_wp_error($dimensions)) {
-				return $dimensions;
-			} elseif (is_array($dimensions)) {
+			if (is_array($dimensions)) {
 				$width      = $dimensions['width'];
 				$height     = $dimensions['height'];
 				$crop_ratio = $dimensions['crop_ratio'];
@@ -91,7 +83,7 @@ class RP_Rules extends ResponsivePics {
 
 			// check for height and/or crops syntax
 			if (ResponsivePics()->helpers->contains($variant, ' ') || ResponsivePics()->helpers->contains($variant, '|') || ResponsivePics()->helpers->contains($variant, '/')) {
-				return ResponsivePics()->error->add_error('invalid', sprintf('art directed parameters (height, factor, crop_x, crop_y) are not supported on image sizes: %s', $variant), $variant);
+				ResponsivePics()->error->add_error('invalid', sprintf('art directed parameters (height, factor, crop_x, crop_y) are not supported on image sizes: %s', $variant), $variant);
 			}
 
 			// get global img crop positions
@@ -125,19 +117,11 @@ class RP_Rules extends ResponsivePics {
 				$components = explode(':', $variant);
 				$breakpoint = ResponsivePics()->process->process_breakpoint($components[0]);
 				$dimensions = ResponsivePics()->process->process_dimensions($components[1]);
-
-				// check for errors
-				if (is_wp_error($breakpoint)) {
-					return $breakpoint;
-				}
 			} else {
 				$dimensions = ResponsivePics()->process->process_dimensions($variant);
 			}
 
-			// check for errors
-			if (is_wp_error($dimensions)) {
-				return $dimensions;
-			} elseif (is_array($dimensions)) {
+			if (is_array($dimensions)) {
 				$width      = $dimensions['width'];
 				$height     = $dimensions['height'];
 				$crop_ratio = $dimensions['crop_ratio'];
