@@ -4,3 +4,4 @@
 * Merge sizes syntax check from get_image_rules() / get_art_image_rules() and process_dimensions()
 * Prevent breaking errors during the process and add error instead
 * Check at end of function calls if there were any errors and return/show them
+* Limit api usage with sizes presets to prevent abuse
