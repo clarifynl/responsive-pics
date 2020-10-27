@@ -16,18 +16,21 @@ class RP_Process extends ResponsivePics {
 			$id = $id[0];
 		}
 
+		// check for image url
 		$url = wp_get_attachment_url($id);
 		if (!$url) {
 			ResponsivePics()->error->add_error('missing', sprintf('url does not exist for id %s', $id), $id);
 			return false;
 		}
 
+		// check for image path
 		$file_path = get_attached_file($id);
 		if (!$file_path) {
 			ResponsivePics()->error->add_error('missing', sprintf('file does not exist for id %s', $id), $id);
 			return false;
 		}
 
+		// check for image dimensions
 		$meta_data       = wp_get_attachment_metadata($id);
 		$original_width  = $meta_data['width'];
 		$original_height = $meta_data['height'];
@@ -38,6 +41,52 @@ class RP_Process extends ResponsivePics {
 		}
 
 		return $id;
+	}
+
+	// validates sizes
+	public function process_sizes($id, $sizes, $order = 'asc', $art_direction = true, $img_crop = null) {
+		$url       = wp_get_attachment_url($id);
+		$mime_type = get_post_mime_type($id);
+		$alt       = get_post_meta($id, '_wp_attachment_image_alt', true);
+		$alpha     = false;
+		$animated  = false;
+
+		// check if png has alpha channel
+		if ($mime_type === 'image/png') {
+			$alpha = ResponsivePics()->helpers->is_alpha_png($file_path);
+		}
+
+		// check if gif is animated
+		if ($mime_type === 'image/gif') {
+			$animated = ResponsivePics()->helpers->is_gif_ani($file_path);
+		}
+
+		// unsupported mime-type, return original source without breakpoints
+		if (!in_array($mime_type, self::$supported_mime_types) || $animated) {
+			return [
+				'sources' => [[
+					'source1x' => $url,
+					'ratio'    => 1
+				]],
+				'mimetype' => $mime_type,
+				'alt'      => $alt,
+				'alpha'    => $alpha
+			];
+		}
+
+		// get resize rules
+		if ($art_direction) {
+			$rules = ResponsivePics()->rules->get_art_image_rules($sizes, $order);
+		} else {
+			$rules = ResponsivePics()->rules->get_image_rules($sizes, $order, $img_crop);
+		}
+
+		// get resize definitions
+		if ($rules) {
+			$definition = ResponsivePics()->definitions->get_definition($id, $rules);
+		}
+
+		return $definition;
 	}
 
 	// validates and returns classes as an array

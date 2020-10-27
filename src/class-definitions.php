@@ -3,39 +3,15 @@
 class RP_Definitions extends ResponsivePics {
 
 	// returns a normalized definition of breakpoints
-	public function get_definition($id, $sizes, $reverse = false, $art_direction = true, $img_crop = null) {
-		$mime_type = get_post_mime_type($id);
-		$alt       = get_post_meta($id, '_wp_attachment_image_alt', true);
-		$alpha     = false;
-		$animated  = false;
-
-		// check if png has alpha channel
-		if ($mime_type === 'image/png') {
-			$alpha = ResponsivePics()->helpers->is_alpha_png($file_path);
-		}
-
-		// check if gif is animated
-		if ($mime_type === 'image/gif') {
-			$animated = ResponsivePics()->helpers->is_gif_ani($file_path);
-		}
-
-		// unsupported mime-type, return original source without breakpoints
-		if (!in_array($mime_type, self::$supported_mime_types) || $animated) {
-			return [
-				'sources' => [[
-					'source1x' => $url,
-					'ratio'    => 1
-				]],
-				'mimetype' => $mime_type,
-				'alt'      => $alt,
-				'alpha'    => $alpha
-			];
-		}
-
-		$rules          = $art_direction ? ResponsivePics()->rules->get_art_image_rules($sizes, $reverse) : ResponsivePics()->rules->get_image_rules($sizes, $reverse, $img_crop);
-		$sources        = [];
-		$addedSource    = false;
-		$min_breakpoint = null;
+	public function get_definition($id, $rules = null) {
+		$image_url       = wp_get_attachment_url($id);
+		$image_path      = get_attached_file($id);
+		$meta_data       = wp_get_attachment_metadata($id);
+		$original_width  = $meta_data['width'];
+		$original_height = $meta_data['height'];
+		$sources         = [];
+		$addedSource     = false;
+		$min_breakpoint  = null;
 
 		foreach ($rules as $rule) {
 			$width      = $rule['width'];
@@ -50,7 +26,7 @@ class RP_Definitions extends ResponsivePics {
 
 			if ($width < $original_width && $height < $original_height) {
 				// we can safely resize
-				$resized_url = $this->get_resized_url($id, $file_path, $url, $width, $height, $crop);
+				$resized_url = $this->get_resized_url($id, $image_path, $image_url, $width, $height, $crop);
 
 				if ($resized_url) {
 					$source1x    = $resized_url;
@@ -58,7 +34,7 @@ class RP_Definitions extends ResponsivePics {
 
 					if ($width * 2 < $original_width && $height * 2 < $original_height) {
 						// we can also resize for @2x
-						$resized_2x_url = $this->get_resized_url($id, $file_path, $url, $width, $height, $crop, 2);
+						$resized_2x_url = $this->get_resized_url($id, $image_path, $image_url, $width, $height, $crop, 2);
 						$source2x       = $resized_2x_url ? $resized_2x_url : null;
 					}
 
@@ -95,10 +71,10 @@ class RP_Definitions extends ResponsivePics {
 						$cropped_width  = $original_height * $ratio;
 					}
 
-					$resized_url = $this->get_resized_url($id, $file_path, $url, $cropped_width, $cropped_height, $crop);
+					$resized_url = $this->get_resized_url($id, $image_path, $image_url, $cropped_width, $cropped_height, $crop);
 				}
 
-				$source1x   = isset($resized_url) ? $resized_url : $url;
+				$source1x   = isset($resized_url) ? $resized_url : $image_url;
 				$source2x   = null;
 				$breakpoint = $rule['breakpoint'];
 
@@ -122,7 +98,7 @@ class RP_Definitions extends ResponsivePics {
 		if (!$addedSource) {
 			// add original source if no sources have been found so far
 			$sources[] = [
-				'source1x' => $url,
+				'source1x' => $image_url,
 				'width'    => $original_width,
 				'height'   => $original_height,
 				'ratio'    => $original_width / $original_height
@@ -131,7 +107,7 @@ class RP_Definitions extends ResponsivePics {
 			// add minimum breakpoint if it doesn't exist (otherwise there will be no image)
 			$minimum_breakpoint = [
 				'breakpoint' => 0,
-				'source1x'   => $url,
+				'source1x'   => $image_url,
 				'width'      => $original_width,
 				'height'     => $original_height,
 				'ratio'      => $original_width / $original_height

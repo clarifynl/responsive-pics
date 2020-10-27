@@ -199,10 +199,8 @@ class ResponsivePics {
 		$image = ResponsivePics()->process->process_image($id);
 
 		// check for valid sizes
-		var_dump($image);
 		if ($image) {
-			$image_sizes = ResponsivePics()->process->process_sizes($image, $sizes);
-			//$definition = ResponsivePics()->definitions->get_definition($image_id, $sizes);
+			$definition = ResponsivePics()->process->process_sizes($image, $sizes);
 		}
 
 		// check for valid classes
