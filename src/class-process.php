@@ -133,8 +133,8 @@ class RP_Process extends ResponsivePics {
 		$dimensions = trim($input);
 		$width      = -1;
 		$height     = -1;
+		$ratio      = null;
 		$crop       = false;
-		$crop_ratio = null;
 
 		if (ResponsivePics()->helpers->contains($dimensions, '-')) {
 			if (ResponsivePics()->helpers->contains($dimensions, ' ')) {
@@ -162,23 +162,32 @@ class RP_Process extends ResponsivePics {
 			}
 		}
 
+		// get height ratio
 		if (ResponsivePics()->helpers->contains($dimensions, '/')) {
-			// height is a specified factor of weight
-			$wh         = explode('/', $dimensions);
-			$crop_ratio = trim($wh[1]);
+			$wh    = explode('/', $dimensions);
+			$ratio = trim($wh[1]);
 
-			if ($this->process_ratio($crop_ratio)) {
-				$height = $width * $crop_ratio;
+			if ($this->process_ratio($ratio)) {
+				$height = $width * $ratio;
 			} else {
-				ResponsivePics()->error->add_error('invalid', sprintf('the crop ratio %s needs to be higher then 0 and equal or lower then 2', (string) $crop_ratio), $crop_ratio);
+				ResponsivePics()->error->add_error('invalid', sprintf('the crop ratio %s needs to be higher then 0 and equal or lower then 2', (string) $ratio), $ratio);
 			}
 		}
 
+		// get crop positions
+		if (ResponsivePics()->helpers->contains($variant, '|')) {
+			$comp = explode('|', $variant);
+			$dm   = trim($comp[0]);
+			$cr   = trim($comp[1]);
+			$crop = ResponsivePics()->process->process_crop($cr);
+		}
+
 		return [
-			'input'      => $input,
-			'width'      => (int) $width,
-			'height'     => (int) $height,
-			'crop_ratio' => $crop_ratio
+			'input'  => $input,
+			'width'  => (int) $width,
+			'height' => (int) $height,
+			'ratio'  => $ratio,
+			'crop'   => $crop
 		];
 	}
 

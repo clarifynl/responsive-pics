@@ -29,11 +29,10 @@ class RP_Rules extends ResponsivePics {
 				} else {
 					break;
 				}
-
+			// shorthand xs-12
 			} elseif (ResponsivePics()->helpers->contains($variant, '-')) {
 				$comp = explode('-', $variant);
-				$bp   = trim($comp[0]); // xs
-				$dm   = trim($comp[1]); // 12(/0.75|c)
+				$bp   = trim($comp[0]);
 
 				$breakpoint = ResponsivePics()->process->process_breakpoint($bp);
 				if ($breakpoint !== false) {
@@ -47,37 +46,18 @@ class RP_Rules extends ResponsivePics {
 				break;
 			}
 
-			// get crop positions
-			if (ResponsivePics()->helpers->contains($variant, '|')) {
-				$comp = explode('|', $variant);
-				$dm   = trim($comp[0]);
-				$cr   = trim($comp[1]);
-				$crop = ResponsivePics()->process->process_crop($cr);
-			}
-
 			if (is_array($dimensions)) {
 				$width      = $dimensions['width'];
 				$height     = $dimensions['height'];
-				$crop_ratio = $dimensions['crop_ratio'];
+				$ratio      = $dimensions['ratio'];
+				$crop       = $dimensions['crop'];
 			}
-
-			// if ($breakpoint === -1) {
-			// 	if (ResponsivePics()->helpers->contains($dimensions['input'], '-')) {
-			// 		// use breakpoint based on defined column size
-			// 		$components = explode('-', $dimensions['input']);
-			// 		$bp         = trim($components[0]);
-			// 		$breakpoint = self::$breakpoints[$bp];
-			// 	} else {
-			// 		// use breakpoint based on width
-			// 		$breakpoint = $width;
-			// 	}
-			// }
 
 			$result[] = [
 				'breakpoint' => $breakpoint,
 				'width'      => $width,
 				'height'     => $height,
-				'crop_ratio' => $crop_ratio,
+				'ratio'      => $ratio,
 				'crop'       => $crop
 			];
 		}
@@ -94,8 +74,8 @@ class RP_Rules extends ResponsivePics {
 
 		foreach ($variants as $variant) {
 			$variant    = trim($variant);
+			$ratio      = null;
 			$crop       = false;
-			$crop_ratio = null;
 			$breakpoint = -1;
 			$dimensions = [
 				'width'  => -1,
@@ -144,9 +124,9 @@ class RP_Rules extends ResponsivePics {
 			}
 
 			if (is_array($dimensions)) {
-				$width      = $dimensions['width'];
-				$height     = $dimensions['height'];
-				$crop_ratio = $dimensions['crop_ratio'];
+				$width  = $dimensions['width'];
+				$height = $dimensions['height'];
+				$ratio  = $dimensions['ratio'];
 			}
 
 			if ($breakpoint === -1) {
@@ -165,7 +145,7 @@ class RP_Rules extends ResponsivePics {
 				'breakpoint' => $breakpoint,
 				'width'      => $width,
 				'height'     => $height,
-				'crop_ratio' => $crop_ratio,
+				'ratio'      => $ratio,
 				'crop'       => $crop
 			];
 		}

@@ -14,10 +14,10 @@ class RP_Definitions extends ResponsivePics {
 		$min_breakpoint  = null;
 
 		foreach ($rules as $rule) {
-			$width      = $rule['width'];
-			$height     = $rule['height'];
-			$crop       = $rule['crop'];
-			$crop_ratio = $rule['crop_ratio'];
+			$width  = $rule['width'];
+			$height = $rule['height'];
+			$ratio  = $rule['ratio'];
+			$crop   = $rule['crop'];
 
 			if ($height === -1) {
 				// calculate height based on original aspect ratio
@@ -60,8 +60,8 @@ class RP_Definitions extends ResponsivePics {
 				// Use original image to resize and crop
 				$ratio = $original_width / $original_height;
 
-				if ($crop_ratio) {
-					$cropped_height  = $original_width * $crop_ratio;
+				if ($ratio) {
+					$cropped_height  = $original_width * $ratio;
 					$cropped_width   = $original_width;
 					$ratio           = $cropped_width / $cropped_height;
 
@@ -86,8 +86,8 @@ class RP_Definitions extends ResponsivePics {
 					'breakpoint' => $breakpoint,
 					'source1x'   => $source1x,
 					'source2x'   => $source2x,
-					'width'      => $crop_ratio ? $cropped_width : $original_height,
-					'height'     => $crop_ratio ? $cropped_height : $original_width,
+					'width'      => $ratio ? $cropped_width : $original_height,
+					'height'     => $ratio ? $cropped_height : $original_width,
 					'ratio'      => $ratio
 				];
 
