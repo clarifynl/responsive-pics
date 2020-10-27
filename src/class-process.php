@@ -8,12 +8,12 @@ class RP_Process extends ResponsivePics {
 			ResponsivePics()->error->add_error('invalid', 'image id is undefined');
 			return false;
 
+		} elseif (is_array($id)) {
+			$id = $id[0];
+
 		} elseif (!is_int($id)) {
 			ResponsivePics()->error->add_error('invalid', sprintf('image id %s is not an integer', $id), $id);
 			return false;
-
-		} elseif (is_array($id)) {
-			$id = $id[0];
 		}
 
 		// check for image url
@@ -81,12 +81,18 @@ class RP_Process extends ResponsivePics {
 			$rules = ResponsivePics()->rules->get_image_rules($sizes, $order, $img_crop);
 		}
 
-		// get resize definitions
+		// get resize sources
+		$sources = [];
 		if ($rules) {
-			$definition = ResponsivePics()->definitions->get_definition($id, $rules);
+			$sources = ResponsivePics()->definitions->get_resize_sources($id, $rules);
 		}
 
-		return $definition;
+		return [
+			'sources'  => $sources,
+			'alt'      => $alt,
+			'mimetype' => $mime_type,
+			'alpha'    => $alpha
+		];
 	}
 
 	// validates and returns classes as an array

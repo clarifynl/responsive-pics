@@ -2,8 +2,8 @@
 
 class RP_Definitions extends ResponsivePics {
 
-	// returns a normalized definition of breakpoints
-	public function get_definition($id, $rules = null) {
+	// returns a normalized definition of sources
+	public function get_resize_sources($id, $rules = null) {
 		$image_url       = wp_get_attachment_url($id);
 		$image_path      = get_attached_file($id);
 		$meta_data       = wp_get_attachment_metadata($id);
@@ -120,12 +120,7 @@ class RP_Definitions extends ResponsivePics {
 			}
 		}
 
-		return [
-			'sources'  => $sources,
-			'alt'      => $alt,
-			'mimetype' => $mime_type,
-			'alpha'    => $alpha
-		];
+		return $sources;
 	}
 
 	// creates a resized file if it doesn't exist and returns the final image url

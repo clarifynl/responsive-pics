@@ -211,10 +211,11 @@ class ResponsivePics {
 		}
 
 		// check for errors
-		if (count(self::$wp_error->get_error_messages()) > 1) {
+		if (count(self::$wp_error->get_error_messages()) > 0) {
 			return ResponsivePics()->error->get_error(self::$wp_error);
 		}
 
+		var_dump($definition);
 		$sources = isset($definition['sources']) ? $definition['sources'] : [];
 		$picture = [];
 
@@ -281,8 +282,11 @@ class ResponsivePics {
 		// check for valid image id
 		$image = ResponsivePics()->process->process_image($id);
 
-		// check for valid definition
-		$definition = ResponsivePics()->definitions->get_definition($image, $sizes, false, false, $crop);
+		// check for valid sizes
+		$definition = [];
+		if ($image) {
+			$definition = ResponsivePics()->process->process_sizes($image, $sizes, false, false, $crop);
+		}
 
 		// convert $picture_classes to array if it is a string
 		if ($img_classes) {
@@ -290,11 +294,11 @@ class ResponsivePics {
 		}
 
 		// check for errors
-		if (count(self::$wp_error->get_error_messages()) > 1) {
+		if (count(self::$wp_error->get_error_messages()) > 0) {
 			return ResponsivePics()->error->get_error(self::$wp_error);
 		}
 
-		$sources = $definition['sources'];
+		$sources = isset($definition['sources']) ? $definition['sources'] : [];
 
 		// lazyload option
 		if ($lazyload) {
@@ -353,7 +357,7 @@ class ResponsivePics {
 		}
 
 		// check for errors
-		if (count(self::$wp_error->get_error_messages()) > 1) {
+		if (count(self::$wp_error->get_error_messages()) > 0) {
 			return ResponsivePics()->error->get_error(self::$wp_error);
 		}
 
