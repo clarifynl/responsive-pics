@@ -199,6 +199,7 @@ class ResponsivePics {
 		$image = ResponsivePics()->process->process_image($id);
 
 		// check for valid sizes
+		$definition = [];
 		if ($image) {
 			$definition = ResponsivePics()->process->process_sizes($image, $sizes);
 		}
@@ -214,7 +215,7 @@ class ResponsivePics {
 			return ResponsivePics()->error->get_error(self::$wp_error);
 		}
 
-		$sources = $definition['sources'];
+		$sources = isset($definition['sources']) ? $definition['sources'] : [];
 		$picture = [];
 
 		// lazyload option
