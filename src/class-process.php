@@ -167,10 +167,16 @@ class RP_Process extends ResponsivePics {
 			$wh    = explode('/', $dimensions);
 			$ratio = trim($wh[1]);
 
+			// strip off crop positions
+			if (ResponsivePics()->helpers->contains($ratio, '|')) {
+				$comp  = explode('|', $ratio);
+				$ratio = trim($comp[0]);
+			}
+
 			if ($this->process_ratio($ratio)) {
 				$height = $width * $ratio;
 			} else {
-				ResponsivePics()->error->add_error('invalid', sprintf('the crop ratio %s needs to be higher then 0 and equal or lower then 2', (string) $ratio), $ratio);
+				ResponsivePics()->error->add_error('invalid', sprintf('the crop ratio %s in size %s needs to be higher then 0 and equal or lower then 2', (string) $ratio, (string) $dimensions), $ratio);
 			}
 		}
 
@@ -209,14 +215,19 @@ class RP_Process extends ResponsivePics {
 		$shortcuts = explode(' ', trim($input));
 
 		if (sizeof($shortcuts) === 1) {
-			$shortcuts = self::$crop_shortcuts[$shortcuts[0]];
-			$shortcuts = explode(' ', trim($shortcuts));
+			if (isset(self::$crop_shortcuts[$shortcuts[0]])) {
+				$shortcuts = self::$crop_shortcuts[$shortcuts[0]];
+				$shortcuts = explode(' ', trim($shortcuts));
+			} else {
+				ResponsivePics()->error->add_error('invalid', sprintf('crop shortcut %s is not defined', $shortcuts[0]), self::$crop_shortcuts);
+			}
 		}
 
 		$result = [];
-
 		foreach($shortcuts as $key => $value) {
-			$result[] = self::$crop_map[$value];
+			if (isset(self::$crop_map[$value])) {
+				$result[] = self::$crop_map[$value];
+			}
 		}
 
 		return $result;

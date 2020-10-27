@@ -42,7 +42,7 @@ class RP_Rules extends ResponsivePics {
 				}
 
 			} else {
-				ResponsivePics()->error->add_error('invalid', 'size has neither breakpoint:width nor breakpoint-column syntax', $variant);
+				ResponsivePics()->error->add_error('invalid', sprintf('size %s has neither breakpoint:width nor breakpoint-column syntax', (string) $variant), $variant);
 				break;
 			}
 
