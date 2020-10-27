@@ -66,7 +66,7 @@ class RP_Rules extends ResponsivePics {
 	}
 
 	// this processes our resizing syntax and returns a normalized array with resizing rules
-	public function get_image_rules($input, $reverse = 'asc', $img_crop = null) {
+	public function get_image_rules($input, $order = 'asc', $img_crop = null) {
 		$variants = ResponsivePics()->breakpoints->add_missing_breakpoints(explode(',', $input));
 		$result   = [];
 

@@ -285,7 +285,7 @@ class ResponsivePics {
 		// check for valid sizes
 		$definition = [];
 		if ($image) {
-			$definition = ResponsivePics()->process->process_sizes($image, $sizes, false, false, $crop);
+			$definition = ResponsivePics()->process->process_sizes($image, $sizes, 'asc', false, $crop);
 		}
 
 		// convert $picture_classes to array if it is a string
@@ -348,8 +348,11 @@ class ResponsivePics {
 		// check for valid image id
 		$image = ResponsivePics()->process->process_image($id);
 
-		// check for valid definition
-		$definition = ResponsivePics()->definitions->get_definition($image, $sizes, true);
+		// check for valid sizes
+		$definition = [];
+		if ($image) {
+			$definition = ResponsivePics()->process->process_sizes($image, $sizes, 'desc');
+		}
 
 		// convert $classes to array if it is a string
 		if ($bg_classes) {
@@ -361,7 +364,7 @@ class ResponsivePics {
 			return ResponsivePics()->error->get_error(self::$wp_error);
 		}
 
-		$sources = $definition['sources'];
+		$sources = isset($definition['sources']) ? $definition['sources'] : [];
 		$copy = $image;
 
 		// prevent same id, append copy number to existing
