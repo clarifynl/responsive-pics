@@ -196,10 +196,14 @@ class ResponsivePics {
 		self::$wp_error = new WP_Error();
 
 		// check for valid image id
-		$image_id = ResponsivePics()->process->process_image_id($id);
+		$image = ResponsivePics()->process->process_image($id);
 
 		// check for valid sizes
-		$definition = ResponsivePics()->definitions->get_definition($image_id, $sizes);
+		var_dump($image);
+		if ($image) {
+			$image_sizes = ResponsivePics()->process->process_sizes($image, $sizes);
+			//$definition = ResponsivePics()->definitions->get_definition($image_id, $sizes);
+		}
 
 		// check for valid classes
 		$img_classes = [];
@@ -276,10 +280,10 @@ class ResponsivePics {
 		self::$wp_error = new WP_Error();
 
 		// check for valid image id
-		$image_id = ResponsivePics()->process->process_image_id($id);
+		$image = ResponsivePics()->process->process_image($id);
 
 		// check for valid definition
-		$definition = ResponsivePics()->definitions->get_definition($image_id, $sizes, false, false, $crop);
+		$definition = ResponsivePics()->definitions->get_definition($image, $sizes, false, false, $crop);
 
 		// convert $picture_classes to array if it is a string
 		if ($img_classes) {
@@ -304,7 +308,7 @@ class ResponsivePics {
 		// add all sources & sizes
 		$srcsets  = [];
 		$sizes    = [];
-		$full_img = wp_get_attachment_image_src($id, 'full', false);
+		$full_img = wp_get_attachment_image_src($image, 'full', false);
 		$fallback = ' src="'. $full_img[0] . '"';
 
 		foreach ($sources as $source) {
@@ -324,8 +328,8 @@ class ResponsivePics {
 		$sizes[] = '100vw';
 
 		// construct image
-		$image = sprintf('<img%s %s="%s" sizes="%s"%s alt="%s"/>', $classes, $src_attribute, implode(', ', $srcsets), implode(', ', $sizes), $fallback, $definition['alt']);
-		return $image;
+		$image_html = sprintf('<img%s %s="%s" sizes="%s"%s alt="%s"/>', $classes, $src_attribute, implode(', ', $srcsets), implode(', ', $sizes), $fallback, $definition['alt']);
+		return $image_html;
 	}
 
 	/*
@@ -339,10 +343,10 @@ class ResponsivePics {
 		self::$wp_error = new WP_Error();
 
 		// check for valid image id
-		$image_id = ResponsivePics()->process->process_image_id($id);
+		$image = ResponsivePics()->process->process_image($id);
 
 		// check for valid definition
-		$definition = ResponsivePics()->definitions->get_definition($image_id, $sizes, true);
+		$definition = ResponsivePics()->definitions->get_definition($image, $sizes, true);
 
 		// convert $classes to array if it is a string
 		if ($bg_classes) {
@@ -355,14 +359,14 @@ class ResponsivePics {
 		}
 
 		$sources = $definition['sources'];
-		$copy = $image_id;
+		$copy = $image;
 
 		// prevent same id, append copy number to existing
-		if (isset(self::$id_map[$image_id])) {
+		if (isset(self::$id_map[$image])) {
 			self::$id_map[$image_id]++;
-			$copy .= '-' . self::$id_map[$image_id];
+			$copy .= '-' . self::$id_map[$image];
 		} else {
-			self::$id_map[$image_id] = 0;
+			self::$id_map[$image] = 0;
 		}
 
 		$id = sprintf('responsive-pics-background-%s', $copy);
@@ -394,75 +398,6 @@ class ResponsivePics {
 		$background[] = sprintf('<div%s id="%s"></div>', $bg_classes ? ' class="' . implode(' ', $bg_classes) . '"' : '', $id);
 
 		return implode("\n", $background) . "\n";
-	}
-
-	/*
-	 * Construct a sources array
-	 *
-	 * Returns an array with all the available image sources and classes for the request
-	 */
-	public static function get_sources($id, $sizes, $classes = null, $lazyload = false) {
-		if (!isset($id)) {
-			return 'image id undefined';
-		}
-
-		$definition  = ResponsivePics()->definitions->get_definition($id, $sizes);
-		if (!$definition) {
-			return 'no image found with id ' . $id;
-		}
-
-		$sources = $definition['sources'];
-
-		// convert $classes to array if it is a string
-		if (!is_array($classes)) {
-			if (!empty($classes)) {
-				$classes = preg_split('/[\s,]+/', $classes);
-			} else {
-				$classes = [];
-			}
-		}
-
-		// lazyload option
-		if ($lazyload) {
-			$classes[] = self::$lazyload_class;
-		}
-
-		$properties = [
-			'alt'     => $definition['alt'],
-			'classes' => $classes
-		];
-
-		// add all sources
-		foreach ($sources as $source) {
-			if (isset($source['breakpoint'])) {
-				$src = [
-					'breakpoint'  => $source['breakpoint'],
-					'srcset'      => [
-						'1x'      => $source['source1x']
-					],
-					'width'       => $source['width'],
-					'height'      => $source['height'],
-					'aspectratio' => $source['ratio']
-				];
-
-				if (isset($source['source2x'])) {
-					$src['srcset']['2x'] = $source['source2x'];
-				}
-
-				$properties['sources'][] = $src;
-			} else {
-				$properties['sources'][] = [
-					'srcset'      => [
-						'1x'      => $source['source1x']
-					],
-					'width'       => $source['width'],
-					'height'      => $source['height'],
-					'aspectratio' => $source['ratio']
-				];
-			}
-		}
-
-		return $properties;
 	}
 }
 

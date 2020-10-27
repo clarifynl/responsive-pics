@@ -4,21 +4,10 @@ class RP_Definitions extends ResponsivePics {
 
 	// returns a normalized definition of breakpoints
 	public function get_definition($id, $sizes, $reverse = false, $art_direction = true, $img_crop = null) {
-		$url       = wp_get_attachment_url($id);
-		$file_path = get_attached_file($id);
-
-		if (!$url) {
-			ResponsivePics()->error->add_error('missing', sprintf('url does not exist for id %s', $id), $id);
-		}
-
-		if (!$file_path) {
-			ResponsivePics()->error->add_error('missing', sprintf('file does not exist for id %s', $id), $id);
-		}
-
-		$mime_type       = get_post_mime_type($id);
-		$alt             = get_post_meta($id, '_wp_attachment_image_alt', true);
-		$alpha           = false;
-		$animated        = false;
+		$mime_type = get_post_mime_type($id);
+		$alt       = get_post_meta($id, '_wp_attachment_image_alt', true);
+		$alpha     = false;
+		$animated  = false;
 
 		// check if png has alpha channel
 		if ($mime_type === 'image/png') {
@@ -43,18 +32,10 @@ class RP_Definitions extends ResponsivePics {
 			];
 		}
 
-		$meta_data       = wp_get_attachment_metadata($id);
-		$original_width  = $meta_data['width'];
-		$original_height = $meta_data['height'];
-		$rules           = $art_direction ? ResponsivePics()->rules->get_art_image_rules($sizes, $reverse) : ResponsivePics()->rules->get_image_rules($sizes, $reverse, $img_crop);
-		$sources         = [];
-
-		$addedSource     = false;
-		$min_breakpoint  = null;
-
-		if (!$original_width || !$original_height) {
-			ResponsivePics()->error->add_error('missing', sprintf('no dimensions for file id %s', $id), $meta_data);
-		}
+		$rules          = $art_direction ? ResponsivePics()->rules->get_art_image_rules($sizes, $reverse) : ResponsivePics()->rules->get_image_rules($sizes, $reverse, $img_crop);
+		$sources        = [];
+		$addedSource    = false;
+		$min_breakpoint = null;
 
 		foreach ($rules as $rule) {
 			$width      = $rule['width'];

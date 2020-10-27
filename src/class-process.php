@@ -3,16 +3,58 @@
 class RP_Process extends ResponsivePics {
 
 	// validates and returns image id
-	public function process_image_id($id = null) {
+	public function process_image($id = null) {
 		if (!$id) {
 			ResponsivePics()->error->add_error('invalid', 'image id is undefined');
-		} elseif (is_array($id)) {
-			return $id[0];
+			return false;
+
 		} elseif (!is_int($id)) {
 			ResponsivePics()->error->add_error('invalid', sprintf('image id %s is not an integer', $id), $id);
+			return false;
+
+		} elseif (is_array($id)) {
+			$id = $id[0];
+		}
+
+		$url = wp_get_attachment_url($id);
+		if (!$url) {
+			ResponsivePics()->error->add_error('missing', sprintf('url does not exist for id %s', $id), $id);
+			return false;
+		}
+
+		$file_path = get_attached_file($id);
+		if (!$file_path) {
+			ResponsivePics()->error->add_error('missing', sprintf('file does not exist for id %s', $id), $id);
+			return false;
+		}
+
+		$meta_data       = wp_get_attachment_metadata($id);
+		$original_width  = $meta_data['width'];
+		$original_height = $meta_data['height'];
+
+		if (!$original_width || !$original_height) {
+			ResponsivePics()->error->add_error('missing', sprintf('no dimensions for file id %s', $id), $meta_data);
+			return false;
 		}
 
 		return $id;
+	}
+
+	// validates and returns classes as an array
+	public function process_classes($classes = null) {
+		if (!is_array($classes) && !is_string($classes)) {
+			ResponsivePics()->error->add_error('invalid', 'classes parameter is neither a string nor an array', $classes);
+		} elseif (!is_array($classes) && is_string($classes)) {
+			if (!empty($classes)) {
+				$classes = preg_split('/[\s,]+/', $classes);
+			} else {
+				$classes = [];
+			}
+
+			return $classes;
+		}
+
+		return $classes;
 	}
 
 	// validates and returns classes as an array
