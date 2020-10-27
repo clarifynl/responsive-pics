@@ -17,20 +17,42 @@ class RP_Rules extends ResponsivePics {
 				'crop'   => false
 			];
 
-			// get crop positions
-			if (ResponsivePics()->helpers->contains($variant, '|')) {
-				$components = explode('|', $variant);
-				$variant    = trim($components[0]);
-				$crop       = ResponsivePics()->process->process_crop($components[1]);
-			}
-
 			// get dimensions
 			if (ResponsivePics()->helpers->contains($variant, ':')) {
-				$components = explode(':', $variant);
-				$breakpoint = ResponsivePics()->process->process_breakpoint($components[0]);
-				$dimensions = ResponsivePics()->process->process_dimensions($components[1]);
+				$comp = explode(':', $variant);
+				$bp   = trim($comp[0]); // xs
+				$dm   = trim($comp[1]); // 400(/0.75|c)
+
+				$breakpoint = ResponsivePics()->process->process_breakpoint($bp);
+				if ($breakpoint !== false) {
+					$dimensions = ResponsivePics()->process->process_dimensions($dm);
+				} else {
+					break;
+				}
+
+			} elseif (ResponsivePics()->helpers->contains($variant, '-')) {
+				$comp = explode('-', $variant);
+				$bp   = trim($comp[0]); // xs
+				$dm   = trim($comp[1]); // 12(/0.75|c)
+
+				$breakpoint = ResponsivePics()->process->process_breakpoint($bp);
+				if ($breakpoint !== false) {
+					$dimensions = ResponsivePics()->process->process_dimensions($variant);
+				} else {
+					break;
+				}
+
 			} else {
-				$dimensions = ResponsivePics()->process->process_dimensions($variant);
+				ResponsivePics()->error->add_error('invalid', 'size has neither breakpoint:width nor breakpoint-column syntax', $variant);
+				break;
+			}
+
+			// get crop positions
+			if (ResponsivePics()->helpers->contains($variant, '|')) {
+				$comp = explode('|', $variant);
+				$dm   = trim($comp[0]);
+				$cr   = trim($comp[1]);
+				$crop = ResponsivePics()->process->process_crop($cr);
 			}
 
 			if (is_array($dimensions)) {
@@ -39,17 +61,17 @@ class RP_Rules extends ResponsivePics {
 				$crop_ratio = $dimensions['crop_ratio'];
 			}
 
-			if ($breakpoint === -1) {
-				if (ResponsivePics()->helpers->contains($dimensions['input'], '-')) {
-					// use breakpoint based on defined column size
-					$components = explode('-', $dimensions['input']);
-					$bp         = trim($components[0]);
-					$breakpoint = self::$breakpoints[$bp];
-				} else {
-					// use breakpoint based on width
-					$breakpoint = $width;
-				}
-			}
+			// if ($breakpoint === -1) {
+			// 	if (ResponsivePics()->helpers->contains($dimensions['input'], '-')) {
+			// 		// use breakpoint based on defined column size
+			// 		$components = explode('-', $dimensions['input']);
+			// 		$bp         = trim($components[0]);
+			// 		$breakpoint = self::$breakpoints[$bp];
+			// 	} else {
+			// 		// use breakpoint based on width
+			// 		$breakpoint = $width;
+			// 	}
+			// }
 
 			$result[] = [
 				'breakpoint' => $breakpoint,
