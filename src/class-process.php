@@ -57,23 +57,6 @@ class RP_Process extends ResponsivePics {
 		return $classes;
 	}
 
-	// validates and returns classes as an array
-	public function process_classes($classes = null) {
-		if (!is_array($classes) && !is_string($classes)) {
-			ResponsivePics()->error->add_error('invalid', 'classes parameter is neither a string nor an array', $classes);
-		} elseif (!is_array($classes) && is_string($classes)) {
-			if (!empty($classes)) {
-				$classes = preg_split('/[\s,]+/', $classes);
-			} else {
-				$classes = [];
-			}
-
-			return $classes;
-		}
-
-		return $classes;
-	}
-
 	// breakpoint can be shortcut (e.g. "xs") or number
 	public function process_breakpoint($input) {
 		$input = trim($input);
