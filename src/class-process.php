@@ -175,8 +175,8 @@ class RP_Process extends ResponsivePics {
 		}
 
 		// get crop positions
-		if (ResponsivePics()->helpers->contains($variant, '|')) {
-			$comp = explode('|', $variant);
+		if (ResponsivePics()->helpers->contains($dimensions, '|')) {
+			$comp = explode('|', $dimensions);
 			$dm   = trim($comp[0]);
 			$cr   = trim($comp[1]);
 			$crop = ResponsivePics()->process->process_crop($cr);
