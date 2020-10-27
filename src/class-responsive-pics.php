@@ -215,7 +215,6 @@ class ResponsivePics {
 			return ResponsivePics()->error->get_error(self::$wp_error);
 		}
 
-		var_dump($definition);
 		$sources = isset($definition['sources']) ? $definition['sources'] : [];
 		$picture = [];
 
