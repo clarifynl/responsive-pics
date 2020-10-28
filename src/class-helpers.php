@@ -75,7 +75,6 @@ class RP_Helpers extends ResponsivePics {
 
 	// get a css rule for targeting high dpi screens
 	public function get_media_query_2x($breakpoint) {
-		// apparently this targets high dpi screens cross-browser
 		return sprintf('@media only screen and (-webkit-min-device-pixel-ratio: 2) and (min-width: %spx), only screen and (min-resolution: 192dpi) and (min-width: %spx)', $breakpoint, $breakpoint);
 	}
 
@@ -104,8 +103,8 @@ class RP_Helpers extends ResponsivePics {
 
 	// check if request comes from rest api
 	public function is_rest_api_request() {
+		// Probably a CLI request
 		if (empty($_SERVER['REQUEST_URI'])) {
-			// Probably a CLI request
 			return false;
 		}
 
@@ -134,6 +133,11 @@ class RP_Helpers extends ResponsivePics {
 
 		fclose($fh);
 		return $count > 1;
+	}
+
+	// check if size has art directed syntax (space, / or |)
+	public function is_art_directed($size) {
+		return preg_match('/ \|\//', $size);
 	}
 
 	// returns true if a string contains a substring

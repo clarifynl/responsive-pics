@@ -95,16 +95,16 @@ class RP_Sources extends ResponsivePics {
 			}
 		}
 
+		// add original source if no sources have been found so far
 		if (!$addedSource) {
-			// add original source if no sources have been found so far
 			$sources[] = [
 				'source1x' => $image_url,
 				'width'    => $original_width,
 				'height'   => $original_height,
 				'ratio'    => $original_width / $original_height
 			];
+		// add minimum breakpoint if it doesn't exist (otherwise there will be no image)
 		} else if ($min_breakpoint != 0) {
-			// add minimum breakpoint if it doesn't exist (otherwise there will be no image)
 			$minimum_breakpoint = [
 				'breakpoint' => 0,
 				'source1x'   => $image_url,

@@ -141,7 +141,19 @@ class RP_Process extends ResponsivePics {
 		return $input;
 	}
 
-	// dimensions can be shortcut (e.g. "xs-5"), width (e.g. "400") or width and height (e.g. "400 300");
+	/*
+	 * dimensions can be:
+	 * - shortcut (e.g. "xs-5")
+	 * - shortcut with height (e.g. "xs-5 400")
+	 * - shortcut with ratio (e.g. "xs-5/0.75")
+	 * - shortcut with height and crop (shorthand) (e.g. "xs-5 400|c")
+	 * - shortcut with ratio and crop (shorthand) (e.g. "xs-5/0.75|c")
+	 * - width (e.g. "400")
+	 * - width and height (e.g. "400 300")
+	 * - width with ratio (e.g. "400/0.75")
+	 * - width and height and crop (shorthand) (e.g. "400 300|c")
+	 * - width with ratio and crop (shorthand) (e.g. "400/0.75|c")
+	 */
 	public function process_dimensions($input) {
 		$dimensions = trim($input);
 		$width      = -1;

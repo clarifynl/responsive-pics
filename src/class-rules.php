@@ -83,8 +83,7 @@ class RP_Rules extends ResponsivePics {
 				'crop'   => false
 			];
 
-			// check for height and/or crops syntax
-			if (ResponsivePics()->helpers->contains($variant, ' ') || ResponsivePics()->helpers->contains($variant, '|') || ResponsivePics()->helpers->contains($variant, '/')) {
+			if (ResponsivePics()->helpers->is_art_directed($variant)) {
 				ResponsivePics()->error->add_error('invalid', sprintf('art directed parameters (height, factor, crop_x, crop_y) are not supported on image sizes: %s', $variant), $variant);
 			}
 
