@@ -3,7 +3,7 @@
 class RP_Sources extends ResponsivePics {
 
 	// returns a normalized array of available sources
-	public function get_resize_sources($id, $rules = null) {
+	public function get_resize_sources($id, $rules = null, $order = 'desc') {
 		$image_url       = wp_get_attachment_url($id);
 		$image_path      = get_attached_file($id);
 		$meta_data       = wp_get_attachment_metadata($id);
@@ -113,7 +113,7 @@ class RP_Sources extends ResponsivePics {
 				'ratio'      => $original_width / $original_height
 			];
 
-			if ($reverse) {
+			if ($order === 'asc') {
 				array_unshift($sources, $minimum_breakpoint);
 			} else {
 				array_push($sources, $minimum_breakpoint);

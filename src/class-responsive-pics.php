@@ -350,7 +350,7 @@ class ResponsivePics {
 		// check for valid sizes
 		$definition = [];
 		if ($image) {
-			$definition = ResponsivePics()->process->process_sizes($image, $sizes, 'desc');
+			$definition = ResponsivePics()->process->process_sizes($image, $sizes);
 		}
 
 		// convert $classes to array if it is a string
