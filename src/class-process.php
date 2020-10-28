@@ -98,7 +98,7 @@ class RP_Process extends ResponsivePics {
 	// validates and returns classes as an array
 	public function process_classes($classes = null) {
 		if (!is_array($classes) && !is_string($classes)) {
-			ResponsivePics()->error->add_error('invalid', 'classes parameter is neither a string nor an array', $classes);
+			ResponsivePics()->error->add_error('invalid', 'classes parameter is neither a (comma separated) string nor an array', $classes);
 		} elseif (!is_array($classes) && is_string($classes)) {
 			if (!empty($classes)) {
 				$classes = preg_split('/[\s,]+/', $classes);
@@ -110,6 +110,19 @@ class RP_Process extends ResponsivePics {
 		}
 
 		return $classes;
+	}
+
+	// validates boolean value
+	public function process_boolean($boolean = false, $type = 'boolean') {
+		if (is_bool($boolean)) {
+			return $boolean;
+		} elseif (is_string($boolean)) {
+			return $boolean === 'true';
+		} else {
+			ResponsivePics()->error->add_error('invalid', sprintf('%s parameter %s is not a valid boolean', $type, (string) $boolean), $boolean);
+		}
+
+		return false;
 	}
 
 	// breakpoint can be shortcut (e.g. "xs") or number

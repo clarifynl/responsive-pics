@@ -204,9 +204,19 @@ class ResponsivePics {
 			$definition = ResponsivePics()->process->process_sizes($image, $sizes);
 		}
 
-		// check for valid classes
+		// check for valid classes value
 		if ($picture_classes) {
 			$picture_classes = ResponsivePics()->process->process_classes($picture_classes);
+		}
+
+		// check for valid lazyload value
+		if (isset($lazyload)) {
+			$lazyload = ResponsivePics()->process->process_boolean($lazyload, 'lazyload');
+		}
+
+		// check for valid intrinsic value
+		if (isset($intrinsic)) {
+			$intrinsic = ResponsivePics()->process->process_boolean($intrinsic, 'intrinsic');
 		}
 
 		// check for errors
@@ -214,10 +224,7 @@ class ResponsivePics {
 			return ResponsivePics()->error->get_error(self::$wp_error);
 		}
 
-		$sources = isset($definition['sources']) ? $definition['sources'] : [];
-		$picture = [];
-
-		// lazyload option
+		// set img classes
 		$img_classes = [];
 		if ($lazyload) {
 			$img_classes[] = self::$lazyload_class;
@@ -238,12 +245,15 @@ class ResponsivePics {
 			}
 		}
 
+		// start constructing <picture> element
+		$picture = [];
 		$picture[] = sprintf('<picture%s>', $picture_classes ? ' class="' . implode(' ', $picture_classes) . '"' : '');
 
 		$src_attribute = $lazyload ? 'data-srcset' : 'srcset';
 		$classes = $img_classes ? ' class="' . implode(' ', $img_classes) . '"' : '';
 
 		// add all sources
+		$sources = isset($definition['sources']) ? $definition['sources'] : [];
 		foreach ($sources as $source) {
 			$data_aspectratio = $intrinsic ? ' data-aspectratio="' . $source['ratio'] . '"' : '';
 
@@ -281,10 +291,15 @@ class ResponsivePics {
 		// check for valid image id
 		$image = ResponsivePics()->process->process_image($id);
 
-		// check for valid sizes
+		// check for valid sizes value
 		$definition = [];
 		if ($image) {
 			$definition = ResponsivePics()->process->process_sizes($image, $sizes, 'asc', false, $crop);
+		}
+
+		// check for valid crop value
+		if ($crop) {
+			$crop = ResponsivePics()->process->process_crop($crop);
 		}
 
 		// convert $picture_classes to array if it is a string
@@ -292,12 +307,15 @@ class ResponsivePics {
 			$img_classes = ResponsivePics()->process->process_classes($img_classes);
 		}
 
+		// check for valid lazyload value
+		if (isset($lazyload)) {
+			$lazyload = ResponsivePics()->process->process_boolean($lazyload, 'lazyload');
+		}
+
 		// check for errors
 		if (count(self::$wp_error->get_error_messages()) > 0) {
 			return ResponsivePics()->error->get_error(self::$wp_error);
 		}
-
-		$sources = isset($definition['sources']) ? $definition['sources'] : [];
 
 		// lazyload option
 		if ($lazyload) {
@@ -313,6 +331,8 @@ class ResponsivePics {
 		$full_img = wp_get_attachment_image_src($image, 'full', false);
 		$fallback = ' src="'. $full_img[0] . '"';
 
+		// start constructing <img> element
+		$sources = isset($definition['sources']) ? $definition['sources'] : [];
 		foreach ($sources as $source) {
 			$srcsets[] = $source['source1x'] . ' ' . $source['width'] . 'w';
 			if (isset($source['source2x'])) {
