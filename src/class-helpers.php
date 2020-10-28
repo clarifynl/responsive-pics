@@ -137,7 +137,7 @@ class RP_Helpers extends ResponsivePics {
 
 	// check if size has art directed syntax (space, / or |)
 	public function is_art_directed($size) {
-		return preg_match('/ \|\//', $size);
+		return preg_match('/[\s\|\/]/', $size);
 	}
 
 	// returns true if a string contains a substring
