@@ -11,10 +11,17 @@ class RP_Helpers extends ResponsivePics {
 
 		// check breakpoint
 		$breakpoint = ResponsivePics()->process->process_breakpoint($key);
-
 		if (is_numeric($breakpoint)) {
+			// strip of ratio
 			if ($this->contains($col, '/')) {
-				$col = explode('/', $col)[0];
+				$comp = explode('/', $col);
+				$col  = trim($comp[0]);
+			}
+
+			// strip of crop
+			if ($this->contains($col, '|')) {
+				$comp = explode('|', $col);
+				$col  = trim($comp[0]);
 			}
 
 			if ($col === 'full') {
