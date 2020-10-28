@@ -219,6 +219,8 @@ class ResponsivePics {
 		// check for valid classes value
 		if ($picture_classes) {
 			$picture_classes = ResponsivePics()->process->process_classes($picture_classes);
+		} else {
+			$picture_classes = [];
 		}
 
 		// check for valid lazyload value
@@ -312,6 +314,8 @@ class ResponsivePics {
 		// convert $picture_classes to array if it is a string
 		if ($img_classes) {
 			$img_classes = ResponsivePics()->process->process_classes($img_classes);
+		} else {
+			$img_classes = [];
 		}
 
 		// check for valid lazyload value
@@ -383,6 +387,8 @@ class ResponsivePics {
 		// convert $classes to array if it is a string
 		if ($bg_classes) {
 			$bg_classes = ResponsivePics()->process->process_classes($bg_classes);
+		} else {
+			$bg_classes = [];
 		}
 
 		// check for errors
