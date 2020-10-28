@@ -30,16 +30,6 @@ class RP_Process extends ResponsivePics {
 			return false;
 		}
 
-		// check for image dimensions
-		$meta_data       = wp_get_attachment_metadata($id);
-		$original_width  = $meta_data['width'];
-		$original_height = $meta_data['height'];
-
-		if (!$original_width || !$original_height) {
-			ResponsivePics()->error->add_error('missing', sprintf('no dimensions for file id %s', $id), $meta_data);
-			return false;
-		}
-
 		return $id;
 	}
 
@@ -47,6 +37,7 @@ class RP_Process extends ResponsivePics {
 	public function process_sizes($id, $sizes, $order = 'desc', $art_direction = true, $img_crop = null) {
 		$file_path = get_attached_file($id);
 		$url       = wp_get_attachment_url($id);
+		$meta_data = wp_get_attachment_metadata($id);
 		$mime_type = get_post_mime_type($id);
 		$alt       = get_post_meta($id, '_wp_attachment_image_alt', true);
 		$alpha     = false;
@@ -62,7 +53,7 @@ class RP_Process extends ResponsivePics {
 			$animated = ResponsivePics()->helpers->is_gif_ani($file_path);
 		}
 
-		// unsupported mime-type, return original source without breakpoints
+		// check if mime-type is supported
 		if (!in_array($mime_type, self::$supported_mime_types) || $animated) {
 			return [
 				'sources' => [[
@@ -73,6 +64,13 @@ class RP_Process extends ResponsivePics {
 				'alt'      => $alt,
 				'alpha'    => $alpha
 			];
+		}
+
+		// check for image dimensions
+		$original_width  = $meta_data['width'];
+		$original_height = $meta_data['height'];
+		if (!$original_width || !$original_height) {
+			ResponsivePics()->error->add_error('missing', sprintf('no dimensions for file id %s', $id), $meta_data);
 		}
 
 		// get resize rules
