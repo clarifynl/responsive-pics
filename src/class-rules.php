@@ -3,7 +3,7 @@
 class RP_Rules extends ResponsivePics {
 
 	// this processes our resizing syntax with art direction support and returns a normalized array with resizing rules
-	public function get_art_image_rules($input, $order = 'desc') {
+	public function get_art_image_rules($input) {
 		$variants = ResponsivePics()->breakpoints->add_missing_breakpoints(explode(',', $input));
 		$result   = [];
 
@@ -62,13 +62,13 @@ class RP_Rules extends ResponsivePics {
 			];
 		}
 
-		usort($result, ['RP_Breakpoints', ($order === 'asc') ? 'sort_by_breakpoint_reverse' : 'sort_by_breakpoint']);
+		usort($result, ['RP_Breakpoints', 'sort_by_breakpoint']);
 
 		return $result;
 	}
 
 	// this processes our resizing syntax and returns a normalized array with resizing rules
-	public function get_image_rules($input, $order = 'desc', $img_crop = null) {
+	public function get_image_rules($input, $img_crop = null) {
 		$variants = ResponsivePics()->breakpoints->add_missing_breakpoints(explode(',', $input));
 		$result   = [];
 
@@ -150,7 +150,7 @@ class RP_Rules extends ResponsivePics {
 			];
 		}
 
-		usort($result, ['RP_Breakpoints', ($order === 'asc') ? 'sort_by_breakpoint_reverse' : 'sort_by_breakpoint']);
+		usort($result, ['RP_Breakpoints', 'sort_by_breakpoint']);
 
 		return $result;
 	}
