@@ -388,7 +388,7 @@ class ResponsivePics {
 
 		// prevent same id, append copy number to existing
 		if (isset(self::$id_map[$image])) {
-			self::$id_map[$image_id]++;
+			self::$id_map[$image]++;
 			$copy .= '-' . self::$id_map[$image];
 		} else {
 			self::$id_map[$image] = 0;
