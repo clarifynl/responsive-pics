@@ -75,11 +75,7 @@ class RP_Process extends ResponsivePics {
 		}
 
 		// get resize rules
-		if ($art_direction) {
-			$rules = ResponsivePics()->rules->get_art_image_rules($sizes);
-		} else {
-			$rules = ResponsivePics()->rules->get_image_rules($sizes, $img_crop);
-		}
+		$rules = ResponsivePics()->rules->get_image_rules($sizes, $art_direction, $img_crop);
 
 		// get resize sources
 		$sources = [];
@@ -217,15 +213,51 @@ class RP_Process extends ResponsivePics {
 			'input'  => $input,
 			'width'  => (int) $width,
 			'height' => (int) $height,
-			'ratio'  => $ratio,
+			'ratio'  => (float) $ratio,
 			'crop'   => $crop
+		];
+	}
+
+	// returns ratio & crop array if has valid /ratio|crop syntax
+	public function process_ratio_crop($ratio_crop = null) {
+		$ratio_crop = preg_replace('/\//', '', $ratio_crop); // remove any leading /
+		$ratio      = null;
+		$crop       = false;
+
+		// Check for crop positions
+		if (ResponsivePics()->helpers->contains($ratio_crop, '|')) {
+			$comp = explode('|', $ratio_crop);
+			$rt   = trim($comp[0]);
+			$cr   = trim($comp[1]);
+
+			if ($this->process_ratio($rt)) {
+				$ratio = $this->process_ratio($rt);
+				$crop  = $this->process_crop($cr);
+			} else {
+				ResponsivePics()->error->add_error('invalid', sprintf('the crop ratio %s needs to be higher then 0 and equal or lower then 2', (string) $rt), $rt);
+			}
+		// add default crop positions
+		} else {
+			if ($this->process_ratio($ratio_crop)) {
+				$ratio = $this->process_ratio($ratio_crop);
+				$crop  = $this->process_crop('c');
+			} else {
+				ResponsivePics()->error->add_error('invalid', sprintf('the crop ratio %s needs to be higher then 0 and equal or lower then 2', (string) $ratio_crop), $ratio_crop);
+			}
+		}
+
+		return [
+			'ratio' => (float) $ratio,
+			'crop'  => $crop
 		];
 	}
 
 	// returns true if ratio is a number and between reasonable values 0-2
 	public function process_ratio($ratio) {
+		$ratio = str_replace(',', '.', $ratio);
+
 		if (is_numeric($ratio) && (0 < $ratio) && ($ratio <= 2)) {
-			return true;
+			return $ratio;
 		} else {
 			return false;
 		}
