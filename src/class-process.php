@@ -186,7 +186,7 @@ class RP_Process extends ResponsivePics {
 		// get height ratio
 		if (ResponsivePics()->helpers->contains($dimensions, '/')) {
 			$wh    = explode('/', $dimensions);
-			$ratio = trim($wh[1]);
+			$ratio = trim(end($wh));
 
 			// strip off crop positions
 			if (ResponsivePics()->helpers->contains($ratio, '|')) {
