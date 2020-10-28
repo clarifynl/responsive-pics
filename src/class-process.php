@@ -213,13 +213,13 @@ class RP_Process extends ResponsivePics {
 		}
 
 		$shortcuts = explode(' ', trim($input));
-
 		if (sizeof($shortcuts) === 1) {
 			if (isset(self::$crop_shortcuts[$shortcuts[0]])) {
 				$shortcuts = self::$crop_shortcuts[$shortcuts[0]];
 				$shortcuts = explode(' ', trim($shortcuts));
 			} else {
 				ResponsivePics()->error->add_error('invalid', sprintf('crop shortcut %s is not defined', $shortcuts[0]), self::$crop_shortcuts);
+				$shortcuts = [];
 			}
 		}
 
@@ -227,6 +227,9 @@ class RP_Process extends ResponsivePics {
 		foreach($shortcuts as $key => $value) {
 			if (isset(self::$crop_map[$value])) {
 				$result[] = self::$crop_map[$value];
+			} else {
+				$direction = ($key === 0) ? 'x' : 'y';
+				ResponsivePics()->error->add_error('invalid', sprintf('crop_%s position %s is not defined', $direction, $value), self::$crop_map);
 			}
 		}
 
