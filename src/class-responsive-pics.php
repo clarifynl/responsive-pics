@@ -297,11 +297,6 @@ class ResponsivePics {
 			$definition = ResponsivePics()->process->process_sizes($image, $sizes, 'desc', false, $crop);
 		}
 
-		// check for valid crop value
-		if ($crop) {
-			$crop = ResponsivePics()->process->process_crop($crop);
-		}
-
 		// convert $picture_classes to array if it is a string
 		if ($img_classes) {
 			$img_classes = ResponsivePics()->process->process_classes($img_classes);
