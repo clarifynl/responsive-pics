@@ -70,7 +70,7 @@ class RP_Process extends ResponsivePics {
 		$original_width  = $meta_data['width'];
 		$original_height = $meta_data['height'];
 		if (!$original_width || !$original_height) {
-			ResponsivePics()->error->add_error('missing', sprintf('no dimensions for file id %s', $id), $meta_data);
+			ResponsivePics()->error->add_error('missing', sprintf('no dimensions found in metadata for image %s', $id), $meta_data);
 		}
 
 		// get resize rules
