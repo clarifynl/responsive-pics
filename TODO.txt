@@ -1,6 +1,4 @@
 
-* Merge sizes syntax check from get_image_rules() / get_art_image_rules() and process_dimensions()
-* Prevent breaking errors during the process and add error instead
-* Check at end of function calls if there were any errors and return/show them
+* Add shorthand syntax for full width columns (eg: 'xs-12-full, md-6-full, lg-4-full')
 * Limit api usage with sizes presets to prevent abuse
 * Enable more crop functionality by switching to $wp_editor->crop instead of $wp_editor->resize
