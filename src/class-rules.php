@@ -26,8 +26,8 @@ class RP_Rules extends ResponsivePics {
 			// get dimensions
 			if (ResponsivePics()->helpers->contains($variant, ':')) {
 				$comp = explode(':', $variant);
-				$bp   = trim($comp[0]); // xs
-				$dm   = trim($comp[1]); // 400(/0.75|c)
+				$bp   = trim($comp[0]);
+				$dm   = trim($comp[1]);
 
 				$breakpoint = ResponsivePics()->process->process_breakpoint($bp);
 				if ($breakpoint !== false) {
@@ -73,7 +73,7 @@ class RP_Rules extends ResponsivePics {
 			];
 		}
 
-		usort($result, ['RP_Breakpoints', ($order === 'asc') ? 'sort_by_breakpoint_reverse' : 'sort_by_breakpoint']);
+		usort($result, ['RP_Breakpoints', ($order === 'asc') ? 'sort_by_breakpoint_reverse' : 'sort_by_breakpoint'] );
 
 		return $result;
 	}
