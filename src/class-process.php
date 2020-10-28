@@ -156,6 +156,16 @@ class RP_Process extends ResponsivePics {
 		$ratio      = null;
 		$crop       = false;
 
+		// get crop positions first to prevent double spaces (600 400|c t)
+		if (ResponsivePics()->helpers->contains($dimensions, '|')) {
+			$comp = explode('|', $dimensions);
+			$dm   = trim($comp[0]);
+			$cr   = trim($comp[1]);
+
+			$dimensions = $dm;
+			$crop       = ResponsivePics()->process->process_crop($cr);
+		}
+
 		if (ResponsivePics()->helpers->contains($dimensions, '-')) {
 			if (ResponsivePics()->helpers->contains($dimensions, ' ')) {
 				// width and height supplied
@@ -187,25 +197,11 @@ class RP_Process extends ResponsivePics {
 			$wh    = explode('/', $dimensions);
 			$ratio = trim(end($wh));
 
-			// strip off crop positions
-			if (ResponsivePics()->helpers->contains($ratio, '|')) {
-				$comp  = explode('|', $ratio);
-				$ratio = trim($comp[0]);
-			}
-
 			if ($this->process_ratio($ratio)) {
 				$height = $width * $ratio;
 			} else {
 				ResponsivePics()->error->add_error('invalid', sprintf('the crop ratio %s in size %s needs to be higher then 0 and equal or lower then 2', (string) $ratio, (string) $dimensions), $ratio);
 			}
-		}
-
-		// get crop positions
-		if (ResponsivePics()->helpers->contains($dimensions, '|')) {
-			$comp = explode('|', $dimensions);
-			$dm   = trim($comp[0]);
-			$cr   = trim($comp[1]);
-			$crop = ResponsivePics()->process->process_crop($cr);
 		}
 
 		return [
