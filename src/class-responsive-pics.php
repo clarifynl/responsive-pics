@@ -6,6 +6,7 @@ class ResponsivePics {
 	public static $gutter = null;
 	public static $grid_widths = null;
 	public static $breakpoints = null;
+	public static $max_width_factor = null;
 	public static $lazyload_class = null;
 	public static $image_quality = null;
 	public static $wp_rest_cache = null;
@@ -66,6 +67,7 @@ class ResponsivePics {
 		self::setGutter();
 		self::setGridWidths();
 		self::setBreakpoints();
+		self::setMaxWidthFactor();
 		self::setLazyLoadClass();
 		self::setImageQuality();
 		self::setRestApiCache();
@@ -120,6 +122,11 @@ class ResponsivePics {
 		self::$grid_widths = $value;
 	}
 
+	// set max width factor
+	public static function setMaxWidthFactor($factor = 2) {
+		self::$max_width_factor = $factor;
+	}
+
 	// set lazyload classname
 	public static function setLazyLoadClass($value = 'lazyload') {
 		self::$lazyload_class = $value;
@@ -158,6 +165,11 @@ class ResponsivePics {
 	// get grid gutter width, in pixels
 	public static function getGutter() {
 		return self::$gutter;
+	}
+
+	// get max width factor
+	public static function getMaxWidthFactor() {
+		return self::$max_width_factor;
 	}
 
 	// get lazyload classname

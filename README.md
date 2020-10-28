@@ -97,6 +97,7 @@ ResponsivePics uses the following default variables:
 | `$gutter`                 | number  | `30`       | The gutter width in pixels (space between grid columns)
 | `$breakpoints`            | array   | `['xs' => 0, 'sm' => 576, 'md' => 768, 'lg' => 992, 'xl' => 1200, 'xxl' => 1400]` | The media query breakpoints ResponsivePics will use for creating and serving your image sources
 | `$grid_widths`            | array   | `['xs' => 576, 'sm' => 540, 'md' => 720, 'lg' => 960, 'xl' => 1140, 'xxl' => 1320]` | The maximum widths of your layout in pixels ResponsivePics will use for resizing your images
+| `$max_width_factor`       | number  | `2`        | The maximum factor of the width to use for resizing and cropping the height of an image source
 | `$lazyload_class`         | string  | `lazyload` | The css class to be added on the picture `img` tag when `lazyload` is enabled
 | `$image_quality`          | number  | `90`       | The image compression quality in percentage used in the `WP_Image_Editor` when resizing images
 | `$wp_rest_cache`          | boolean | `false`    | Wether to enable cache in the WP Rest API response headers
@@ -162,6 +163,7 @@ if (class_exists('ResponsivePics')) {
 		'xxl'   => 1600,
 		'xxxl'  => 1920
 	]);
+	ResponsivePics::setMaxWidthFactor(4);
 	ResponsivePics::setImageQuality(85);
 	ResponsivePics::setRestApiCache(true);
 	ResponsivePics::setRestApiCacheDuration(86400);
@@ -176,6 +178,7 @@ ResponsivePics::getColumns();              // Will return $columns
 ResponsivePics::getGutter();               // Will return $gutter
 ResponsivePics::getBreakpoints();          // Will return $breakpoints
 ResponsivePics::getGridWidths();           // Will return $grid_widths
+ResponsivePics::getMaxWidthFactor();       // Will return $max_width_factor
 ResponsivePics::getLazyLoadClass();        // Will return $lazyload_class
 ResponsivePics::getImageQuality();         // Will return $image_quality
 ResponsivePics::getRestApiCache();         // Will return $wp_rest_cache
@@ -228,7 +231,7 @@ GET /wp-json/responsive-pics/v1/get-image/<id>?sizes=<sizes>&crop=<crop>&classes
 | ---------- | ----------- | -------- | -------- | --------------------------------
 | id         | number      | yes      |          | The WordPress image id (e.g. 1).
 | sizes      | string      | yes      |          | A comma-separated string of preferred image sizes (e.g. `'xs-12, sm-6, md-4, lg-3'`). See the [Sizes section](#sizes) for more information.
-| crop       | string      | optional | `false`  | A crop-factor of the width for the desired height between `0-2` (e.g. `0.75`) with optional crop positions (e.g. <code>0.75&#124;c t</code>)
+| crop       | string      | optional | `false`  | A crop-factor of the width for the desired height within the default range of `0-2` (e.g. `0.75`) with optional crop positions (e.g. <code>0.75&#124;c t</code>)
 | classes    | string      | optional | `null`   | A comma-separated string of additional CSS classes you want to add to the img element (e.g. `'my_img_class'` or `'my_img_class, my_second_img_class'`).
 | lazyload   | boolean     | optional | `false`  | When `true` enables `lazyload` classes and data-srcset attributes. See the [Lazyloading section](#lazyloading) for more information.
 
@@ -294,7 +297,7 @@ The following parameters are available in the sizes syntax:
 | breakpoint | number or string | yes      |         | If undefined, and `width` is a number, breakpoint will be the same as the width. If undefined, and `width` is a column definition, breakpoint will be the corresponding breakpoint (e.g. if width is `'xs-8'`, breakpoint will be `'xs'`).
 | width      | number or string | yes      |         | A column definition is a key in `$grid_widths` plus a dash and a column span number (e.g. `'xs-8'`). If column span number is `full`, the full width of the next matching `$breakpoint` is used (e.g. `'xs-full'`).
 | height     | number           | optional |         | The desired height of the image (e.g. `500`).
-| factor     | number           | optional |         | A factor of the width for the desired height between `0-2` (e.g. `0.75`).
+| factor     | number           | optional |         | A crop-factor of the width for the desired height within the default range of `0-2` (e.g. `0.75`).
 | crop_x     | string           | optional | c       | Crop position in horizontal direction: `l(eft)`, `c(enter)` or `r(ight)`.
 | crop_y     | string           | optional | c       | Crop position in vertical direction: `t(op), c(enter)` or `b(ottom)`. If undefined, `crop_x` will be treated as a shortcut: `'c' = 'center center', 't' = 'top center', r = 'right center', 'b' = 'center bottom', 'l' = 'left center'`.
 

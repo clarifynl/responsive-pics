@@ -255,7 +255,7 @@ class RP_Process extends ResponsivePics {
 	public function process_ratio($ratio) {
 		$ratio = str_replace(',', '.', $ratio);
 
-		if (is_numeric($ratio) && (0 < $ratio) && ($ratio <= 2)) {
+		if (is_numeric($ratio) && (0 < $ratio) && ($ratio <= self::$max_width_factor)) {
 			return $ratio;
 		} else {
 			return false;
