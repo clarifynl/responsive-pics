@@ -1,8 +1,8 @@
 <?php
 
-class RP_Definitions extends ResponsivePics {
+class RP_Sources extends ResponsivePics {
 
-	// returns a normalized definition of sources
+	// returns a normalized array of available sources
 	public function get_resize_sources($id, $rules = null) {
 		$image_url       = wp_get_attachment_url($id);
 		$image_path      = get_attached_file($id);
@@ -19,21 +19,21 @@ class RP_Definitions extends ResponsivePics {
 			$ratio  = $rule['ratio'];
 			$crop   = $rule['crop'];
 
+			// calculate height based on original aspect ratio
 			if ($height === -1) {
-				// calculate height based on original aspect ratio
 				$height = floor($original_height / $original_width * $width);
 			}
 
+			// we can safely resize
 			if ($width < $original_width && $height < $original_height) {
-				// we can safely resize
 				$resized_url = $this->get_resized_url($id, $image_path, $image_url, $width, $height, $crop);
 
 				if ($resized_url) {
 					$source1x    = $resized_url;
 					$source2x    = null;
 
+					// we can also resize for @2x
 					if ($width * 2 < $original_width && $height * 2 < $original_height) {
-						// we can also resize for @2x
 						$resized_2x_url = $this->get_resized_url($id, $image_path, $image_url, $width, $height, $crop, 2);
 						$source2x       = $resized_2x_url ? $resized_2x_url : null;
 					}
@@ -56,8 +56,8 @@ class RP_Definitions extends ResponsivePics {
 					$addedSource = true;
 				}
 
+			// Use original image to resize and crop
 			} else {
-				// Use original image to resize and crop
 				$ratio = $original_width / $original_height;
 
 				if ($ratio) {

@@ -49,12 +49,12 @@ class ResponsivePics {
 	public static function init() {
 		$includes = [
 			'class-rest-api',
-			'class-definitions',
-			'class-rules',
-			'class-breakpoints',
-			'class-process',
 			'class-helpers',
-			'class-error'
+			'class-error',
+			'class-process',
+			'class-rules',
+			'class-sources',
+			'class-breakpoints'
 		];
 
 		foreach ($includes as $inc) {
@@ -73,16 +73,16 @@ class ResponsivePics {
 
 		// Init classes
 		ResponsivePics()->api = new RP_Rest_Api();
-		ResponsivePics()->definitions = new RP_Definitions();
-		ResponsivePics()->rules = new RP_Rules();
-		ResponsivePics()->breakpoints = new RP_Breakpoints();
-		ResponsivePics()->process = new RP_Process();
 		ResponsivePics()->helpers = new RP_Helpers();
 		ResponsivePics()->error = new RP_Error();
+		ResponsivePics()->process = new RP_Process();
+		ResponsivePics()->rules = new RP_Rules();
+		ResponsivePics()->breakpoints = new RP_Breakpoints();
+		ResponsivePics()->sources = new RP_Sources();
 
 		// Hooks
-		add_action('process_resize_request', ['RP_Process', 'process_resize_request'], 10, 6);
-		add_action('rest_api_init',          ['RP_Rest_Api', 'register_api_routes']);
+		add_action('process_resize_request',   ['RP_Process', 'process_resize_request'], 10, 6);
+		add_action('rest_api_init',            ['RP_Rest_Api', 'register_api_routes']);
 		add_filter('big_image_size_threshold', '__return_false');
 	}
 
@@ -205,7 +205,6 @@ class ResponsivePics {
 		}
 
 		// check for valid classes
-		$img_classes = [];
 		if ($picture_classes) {
 			$picture_classes = ResponsivePics()->process->process_classes($picture_classes);
 		}
@@ -219,6 +218,7 @@ class ResponsivePics {
 		$picture = [];
 
 		// lazyload option
+		$img_classes = [];
 		if ($lazyload) {
 			$img_classes[] = self::$lazyload_class;
 		}

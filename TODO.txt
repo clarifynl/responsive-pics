@@ -1,6 +1,4 @@
-* Move all image checks in get_definition() to ResponsivePics()->process->process_image()
-* Rename ResponsivePics()->definitions->get_definition -> ResponsivePics()->process->process_sizes()
-* In get_image_rules() / get_art_image_rules() rename $reverse = false -> $order = 'ASC'
+
 * Merge sizes syntax check from get_image_rules() / get_art_image_rules() and process_dimensions()
 * Prevent breaking errors during the process and add error instead
 * Check at end of function calls if there were any errors and return/show them

@@ -84,7 +84,7 @@ class RP_Process extends ResponsivePics {
 		// get resize sources
 		$sources = [];
 		if ($rules) {
-			$sources = ResponsivePics()->definitions->get_resize_sources($id, $rules);
+			$sources = ResponsivePics()->sources->get_resize_sources($id, $rules);
 		}
 
 		return [
