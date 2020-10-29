@@ -10,7 +10,7 @@ class RP_Rules extends ResponsivePics {
 		// get image crop & ratio
 		$global_crop = null;
 		if (!$art_direction && $img_crop) {
-			$global_crop = ResponsivePics()->process->process_ratio_crop($img_crop);
+			$global_crop = ResponsivePics()->process->process_factor_crop($img_crop);
 		}
 
 		foreach ($variants as $variant) {
@@ -53,22 +53,22 @@ class RP_Rules extends ResponsivePics {
 			}
 
 			if (is_array($dimensions)) {
-				$width      = $dimensions['width'];
-				$height     = $dimensions['height'];
-				$ratio      = $dimensions['ratio'];
-				$crop       = $dimensions['crop'];
+				$width  = $dimensions['width'];
+				$height = $dimensions['height'];
+				$factor = $dimensions['factor'];
+				$crop   = $dimensions['crop'];
 			}
 
 			if (!$art_direction && $global_crop) {
-				$ratio = $global_crop['ratio'];
-				$crop  = $global_crop['crop'];
+				$factor = $global_crop['factor'];
+				$crop   = $global_crop['crop'];
 			}
 
 			$result[] = [
 				'breakpoint' => $breakpoint,
 				'width'      => $width,
 				'height'     => $height,
-				'ratio'      => $ratio,
+				'factor'     => $factor,
 				'crop'       => $crop
 			];
 		}

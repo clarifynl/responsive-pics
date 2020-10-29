@@ -153,7 +153,7 @@ class RP_Process extends ResponsivePics {
 		$dimensions = trim($input);
 		$width      = -1;
 		$height     = -1;
-		$ratio      = null;
+		$factor     = null;
 		$crop       = false;
 
 		// get crop positions first to prevent double spaces (600 400|c t)
@@ -166,6 +166,7 @@ class RP_Process extends ResponsivePics {
 			$crop       = ResponsivePics()->process->process_crop($cr);
 		}
 
+		// get breakpoint and dimensions
 		if (ResponsivePics()->helpers->contains($dimensions, '-')) {
 			if (ResponsivePics()->helpers->contains($dimensions, ' ')) {
 				// width and height supplied
@@ -192,15 +193,15 @@ class RP_Process extends ResponsivePics {
 			}
 		}
 
-		// get height ratio
+		// get height factor
 		if (ResponsivePics()->helpers->contains($dimensions, '/')) {
-			$wh    = explode('/', $dimensions);
-			$ratio = trim(end($wh));
+			$wh     = explode('/', $dimensions);
+			$factor = trim(end($wh));
 
-			if ($this->process_ratio($ratio)) {
-				$height = $width * $ratio;
+			if ($this->process_factor($factor)) {
+				$height = $width * $factor;
 			} else {
-				ResponsivePics()->error->add_error('invalid', sprintf('the crop ratio %s in size %s needs to be higher then 0 and equal or lower then 2', (string) $ratio, (string) $dimensions), $ratio);
+				ResponsivePics()->error->add_error('invalid', sprintf('the crop factor %s in size %s needs to be higher then 0 and equal or lower then 2', (string) $factor, (string) $dimensions), $factor);
 			}
 		}
 
@@ -208,51 +209,52 @@ class RP_Process extends ResponsivePics {
 			'input'  => $input,
 			'width'  => (int) $width,
 			'height' => (int) $height,
-			'ratio'  => (float) $ratio,
+			'factor' => (float) $factor,
 			'crop'   => $crop
 		];
 	}
 
-	// returns ratio & crop array if has valid /ratio|crop syntax
-	public function process_ratio_crop($ratio_crop = null) {
-		$ratio_crop = preg_replace('/\//', '', $ratio_crop); // remove any leading /
-		$ratio      = null;
-		$crop       = false;
+	// returns factor & crop array if has valid /factor|crop syntax
+	public function process_factor_crop($factor_crop = null) {
+		$factor_crop = preg_replace('/\//', '', $factor_crop); // remove any leading /
+		$factor      = null;
+		$crop        = false;
 
 		// Check for crop positions
-		if (ResponsivePics()->helpers->contains($ratio_crop, '|')) {
-			$comp = explode('|', $ratio_crop);
-			$rt   = trim($comp[0]);
+		if (ResponsivePics()->helpers->contains($factor_crop, '|')) {
+			$comp = explode('|', $factor_crop);
+			$ft   = trim($comp[0]);
 			$cr   = trim($comp[1]);
 
-			if ($this->process_ratio($rt)) {
-				$ratio = $this->process_ratio($rt);
-				$crop  = $this->process_crop($cr);
+			if ($this->process_factor($ft)) {
+				$factor = $this->process_factor($ft);
+				$crop   = $this->process_crop($cr);
 			} else {
-				ResponsivePics()->error->add_error('invalid', sprintf('the crop ratio %s needs to be higher then 0 and equal or lower then 2', (string) $rt), $rt);
+				ResponsivePics()->error->add_error('invalid', sprintf('the crop factor %s needs to be higher then 0 and equal or lower then %d', (string) $ft, (float) self::$max_width_factor), $ft);
 			}
 		// add default crop positions
 		} else {
-			if ($this->process_ratio($ratio_crop)) {
-				$ratio = $this->process_ratio($ratio_crop);
-				$crop  = $this->process_crop('c');
+			if ($this->process_factor($factor_crop)) {
+				$factor = $this->process_factor($factor_crop);
+				$crop   = $this->process_crop('c');
 			} else {
-				ResponsivePics()->error->add_error('invalid', sprintf('the crop ratio %s needs to be higher then 0 and equal or lower then 2', (string) $ratio_crop), $ratio_crop);
+				ResponsivePics()->error->add_error('invalid', sprintf('the crop factor %s needs to be higher then 0 and equal or lower then %d', (string) $factor_crop, (float) self::$max_width_factor), $factor_crop);
 			}
 		}
 
 		return [
-			'ratio' => (float) $ratio,
-			'crop'  => $crop
+			'factor' => (float) $factor,
+			'crop'   => $crop
 		];
 	}
 
-	// returns true if ratio is a number and between reasonable values 0-2
-	public function process_ratio($ratio) {
-		$ratio = str_replace(',', '.', $ratio);
+	// returns true if factor is a number and between reasonable values 0-2
+	public function process_factor($factor) {
+		// replace comma's with dots
+		$factor = str_replace(',', '.', $factor);
 
-		if (is_numeric($ratio) && (0 < $ratio) && ($ratio <= self::$max_width_factor)) {
-			return $ratio;
+		if (is_numeric($factor) && (0 < $factor) && ($factor <= self::$max_width_factor)) {
+			return $factor;
 		} else {
 			return false;
 		}
