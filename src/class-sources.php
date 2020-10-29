@@ -56,27 +56,25 @@ class RP_Sources extends ResponsivePics {
 					$addedSource = true;
 				}
 
-			// Use original image to resize and crop
+			// use original image to resize and crop
 			} else {
-				$ratio = $original_width / $original_height;
+				$org_ratio   = $original_width / $original_height;
+				$rule_factor = $height / $width;
 
-				if ($factor) {
-					$cropped_height  = $original_width * $factor;
-					$cropped_width   = $original_width;
-					$ratio           = $cropped_width / $cropped_height;
+				// apply ratio on original width
+				$max_height = $original_width * ($factor ? $factor : $rule_factor);
+				$max_width  = $original_width;
 
-					// check if new height will be enough to get the right aspect ratio
-					if ($cropped_height > $original_height) {
-						$cropped_height = $original_height;
-						$cropped_width  = $original_height * $ratio;
-					}
-
-					$resized_url = $this->get_resized_url($id, $image_path, $image_url, $cropped_width, $cropped_height, $crop);
+				// check if original height is large enough for new factor height
+				if ($max_height > $original_height) {
+					$max_height = $original_height;
+					$max_width  = $original_height / ($factor ? $factor : $rule_factor);
 				}
 
-				$source1x   = isset($resized_url) ? $resized_url : $image_url;
-				$source2x   = null;
-				$breakpoint = $rule['breakpoint'];
+				$resized_url = $this->get_resized_url($id, $image_path, $image_url, $max_width, $max_height, $crop);
+				$source1x    = isset($resized_url) ? $resized_url : $image_url;
+				$source2x    = null;
+				$breakpoint  = $rule['breakpoint'];
 
 				if ($breakpoint < $min_breakpoint || !isset($min_breakpoint)) {
 					$min_breakpoint = $breakpoint;
@@ -86,9 +84,9 @@ class RP_Sources extends ResponsivePics {
 					'breakpoint' => $breakpoint,
 					'source1x'   => $source1x,
 					'source2x'   => $source2x,
-					'width'      => $factor ? $cropped_width : $original_height,
-					'height'     => $factor ? $cropped_height : $original_width,
-					'ratio'      => $ratio
+					'width'      => (int) $max_width,
+					'height'     => (int) $max_height,
+					'ratio'      => (float) $max_width / $max_height
 				];
 
 				$addedSource = true;
