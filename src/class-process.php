@@ -182,7 +182,12 @@ class RP_Process extends ResponsivePics {
 				// width and height supplied
 				$wh     = explode(' ', $dimensions);
 				$width  = trim($wh[0]);
-				$height = trim($wh[1]);
+				$hg     = trim($wh[1]);
+
+				// if height does not start with /
+				if (substr($hg, 0, 1) !== '/') {
+					$height = $hg;
+				}
 			} else {
 				// height will be calculated based on width
 				$width = ResponsivePics()->helpers->match($dimensions, '/(\d+)/');
@@ -198,8 +203,11 @@ class RP_Process extends ResponsivePics {
 			$wh     = explode('/', $dimensions);
 			$factor = trim(end($wh));
 
+			// set height based upon factor if height is not set yet
 			if ($this->process_factor($factor)) {
-				$height = $width * $factor;
+				if ($height === -1) {
+					$height = $width * $factor;
+				}
 			} else {
 				ResponsivePics()->error->add_error('invalid', sprintf('the crop factor %s in size %s needs to be higher then 0 and equal or lower then 2', (string) $factor, (string) $dimensions), $factor);
 			}
