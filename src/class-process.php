@@ -114,7 +114,7 @@ class RP_Process extends ResponsivePics {
 		} elseif (is_string($boolean)) {
 			return $boolean === 'true';
 		} else {
-			ResponsivePics()->error->add_error('invalid', sprintf('%s parameter %s is not a valid boolean', $type, (string) $boolean), $boolean);
+			ResponsivePics()->error->add_error('invalid', sprintf('%s parameter is not a valid boolean', $type), $boolean);
 		}
 
 		return false;
