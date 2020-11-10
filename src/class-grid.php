@@ -9,8 +9,8 @@ class RP_Grid extends ResponsivePics {
 		$col  = $comp[1];
 
 		// convert 'xs-full' shorthand to 'xs-12-full'
-		if ($col === 'full') {
-			$col = self::$columns . '-full';
+		if (ResponsivePics()->helpers->match($col, '/^full/')) {
+			$col = str_replace('full', self::$columns . '-full', $col);
 		}
 
 		// check breakpoint
