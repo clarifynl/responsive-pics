@@ -2,64 +2,6 @@
 
 class RP_Helpers extends ResponsivePics {
 
-	// calculates column shortcut (e.g. "xs-5") to actual pixels
-	public function columns_to_pixels($input) {
-		$components = explode('-', $input);
-
-		$key = $components[0];
-		$col = $components[1];
-
-		// check breakpoint
-		$breakpoint = ResponsivePics()->process->process_breakpoint($key);
-		if (is_numeric($breakpoint)) {
-			// strip of ratio
-			if ($this->contains($col, '/')) {
-				$comp = explode('/', $col);
-				$col  = trim($comp[0]);
-			}
-
-			// strip of crop
-			if ($this->contains($col, '|')) {
-				$comp = explode('|', $col);
-				$col  = trim($comp[0]);
-			}
-
-			if ($col === 'full') {
-				$next_breakpoint = ResponsivePics()->breakpoints->get_next_breakpoint($key);
-
-				// use max breakpoint if there's no bigger one left
-				if (!isset($next_breakpoint)) {
-					$next_breakpoint = $key;
-				}
-
-				$next_width = self::$breakpoints[$next_breakpoint];
-
-				if (!isset($next_width)) {
-					ResponsivePics()->error->add_error('missing', sprintf('no breakpoint set for %s', $breakpoint), $breakpoint);
-				}
-
-				return $next_width;
-
-			} else if ($this->match($col, '/(\d+)/')) {
-				if ($col < 1 || $col > self::$columns) {
-					ResponsivePics()->error->add_error('invalid', sprintf('number of columns should be between 1 and %s', self::$columns), $col);
-				}
-			} else {
-				ResponsivePics()->error->add_error('invalid', sprintf('invalid columns: %s', $col), $col);
-			}
-
-			$grid_width = self::$grid_widths[$key];
-			if (!isset($grid_width)) {
-				ResponsivePics()->error->add_error('missing', sprintf('no width found for breakpoint %s', $breakpoint), $breakpoint);
-			}
-
-			$column_pixels = ($grid_width - (self::$columns) * self::$gutter) / self::$columns;
-			$pixels = floor($column_pixels * $col + self::$gutter * ($col - 1));
-
-			return $pixels;
-		}
-	}
-
 	// get suffix for resized image
 	public function get_resized_suffix($width, $height, $ratio, $crop) {
 		if ($ratio === 1) {

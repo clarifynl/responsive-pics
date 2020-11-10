@@ -173,9 +173,9 @@ class RP_Process extends ResponsivePics {
 				$wh        = explode(' ', $dimensions);
 				$dimension = trim($wh[0]);
 				$height    = trim($wh[1]);
-				$width     = ResponsivePics()->helpers->columns_to_pixels($dimension);
+				$width     = ResponsivePics()->grid->columns_to_pixels($dimension);
 			} else {
-				$width = ResponsivePics()->helpers->columns_to_pixels($dimensions);
+				$width = ResponsivePics()->grid->columns_to_pixels($dimensions);
 			}
 		} else {
 			if (ResponsivePics()->helpers->contains($dimensions, ' ')) {

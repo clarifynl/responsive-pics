@@ -54,8 +54,9 @@ class ResponsivePics {
 			'class-error',
 			'class-process',
 			'class-rules',
-			'class-sources',
-			'class-breakpoints'
+			'class-breakpoints',
+			'class-grid',
+			'class-sources'
 		];
 
 		foreach ($includes as $inc) {
@@ -80,6 +81,7 @@ class ResponsivePics {
 		ResponsivePics()->process = new RP_Process();
 		ResponsivePics()->rules = new RP_Rules();
 		ResponsivePics()->breakpoints = new RP_Breakpoints();
+		ResponsivePics()->grid = new RP_Grid();
 		ResponsivePics()->sources = new RP_Sources();
 
 		// Hooks
