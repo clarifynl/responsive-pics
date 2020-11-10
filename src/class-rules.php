@@ -35,9 +35,9 @@ class RP_Rules extends ResponsivePics {
 				} else {
 					break;
 				}
-			// shorthand xs-12
+			// shorthand xs-12 / xs-12-full
 			} elseif (ResponsivePics()->helpers->contains($variant, '-')) {
-				$comp = explode('-', $variant);
+				$comp = explode('-', $variant, 2);
 				$bp   = trim($comp[0]);
 
 				$breakpoint = ResponsivePics()->process->process_breakpoint($bp);
