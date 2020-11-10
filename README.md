@@ -281,7 +281,7 @@ breakpoint:width
 | Parameter  | Type             | Required | Default | Definition
 | ---------- | ---------------- | -------- | ------- | --------------------------------
 | breakpoint | number or string | yes      |         | If undefined, and `width` is a number, breakpoint will be the same as the width. If undefined, and `width` is a column definition, breakpoint will be the corresponding breakpoint (e.g. if width is `'xs-8'`, breakpoint will be `'xs'`).
-| width      | number or string | yes      |         | A column definition is a key in `$grid_widths` plus a dash and a column span number (e.g. `'xs-8'`).<br>If the column span number is suffixed with `-full` (e.g. `'xs-8-full'`), the column width is not calculated as a percentage of the $grid_width, but of the next matching `$breakpoint` width.<br>You can also use a shorthand `full` as span number (e.g. `'xs-full'`) for full width columns (e.g. `'xs-12-full'`).
+| width      | number or string | yes      |         | A column definition is a key in `$grid_widths` plus a dash and a column span number (e.g. `'xs-8'`).<br>If the column span number is suffixed with `-full` (e.g. `'xs-8-full'`), the column width is not calculated as a percentage of the `$grid_width`, but of the next matching `$breakpoint` width.<br>You can also use a shorthand `full` as span number (e.g. `'xs-full'`) for full width columns (e.g. `'xs-12-full'`).
 
 ### Picture & background sizes
 Since the `<picture>` element and background images support art directed images, the following full syntax is available for each image size in the `sizes` parameter:
@@ -295,7 +295,7 @@ The following parameters are available in the sizes syntax:
 | Parameter  | Type             | Required | Default | Definition
 | ---------- | ---------------- | -------- | ------- | --------------------------------
 | breakpoint | number or string | yes      |         | If undefined, and `width` is a number, breakpoint will be the same as the width. If undefined, and `width` is a column definition, breakpoint will be the corresponding breakpoint (e.g. if width is `'xs-8'`, breakpoint will be `'xs'`).
-| width      | number or string | yes      |         | A column definition is a key in `$grid_widths` plus a dash and a column span number (e.g. `'xs-8'`).<br>If the column span number is suffixed with `-full` (e.g. `'xs-8-full'`), the column width is not calculated as a percentage of the $grid_width, but of the next matching `$breakpoint` width.<br>You can also use a shorthand `full` as span number (e.g. `'xs-full'`) for full width columns (e.g. `'xs-12-full'`).
+| width      | number or string | yes      |         | A column definition is a key in `$grid_widths` plus a dash and a column span number (e.g. `'xs-8'`).<br>If the column span number is suffixed with `-full` (e.g. `'xs-8-full'`), the column width is not calculated as a percentage of the `$grid_width`, but of the next matching `$breakpoint` width.<br>You can also use a shorthand `full` as span number (e.g. `'xs-full'`) for full width columns (e.g. `'xs-12-full'`).
 | height     | number           | optional |         | The desired height of the image (e.g. `500`).
 | factor     | number           | optional |         | A crop-factor of the width for the desired height within the default range of `0-2` (e.g. `0.75`).
 | crop_x     | string           | optional | c       | Crop position in horizontal direction: `l(eft)`, `c(enter)` or `r(ight)`.
