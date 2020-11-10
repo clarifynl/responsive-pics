@@ -2,37 +2,6 @@
 
 class RP_Breakpoints extends ResponsivePics {
 
-	// get breakpoint name and number of columns
-	public function get_breakpoint_from_rule($rule) {
-		if (!ResponsivePics()->helpers->contains($rule, ':')) {
-			if (ResponsivePics()->helpers->contains($rule, '-')) {
-				$components = explode('-', $rule);
-
-				return [
-					'breakpoint' => trim($components[0]),
-					'columns'    => trim($components[1]) // can be 'full'
-				];
-			}
-		}
-
-		return null;
-	}
-
-	// returns next breakpoint in $breakpoints array
-	public function get_next_breakpoint($key) {
-		$previous_breakpoint = null;
-
-		foreach (self::$breakpoints as $breakpoint_key => $breakpoint_value) {
-			if ($previous_breakpoint === $key) {
-				return $breakpoint_key;
-			}
-
-			$previous_breakpoint = $breakpoint_key;
-		}
-
-		return null;
-	}
-
 	// add missing breakpoints
 	public function add_missing_breakpoints($variants) {
 		$result = [];
@@ -62,10 +31,14 @@ class RP_Breakpoints extends ResponsivePics {
 
 		uasort($defined_breakpoints, ['self', 'sort_by_breakpoint_index']);
 
-		// add missing smaller breakpoints
+		// add missing smaller breakpoints with all columns
 		foreach (self::$breakpoints as $breakpoint_key => $breakpoint_value) {
 			if (!isset($defined_breakpoints[$breakpoint_key])) {
-				$result[] = $breakpoint_key . '-12';
+				// get first breakpoint and check if it should be fullwidth
+				$first     = reset($defined_breakpoints);
+				$columns   = ($first['columns'] === 'full') ? 'full' : self::$columns;
+				$fullwidth = isset($first['fullwidth']) ? $first['fullwidth'] : false;
+				$result[]  = $breakpoint_key . '-' . $columns . ($fullwidth ? '-full' : '');
 			} else {
 				break;
 			}
@@ -73,22 +46,16 @@ class RP_Breakpoints extends ResponsivePics {
 
 		// now loop again through original rules
 		foreach ($variants as $variant) {
+			$variant    = trim($variant);
 			$breakpoint = $this->get_breakpoint_from_rule($variant);
 
 			if (isset($breakpoint)) {
 				$next_breakpoint = $this->get_next_breakpoint($breakpoint['breakpoint']);
-				$columns = $breakpoint['columns'];
-
-				if (ResponsivePics()->helpers->contains($columns, '/')) {
-					$columns = explode('/', $columns)[0];
-				}
-
-				$columns = trim($columns);
 
 				// add in-between breakpoints if we haven't defined them explicitly yet
 				while ($next_breakpoint && !isset($defined_breakpoints[$next_breakpoint])) {
-					if ($columns === 'full' || ($columns !== 'full' && isset(self::$grid_widths[$next_breakpoint]))) {
-						$result[] = sprintf('%s-%s', $next_breakpoint, $breakpoint['columns']);
+					if (isset(self::$grid_widths[$next_breakpoint])) {
+						$result[] = str_replace($breakpoint['breakpoint'], $next_breakpoint, $variant);
 					}
 
 					$next_breakpoint = $this->get_next_breakpoint($next_breakpoint);
@@ -99,6 +66,41 @@ class RP_Breakpoints extends ResponsivePics {
 		}
 
 		return $result;
+	}
+
+	// get breakpoint name and number of columns
+	public function get_breakpoint_from_rule($rule) {
+		if (!ResponsivePics()->helpers->contains($rule, ':')) {
+			if (ResponsivePics()->helpers->contains($rule, '-')) {
+				$components = explode('-', $rule);
+				$breakpoint = trim($components[0]);
+				$columns    = trim($components[1]);
+				$fullwidth  = isset($components[2]) && ResponsivePics()->helpers->contains($components[2], 'full');
+
+				return [
+					'breakpoint' => $breakpoint,
+					'columns'    => $columns, // can be 'full'
+					'fullwidth'  => $fullwidth // true/false
+				];
+			}
+		}
+
+		return null;
+	}
+
+	// returns next breakpoint in $breakpoints array
+	public function get_next_breakpoint($key) {
+		$previous_breakpoint = null;
+
+		foreach (self::$breakpoints as $breakpoint_key => $breakpoint_value) {
+			if ($previous_breakpoint === $key) {
+				return $breakpoint_key;
+			}
+
+			$previous_breakpoint = $breakpoint_key;
+		}
+
+		return null;
 	}
 
 	// sort breakpoints from small to wide
