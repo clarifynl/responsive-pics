@@ -23,6 +23,12 @@ class RP_Rules extends ResponsivePics {
 				'crop'   => false
 			];
 
+			// check for factor and/or crops syntax in non-art directed elements
+			if (!$art_direction && ResponsivePics()->helpers->is_art_directed($variant)) {
+				ResponsivePics()->error->add_error('invalid', sprintf('art directed parameters (height, factor, crop_x, crop_y) are not supported on image sizes: %s', $variant), $variant);
+				break;
+			}
+
 			// get dimensions
 			if (ResponsivePics()->helpers->contains($variant, ':')) {
 				$comp = explode(':', $variant);
