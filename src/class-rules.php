@@ -68,6 +68,7 @@ class RP_Rules extends ResponsivePics {
 			if (!$art_direction && $global_crop) {
 				$factor = $global_crop['factor'];
 				$crop   = $global_crop['crop'];
+				$height = (int) round($width * $factor);
 			}
 
 			$result[] = [
