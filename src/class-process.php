@@ -238,7 +238,8 @@ class RP_Process extends ResponsivePics {
 				$factor = $this->process_factor($ft);
 				$crop   = $this->process_crop($cr);
 			} else {
-				ResponsivePics()->error->add_error('invalid', sprintf('the crop factor %s needs to be higher then 0 and equal or lower then %d', (string) $ft, (float) self::$max_width_factor), $ft);
+				ResponsivePics()->error->add_error('invalid', sprintf('the crop factor %s needs to be a floating number between 0 and %d', (string) $ft, (float) self::$max_width_factor), $ft);
+				return false;
 			}
 		// add default crop positions
 		} else {
@@ -246,7 +247,8 @@ class RP_Process extends ResponsivePics {
 				$factor = $this->process_factor($factor_crop);
 				$crop   = $this->process_crop('c');
 			} else {
-				ResponsivePics()->error->add_error('invalid', sprintf('the crop factor %s needs to be higher then 0 and equal or lower then %d', (string) $factor_crop, (float) self::$max_width_factor), $factor_crop);
+				ResponsivePics()->error->add_error('invalid', sprintf('the crop factor %s needs to be a floating number between 0 and %d', (string) $factor_crop, (float) self::$max_width_factor), $factor_crop);
+				return false;
 			}
 		}
 
