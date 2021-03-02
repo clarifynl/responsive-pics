@@ -8,6 +8,7 @@ class ResponsivePics {
 	public static $breakpoints = null;
 	public static $max_width_factor = null;
 	public static $lazyload_class = null;
+	public static $lqip_class = null;
 	public static $image_quality = null;
 	public static $wp_rest_cache = null;
 	public static $wp_rest_cache_duration = null;
@@ -134,6 +135,11 @@ class ResponsivePics {
 		self::$lazyload_class = $value;
 	}
 
+	// set lqip (low quality image placeholder) classname
+	public static function setLqipClass($value = 'blur-up') {
+		self::$lqip_class = $value;
+	}
+
 	// set image quality
 	public static function setImageQuality($value = 90) {
 		self::$image_quality = $value;
@@ -177,6 +183,11 @@ class ResponsivePics {
 	// get lazyload classname
 	public static function getLazyLoadClass() {
 		return self::$lazyload_class;
+	}
+
+	// get lqip classname
+	public static function getLqipClass() {
+		return self::$lqip_class;
 	}
 
 	// get image quality
@@ -300,7 +311,7 @@ class ResponsivePics {
 	 * Construct a responsive image element
 	 * returns <img> element as html markup
 	 */
-	public static function get_image($id = null, $sizes = null, $crop = false, $img_classes = null, $lazyload = false) {
+	public static function get_image($id = null, $sizes = null, $crop = false, $img_classes = null, $lazyload = false, $lqip = false) {
 		// init WP_Error
 		self::$wp_error = new WP_Error();
 
@@ -335,14 +346,21 @@ class ResponsivePics {
 			$img_classes[] = self::$lazyload_class;
 		}
 
+		// low quality image placeholder option
+		if ($lqip) {
+			$img_classes[] = self::$lqip_class;
+			$lqip_img = ResponsivePics()->process->process_sizes($image, $sizes, 'desc', false, $crop);
+			var_dump($sizes, $lqip_img);
+		}
+
 		$src_attribute = $lazyload ? 'data-srcset' : 'srcset';
 		$classes = $img_classes ? ' class="' . implode(' ', $img_classes) . '"' : '';
 
 		// add all sources & sizes
 		$srcsets  = [];
 		$sizes    = [];
-		$full_img = wp_get_attachment_image_src($image, 'full', false);
-		$fallback = ' src="'. $full_img[0] . '"';
+		$lqip_img = wp_get_attachment_image_src($image, 'full', false);
+		$src      = $lqip ? ' src="'. $lqip_img[0] . '"' : '';
 
 		// start constructing <img> element
 		$sources = isset($definition['sources']) ? $definition['sources'] : [];
@@ -363,7 +381,7 @@ class ResponsivePics {
 		$sizes[] = '100vw';
 
 		// construct image
-		$image_html = sprintf('<img%s %s="%s" sizes="%s"%s alt="%s"/>', $classes, $src_attribute, implode(', ', $srcsets), implode(', ', $sizes), $fallback, $definition['alt']);
+		$image_html = sprintf('<img%s %s="%s" sizes="%s"%s alt="%s"/>', $classes, $src_attribute, implode(', ', $srcsets), implode(', ', $sizes), $src, $definition['alt']);
 		return $image_html;
 	}
 
