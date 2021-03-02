@@ -98,7 +98,9 @@ ResponsivePics uses the following default variables:
 | `$breakpoints`            | array   | `['xs' => 0, 'sm' => 576, 'md' => 768, 'lg' => 992, 'xl' => 1200, 'xxl' => 1400]` | The media query breakpoints ResponsivePics will use for creating and serving your image sources
 | `$grid_widths`            | array   | `['xs' => 576, 'sm' => 540, 'md' => 720, 'lg' => 960, 'xl' => 1140, 'xxl' => 1320]` | The maximum widths of your layout in pixels ResponsivePics will use for resizing your images
 | `$max_width_factor`       | number  | `2`        | The maximum factor of the width to use for resizing and cropping the height of an image source
-| `$lazyload_class`         | string  | `lazyload` | The css class to be added on the picture `img` tag when `lazyload` is enabled
+| `$lazyload_class`         | string  | `lazyload` | The css class to be added on the `img` tag when `lazyload` is enabled
+| `$lqip_width`             | number  | `200`      | The image width to be used for the LQIP (low quality image placeholder)
+| `$lqip_class`             | string  | `blur-up`  | The css class to be added on the `img` tag when `LQIP (low quality image placeholder)` is enabled
 | `$image_quality`          | number  | `90`       | The image compression quality in percentage used in the `WP_Image_Editor` when resizing images
 | `$wp_rest_cache`          | boolean | `false`    | Wether to enable cache in the WP Rest API response headers
 | `$wp_rest_cache_duration` | number  | `3600`     | The cache duration (max-age) in seconds of the WP Rest API Cache-Control header
@@ -164,6 +166,9 @@ if (class_exists('ResponsivePics')) {
 		'xxxl'  => 1920
 	]);
 	ResponsivePics::setMaxWidthFactor(4);
+	ResponsivePics::setLazyLoadClass('lozad');
+	ResponsivePics::setLqipWidth(100);
+	ResponsivePics::setLqipClass('blurred');
 	ResponsivePics::setImageQuality(85);
 	ResponsivePics::setRestApiCache(true);
 	ResponsivePics::setRestApiCacheDuration(86400);
@@ -179,7 +184,10 @@ ResponsivePics::getGutter();               // Will return $gutter
 ResponsivePics::getBreakpoints();          // Will return $breakpoints
 ResponsivePics::getGridWidths();           // Will return $grid_widths
 ResponsivePics::getMaxWidthFactor();       // Will return $max_width_factor
+ResponsivePics::getLqipWidth();            // Will return $max_width_factor
 ResponsivePics::getLazyLoadClass();        // Will return $lazyload_class
+ResponsivePics::getLqipWidth();            // Will return $lqip_width
+ResponsivePics::getLqipClass();            // Will return $lqip_class
 ResponsivePics::getImageQuality();         // Will return $image_quality
 ResponsivePics::getRestApiCache();         // Will return $wp_rest_cache
 ResponsivePics::getRestApiCacheDuration(); // Will return $wp_rest_cache_duration
@@ -234,6 +242,7 @@ GET /wp-json/responsive-pics/v1/get-image/<id>?sizes=<sizes>&crop=<crop>&classes
 | crop       | string      | optional | `false`  | A crop-factor of the width for the desired height within the default range of `0-2` (e.g. `0.75`) with optional crop positions (e.g. <code>0.75&#124;c t</code>)
 | classes    | string      | optional | `null`   | A comma-separated string of additional CSS classes you want to add to the img element (e.g. `'my_img_class'` or `'my_img_class, my_second_img_class'`).
 | lazyload   | boolean     | optional | `false`  | When `true` enables `lazyload` classes and data-srcset attributes. See the [Lazyloading section](#lazyloading) for more information.
+| lqip       | boolean     | optional | `false`  | When `true` enables `LQIP` classes and src attribute. See the [LQIP section](#lqip) for more information.
 
 
 ### Background Image
@@ -328,8 +337,8 @@ If you have disabled `WP-Cron` in your setup and you are using your own cron job
 define('DISABLE_WP_CRON', true);
 ```
 
-If you're using [Trellis](https://roots.io/trellis/) like us ❤️, the default cron interval is set to every [15 mins](https://github.com/roots/trellis/blob/master/roles/wordpress-setup/tasks/main.yml#L48).  
-You could override this to for example 1 mins with an environment variable per wordpress site like this:
+If you're using [Trellis](https://roots.io/trellis/) like us ❤️, the default cron interval is set to every [15 mins](https://github.com/roots/trellis/blob/master/roles/wordpress-setup/tasks/main.yml#L49).  
+You can override this to for example 1 mins with setting the `cron_interval` (or `cron_interval_multisite` for multisite) variable per wordpress site like this:
 
 In for example **trellis/group_vars/development/wordpress_sites.yml**:
 
@@ -349,24 +358,8 @@ wordpress_sites:
       provider: self-signed
     cache:
       enabled: false
-    cron:
-      interval: 1
+    cron_interval: 1
 ```
-
-In **trellis/roles/wordpress-setup/tasks/main.yml**:
-
-
-```yaml
-- name: Setup WP system cron
-  cron:
-    name: "{{ item.key }} WordPress cron"
-    minute: "*/{{ item.value.cron.interval | default(15) }}"
-    user: "{{ web_user }}"
-    job: "cd {{ www_root }}/{{ item.key }}/{{ item.value.current_path | default('current') }} && wp cron event run --due-now > /dev/null 2>&1"
-    cron_file: "wordpress-{{ item.key | replace('.', '_') }}"
-    state: "{{ (cron_enabled and not item.value.multisite.enabled) | ternary('present', 'absent') }}"
-  with_dict: "{{ wordpress_sites }}"
- ```
 
 Don't forget to re-provision your server after changing this value.
 
@@ -421,6 +414,21 @@ To install **Lazysizes** in your wordpress theme as a node module, run the follo
 And import the package in your theme’s global javascript file:
 ```javascript
 import 'lazysizes';
+```
+
+### LQIP (Low Quality Image Placeholder) <a name="lqip"></a>
+When enabling the `lqip` option in the `get_image` function, this library automatically:
+
+* adds a `blur-up` class to the `<img>` element.
+* adds a fallback `src` attribute on the `<img>` element with a low quality placeholder image with a default width of 200px.
+
+This will enable you to style your placeholder image before the actual high quality image is loaded.
+
+You can also set your own lqip class by passing it to **ResponsivePics** library in your theme’s **functions.php**:
+```php
+if (class_exists('ResponsivePics')) {
+	ResponsivePics::setLqipClass('blurred');
+}
 ```
 
 ### Intrinsic Aspectratio <a name="intrinsic"></a>
