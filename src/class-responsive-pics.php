@@ -337,6 +337,11 @@ class ResponsivePics {
 			$lazyload = ResponsivePics()->process->process_boolean($lazyload, 'lazyload');
 		}
 
+		// check for valid lqip value
+		if (isset($lqip)) {
+			$lqip = ResponsivePics()->process->process_boolean($lqip, 'lqip');
+		}
+
 		// check for errors
 		if (count(self::$wp_error->get_error_messages()) > 0) {
 			return ResponsivePics()->error->get_error(self::$wp_error);
