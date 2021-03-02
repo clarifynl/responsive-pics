@@ -376,6 +376,13 @@ class ResponsivePics {
 		$src_attribute = $lazyload ? 'data-srcset' : 'srcset';
 		$classes = $img_classes ? ' class="' . implode(' ', $img_classes) . '"' : '';
 
+		// return normal image if unsupported mime type
+		if (!in_array($definition['mimetype'], self::$supported_mime_types)) {
+			$original_src = wp_get_attachment_image_src($image);
+			$image_html   = sprintf('<img%s %s="%s" alt="%s"/>', $classes, $src_attribute, $original_src[0], $definition['alt']);
+			return $image_html;
+		}
+
 		// add all sources & sizes
 		$srcsets  = [];
 		$sizes    = [];
