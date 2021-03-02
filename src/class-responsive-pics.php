@@ -71,6 +71,7 @@ class ResponsivePics {
 		self::setBreakpoints();
 		self::setMaxWidthFactor();
 		self::setLazyLoadClass();
+		self::setLqipClass();
 		self::setImageQuality();
 		self::setRestApiCache();
 		self::setRestApiCacheDuration();
@@ -350,7 +351,6 @@ class ResponsivePics {
 		if ($lqip) {
 			$img_classes[] = self::$lqip_class;
 			$lqip_img = ResponsivePics()->process->process_sizes($image, $sizes, 'desc', false, $crop);
-			var_dump($sizes, $lqip_img);
 		}
 
 		$src_attribute = $lazyload ? 'data-srcset' : 'srcset';
