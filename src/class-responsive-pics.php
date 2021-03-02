@@ -8,6 +8,7 @@ class ResponsivePics {
 	public static $breakpoints = null;
 	public static $max_width_factor = null;
 	public static $lazyload_class = null;
+	public static $lqip_width = null;
 	public static $lqip_class = null;
 	public static $image_quality = null;
 	public static $wp_rest_cache = null;
@@ -71,6 +72,7 @@ class ResponsivePics {
 		self::setBreakpoints();
 		self::setMaxWidthFactor();
 		self::setLazyLoadClass();
+		self::setLqipWidth();
 		self::setLqipClass();
 		self::setImageQuality();
 		self::setRestApiCache();
@@ -136,6 +138,11 @@ class ResponsivePics {
 		self::$lazyload_class = $value;
 	}
 
+	// set lqip (low quality image placeholder) image width
+	public static function setLqipWidth($width = 200) {
+		self::$lqip_width = $width;
+	}
+
 	// set lqip (low quality image placeholder) classname
 	public static function setLqipClass($value = 'blur-up') {
 		self::$lqip_class = $value;
@@ -184,6 +191,11 @@ class ResponsivePics {
 	// get lazyload classname
 	public static function getLazyLoadClass() {
 		return self::$lazyload_class;
+	}
+
+	// get lqip width
+	public static function getLqipWidth() {
+		return self::$lqip_width;
 	}
 
 	// get lqip classname
@@ -353,9 +365,12 @@ class ResponsivePics {
 		}
 
 		// low quality image placeholder option
+		$lqip_img = null;
 		if ($lqip) {
 			$img_classes[] = self::$lqip_class;
-			$lqip_img = ResponsivePics()->process->process_sizes($image, $sizes, 'desc', false, $crop);
+			$lqip_sizes    = ResponsivePics()->process->process_sizes($image, '0:' . self::$lqip_width, 'desc', false, $crop);
+			$lqip_sources  = isset($lqip_sizes['sources']) ? $lqip_sizes['sources'] : [];
+			$lqip_img      = isset($lqip_sources[0]['source1x']) ? $lqip_sources[0]['source1x'] : null;
 		}
 
 		$src_attribute = $lazyload ? 'data-srcset' : 'srcset';
@@ -364,8 +379,7 @@ class ResponsivePics {
 		// add all sources & sizes
 		$srcsets  = [];
 		$sizes    = [];
-		$lqip_img = wp_get_attachment_image_src($image, 'full', false);
-		$src      = $lqip ? ' src="'. $lqip_img[0] . '"' : '';
+		$src      = ($lqip && $lqip_img) ? ' src="'. $lqip_img . '"' : '';
 
 		// start constructing <img> element
 		$sources = isset($definition['sources']) ? $definition['sources'] : [];
