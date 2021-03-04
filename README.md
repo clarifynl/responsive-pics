@@ -338,7 +338,7 @@ define('DISABLE_WP_CRON', true);
 ```
 
 If you're using [Trellis](https://roots.io/trellis/) like us ❤️, the default cron interval is set to every [15 mins](https://github.com/roots/trellis/blob/master/roles/wordpress-setup/tasks/main.yml#L49).  
-You can override this to for example 1 mins with setting the `cron_interval` (or `cron_interval_multisite` for multisite) variable per wordpress site like this:
+You can override this to for example 1 mins with setting the `cron_interval` (or `cron_interval_multisite` for multisite) variable per wordpress site to `*/1`:
 
 In for example **trellis/group_vars/development/wordpress_sites.yml**:
 
@@ -358,7 +358,7 @@ wordpress_sites:
       provider: self-signed
     cache:
       enabled: false
-    cron_interval: 1
+    cron_interval: '*/1'
 ```
 
 Don't forget to re-provision your server after changing this value.
