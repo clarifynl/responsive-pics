@@ -100,8 +100,8 @@ ResponsivePics uses the following default variables:
 | `$grid_widths`            | array   | `['xs' => 576, 'sm' => 540, 'md' => 720, 'lg' => 960, 'xl' => 1140, 'xxl' => 1320]` | The maximum widths of your layout in pixels ResponsivePics will use for resizing your images
 | `$max_width_factor`       | number  | `2`        | The maximum factor of the width to use for resizing and cropping the height of an image source
 | `$lazyload_class`         | string  | `lazyload` | The css class to be added on the `img` tag when `lazyload` is enabled
-| `$lqip_width`             | number  | `200`      | The image width to be used for the LQIP (low quality image placeholder)
-| `$lqip_class`             | string  | `blur-up`  | The css class to be added on the `img` tag when `LQIP (low quality image placeholder)` is enabled
+| `$lqip_width`             | number  | `200`      | The image width to be used for the `LQIP` (low quality image placeholder)
+| `$lqip_class`             | string  | `blur-up`  | The css class to be added on the `img` tag when `LQIP` (low quality image placeholder) is enabled
 | `$image_quality`          | number  | `90`       | The image compression quality in percentage used in the `WP_Image_Editor` when resizing images
 | `$wp_rest_cache`          | boolean | `false`    | Wether to enable cache in the WP Rest API response headers
 | `$wp_rest_cache_duration` | number  | `3600`     | The cache duration (max-age) in seconds of the WP Rest API Cache-Control header
@@ -226,12 +226,12 @@ For inserting a responsive `<img>` element in your template, use the `get_image`
 
 #### PHP
 ```php
-ResponsivePics::get_image(id, sizes, crop, classes, lazyload);
+ResponsivePics::get_image(id, sizes, crop, classes, lazyload, lqip);
 ```
 
 #### REST API
 ```curl
-GET /wp-json/responsive-pics/v1/get-image/<id>?sizes=<sizes>&crop=<crop>&classes=<classes>&lazyload=<lazyload>
+GET /wp-json/responsive-pics/v1/get-image/<id>?sizes=<sizes>&crop=<crop>&classes=<classes>&lazyload=<lazyload>&lqip=<lqip>
 ```
 
 #### Image Parameters

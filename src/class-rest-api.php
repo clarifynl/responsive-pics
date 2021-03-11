@@ -100,10 +100,11 @@ class RP_Rest_Api extends ResponsivePics {
 		$classes   = isset($params['classes']) ? urldecode($params['classes']) : null;
 		$crop      = isset($params['crop']) ? urldecode($params['crop']) : null;
 		$lazyload  = isset($params['lazyload']) ? ($params['lazyload'] === 'true') : null;
+		$lqip      = isset($params['lqip']) ? ($params['lqip'] === 'true') : null;
 
 		if (class_exists('ResponsivePics')) {
 			if ($sizes) {
-				$image  = ResponsivePics::get_image($id, $sizes, $crop, $classes, $lazyload);
+				$image  = ResponsivePics::get_image($id, $sizes, $crop, $classes, $lazyload, $lqip);
 
 				// Check for errors
 				if (is_wp_error($image)) {
