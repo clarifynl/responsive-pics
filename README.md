@@ -9,6 +9,7 @@
 * Supports image srcset & sizes attributes
 * Supports aspect ratio based crops
 * Supports lazyloading
+* Supports LQIP (low quality image placeholder)
 * Supports intrinsic ratio boxes
 * With full REST API support
 * Uses background processing for resizing and cropping images
