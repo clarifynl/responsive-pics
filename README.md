@@ -393,7 +393,7 @@ If an error occurs during the resizing process or if there's invalid syntax, Res
 ## Features <a name="features"></a>
 
 ### Lazyloading <a name="lazyloading"></a>
-When enabling the `lazyload` option in the `get_picture` or `get_image` function, this library automatically:
+When enabling the `lazyload` option in the `get_picture` or `get_image` functions or API endpoints, this library automatically:
 
 * adds a `lazyload` class to the `<img>` element.
 * swaps the `srcset` with `data-srcset` attribute on the picture `<source>` or the `<img>` elements.
@@ -418,14 +418,14 @@ import 'lazysizes';
 ```
 
 ### LQIP (Low Quality Image Placeholder) <a name="lqip"></a>
-When enabling the `lqip` option in the `get_image` function, this library automatically:
+When enabling the `lqip` option in the `get_image` function or `/responsive-pics/v1/get-image` API endpoint, this library automatically:
 
 * adds a `blur-up` class to the `<img>` element.
 * adds a fallback `src` attribute on the `<img>` element with a low quality placeholder image with a default width of 200px.
 
 This will enable you to style your placeholder image before the actual high quality image is loaded.
 
-You can also set your own lqip class by passing it to **ResponsivePics** library in your theme’s **functions.php**:
+You can also set your own `lqip` class by passing it to **ResponsivePics** library in your theme’s **functions.php**:
 ```php
 if (class_exists('ResponsivePics')) {
 	ResponsivePics::setLqipClass('blurred');
@@ -433,7 +433,7 @@ if (class_exists('ResponsivePics')) {
 ```
 
 ### Intrinsic Aspectratio <a name="intrinsic"></a>
-When enabling the `intrinsic` option in the `get_picture` function, this library automatically:
+When enabling the `intrinsic` option in the `get_picture` function or `/responsive-pics/v1/get-picture` API endpoint, this library automatically:
 
 * adds a intrinsic class to the `<picture>` element and a `intrinsic__item` class to the picture `<img>` element.
 * adds `data-aspectratio` attributes on the picture `<source>` and `<img>` elements with the calculated source image ratio.
