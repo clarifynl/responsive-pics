@@ -57,7 +57,7 @@ class RP_Focal_Point extends ResponsivePics {
 	 */
 	public static function set_focal_point() {
 		$attachment = isset($_POST['attachment']) ? $_POST['attachment'] : null;
-		$post_id = isset(get_query_var('item')) ? get_query_var('item') : null;
+		$post_id = get_query_var('item');
 		$die = json_encode(['success' => false]);
 
 		// Save the focal point if there is one
