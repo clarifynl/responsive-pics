@@ -36,7 +36,7 @@ class RP_Focal_Point extends ResponsivePics {
 	 * Get the focalpoint of the attachment from the post meta
 	 */
 	public static function get_focal_point() {
-		$attachment = isset($_POST('attachment')) ? $_POST('attachment') : null;
+		$attachment = isset($_POST('attachment') ? $_POST('attachment') : null;
 		$attachment['focal_point'] = get_post_meta($attachment['id'], 'focal_point', true);
 		$die = json_encode(['success' => false]);
 
@@ -56,7 +56,7 @@ class RP_Focal_Point extends ResponsivePics {
 	 * Set the focalpoint of the attachment as post meta
 	 */
 	public static function set_focal_point() {
-		$attachment = isset($_POST('attachment')) ? $_POST('attachment') : null;
+		$attachment = isset($_POST('attachment') ? $_POST('attachment') : null;
 		$die = json_encode(['success' => false]);
 
 		// Save the focal point if there is one
