@@ -3,8 +3,8 @@
 class RP_Focal_Point extends ResponsivePics {
 
 	public function __construct() {
-		add_action('wp_ajax_set_focal_point', ['RP_Focal_Point', 'initialize_crop']);
-		add_action('wp_ajax_get_focal_point',  ['RP_Focal_Point', 'get_focal_point']);
+		add_action('wp_ajax_set_focal_point', ['RP_Focal_Point', 'set_focal_point']);
+		add_action('wp_ajax_get_focal_point', ['RP_Focal_Point', 'get_focal_point']);
 		add_action('admin_enqueue_scripts',   ['RP_Focal_Point', 'load_scripts']);
 	}
 
@@ -36,38 +36,42 @@ class RP_Focal_Point extends ResponsivePics {
 	 * Get the focalpoint of the attachment from the post meta
 	 */
 	public static function get_focal_point() {
-		$attachment = isset($_POST['attachment']) ? $_POST['attachment'] : null;
-		$attachment['focal_point'] = get_post_meta($attachment['id'], 'focal_point', true);
-		$die = json_encode(['success' => false]);
+		$attachment  = isset($_POST['attachment']) ? $_POST['attachment'] : [];
+		$post_id     = isset($_GET['item']) ? $_GET['item'] : null;
+		$focal_point = get_post_meta($post_id, 'focal_point', true);
 
 		// Return the focal point if there is one
-		if (null !== $attachment['id'] || is_array($attachment['focal_point'])) {
-			$die = json_encode([
-				'success'     => true,
-				'focal_point' => $attachment['focal_point']
+		if ($post_id && is_array($focal_point)) {
+			wp_send_json_success([
+				'post_id'     => $post_id,
+				'focal_point' => $focal_point
 			]);
 		}
 
 		// Return the ajax call
-		die($die);
+		wp_send_json_error();
 	}
 
 	/**
 	 * Set the focalpoint of the attachment as post meta
 	 */
 	public static function set_focal_point() {
-		$attachment = isset($_POST['attachment']) ? $_POST['attachment'] : null;
-		$post_id = get_query_var('item');
-		$die = json_encode(['success' => false]);
+		$attachment  = isset($_POST['attachment']) ? $_POST['attachment'] : [];
+		$focal_point = isset($attachment['focal_point']) ? $attachment['focal_point'] : null;
+		$post_id     = isset($_SERVER['item']) ? $_SERVER['item'] : null;
 
 		// Save the focal point if there is one
-		if ($post_id && is_array($attachment['focal_point'])) {
-			update_post_meta($post_id, 'focal_point', $attachment['focal_point']);
-
-			$die = json_encode(['success' => true]);
+		if ($post_id && is_array($focal_point)) {
+			update_post_meta($post_id, 'focal_point', $focal_point);
+			wp_send_json_success([
+				'post_id'     => $post_id,
+				'focal_point' => $focal_point
+			]);
 		}
 
 		// Return the ajax call
-		die($die);
+		wp_send_json_error([
+			'post_id' => $post_id
+		]);
 	}
 }

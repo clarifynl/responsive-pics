@@ -231,7 +231,6 @@
 	}
 }(jQuery, window, document), function(t, e, a) {
 	t(a).on("ready", function() {
-		console.log('FOCAL POINT');
 		setInterval(function() {
 			var e = t(".attachment-details");
 			if (e.find(".details-image").length && !t(".image-focal").length) try {
