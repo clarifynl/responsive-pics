@@ -15,12 +15,12 @@
 			_disabled: "button-disabled"
 		}
 	};
-	t.imageFocal || (t.imageFocal = {}), t.imageFocal.focusPoint = function(a, n) {
+	t.imageFocal || (t.imageFocal = {}), t.imageFocal.focalPoint = function(a, n) {
 		var c = this;
-		c.$el = t(a), c.el = a, c.$el.data("imageFocal.focusPoint", c);
+		c.$el = t(a), c.el = a, c.$el.data("imageFocal.focalPoint", c);
 		var i, s;
 		c.init = function() {
-			c.options = t.extend({}, t.imageFocal.focusPoint.defaultOptions, n), c.addInterfaceElements(), c.attachment.init(), c.focusInterface.init(), c.saveButton.init(), t(e).on("resize", c.attachment.updateDimensionData)
+			c.options = t.extend({}, t.imageFocal.focalPoint.defaultOptions, n), c.addInterfaceElements(), c.attachment.init(), c.focusInterface.init(), c.saveButton.init(), t(e).on("resize", c.attachment.updateDimensionData)
 		}, c.addInterfaceElements = function() {
 			var e, a = t(".edit-attachment-frame .attachment-media-view .details-image");
 			a.addClass(o.imageFocal._img), a.wrap('<div class="' + o._imageFocal + '"><div class="' + o.imageFocal._wrapper + '"></div></div>'), (e = t("." + o.imageFocal._wrapper)).append('<div class="' + o.imageFocal._point + '"></div>'), e.append('<div class="' + o.imageFocal._clickarea + '"></div>'), i = t("." + o._imageFocal), s = t("." + o.imageFocal._clickarea)
@@ -33,7 +33,7 @@
 				x: !1,
 				y: !1
 			},
-			_focusPoint: {
+			_focalPoint: {
 				x: 50,
 				y: 50
 			},
@@ -47,19 +47,18 @@
 				var e = {
 					id: c.attachment._id
 				};
-				console.log(c.el, e);
 				t.ajax({
 					type: "POST",
 					url: ajaxurl,
 					data: {
-						action: "get-focalpoint",
+						action: "get_focal_point",
 						attachment: e
 					},
 					dataType: "json"
 				}).always(function(t) {
 					if (!0 === t.success) try {
-						if (!t.focusPoint.hasOwnProperty("x") || !t.focusPoint.hasOwnProperty("y")) throw "Wrong object properties";
-						c.attachment._focusPoint = t.focusPoint
+						if (!t.focal_point.hasOwnProperty("x") || !t.focal_point.hasOwnProperty("y")) throw "Wrong object properties";
+						c.attachment._focalPoint = t.focal_point
 					} catch (t) {
 						console.log(t)
 					}
@@ -125,15 +124,15 @@
 					n = c.focusInterface._clickPosition;
 				a.x = e.x - o.x - n.x, a.y = e.y - o.y - n.y, a.x = u.calc.maxRange(a.x, 0, c.attachment._width), a.y = u.calc.maxRange(a.y, 0, c.attachment._height);
 				var i = {};
-				return i.x = a.x / c.attachment._width * 100, i.y = a.y / c.attachment._height * 100, c.attachment._focusPoint = i, c.focusInterface._position = a, c.focusInterface.updateStyle(), this
+				return i.x = a.x / c.attachment._width * 100, i.y = a.y / c.attachment._height * 100, c.attachment._focalPoint = i, c.focusInterface._position = a, c.focusInterface.updateStyle(), this
 			},
 			updateStyle: function() {
 				return c.focusInterface.updateStylePosition(), c.focusInterface.updateStyleBackground(), this
 			},
 			updateStylePosition: function() {
 				return c.focusInterface.$el.css({
-					left: c.attachment._focusPoint.x + "%",
-					top: c.attachment._focusPoint.y + "%"
+					left: c.attachment._focalPoint.x + "%",
+					top: c.attachment._focalPoint.y + "%"
 				}), this
 			},
 			updateStyleBackground: function() {
@@ -169,8 +168,8 @@
 					x: e.left + t,
 					y: e.top + t
 				}, c.focusInterface._position = {
-					x: c.attachment._focusPoint.x / 100 * c.attachment._width,
-					y: c.attachment._focusPoint.y / 100 * c.attachment._height
+					x: c.attachment._focalPoint.x / 100 * c.attachment._width,
+					y: c.attachment._focalPoint.y / 100 * c.attachment._height
 				}, this
 			},
 			state: {
@@ -197,14 +196,13 @@
 		}, c.sendImageCropDataByAjax = function() {
 			var e = {
 				id: c.attachment._id,
-				focusPoint: c.attachment._focusPoint
+				focal_point: c.attachment._focalPoint
 			};
-			console.log(e);
 			t.ajax({
 				type: "POST",
 				url: ajaxurl,
 				data: {
-					action: "initialize-crop",
+					action: "set_focal_point",
 					attachment: e
 				},
 				dataType: "json",
@@ -224,19 +222,20 @@
 				return t < e ? o = e : t > a && (o = a), o
 			}
 		}
-	}, t.imageFocal.focusPoint.defaultOptions = {
+	}, t.imageFocal.focalPoint.defaultOptions = {
 		myDefaultValue: ""
-	}, t.fn.imageFocal_focusPoint = function(e) {
+	}, t.fn.imageFocal_focalPoint = function(e) {
 		return this.each(function() {
-			new t.imageFocal.focusPoint(this, e).init()
+			new t.imageFocal.focalPoint(this, e).init()
 		})
 	}
 }(jQuery, window, document), function(t, e, a) {
 	t(a).on("ready", function() {
+		console.log('FOCAL POINT');
 		setInterval(function() {
 			var e = t(".attachment-details");
 			if (e.find(".details-image").length && !t(".image-focal").length) try {
-				e.imageFocal_focusPoint()
+				e.imageFocal_focalPoint()
 			} catch (t) {
 				console.log(t);
 			}

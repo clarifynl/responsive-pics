@@ -3,8 +3,8 @@
 class RP_Focal_Point extends ResponsivePics {
 
 	public function __construct() {
-		add_action('wp_ajax_initialize-crop', ['RP_Focal_Point', 'initialize_crop']);
-		add_action('wp_ajax_get-focalpoint',  ['RP_Focal_Point', 'get_focal_point']);
+		add_action('wp_ajax_set_focal_point', ['RP_Focal_Point', 'initialize_crop']);
+		add_action('wp_ajax_get_focal_point',  ['RP_Focal_Point', 'get_focal_point']);
 		add_action('admin_enqueue_scripts',   ['RP_Focal_Point', 'load_scripts']);
 	}
 
@@ -36,7 +36,7 @@ class RP_Focal_Point extends ResponsivePics {
 	 * Get the focalpoint of the attachment from the post meta
 	 */
 	public static function get_focal_point() {
-		$attachment = getGlobalPostData('attachment');
+		$attachment = isset($_POST('attachment')) ? $_POST('attachment') : null;
 		$attachment['focal_point'] = get_post_meta($attachment['id'], 'focal_point', true);
 		$die = json_encode(['success' => false]);
 
@@ -53,16 +53,15 @@ class RP_Focal_Point extends ResponsivePics {
 	}
 
 	/**
-	 * Initialize a new crop
+	 * Set the focalpoint of the attachment as post meta
 	 */
-	public static function initialize_crop() {
-		$attachment = getGlobalPostData('attachment');
+	public static function set_focal_point() {
+		$attachment = isset($_POST('attachment')) ? $_POST('attachment') : null;
 		$die = json_encode(['success' => false]);
 
-		// Crop the attachment if there is a focus point
+		// Save the focal point if there is one
 		if (null !== $attachment['id'] && is_array($attachment['focal_point'])) {
-			$crop = new CropService();
-			$crop->crop($attachment['id'], $attachment['focal_point']);
+			update_post_meta($attachment['id'], 'focal_point', $attachment['focal_point']);
 
 			$die = json_encode(['success' => true]);
 		}
