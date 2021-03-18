@@ -58,7 +58,8 @@ class ResponsivePics {
 			'class-rules',
 			'class-breakpoints',
 			'class-grid',
-			'class-sources'
+			'class-sources',
+			'class-focal-point'
 		];
 
 		foreach ($includes as $inc) {
@@ -87,6 +88,11 @@ class ResponsivePics {
 		ResponsivePics()->breakpoints = new RP_Breakpoints();
 		ResponsivePics()->grid = new RP_Grid();
 		ResponsivePics()->sources = new RP_Sources();
+
+		// Init Focal Point if user is allowed to upload media
+		if (current_user_can('upload_files') === true) {
+			ResponsivePics()->focalpoint = new RP_Focal_Point();
+		}
 
 		// Hooks
 		add_action('process_resize_request',   ['RP_Process', 'process_resize_request'], 10, 6);
