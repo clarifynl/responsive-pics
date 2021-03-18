@@ -65,8 +65,8 @@ class RP_Focal_Point extends ResponsivePics {
 	 * Initialize a new crop
 	 */
 	public function initializeCrop() {
-		// Get $_POST['attachment']
-		// $attachment = getGlobalPostData('attachment');
+		$attachment = getGlobalPostData('attachment');
+		var_dump($attachment);
 
 		// $die = json_encode(['success' => false]);
 
