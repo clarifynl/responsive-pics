@@ -3,27 +3,20 @@
 class RP_Focal_Point extends ResponsivePics {
 
 	public function __construct() {
-		$this->addHooks();
-	}
-
-	/**
-	 * Make sure all hooks are being executed.
-	 */
-	private function addHooks() {
-		add_action('wp_ajax_initialize-crop', [$this, 'initializeCrop']);
-		add_action('wp_ajax_get-focuspoint', [$this, 'getFocusPoint']);
-		add_action('admin_enqueue_scripts', [$this, 'loadScripts']);
+		add_action('wp_ajax_initialize-crop', ['RP_Focal_Point', 'initialize_crop']);
+		add_action('wp_ajax_get-focalpoint',  ['RP_Focal_Point', 'get_focal_point']);
+		add_action('admin_enqueue_scripts',   ['RP_Focal_Point', 'load_scripts']);
 	}
 
 	/**
 	 * Enqueues all necessary CSS and Scripts
 	 */
-	public function loadScripts() {
-		// wp_enqueue_script('focuspoint-js', IMAGEFOCUS_ASSETS . 'js/focuspoint.min.js', ['jquery']);
-		// wp_localize_script('focuspoint-js', 'focusPointL10n', $this->focusPointL10n());
-		// wp_enqueue_script('focuspoint-js');
-
-		// wp_enqueue_style('image-focus-css', IMAGEFOCUS_ASSETS . 'css/style.min.css');
+	public static function load_scripts() {
+		// wp_enqueue_script('focalpoint-js', RESPONSIVE_PICS_ASSETS . 'js/focalpoint.min.js', ['jquery']);
+		wp_enqueue_script('focalpoint-js', RESPONSIVE_PICS_ASSETS . 'js/focalpoint.js', ['jquery']);
+		wp_localize_script('focalpoint-js', 'focalPointL10n', self::focal_point_l10n());
+		wp_enqueue_script('focalpoint-js');
+		wp_enqueue_style('focalpoint-css', RESPONSIVE_PICS_ASSETS . 'css/focalpoint.min.css');
 	}
 
 	/**
@@ -31,54 +24,50 @@ class RP_Focal_Point extends ResponsivePics {
 	 *
 	 * @return array
 	 */
-	private function focusPointL10n() {
+	private static function focal_point_l10n() {
 		return [
-			'cropButton' => __('Crop image', IMAGEFOCUS_TEXTDOMAIN),
+			'saveButton' => __('Save Focal Point', RESPONSIVE_PICS_TEXTDOMAIN),
+			'saving'     => __('Saving…', RESPONSIVE_PICS_TEXTDOMAIN),
+			'tryAgain'   => __('Please Try Again', RESPONSIVE_PICS_TEXTDOMAIN)
 		];
 	}
 
 	/**
-	 * Get the focuspoint of the attachment from the post meta
+	 * Get the focalpoint of the attachment from the post meta
 	 */
-	public function getFocusPoint() {
-		// Get $_POST['attachment']
-		// $attachment = getGlobalPostData('attachment');
+	public static function get_focal_point() {
+		$attachment = getGlobalPostData('attachment');
+		$attachment['focal_point'] = get_post_meta($attachment['id'], 'focal_point', true);
+		$die = json_encode(['success' => false]);
 
-		// // Get the post meta
-		// $attachment['focusPoint'] = get_post_meta($attachment['id'], 'focus_point', true);
+		// Return the focal point if there is one
+		if (null !== $attachment['id'] || is_array($attachment['focal_point'])) {
+			$die = json_encode([
+				'success'     => true,
+				'focal_point' => $attachment['focal_point']
+			]);
+		}
 
-		// $die = json_encode(['success' => false]);
-
-		// // Return the focus point if there is one
-		// if (null !== $attachment['id'] || is_array($attachment['focusPoint'])) {
-		// 	$die = json_encode([
-		// 		'success'    => true,
-		// 		'focusPoint' => $attachment['focusPoint']
-		// 	]);
-		// }
-
-		// // Return the ajax call
-		// die($die);
+		// Return the ajax call
+		die($die);
 	}
 
 	/**
 	 * Initialize a new crop
 	 */
-	public function initializeCrop() {
+	public static function initialize_crop() {
 		$attachment = getGlobalPostData('attachment');
-		var_dump($attachment);
+		$die = json_encode(['success' => false]);
 
-		// $die = json_encode(['success' => false]);
+		// Crop the attachment if there is a focus point
+		if (null !== $attachment['id'] && is_array($attachment['focal_point'])) {
+			$crop = new CropService();
+			$crop->crop($attachment['id'], $attachment['focal_point']);
 
-		// // Crop the attachment if there is a focus point
-		// if (null !== $attachment['id'] && is_array($attachment['focusPoint'])) {
-		// 	$crop = new CropService();
-		// 	$crop->crop($attachment['id'], $attachment['focusPoint']);
+			$die = json_encode(['success' => true]);
+		}
 
-		// 	$die = json_encode(['success' => true]);
-		// }
-
-		// // Return the ajax call
-		// die($die);
+		// Return the ajax call
+		die($die);
 	}
 }
