@@ -225,7 +225,6 @@
 		myDefaultValue: ""
 	}, t.fn.imageFocal_focalPoint = function(e) {
 		return this.each(function() {
-			console.log(this);
 			new t.imageFocal.focalPoint(this, e).init()
 		})
 	}
