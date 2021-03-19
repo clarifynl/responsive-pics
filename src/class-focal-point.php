@@ -51,7 +51,7 @@ class RP_Focal_Point extends ResponsivePics {
 	 */
 	public static function get_focal_point() {
 		$attachment  = isset($_POST['attachment']) ? $_POST['attachment'] : [];
-		$post_id     = isset($_GET['item']) ? $_GET['item'] : null;
+		$post_id     = isset($attachment['id']) ? $attachment['id'] : null;
 		$focal_point = get_post_meta($post_id, 'focal_point', true);
 
 		// Return the focal point if there is one
@@ -72,7 +72,7 @@ class RP_Focal_Point extends ResponsivePics {
 	public static function set_focal_point() {
 		$attachment  = isset($_POST['attachment']) ? $_POST['attachment'] : [];
 		$focal_point = isset($attachment['focal_point']) ? $attachment['focal_point'] : null;
-		$post_id     = isset($_SERVER['item']) ? $_SERVER['item'] : null;
+		$post_id     = isset($attachment['id']) ? $attachment['id'] : null;
 
 		// Save the focal point if there is one
 		if ($post_id && is_array($focal_point)) {
