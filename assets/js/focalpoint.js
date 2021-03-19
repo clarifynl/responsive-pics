@@ -43,7 +43,7 @@
 				})
 			},
 			getData: function() {
-				c.attachment._id = t(c.el).data("id");
+				c.attachment._id = t(c.el).find('#attachment-id').data("id");
 				var e = {
 					id: c.attachment._id
 				};

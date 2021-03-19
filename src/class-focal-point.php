@@ -3,9 +3,10 @@
 class RP_Focal_Point extends ResponsivePics {
 
 	public function __construct() {
-		add_action('wp_ajax_set_focal_point', ['RP_Focal_Point', 'set_focal_point']);
-		add_action('wp_ajax_get_focal_point', ['RP_Focal_Point', 'get_focal_point']);
 		add_action('admin_enqueue_scripts',   ['RP_Focal_Point', 'load_scripts']);
+		add_action('print_media_templates',   ['RP_Focal_Point', 'customize_attachment_template']);
+		add_action('wp_ajax_get_focal_point', ['RP_Focal_Point', 'get_focal_point']);
+		add_action('wp_ajax_set_focal_point', ['RP_Focal_Point', 'set_focal_point']);
 	}
 
 	/**
@@ -31,6 +32,19 @@ class RP_Focal_Point extends ResponsivePics {
 			'tryAgain'   => __('Please Try Again', RESPONSIVE_PICS_TEXTDOMAIN)
 		];
 	}
+
+	/**
+	 * Add attachment id to "Attachments Details Two Column" Backbone micro template
+	 *
+	 * @see https://stackoverflow.com/a/25948448/2078474
+	 */
+	public static function customize_attachment_template() { ?>
+		<script>
+			jQuery(document).ready(function($) {
+				jQuery('script#tmpl-attachment-details-two-column:first').prepend('<div class="attachment-id hidden" id="attachment-id" data-id="{{ data.id }}"/>');
+			});
+		</script>
+	<?php }
 
 	/**
 	 * Get the focalpoint of the attachment from the post meta
