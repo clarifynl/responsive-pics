@@ -21,7 +21,8 @@ class ResponsivePics {
 		't' => 'top',
 		'r' => 'right',
 		'b' => 'bottom',
-		'l' => 'left'
+		'l' => 'left',
+		'f' => 'focal point'
 	];
 
 	// some handy shortcuts
