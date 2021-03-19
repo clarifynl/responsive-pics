@@ -3,14 +3,14 @@
 class RP_Rules extends ResponsivePics {
 
 	// this processes our resizing syntax with art direction support and returns a normalized array with resizing rules
-	public function get_image_rules($input, $order = 'desc', $art_direction = true, $img_crop = null) {
+	public function get_image_rules($input, $order = 'desc', $art_direction = true, $img_crop = null, $focal_point = null) {
 		$variants = ResponsivePics()->breakpoints->add_missing_breakpoints(explode(',', $input));
 		$result   = [];
 
 		// get image crop & ratio
 		$global_crop = null;
 		if (!$art_direction && $img_crop) {
-			$global_crop = ResponsivePics()->process->process_factor_crop($img_crop);
+			$global_crop = ResponsivePics()->process->process_factor_crop($img_crop, $focal_point);
 		}
 
 		foreach ($variants as $variant) {
@@ -37,7 +37,7 @@ class RP_Rules extends ResponsivePics {
 
 				$breakpoint = ResponsivePics()->process->process_breakpoint($bp);
 				if ($breakpoint !== false) {
-					$dimensions = ResponsivePics()->process->process_dimensions($dm);
+					$dimensions = ResponsivePics()->process->process_dimensions($dm, $focal_point);
 				} else {
 					break;
 				}
@@ -48,7 +48,7 @@ class RP_Rules extends ResponsivePics {
 
 				$breakpoint = ResponsivePics()->process->process_breakpoint($bp);
 				if ($breakpoint !== false) {
-					$dimensions = ResponsivePics()->process->process_dimensions($variant);
+					$dimensions = ResponsivePics()->process->process_dimensions($variant, $focal_point);
 				} else {
 					break;
 				}

@@ -35,13 +35,14 @@ class RP_Process extends ResponsivePics {
 
 	// validates sizes
 	public function process_sizes($id, $sizes, $order = 'desc', $art_direction = true, $img_crop = null) {
-		$file_path = get_attached_file($id);
-		$url       = wp_get_attachment_url($id);
-		$meta_data = wp_get_attachment_metadata($id);
-		$mime_type = get_post_mime_type($id);
-		$alt       = get_post_meta($id, '_wp_attachment_image_alt', true);
-		$alpha     = false;
-		$animated  = false;
+		$file_path   = get_attached_file($id);
+		$url         = wp_get_attachment_url($id);
+		$meta_data   = wp_get_attachment_metadata($id);
+		$mime_type   = get_post_mime_type($id);
+		$alt         = get_post_meta($id, '_wp_attachment_image_alt', true);
+		$focal_point = get_post_meta($id, 'responsive_pics_focal_point', true);
+		$alpha       = false;
+		$animated    = false;
 
 		// check if png has alpha channel
 		if ($mime_type === 'image/png') {
@@ -74,7 +75,7 @@ class RP_Process extends ResponsivePics {
 		}
 
 		// get resize rules
-		$rules = ResponsivePics()->rules->get_image_rules($sizes, $order, $art_direction, $img_crop);
+		$rules = ResponsivePics()->rules->get_image_rules($sizes, $order, $art_direction, $img_crop, $focal_point);
 
 		// get resize sources
 		$sources = [];
@@ -149,7 +150,7 @@ class RP_Process extends ResponsivePics {
 	 * - width and height and crop (shorthand) (e.g. "400 300|c")
 	 * - width with ratio and crop (shorthand) (e.g. "400/0.75|c")
 	 */
-	public function process_dimensions($input) {
+	public function process_dimensions($input, $focal_point = null) {
 		$dimensions = trim($input);
 		$width      = -1;
 		$height     = -1;
@@ -163,7 +164,7 @@ class RP_Process extends ResponsivePics {
 			$cr   = trim($comp[1]);
 
 			$dimensions = $dm;
-			$crop       = ResponsivePics()->process->process_crop($cr);
+			$crop       = ResponsivePics()->process->process_crop($cr, $focal_point);
 		}
 
 		// get breakpoint and dimensions
@@ -223,7 +224,7 @@ class RP_Process extends ResponsivePics {
 	}
 
 	// returns factor & crop array if has valid /factor|crop syntax
-	public function process_factor_crop($factor_crop = null) {
+	public function process_factor_crop($factor_crop = null, $focal_point = null) {
 		$factor_crop = preg_replace('/\//', '', $factor_crop); // remove any leading /
 		$factor      = null;
 		$crop        = false;
@@ -236,7 +237,7 @@ class RP_Process extends ResponsivePics {
 
 			if ($this->process_factor($ft)) {
 				$factor = $this->process_factor($ft);
-				$crop   = $this->process_crop($cr);
+				$crop   = $this->process_crop($cr, $focal_point);
 			} else {
 				ResponsivePics()->error->add_error('invalid', sprintf('the crop factor %s needs to be a floating number between 0 and %d', (string) $ft, (float) self::$max_width_factor), $ft);
 				return false;
@@ -271,7 +272,7 @@ class RP_Process extends ResponsivePics {
 	}
 
 	// crop values can be single shortcut values (e.g. "c") or two dimensional values (e.g. "l t");
-	public function process_crop($input) {
+	public function process_crop($input, $focal_point = null) {
 		if ($input === false) {
 			return false;
 		}
@@ -279,6 +280,10 @@ class RP_Process extends ResponsivePics {
 		$shortcuts = explode(' ', trim($input));
 		if (sizeof($shortcuts) === 1) {
 			if (isset(self::$crop_shortcuts[$shortcuts[0]])) {
+				if ($shortcuts[0] === 'f') {
+					var_dump($focal_point);
+				}
+
 				$shortcuts = self::$crop_shortcuts[$shortcuts[0]];
 				$shortcuts = explode(' ', trim($shortcuts));
 			} else {
@@ -303,6 +308,7 @@ class RP_Process extends ResponsivePics {
 	// process the scheduled resize action
 	public static function process_resize_request($id, $quality, $width, $height, $crop, $ratio) {
 		$file_path   = get_attached_file($id);
+		$meta_data   = wp_get_attachment_metadata($id);
 		$path_parts  = pathinfo($file_path);
 		$suffix      = ResponsivePics()->helpers->get_resized_suffix($width, $height, $ratio, $crop);
 		$resize_path = join(DIRECTORY_SEPARATOR, [$path_parts['dirname'], $path_parts['filename'] . '-' . $suffix . '.' . $path_parts['extension']]);
@@ -312,7 +318,11 @@ class RP_Process extends ResponsivePics {
 		if (!file_exists($resize_path)) {
 			if (!is_wp_error($wp_editor)) {
 				$wp_editor->set_quality($quality);
-				$wp_editor->resize($width * $ratio, $height * $ratio, $crop);
+				if ($crop) {
+					$wp_editor->crop($src_x, $src_y, $src_w, $src_h, $width * $ratio, $height * $ratio, true);
+				} else {
+					$wp_editor->resize($width * $ratio, $height * $ratio);
+				}
 				$wp_editor->save($resize_path);
 			} else {
 				syslog(LOG_ERR, sprintf('error resizing image "%s"', $resize_path));
