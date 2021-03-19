@@ -52,7 +52,7 @@ class RP_Focal_Point extends ResponsivePics {
 	public static function get_focal_point() {
 		$attachment  = isset($_POST['attachment']) ? $_POST['attachment'] : [];
 		$post_id     = isset($attachment['id']) ? $attachment['id'] : null;
-		$focal_point = get_post_meta($post_id, 'focal_point', true);
+		$focal_point = get_post_meta($post_id, 'responsive_pics_focal_point', true);
 
 		// Return the focal point if there is one
 		if ($post_id && is_array($focal_point)) {
@@ -76,16 +76,11 @@ class RP_Focal_Point extends ResponsivePics {
 
 		// Save the focal point if there is one
 		if ($post_id && is_array($focal_point)) {
-			update_post_meta($post_id, 'focal_point', $focal_point);
-			wp_send_json_success([
-				'post_id'     => $post_id,
-				'focal_point' => $focal_point
-			]);
+			update_post_meta($post_id, 'responsive_pics_focal_point', $focal_point);
+			wp_send_json_success();
 		}
 
 		// Return the ajax call
-		wp_send_json_error([
-			'post_id' => $post_id
-		]);
+		wp_send_json_error();
 	}
 }
