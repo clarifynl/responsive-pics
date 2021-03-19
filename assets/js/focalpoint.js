@@ -57,8 +57,8 @@
 					dataType: "json"
 				}).always(function(t) {
 					if (!0 === t.success) try {
-						if (!t.focal_point.hasOwnProperty("x") || !t.focal_point.hasOwnProperty("y")) throw "Wrong object properties";
-						c.attachment._focalPoint = t.focal_point
+						if (!t.data.focal_point.hasOwnProperty("x") || !t.data.focal_point.hasOwnProperty("y")) throw "Wrong object properties";
+						c.attachment._focalPoint = t.data.focal_point
 					} catch (t) {
 						console.log(t)
 					}
@@ -211,8 +211,7 @@
 					c.saveButton.$el.text(focalPointL10n.saving), c.saveButton.disable(), c.saveButton._ajaxState = !0
 				}
 			}).always(function(t) {
-				var e = "Done";
-				!0 !== t.success && (c.saveButton.activate(), e = focalPointL10n.tryAgain), c.saveButton.$el.text(e), c.saveButton._ajaxState = !1
+				!0 !== t.success && (c.saveButton.activate(), e = focalPointL10n.tryAgain), c.saveButton.$el.text(focalPointL10n.saved), c.saveButton._ajaxState = !1
 			})
 		};
 		var u = {};

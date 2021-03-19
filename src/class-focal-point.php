@@ -29,6 +29,7 @@ class RP_Focal_Point extends ResponsivePics {
 		return [
 			'saveButton' => __('Save Focal Point', RESPONSIVE_PICS_TEXTDOMAIN),
 			'saving'     => __('Saving…', RESPONSIVE_PICS_TEXTDOMAIN),
+			'saved'      => __('Saved', RESPONSIVE_PICS_TEXTDOMAIN),
 			'tryAgain'   => __('Please Try Again', RESPONSIVE_PICS_TEXTDOMAIN)
 		];
 	}
@@ -57,7 +58,6 @@ class RP_Focal_Point extends ResponsivePics {
 		// Return the focal point if there is one
 		if ($post_id && is_array($focal_point)) {
 			wp_send_json_success([
-				'post_id'     => $post_id,
 				'focal_point' => $focal_point
 			]);
 		}
