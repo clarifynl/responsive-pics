@@ -281,7 +281,7 @@ class RP_Process extends ResponsivePics {
 		if (sizeof($shortcuts) === 1) {
 			if (isset(self::$crop_shortcuts[$shortcuts[0]])) {
 				if ($shortcuts[0] === 'f') {
-					var_dump($focal_point);
+					return $focal_point;
 				}
 
 				$shortcuts = self::$crop_shortcuts[$shortcuts[0]];
