@@ -35,14 +35,14 @@ class RP_Focal_Point extends ResponsivePics {
 	}
 
 	/**
-	 * Add attachment id to "Attachments Details Two Column" Backbone micro template
+	 * Add attachment id to "Attachments Details Two Column & Image Editor" Backbone micro template
 	 *
 	 * @see https://stackoverflow.com/a/25948448/2078474
 	 */
 	public static function customize_attachment_template() { ?>
 		<script>
 			jQuery(document).ready(function($) {
-				jQuery('script#tmpl-attachment-details-two-column:first').prepend('<div class="attachment-id hidden" id="attachment-id" data-id="{{ data.id }}"/>');
+				jQuery('script#tmpl-attachment-details-two-column:first, script#tmpl-image-editor:first').prepend('<div class="attachment-id hidden" id="attachment-id" data-id="{{ data.id }}"/>');
 			});
 		</script>
 	<?php }

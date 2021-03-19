@@ -22,7 +22,7 @@
 		c.init = function() {
 			c.options = t.extend({}, t.imageFocal.focalPoint.defaultOptions, n), c.addInterfaceElements(), c.attachment.init(), c.focusInterface.init(), c.saveButton.init(), t(e).on("resize", c.attachment.updateDimensionData)
 		}, c.addInterfaceElements = function() {
-			var e, a = t(".edit-attachment-frame .attachment-media-view .details-image");
+			var e, a = t(".edit-attachment-frame .attachment-media-view .details-image, .edit-attachment-frame .image-editor .imgedit-crop-wrap img");
 			a.addClass(o.imageFocal._img), a.wrap('<div class="' + o._imageFocal + '"><div class="' + o.imageFocal._wrapper + '"></div></div>'), (e = t("." + o.imageFocal._wrapper)).append('<div class="' + o.imageFocal._point + '"></div>'), e.append('<div class="' + o.imageFocal._clickarea + '"></div>'), i = t("." + o._imageFocal), s = t("." + o.imageFocal._clickarea)
 		}, c.attachment = {
 			$el: !1,
@@ -182,7 +182,7 @@
 			_ajaxState: !1,
 			init: function() {
 				var e = '<button type="button" class="' + o._button + " " + o.button._disabled + " crop-attachment " + o.imageFocal._button + '">' + focalPointL10n.saveButton + "</button>";
-				t(c.el).find(".attachment-actions").append(e), c.saveButton.$el = t("." + o.imageFocal._button), c.saveButton.$el.on("click", c.sendImageCropDataByAjax)
+				t(c.el).find(".attachment-actions, .imgedit-submit").append(e), c.saveButton.$el = t("." + o.imageFocal._button), c.saveButton.$el.on("click", c.sendImageCropDataByAjax)
 			},
 			highlight: function() {
 				c.saveButton.$el.removeClass(o.button._disabled).addClass(o.button._primary).text(focalPointL10n.saveButton)
@@ -225,14 +225,15 @@
 		myDefaultValue: ""
 	}, t.fn.imageFocal_focalPoint = function(e) {
 		return this.each(function() {
+			console.log(this);
 			new t.imageFocal.focalPoint(this, e).init()
 		})
 	}
 }(jQuery, window, document), function(t, e, a) {
 	t(a).on("ready", function() {
 		setInterval(function() {
-			var e = t(".attachment-details");
-			if (e.find(".details-image").length && !t(".image-focal").length) try {
+			var e = t(".attachment-details, .image-editor");
+			if (e.find(".details-image, .imgedit-crop-wrap img").length && !t(".image-focal").length) try {
 				e.imageFocal_focalPoint()
 			} catch (t) {
 				console.log(t);
