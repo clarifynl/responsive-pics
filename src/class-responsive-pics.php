@@ -31,7 +31,8 @@ class ResponsivePics {
 		't' => 'c t',
 		'r' => 'r c',
 		'b' => 'c b',
-		'l' => 'l c'
+		'l' => 'l c',
+		'f' => 'f'
 	];
 
 	// only resizes images with the following mime types
