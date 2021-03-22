@@ -281,7 +281,14 @@ class RP_Process extends ResponsivePics {
 		if (sizeof($shortcuts) === 1) {
 			if (isset(self::$crop_shortcuts[$shortcuts[0]])) {
 				if ($shortcuts[0] === 'f') {
-					return $focal_point;
+
+					if ($this->process_focal_point($focal_point)) {
+						$focal_point = $this->process_focal_point($focal_point);
+						return $focal_point;
+					} else {
+						ResponsivePics()->error->add_error('invalid', sprintf('the focal point %s needs to be an array containing an x & y percentage', json_encode($focal_point)), $focal_point);
+						return false;
+					}
 				}
 
 				$shortcuts = self::$crop_shortcuts[$shortcuts[0]];
@@ -305,6 +312,23 @@ class RP_Process extends ResponsivePics {
 		return $result;
 	}
 
+	// focal point must be an array containing an 'x' & 'y' key with float values
+	public function process_focal_point($focal_point = null) {
+		if (is_array($focal_point) && array_key_exists('x', $focal_point) && array_key_exists('y', $focal_point)) {
+			return [
+				'x' => round($focal_point['x'], 2),
+				'y' => round($focal_point['y'], 2)
+			];
+		} else {
+			return false;
+		}
+	}
+
+	// convert crop positions array 'top left' to coordinates
+	public static function process_crop_positions($crop = []) {
+		var_dump($crop);
+	}
+
 	// process the scheduled resize action
 	public static function process_resize_request($id, $quality, $width, $height, $crop, $ratio) {
 		$file_path   = get_attached_file($id);
@@ -318,8 +342,11 @@ class RP_Process extends ResponsivePics {
 		if (!file_exists($resize_path)) {
 			if (!is_wp_error($wp_editor)) {
 				$wp_editor->set_quality($quality);
+
 				if ($crop) {
-					$wp_editor->crop($src_x, $src_y, $src_w, $src_h, $width * $ratio, $height * $ratio, true);
+					$crop_settings = self::process_crop_positions($crop);
+					var_dump($crop_settings);
+					// $wp_editor->crop($src_x, $src_y, $src_w, $src_h, $width * $ratio, $height * $ratio, true);
 				} else {
 					$wp_editor->resize($width * $ratio, $height * $ratio);
 				}
