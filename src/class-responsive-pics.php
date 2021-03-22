@@ -17,11 +17,12 @@ class ResponsivePics {
 
 	// map short letters to valid crop values
 	public static $crop_map = [
-		'c' => 50,
-		't' => 0,
-		'r' => 100,
-		'b' => 100,
-		'l' => 0
+		'c' => 'center',
+		't' => 'top',
+		'r' => 'right',
+		'b' => 'bottom',
+		'l' => 'left',
+		'f' => 'focal'
 	];
 
 	// some handy shortcuts
