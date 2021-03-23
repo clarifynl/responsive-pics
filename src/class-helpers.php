@@ -10,10 +10,17 @@ class RP_Helpers extends ResponsivePics {
 			$ratio_indicator = '@' . $ratio . 'x';
 		}
 
+		// crop positions
 		if ($crop === false) {
 			$crop_indicator = '';
 		} else {
-			$crop_indicator = '-' . implode('-', $crop);
+			$prefix = '';
+			if (isset($crop['x']) && is_float($crop['x']) &&
+				isset($crop['y']) && is_float($crop['y'])) {
+				$prefix = 'focal-';
+			}
+
+			$crop_indicator = '-' . $prefix . implode('-', $crop);
 		}
 
 		// note: actual dimensions can be different from the dimensions appended to the filename, but we don't know those before we actually resize
