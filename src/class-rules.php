@@ -3,7 +3,7 @@
 class RP_Rules extends ResponsivePics {
 
 	// this processes our resizing syntax with art direction support and returns a normalized array with resizing rules
-	public function get_image_rules($input, $order = 'desc', $art_direction = true, $img_crop = null, $focal_point = null) {
+	public function get_image_rules($input, $order = 'desc', $art_direction = true, $img_crop = null, $focal_point = ['x' => 50, 'y' => 50]) {
 		$variants = ResponsivePics()->breakpoints->add_missing_breakpoints(explode(',', $input));
 		$result   = [];
 
