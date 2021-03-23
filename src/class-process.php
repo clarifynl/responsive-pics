@@ -342,6 +342,55 @@ class RP_Process extends ResponsivePics {
 		return $crop;
 	}
 
+	// calculate crop parameters based upon focal percentages
+	public static function process_focal_crop($meta_data = null, $dest_w = null, $dest_h = null, $crop = []) {
+		$src_w = $meta_data['width'];
+		$src_h = $meta_data['height'];
+
+		// scale factor of scaling dest rect inside source rect
+		$scale_to_fill = min(($src_w / $dest_w), ($src_h / $dest_h));
+
+		// dest rect inside source rect
+		$scaled = [
+			'w' => ($dest_w * $scale_to_fill),
+			'h' => ($dest_h * $scale_to_fill)
+		];
+
+		// source crop x, y, rounded
+		$src_x = round(($crop['x'] / 100) * (($src_w - $scaled['w']) * 0.5));
+		$src_y = round(($crop['y'] / 100) * (($src_h - $scaled['h']) * 0.5));
+
+		// after that, now round source width, height too
+		$scaled['w'] = round($scaled['w']);
+		$scaled['h'] = round($scaled['h']);
+
+		// keep rect inside source dimensions
+		if ($src_x < 0) {
+			$src_x = 0;
+		}
+
+		if (($src_x + $scaled['w']) > $src_w) {
+			$src_x = $src_w - $scaled['w'];
+		}
+
+		if ($src_y < 0) {
+			$src_y = 0;
+		}
+
+		if ($src_y + $scaled['h'] > $src_h) {
+			$src_y = $src_h - $scaled['h'];
+		}
+
+		return [
+			'src_x'  => $src_x,
+			'src_y'  => $src_y,
+			'src_w'  => $scaled['w'],
+			'src_h'  => $scaled['h'],
+			'dest_w' => $dest_w,
+			'dest_h' => $dest_h
+		];
+	}
+
 	// process the scheduled resize action
 	public static function process_resize_request($id, $quality, $width, $height, $crop, $ratio, $resize_path) {
 		$file_path = get_attached_file($id);
@@ -353,9 +402,19 @@ class RP_Process extends ResponsivePics {
 			if (!is_wp_error($wp_editor)) {
 				$wp_editor->set_quality($quality);
 
+				// get crop parameters
 				if ($crop) {
 					$crop_percentages = self::process_crop_positions($crop);
-					// $wp_editor->crop($src_x, $src_y, $src_w, $src_h, $width * $ratio, $height * $ratio, true);
+					$crop_parameters  = self::process_focal_crop($meta_data, ($width * $ratio), ($height * $ratio), $crop_percentages);
+					$wp_editor->crop(
+						$crop_parameters['src_x'],
+						$crop_parameters['src_y'],
+						$crop_parameters['src_w'],
+						$crop_parameters['src_h'],
+						$crop_parameters['dest_w'],
+						$crop_parameters['dest_h'],
+						true
+					);
 				} else {
 					$wp_editor->resize($width * $ratio, $height * $ratio);
 				}
