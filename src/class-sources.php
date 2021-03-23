@@ -124,8 +124,8 @@ class RP_Sources extends ResponsivePics {
 
 	// creates a resized file if it doesn't exist and returns the final image url
 	public function get_resized_url($id, $file_path, $original_url, $width, $height, $crop, $ratio = 1) {
-		$suffix            = ResponsivePics()->helpers->get_resized_suffix($width, $height, $ratio, $crop);
 		$path_parts        = pathinfo($file_path);
+		$suffix            = ResponsivePics()->helpers->get_resized_suffix($width, $height, $ratio, $crop);
 		$resized_file_path = join(DIRECTORY_SEPARATOR, [$path_parts['dirname'], $path_parts['filename'] . '-' . $suffix . '.' . $path_parts['extension']]);
 		$resized_url       = join(DIRECTORY_SEPARATOR, [dirname($original_url), basename($resized_file_path)]);
 		$resize_request    = [
@@ -133,7 +133,7 @@ class RP_Sources extends ResponsivePics {
 			'quality'     => (int) self::$image_quality,
 			'width'       => (int) $width,
 			'height'      => (int) $height,
-			'crop'        => $crop,
+			'crop'        => (array) $crop,
 			'ratio'       => (int) $ratio
 		];
 

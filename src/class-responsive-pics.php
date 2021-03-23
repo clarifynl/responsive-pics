@@ -35,6 +35,15 @@ class ResponsivePics {
 		'f' => 'f'
 	];
 
+	// crop values to percentage
+	public static $crop_percentages = [
+		'center' => 50,
+		'top'    => 0,
+		'right'  => 100,
+		'bottom' => 100,
+		'left'   => 0
+	];
+
 	// only resizes images with the following mime types
 	public static $supported_mime_types = [
 		'image/jpeg',

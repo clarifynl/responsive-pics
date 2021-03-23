@@ -281,7 +281,6 @@ class RP_Process extends ResponsivePics {
 		if (sizeof($shortcuts) === 1) {
 			if (isset(self::$crop_shortcuts[$shortcuts[0]])) {
 				if ($shortcuts[0] === 'f') {
-
 					if ($this->process_focal_point($focal_point)) {
 						$focal_point = $this->process_focal_point($focal_point);
 						return $focal_point;
@@ -301,8 +300,8 @@ class RP_Process extends ResponsivePics {
 
 		$result = [];
 		foreach($shortcuts as $key => $value) {
-			if (isset(self::$crop_map[$value])) {
-				$result[] = self::$crop_map[$value];
+			if (isset(self::$crop_map[$value]) && $key < 2) {
+				$result[$key === 0 ? 'x' : 'y'] = self::$crop_map[$value];
 			} else {
 				$direction = ($key === 0) ? 'x' : 'y';
 				ResponsivePics()->error->add_error('invalid', sprintf('crop_%s position %s is not defined', $direction, $value), self::$crop_map);
@@ -314,29 +313,40 @@ class RP_Process extends ResponsivePics {
 
 	// focal point must be an array containing an 'x' & 'y' key with float values
 	public function process_focal_point($focal_point = null) {
-		if (is_array($focal_point) && array_key_exists('x', $focal_point) && array_key_exists('y', $focal_point)) {
+		if (is_array($focal_point) &&
+			array_key_exists('x', $focal_point) &&
+			array_key_exists('y', $focal_point)) {
 			return [
-				'x' => round($focal_point['x'], 2),
-				'y' => round($focal_point['y'], 2)
+				'x' => round($focal_point['x'], 0),
+				'y' => round($focal_point['y'], 0)
 			];
 		} else {
 			return false;
 		}
 	}
 
-	// convert crop positions array 'top left' to coordinates
+	// convert crop positions array 'top left' to coordinates '0 0'
 	public static function process_crop_positions($crop = []) {
-		var_dump($crop);
+		if (isset($crop['x']) &&
+			is_string($crop['x']) &&
+			isset(self::$crop_percentages[$crop['x']])) {
+			$crop['x'] = self::$crop_percentages[$crop['x']];
+		}
+
+		if (isset($crop['y']) &&
+			is_string($crop['y']) &&
+			isset(self::$crop_percentages[$crop['y']])) {
+			$crop['y'] = self::$crop_percentages[$crop['y']];
+		}
+
+		return $crop;
 	}
 
 	// process the scheduled resize action
-	public static function process_resize_request($id, $quality, $width, $height, $crop, $ratio) {
-		$file_path   = get_attached_file($id);
-		$meta_data   = wp_get_attachment_metadata($id);
-		$path_parts  = pathinfo($file_path);
-		$suffix      = ResponsivePics()->helpers->get_resized_suffix($width, $height, $ratio, $crop);
-		$resize_path = join(DIRECTORY_SEPARATOR, [$path_parts['dirname'], $path_parts['filename'] . '-' . $suffix . '.' . $path_parts['extension']]);
-		$wp_editor   = wp_get_image_editor($file_path);
+	public static function process_resize_request($id, $quality, $width, $height, $crop, $ratio, $resize_path) {
+		$file_path = get_attached_file($id);
+		$meta_data = wp_get_attachment_metadata($id);
+		$wp_editor = wp_get_image_editor($file_path);
 
 		// Check if image exists
 		if (!file_exists($resize_path)) {
@@ -344,12 +354,12 @@ class RP_Process extends ResponsivePics {
 				$wp_editor->set_quality($quality);
 
 				if ($crop) {
-					$crop_settings = self::process_crop_positions($crop);
-					var_dump($crop_settings);
+					$crop_percentages = self::process_crop_positions($crop);
 					// $wp_editor->crop($src_x, $src_y, $src_w, $src_h, $width * $ratio, $height * $ratio, true);
 				} else {
 					$wp_editor->resize($width * $ratio, $height * $ratio);
 				}
+				// Save resized/cropped file
 				$wp_editor->save($resize_path);
 			} else {
 				syslog(LOG_ERR, sprintf('error resizing image "%s"', $resize_path));
