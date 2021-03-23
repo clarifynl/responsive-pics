@@ -129,12 +129,13 @@ class RP_Sources extends ResponsivePics {
 		$resized_file_path = join(DIRECTORY_SEPARATOR, [$path_parts['dirname'], $path_parts['filename'] . '-' . $suffix . '.' . $path_parts['extension']]);
 		$resized_url       = join(DIRECTORY_SEPARATOR, [dirname($original_url), basename($resized_file_path)]);
 		$resize_request    = [
-			'id'          => (int) $id,
-			'quality'     => (int) self::$image_quality,
-			'width'       => (int) $width,
-			'height'      => (int) $height,
-			'crop'        => (array) $crop,
-			'ratio'       => (int) $ratio
+			'id'      => (int) $id,
+			'quality' => (int) self::$image_quality,
+			'width'   => (int) $width,
+			'height'  => (int) $height,
+			'crop'    => (array) $crop,
+			'ratio'   => (int) $ratio,
+			'path'    => (string) $resized_file_path
 		];
 
 		// if image size does not exist yet as filename
