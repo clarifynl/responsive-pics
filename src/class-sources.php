@@ -133,7 +133,7 @@ class RP_Sources extends ResponsivePics {
 			'quality' => (int) self::$image_quality,
 			'width'   => (int) $width,
 			'height'  => (int) $height,
-			'crop'    => (array) $crop,
+			'crop'    => $crop,
 			'ratio'   => (int) $ratio,
 			'path'    => (string) $resized_file_path
 		];
