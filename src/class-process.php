@@ -74,6 +74,14 @@ class RP_Process extends ResponsivePics {
 			ResponsivePics()->error->add_error('missing', sprintf('no dimensions found in metadata for image %s', $id), $meta_data);
 		}
 
+		// default focal point
+		if (!$focal_point) {
+			$focal_point = [
+				'x' => 50,
+				'y' => 50
+			];
+		}
+
 		// get resize rules
 		$rules = ResponsivePics()->rules->get_image_rules($sizes, $order, $art_direction, $img_crop, $focal_point);
 
