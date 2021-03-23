@@ -365,8 +365,8 @@ class RP_Process extends ResponsivePics {
 		];
 
 		// source crop x, y, rounded
-		$src_x = round(($crop['x'] / 100) * (($src_w - $scaled['w']) * 0.5));
-		$src_y = round(($crop['y'] / 100) * (($src_h - $scaled['h']) * 0.5));
+		$src_x = round($crop['x'] / 100 * $src_w - ($scaled['w'] * 0.5));
+		$src_y = round($crop['y'] / 100 * $src_h - ($scaled['h'] * 0.5));
 
 		// after that, now round source width, height too
 		$scaled['w'] = round($scaled['w']);
@@ -421,7 +421,7 @@ class RP_Process extends ResponsivePics {
 						$crop_parameters['src_h'],
 						$crop_parameters['dest_w'],
 						$crop_parameters['dest_h'],
-						true
+						false
 					);
 				} else {
 					$wp_editor->resize($width * $ratio, $height * $ratio);
