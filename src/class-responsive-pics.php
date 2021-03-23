@@ -106,7 +106,7 @@ class ResponsivePics {
 		}
 
 		// Hooks
-		add_action('process_resize_request',   ['RP_Process', 'process_resize_request'], 10, 6);
+		add_action('process_resize_request',   ['RP_Process', 'process_resize_request'], 10, 7);
 		add_action('rest_api_init',            ['RP_Rest_Api', 'register_api_routes']);
 		add_filter('big_image_size_threshold', '__return_false');
 	}
