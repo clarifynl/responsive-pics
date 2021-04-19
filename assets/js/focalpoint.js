@@ -1,242 +1,395 @@
-!function(t, e, a) {
-	"use strict";
-	var o = {
-		_imageFocal: "image-focal",
-		imageFocal: {
-			_wrapper: "image-focal__wrapper",
-			_img: "image-focal__img",
-			_point: "image-focal__point",
-			_clickarea: "image-focal__clickarea",
-			_button: "image-focal__button"
-		},
-		_button: "button",
-		button: {
-			_primary: "button-primary",
-			_disabled: "button-disabled"
+/* global jQuery, ajaxurl, focalPointL10n */
+
+// compress: terser --compress --mangle --output focalpoint.min.js -- focalpoint.js
+
+(function($, win, doc) {
+	function maxRange(val1, val2, val3) {
+		let result = val1;
+
+		if (val1 < val2) {
+			result = val2;
+		} else if (val1 > val3) {
+			result = val3;
 		}
+
+		return result;
+	}
+
+	const CLASSES = {
+		IMAGE_FOCAL          : 'image-focal',
+		IMAGE_FOCAL_WRAPPER  : 'image-focal__wrapper',
+		IMAGE_FOCAL_IMG      : 'image-focal__img',
+		IMAGE_FOCAL_POINT    : 'image-focal__point',
+		IMAGE_FOCAL_CLICKAREA: 'image-focal__clickarea',
+		IMAGE_FOCAL_BUTTON   : 'image-focal__button',
+		BUTTON               : 'button',
+		BUTTON_PRIMARY       : 'button-primary',
+		BUTTON_DISABLED      : 'button-disabled'
 	};
-	t.imageFocal || (t.imageFocal = {}), t.imageFocal.focalPoint = function(a, n) {
-		var c = this;
-		c.$el = t(a), c.el = a, c.$el.data("imageFocal.focalPoint", c);
-		var i, s;
-		c.init = function() {
-			c.options = t.extend({}, t.imageFocal.focalPoint.defaultOptions, n), c.addInterfaceElements(), c.attachment.init(), c.focusInterface.init(), c.saveButton.init(), t(e).on("resize", c.attachment.updateDimensionData)
-		}, c.addInterfaceElements = function() {
-			var e, a = t(".edit-attachment-frame .attachment-media-view .details-image, .edit-attachment-frame .image-editor .imgedit-crop-wrap img");
-			a.addClass(o.imageFocal._img), a.wrap('<div class="' + o._imageFocal + '"><div class="' + o.imageFocal._wrapper + '"></div></div>'), (e = t("." + o.imageFocal._wrapper)).append('<div class="' + o.imageFocal._point + '"></div>'), e.append('<div class="' + o.imageFocal._clickarea + '"></div>'), i = t("." + o._imageFocal), s = t("." + o.imageFocal._clickarea)
-		}, c.attachment = {
-			$el: !1,
-			_id: !1,
-			_width: !1,
-			_height: !1,
-			_offset: {
-				x: !1,
-				y: !1
+
+	$.imageFocal = $.imageFocal || {};
+
+	$.imageFocal.focalPoint = function(el, options) {
+		const self = this;
+
+		self.$el = $(el);
+		self.el = el;
+		self.$el.data('imageFocal.focalPoint', self);
+
+		let $imageFocal;
+		let $clickArea;
+
+		self.init = function() {
+			self.options = $.extend({}, $.imageFocal.focalPoint.defaultOptions, options);
+
+			self.addInterfaceElements();
+			self.attachment.init();
+			self.focusInterface.init();
+			self.saveButton.init();
+
+			$(doc).on('resize', self.attachment.updateDimensionData);
+		};
+
+		self.addInterfaceElements = function() {
+			const $el = $('.edit-attachment-frame .attachment-media-view .details-image');
+
+			$el.addClass(CLASSES.IMAGE_FOCAL_IMG);
+			$el.wrap(`<div class="${CLASSES.IMAGE_FOCAL}"><div class="${CLASSES.IMAGE_FOCAL_WRAPPER}"></div></div>`);
+
+			const $focalWrapper = $(`.${CLASSES.IMAGE_FOCAL_WRAPPER}`);
+
+			$focalWrapper.append(`<div class="${CLASSES.IMAGE_FOCAL_POINT}"></div>`);
+			$focalWrapper.append(`<div class="${CLASSES.IMAGE_FOCAL_CLICKAREA}"></div>`);
+
+			$imageFocal = $(`.${CLASSES.IMAGE_FOCAL}`);
+			$clickArea = $(`.${CLASSES.IMAGE_FOCAL_CLICKAREA}`);
+		};
+
+		self.attachment = {
+			$el   : false,
+			id    : false,
+			width : false,
+			height: false,
+			offset: {
+				x: false,
+				y: false
 			},
-			_focalPoint: {
+			focalPoint: {
 				x: 50,
 				y: 50
 			},
-			init: function() {
-				c.attachment.$el = t("." + o.imageFocal._img), c.attachment.getData(), c.attachment.$el.load(function() {
-					c.attachment.updateDimensionData()
-				})
+			init() {
+				self.attachment.$el = $(`.${CLASSES.IMAGE_FOCAL_IMG}`);
+				self.attachment.getData();
+				self.attachment.$el.load(() => {
+					self.attachment.updateDimensionData();
+				});
 			},
-			getData: function() {
-				c.attachment._id = t(c.el).find('#attachment-id').data("id");
-				var e = {
-					id: c.attachment._id
+			getData() {
+				self.attachment.id = $(self.el).find('#attachment-id').data('id');
+
+				const attachment = {
+					'id': self.attachment.id
 				};
-				t.ajax({
-					type: "POST",
-					url: ajaxurl,
+
+				$.ajax({
+					type: 'POST',
+					url : ajaxurl,
 					data: {
-						action: "get_focal_point",
-						attachment: e
+						action: 'get_focal_point',
+						attachment
 					},
-					dataType: "json"
-				}).always(function(t) {
-					if (!0 === t.success) try {
-						if (!t.data.focal_point.hasOwnProperty("x") || !t.data.focal_point.hasOwnProperty("y")) throw "Wrong object properties";
-						c.attachment._focalPoint = t.data.focal_point
-					} catch (t) {
-						console.log(t)
+					dataType: 'json'
+				}).always(result => {
+					if (result['success'] === true && result['data'] && result['data']['focal_point']) {
+						try {
+							if (result['data']['focal_point']['x'] === undefined || result['data']['focal_point']['y'] === undefined) {
+								throw new Error('no coordinates');
+							}
+
+							self.attachment.focalPoint = result['data']['focal_point'];
+						} catch (err) {
+							console.log(err);
+						}
 					}
-					c.attachment.updateDimensionData(), c.focusInterface.updateStylePosition(), c.focusInterface.$el.css({
-						display: "block"
-					}), c.focusInterface.updateDimensionData(), c.focusInterface.updateStyleBackground()
-				})
+
+					self.attachment.updateDimensionData();
+					self.focusInterface.updateStylePosition();
+					self.focusInterface.$el.css({
+						display: 'block'
+					});
+					self.focusInterface.updateDimensionData();
+					self.focusInterface.updateStyleBackground();
+				});
 			},
-			updateDimensionData: function() {
-				var t = c.attachment.$el;
-				c.attachment._width = t.width(), c.attachment._height = t.height(), c.attachment._offset.x = t.offset().left, c.attachment._offset.y = t.offset().top
+			updateDimensionData() {
+				const $el = self.attachment.$el;
+
+				self.attachment.width = $el.width();
+				self.attachment.height = $el.height();
+				self.attachment.offset.x = $el.offset().left;
+				self.attachment.offset.y = $el.offset().top;
 			}
-		}, c.focusInterface = {
-			$el: !1,
-			_width: 0,
-			_height: 0,
-			_radius: 0,
-			_offset: {
+		};
+
+		self.focusInterface = {
+			$el   : false,
+			width : 0,
+			height: 0,
+			radius: 0,
+			offset: {
 				x: 0,
 				y: 0
 			},
-			_position: {
+			position: {
 				x: 0,
 				y: 0
 			},
-			_clickPosition: {
+			clickPosition: {
 				x: 0,
 				y: 0
 			},
-			_state: {
-				move: !1,
-				active: !1,
-				hover: !1
+			state: {
+				move  : false,
+				active: false,
+				hover : false
 			},
-			init: function() {
-				c.focusInterface.$el = t("." + o.imageFocal._point), s.on("mousedown", function(t) {
-					1 === t.which && c.focusInterface.startMove(t, !0).move(t)
-				}), c.focusInterface.$el.on("mousedown", function(t) {
-					1 === t.which && c.focusInterface.startMove(t)
-				}).on("mouseenter", function() {
-					c.focusInterface.state.hover(!0)
-				}).on("mouseleave", function() {
-					c.focusInterface.state.hover(!1)
-				}), t(e).on("mouseup", function(t) {
-					1 === t.which && (c.focusInterface._state.move = !1, c.focusInterface._state.active = !1, i.removeClass("is-active"))
-				}).on("mousemove", function(t) {
-					c.focusInterface.move(t)
-				}).on("resize", function() {
-					c.focusInterface.updateDimensionData().updateStyle()
-				})
+			init() {
+				self.focusInterface.$el = $(`.${CLASSES.IMAGE_FOCAL_POINT}`);
+
+				$clickArea.on('mousedown', e => {
+					if (e.which === 1) {
+						self.focusInterface.startMove(e, true).move(e);
+					}
+				});
+
+				self.focusInterface.$el
+					.on('mousedown', e => {
+						if (e.which === 1) {
+							self.focusInterface.startMove(e);
+						}
+					})
+					.on('mouseenter', () => {
+						self.focusInterface.hover(true);
+					})
+					.on('mouseleave', () => {
+						self.focusInterface.hover(false);
+					});
+
+				$(win)
+					.on('mouseup', e => {
+						if (e.which === 1) {
+							self.focusInterface.state.move = false;
+							self.focusInterface.state.active = false;
+							$imageFocal.removeClass('is-active');
+						}
+					})
+					.on('mousemove', e => {
+						self.focusInterface.move(e);
+					})
+					.on('resize', () => {
+						self.focusInterface.updateDimensionData().updateStyle();
+					});
 			},
-			startMove: function(t, e) {
-				return c.attachment.updateDimensionData(), c.focusInterface.updateDimensionData().updateClickPosition(t, e), c.saveButton.highlight(), i.addClass("is-active"), c.focusInterface._state.move = !0, c.focusInterface._state.active = !0, this
+			startMove(t, e) {
+				self.attachment.updateDimensionData();
+				self.focusInterface.updateDimensionData().updateClickPosition(t, e);
+				self.saveButton.highlight();
+
+				$imageFocal.addClass('is-active');
+
+				self.focusInterface.state.move = true;
+				self.focusInterface.state.active = true;
+
+				return this;
 			},
-			move: function(t) {
-				if (!1 === c.focusInterface._state.move) return !1;
-				var e = {
-						x: t.pageX,
-						y: t.pageY
-					},
-					a = {},
-					o = c.attachment._offset,
-					n = c.focusInterface._clickPosition;
-				a.x = e.x - o.x - n.x, a.y = e.y - o.y - n.y, a.x = u.calc.maxRange(a.x, 0, c.attachment._width), a.y = u.calc.maxRange(a.y, 0, c.attachment._height);
-				var i = {};
-				return i.x = a.x / c.attachment._width * 100, i.y = a.y / c.attachment._height * 100, c.attachment._focalPoint = i, c.focusInterface._position = a, c.focusInterface.updateStyle(), this
+			move(e) {
+				if (self.focusInterface.state.move === false) {
+					return false;
+				}
+
+				const a = {};
+				const offset = self.attachment.offset;
+				const pos = self.focusInterface.clickPosition;
+
+				a.x = e.pageX - offset.x - pos.x;
+				a.y = e.pageY - offset.y - pos.y;
+				a.x = maxRange(a.x, 0, self.attachment.width);
+				a.y = maxRange(a.y, 0, self.attachment.height);
+
+				self.attachment.focalPoint = {
+					x: a.x / self.attachment.width * 100,
+					y: a.y / self.attachment.height * 100
+				};
+
+				self.focusInterface.position = a;
+				self.focusInterface.updateStyle();
+
+				return this;
 			},
-			updateStyle: function() {
-				return c.focusInterface.updateStylePosition(), c.focusInterface.updateStyleBackground(), this
+			updateStyle() {
+				self.focusInterface.updateStylePosition();
+				self.focusInterface.updateStyleBackground();
+
+				return this;
 			},
-			updateStylePosition: function() {
-				return c.focusInterface.$el.css({
-					left: c.attachment._focalPoint.x + "%",
-					top: c.attachment._focalPoint.y + "%"
-				}), this
+			updateStylePosition() {
+				self.focusInterface.$el.css({
+					left: `${self.attachment.focalPoint.x}%`,
+					top : `${self.attachment.focalPoint.y}%`
+				});
+
+				return this;
 			},
-			updateStyleBackground: function() {
-				var t = 0 - (c.focusInterface._position.x - c.focusInterface._radius),
-					e = 0 - (c.focusInterface._position.y - c.focusInterface._radius);
-				return c.focusInterface.$el.css({
-					backgroundImage: 'url("' + c.attachment.$el.attr("src") + '")',
-					backgroundSize: c.attachment._width + "px " + c.attachment._height + "px ",
-					backgroundPosition: t + "px " + e + "px "
-				}), this
+			updateStyleBackground() {
+				const x = 0 - (self.focusInterface.position.x - self.focusInterface.radius);
+				const y = 0 - (self.focusInterface.position.y - self.focusInterface.radius);
+
+				self.focusInterface.$el.css({
+					backgroundImage   : `url("${self.attachment.$el.attr('src')}")`,
+					backgroundSize    : `${self.attachment.width}px ${self.attachment.height}px`,
+					backgroundPosition: `${x}px ${y}px `
+				});
+
+				return this;
 			},
-			updateClickPosition: function(t, e) {
-				var a = {
+			updateClickPosition(t, e) {
+				const pos = {
 					x: 0,
 					y: 0
 				};
-				if (!0 !== e) {
-					var o = {
-							x: t.pageX,
-							y: t.pageY
-						},
-						n = c.focusInterface._offset;
-					(a = {}).x = o.x - n.x, a.y = o.y - n.y
+
+				if (e !== true) {
+					const o = self.focusInterface.offset;
+
+					pos.x = t.pageX - o.x;
+					pos.y = t.pageY - o.y;
 				}
-				return c.focusInterface._clickPosition = a, this
+
+				self.focusInterface.clickPosition = pos;
+
+				return this;
 			},
-			updateDimensionData: function() {
-				c.focusInterface._width = c.focusInterface.$el.width(), c.focusInterface._height = c.focusInterface.$el.height();
-				var t = c.focusInterface._width / 2;
-				c.focusInterface._radius = t;
-				var e = c.focusInterface.$el.offset();
-				return c.focusInterface._offset = {
-					x: e.left + t,
-					y: e.top + t
-				}, c.focusInterface._position = {
-					x: c.attachment._focalPoint.x / 100 * c.attachment._width,
-					y: c.attachment._focalPoint.y / 100 * c.attachment._height
-				}, this
+			updateDimensionData() {
+				self.focusInterface.width = self.focusInterface.$el.width();
+				self.focusInterface.height = self.focusInterface.$el.height();
+
+				const radius = self.focusInterface.width / 2;
+
+				self.focusInterface.radius = radius;
+
+				const o = self.focusInterface.$el.offset();
+
+				self.focusInterface.offset = {
+					x: o.left + radius,
+					y: o.top + radius
+				};
+
+				self.focusInterface.position = {
+					x: self.attachment.focalPoint.x / 100 * self.attachment.width,
+					y: self.attachment.focalPoint.y / 100 * self.attachment.height
+				};
+
+				return this;
 			},
-			state: {
-				hover: function(t) {
-					c.focusInterface._state.hover = t, i.toggleClass("is-hover", t)
-				}
+			hover(val) {
+				self.focusInterface.state.hover = val;
+
+				$imageFocal.toggleClass('is-hover', val);
 			}
-		}, c.saveButton = {
-			$el: !1,
-			_ajaxState: !1,
-			init: function() {
-				var e = '<button type="button" class="' + o._button + " " + o.button._disabled + " crop-attachment " + o.imageFocal._button + '">' + focalPointL10n.saveButton + "</button>";
-				t(c.el).find(".attachment-actions, .imgedit-submit").append(e), c.saveButton.$el = t("." + o.imageFocal._button), c.saveButton.$el.on("click", c.sendImageCropDataByAjax)
-			},
-			highlight: function() {
-				c.saveButton.$el.removeClass(o.button._disabled).addClass(o.button._primary).text(focalPointL10n.saveButton)
-			},
-			activate: function() {
-				c.saveButton.$el.removeClass(o.button._disabled).removeClass(o.button._primary)
-			},
-			disable: function() {
-				c.saveButton.$el.removeClass(o.button._primary).addClass(o.button._disabled)
-			}
-		}, c.sendImageCropDataByAjax = function() {
-			var e = {
-				id: c.attachment._id,
-				focal_point: c.attachment._focalPoint
-			};
-			t.ajax({
-				type: "POST",
-				url: ajaxurl,
-				data: {
-					action: "set_focal_point",
-					attachment: e
-				},
-				dataType: "json",
-				beforeSend: function() {
-					if (!0 === c.saveButton._ajaxState) return !1;
-					c.saveButton.$el.text(focalPointL10n.saving), c.saveButton.disable(), c.saveButton._ajaxState = !0
-				}
-			}).always(function(t) {
-				!0 !== t.success && (c.saveButton.activate(), e = focalPointL10n.tryAgain), c.saveButton.$el.text(focalPointL10n.saved), c.saveButton._ajaxState = !1
-			})
 		};
-		var u = {};
-		u.calc = {
-			maxRange: function(t, e, a) {
-				var o = t;
-				return t < e ? o = e : t > a && (o = a), o
+
+		self.saveButton = {
+			$el     : false,
+			isSaving: false,
+			init() {
+				const button = `<button type="button" class="${CLASSES.BUTTON} ${CLASSES.BUTTON_DISABLED} crop-attachment ${CLASSES.IMAGE_FOCAL_BUTTON}">${focalPointL10n.saveButton}</button>`;
+
+				$(self.el)
+					.find('.attachment-actions')
+					.append(button);
+
+				self.saveButton.$el = $(`.${CLASSES.IMAGE_FOCAL_BUTTON}`);
+				self.saveButton.$el.on('click', self.sendImageCropDataByAjax);
+			},
+			highlight() {
+				self.saveButton.$el
+					.removeClass(CLASSES.BUTTON_DISABLED)
+					.addClass(CLASSES.BUTTON_PRIMARY)
+					.text(focalPointL10n.saveButton);
+			},
+			activate() {
+				self.saveButton.$el
+					.removeClass(CLASSES.BUTTON_DISABLED)
+					.removeClass(CLASSES.BUTTON_PRIMARY);
+			},
+			disable() {
+				self.saveButton.$el
+					.removeClass(CLASSES.BUTTON_PRIMARY)
+					.addClass(CLASSES.BUTTON_DISABLED);
 			}
-		}
-	}, t.imageFocal.focalPoint.defaultOptions = {
-		myDefaultValue: ""
-	}, t.fn.imageFocal_focalPoint = function(e) {
+		};
+
+		self.sendImageCropDataByAjax = function() {
+			const attachment = {
+				'id'         : self.attachment.id,
+				'focal_point': self.attachment.focalPoint
+			};
+
+			$.ajax({
+				type: 'POST',
+				url : ajaxurl,
+				data: {
+					action: 'set_focal_point',
+					attachment
+				},
+				dataType: 'json',
+				beforeSend() {
+					if (self.saveButton.isSaving === true) {
+						return false;
+					}
+
+					self.saveButton.$el.text(focalPointL10n.saving);
+					self.saveButton.disable();
+					self.saveButton.isSaving = true;
+
+					return true;
+				}
+			}).always(result => {
+				let msg = focalPointL10n.saved;
+
+				if (result.success !== true) {
+					self.saveButton.activate();
+					msg = focalPointL10n.tryAgain;
+				}
+
+				self.saveButton.$el.text(msg);
+				self.saveButton.isSaving = false;
+			});
+		};
+	};
+
+	$.imageFocal.focalPoint.defaultOptions = {
+		myDefaultValue: ''
+	};
+
+	$.fn.initFocalPoint = function(options) {
 		return this.each(function() {
-			new t.imageFocal.focalPoint(this, e).init()
-		})
-	}
-}(jQuery, window, document), function(t, e, a) {
-	t(a).on("ready", function() {
-		setInterval(function() {
-			var e = t(".attachment-details, .image-editor");
-			if (e.find(".details-image, .imgedit-crop-wrap img").length && !t(".image-focal").length) try {
-				e.imageFocal_focalPoint()
-			} catch (t) {
-				console.log(t);
+			new $.imageFocal.focalPoint(this, options).init();
+		});
+	};
+
+	$(doc).on('ready', () => {
+		win.setInterval(() => {
+			const $el = $('.attachment-details');
+
+			if ($el.find('.details-image').length && !$('.image-focal').length) {
+				try {
+					$el.initFocalPoint();
+				} catch (err) {
+					console.log(err);
+				}
 			}
-		}, 500)
-	})
-}(jQuery, window, document);
+		}, 500);
+	});
+})(jQuery, window, document);
