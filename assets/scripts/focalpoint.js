@@ -372,7 +372,6 @@
 
 	$.fn.initFocalPoint = function(options) {
 		return this.each(function() {
-			console.log('initFocalPoint', this);
 			new $.imageFocal.focalPoint(this, options).init();
 		});
 	};
@@ -384,10 +383,8 @@
 	$(doc).on('ready', () => {
 		win.setInterval(() => {
 			const $el = $('.attachment-details, .image-editor');
-			console.log('interval', $el);
 			if ($el.find('.details-image, .imgedit-crop-wrap img').length && !$('.image-focal').length) {
 				try {
-					console.log('try', $el);
 					$el.initFocalPoint();
 				} catch (err) {
 					console.log(err);
