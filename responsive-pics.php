@@ -27,14 +27,19 @@ class ResponsivePicsWP {
 		}
 
 		// Variables
+		$package = file_get_contents('/package.json');
+		$package = json_decode($package, true);
+		var_dump($package['version']);
+
 		define('RESPONSIVE_PICS_DIR', plugin_dir_path( __FILE__ ));
+		define('RESPONSIVE_PICS_VERSION', '1.4.0');
 		define('RESPONSIVE_PICS_TEXTDOMAIN', 'responsive-pics');
-		define('RESPONSIVE_PICS_ASSETS', plugin_dir_url(__FILE__) . 'assets/');
 
 		// Init
 		if (!class_exists('ResponsivePics')) {
-			include(RESPONSIVE_PICS_DIR . '/lib/action-scheduler/action-scheduler.php');
-			include(RESPONSIVE_PICS_DIR . '/src/class-responsive-pics.php');
+			require_once(RESPONSIVE_PICS_DIR . '/lib/action-scheduler/action-scheduler.php');
+			require_once(RESPONSIVE_PICS_DIR . '/lib/wpackio-enqueue/inc/Enqueue.php');
+			require_once(RESPONSIVE_PICS_DIR . '/src/class-responsive-pics.php');
 		}
 	}
 

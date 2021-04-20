@@ -51,7 +51,7 @@
 		};
 
 		self.addInterfaceElements = function() {
-			const $el = $('.edit-attachment-frame .attachment-media-view .details-image');
+			const $el = $('.edit-attachment-frame .attachment-media-view .details-image, .edit-attachment-frame .image-editor .imgedit-crop-wrap img');
 
 			$el.addClass(CLASSES.IMAGE_FOCAL_IMG);
 			$el.wrap(`<div class="${CLASSES.IMAGE_FOCAL}"><div class="${CLASSES.IMAGE_FOCAL_WRAPPER}"></div></div>`);
@@ -306,7 +306,7 @@
 				const button = `<button type="button" class="${CLASSES.BUTTON} ${CLASSES.BUTTON_DISABLED} crop-attachment ${CLASSES.IMAGE_FOCAL_BUTTON}">${focalPointL10n.saveButton}</button>`;
 
 				$(self.el)
-					.find('.attachment-actions')
+					.find('.attachment-actions, .imgedit-submit')
 					.append(button);
 
 				self.saveButton.$el = $(`.${CLASSES.IMAGE_FOCAL_BUTTON}`);
@@ -381,9 +381,9 @@
 
 	$(doc).on('ready', () => {
 		win.setInterval(() => {
-			const $el = $('.attachment-details');
+			const $el = $('.attachment-details, .image-editor');
 
-			if ($el.find('.details-image').length && !$('.image-focal').length) {
+			if ($el.find('.details-image, .imgedit-crop-wrap img').length && !$('.image-focal').length) {
 				try {
 					$el.initFocalPoint();
 				} catch (err) {

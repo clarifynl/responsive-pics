@@ -1,8 +1,13 @@
 <?php
 
 class RP_Focal_Point extends ResponsivePics {
+	/**
+	 * @var \WPackio\Enqueue
+	 */
+	public $enqueue;
 
 	public function __construct() {
+		$this->enqueue = new \WPackio\Enqueue('responsivePics', 'dist', RESPONSIVE_PICS_VERSION, 'plugin', RESPONSIVE_PICS_DIR);
 		add_action('admin_enqueue_scripts',   ['RP_Focal_Point', 'load_scripts']);
 		add_action('print_media_templates',   ['RP_Focal_Point', 'customize_attachment_template']);
 		add_action('wp_ajax_get_focal_point', ['RP_Focal_Point', 'get_focal_point']);
@@ -13,11 +18,21 @@ class RP_Focal_Point extends ResponsivePics {
 	 * Enqueues all necessary CSS and Scripts
 	 */
 	public static function load_scripts() {
-		// wp_enqueue_script('focalpoint-js', RESPONSIVE_PICS_ASSETS . 'js/focalpoint.min.js', ['jquery']);
-		wp_enqueue_script('focalpoint-js', RESPONSIVE_PICS_ASSETS . 'js/focalpoint.js', ['jquery']);
-		wp_localize_script('focalpoint-js', 'focalPointL10n', self::focal_point_l10n());
-		wp_enqueue_script('focalpoint-js');
-		wp_enqueue_style('focalpoint-css', RESPONSIVE_PICS_ASSETS . 'css/focalpoint.min.css');
+		$assets = $this->enqueue->enqueue('focalpoint', 'admin', [
+			'js'        => true,
+			'css'       => false,
+			'js_dep'    => ['jquery'],
+			'css_dep'   => [],
+			'in_footer' => false
+		]);
+		$entry_point = array_pop($assets['js']);
+		var_dump($entry_point);
+		wp_localize_script($entry_point['handle'], 'focalPointL10n', self::focal_point_l10n());
+
+		$assets = $this->enqueue->enqueue('focalpoint', 'admin', [
+			'js'  => false,
+			'css' => true
+		]);
 	}
 
 	/**

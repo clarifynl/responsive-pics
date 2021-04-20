@@ -1,0 +1,20 @@
+{
+  "name": "responsive-pics",
+  "version": "1.4.0",
+  "private": true,
+  "devDependencies": {
+    "@wpackio/scripts": "^5.0.0",
+    "cssnano": "^5.0.1",
+    "node-sass": "^4.14.1",
+    "sass": "^1.32.11"
+  },
+  "scripts": {
+    "bootstrap": "wpackio-scripts bootstrap -p ./assets/build/wpackio.project.js -s ./assets/build/wpackio.server.js",
+    "build": "wpackio-scripts build -p ./assets/build/wpackio.project.js -s ./assets/build/wpackio.server.js",
+    "start": "wpackio-scripts start -p ./assets/build/wpackio.project.js -s ./assets/build/wpackio.server.js",
+    "archive": "wpackio-scripts pack -p ./assets/build/wpackio.project.js -s ./assets/build/wpackio.server.js"
+  },
+  "dependencies": {
+    "@wpackio/entrypoint": "^5.0.0"
+  }
+}
