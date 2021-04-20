@@ -380,10 +380,9 @@
 	$(doc).on('ready', () => {
 		win.setInterval(() => {
 			const $el = $('.attachment-details, .image-editor');
-
+			console.log('interval', $el);
 			if ($el.find('.details-image, .imgedit-crop-wrap img').length && !$('.image-focal').length) {
 				try {
-					console.log('interval', $el);
 					$el.initFocalPoint();
 				} catch (err) {
 					console.log(err);
