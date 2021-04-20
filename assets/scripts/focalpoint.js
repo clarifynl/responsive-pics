@@ -376,7 +376,7 @@
 		});
 	};
 
-	$.fn.initAttachment = function(id) {
+	$.responsivePics.focalPoint.initAttachment = function(id) {
 		console.log('initAttachment', id);
 	};
 
