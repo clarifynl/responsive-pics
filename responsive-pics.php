@@ -27,10 +27,6 @@ class ResponsivePicsWP {
 		}
 
 		// Variables
-		$package = file_get_contents('/package.json');
-		$package = json_decode($package, true);
-		var_dump($package['version']);
-
 		define('RESPONSIVE_PICS_DIR', plugin_dir_path( __FILE__ ));
 		define('RESPONSIVE_PICS_VERSION', '1.4.0');
 		define('RESPONSIVE_PICS_TEXTDOMAIN', 'responsive-pics');
