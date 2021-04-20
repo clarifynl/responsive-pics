@@ -2,5 +2,4 @@
 *.sublime-workspace
 *.DS_Store
 /node_modules
-/dist
 /package
