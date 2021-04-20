@@ -1,4 +1,4 @@
-const TerserPlugin = require('terser-webpack-plugin');
+// const TerserPlugin = require('terser-webpack-plugin');
 const pkg = require('../../package.json');
 
 module.exports = {
@@ -22,20 +22,20 @@ module.exports = {
 					'./assets/styles/focalpoint.scss'
 				]
 			},
-			webpackConfig: {
-				optimization: {
-					minimize: true,
-					minimizer: [
-						new TerserPlugin({
-							terserOptions: {
-								compress: {
-									drop_console: false
-								}
-							}
-						})
-					]
-				}
-			}
+			// webpackConfig: {
+			// 	optimization: {
+			// 		minimize: true,
+			// 		minimizer: [
+			// 			new TerserPlugin({
+			// 				terserOptions: {
+			// 					compress: {
+			// 						drop_console: false
+			// 					}
+			// 				}
+			// 			})
+			// 		]
+			// 	}
+			// }
 		}
 	],
 	outputPath: 'dist',
