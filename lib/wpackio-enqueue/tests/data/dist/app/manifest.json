@@ -1,0 +1,43 @@
+{
+  "app/assets/image.png": "app/assets/asset-c7cf665262fc289aea5bbe16b4f9aa67.png",
+  "main.css": "app/main.css",
+  "main.css.map": "app/main.css.map",
+  "main.js": "app/main.js",
+  "main.js.map": "app/main.js.map",
+  "mobile.js": "app/mobile.js",
+  "mobile.js.map": "app/mobile.js.map",
+  "runtime.js": "app/runtime.js",
+  "runtime.js.map": "app/runtime.js.map",
+  "wpackioEp": {
+    "main": {
+      "js": [
+        "app/runtime.js",
+        "app/vendor.js",
+        "app/main.js"
+      ],
+      "js.map": [
+        "app/runtime.js.map",
+        "app/vendor.js.map",
+        "app/main.js.map"
+      ],
+      "css": [
+        "app/main.css"
+      ],
+      "css.map": [
+        "app/main.css.map"
+      ]
+    },
+    "mobile": {
+      "js": [
+        "app/runtime.js",
+        "app/vendor.js",
+        "app/mobile.js"
+      ],
+      "js.map": [
+        "app/runtime.js.map",
+        "app/vendor.js.map",
+        "app/mobile.js.map"
+      ]
+    }
+  }
+}

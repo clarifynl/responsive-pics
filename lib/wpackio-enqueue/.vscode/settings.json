@@ -1,0 +1,11 @@
+{
+  "phpSniffer.autoDetect": true,
+  "spellright.language": [
+    "en"
+  ],
+  "spellright.documentTypes": [
+    "markdown",
+    "latex",
+    "plaintext"
+  ]
+}

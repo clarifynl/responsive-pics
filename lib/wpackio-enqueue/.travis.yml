@@ -1,0 +1,12 @@
+language: php
+php:
+  - '7.3'
+before_script:
+  - pecl install pcov
+  - npm i -g codecov
+  - composer install
+  - ./vendor/bin/pcov clobber
+script:
+  - composer run-script lint
+  - composer run-script test
+  - codecov
