@@ -53,7 +53,8 @@ class RP_Focal_Point extends ResponsivePics {
 	public static function customize_attachment_template() { ?>
 		<script>
 			jQuery(document).ready(function($) {
-				jQuery('script#tmpl-attachment-details-two-column:first, script#tmpl-image-editor:first').prepend('<div class="attachment-id hidden" id="attachment-id" data-id="{{ data.id }}"/>');
+				$('script#tmpl-attachment-details-two-column:first, script#tmpl-image-editor:first').prepend('<div class="attachment-id hidden" id="attachment-id" data-id="{{ data.id }}"/>');
+				$('script#tmpl-attachment-details-two-column:first, script#tmpl-image-editor:first').append('<script type="text/javascript">jQuery.responsivePics.focalPoint.initAttachment({{ data.id }});</' + 'script>');
 			});
 		</script>
 	<?php }
