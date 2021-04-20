@@ -15,6 +15,7 @@ defined('ABSPATH') or exit;
 class ResponsivePicsWP {
 
 	private static $instance;
+	public static $enqueue;
 
 	/**
 	 * Construct
@@ -27,7 +28,7 @@ class ResponsivePicsWP {
 		}
 
 		// Variables
-		define('RESPONSIVE_PICS_DIR', plugin_dir_path( __FILE__ ));
+		define('RESPONSIVE_PICS_DIR', plugin_dir_path(__FILE__));
 		define('RESPONSIVE_PICS_VERSION', '1.4.0');
 		define('RESPONSIVE_PICS_TEXTDOMAIN', 'responsive-pics');
 
@@ -36,6 +37,8 @@ class ResponsivePicsWP {
 			require_once(RESPONSIVE_PICS_DIR . '/lib/action-scheduler/action-scheduler.php');
 			require_once(RESPONSIVE_PICS_DIR . '/lib/wpackio-enqueue/inc/Enqueue.php');
 			require_once(RESPONSIVE_PICS_DIR . '/src/class-responsive-pics.php');
+
+			self::$enqueue = new \WPackio\Enqueue('responsivePics', 'dist', RESPONSIVE_PICS_VERSION, 'plugin', __FILE__);
 		}
 	}
 
@@ -46,6 +49,7 @@ class ResponsivePicsWP {
 		if (!isset(self::$instance)) {
 			self::$instance = new self;
 		}
+
 		return self::$instance;
 	}
 
