@@ -1,4 +1,4 @@
-/* global jQuery, ajaxurl, focalPointL10n */
+/* global jQuery, ajaxurl, responsivePicsL10n */
 (function($, win, doc) {
 	function maxRange(val1, val2, val3) {
 		let result = val1;
@@ -24,20 +24,20 @@
 		BUTTON_DISABLED      : 'button-disabled'
 	};
 
-	$.imageFocal = $.imageFocal || {};
+	$.responsivePics = $.responsivePics || {};
 
-	$.imageFocal.focalPoint = function(el, options) {
+	$.responsivePics.focalPoint = function(el, options) {
 		const self = this;
 
 		self.$el = $(el);
 		self.el = el;
-		self.$el.data('imageFocal.focalPoint', self);
+		self.$el.data('responsivePics.focalPoint', self);
 
-		let $imageFocal;
+		let $responsivePics;
 		let $clickArea;
 
 		self.init = function() {
-			self.options = $.extend({}, $.imageFocal.focalPoint.defaultOptions, options);
+			self.options = $.extend({}, $.responsivePics.focalPoint.defaultOptions, options);
 
 			self.addInterfaceElements();
 			self.attachment.init();
@@ -58,7 +58,7 @@
 			$focalWrapper.append(`<div class="${CLASSES.IMAGE_FOCAL_POINT}"></div>`);
 			$focalWrapper.append(`<div class="${CLASSES.IMAGE_FOCAL_CLICKAREA}"></div>`);
 
-			$imageFocal = $(`.${CLASSES.IMAGE_FOCAL}`);
+			$responsivePics = $(`.${CLASSES.IMAGE_FOCAL}`);
 			$clickArea = $(`.${CLASSES.IMAGE_FOCAL_CLICKAREA}`);
 		};
 
@@ -178,7 +178,7 @@
 						if (e.which === 1) {
 							self.focusInterface.state.move = false;
 							self.focusInterface.state.active = false;
-							$imageFocal.removeClass('is-active');
+							$responsivePics.removeClass('is-active');
 						}
 					})
 					.on('mousemove', e => {
@@ -193,7 +193,7 @@
 				self.focusInterface.updateDimensionData().updateClickPosition(t, e);
 				self.saveButton.highlight();
 
-				$imageFocal.addClass('is-active');
+				$responsivePics.addClass('is-active');
 
 				self.focusInterface.state.move = true;
 				self.focusInterface.state.active = true;
@@ -292,7 +292,7 @@
 			hover(val) {
 				self.focusInterface.state.hover = val;
 
-				$imageFocal.toggleClass('is-hover', val);
+				$responsivePics.toggleClass('is-hover', val);
 			}
 		};
 
@@ -300,7 +300,7 @@
 			$el     : false,
 			isSaving: false,
 			init() {
-				const button = `<button type="button" class="${CLASSES.BUTTON} ${CLASSES.BUTTON_DISABLED} crop-attachment ${CLASSES.IMAGE_FOCAL_BUTTON}">${focalPointL10n.saveButton}</button>`;
+				const button = `<button type="button" class="${CLASSES.BUTTON} ${CLASSES.BUTTON_DISABLED} crop-attachment ${CLASSES.IMAGE_FOCAL_BUTTON}">${responsivePicsL10n.saveButton}</button>`;
 
 				$(self.el)
 					.find('.attachment-actions, .imgedit-submit')
@@ -313,7 +313,7 @@
 				self.saveButton.$el
 					.removeClass(CLASSES.BUTTON_DISABLED)
 					.addClass(CLASSES.BUTTON_PRIMARY)
-					.text(focalPointL10n.saveButton);
+					.text(responsivePicsL10n.saveButton);
 			},
 			activate() {
 				self.saveButton.$el
@@ -346,18 +346,18 @@
 						return false;
 					}
 
-					self.saveButton.$el.text(focalPointL10n.saving);
+					self.saveButton.$el.text(responsivePicsL10n.saving);
 					self.saveButton.disable();
 					self.saveButton.isSaving = true;
 
 					return true;
 				}
 			}).always(result => {
-				let msg = focalPointL10n.saved;
+				let msg = responsivePicsL10n.saved;
 
 				if (result.success !== true) {
 					self.saveButton.activate();
-					msg = focalPointL10n.tryAgain;
+					msg = responsivePicsL10n.tryAgain;
 				}
 
 				self.saveButton.$el.text(msg);
@@ -366,13 +366,13 @@
 		};
 	};
 
-	$.imageFocal.focalPoint.defaultOptions = {
+	$.responsivePics.focalPoint.defaultOptions = {
 		myDefaultValue: ''
 	};
 
 	$.fn.initFocalPoint = function(options) {
 		return this.each(function() {
-			new $.imageFocal.focalPoint(this, options).init();
+			new $.responsivePics.focalPoint(this, options).init();
 		});
 	};
 
