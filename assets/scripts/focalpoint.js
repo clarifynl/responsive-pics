@@ -377,12 +377,17 @@
 		});
 	};
 
+	$.fn.initAttachment = function(id) {
+		console.log('initAttachment', id);
+	};
+
 	$(doc).on('ready', () => {
 		win.setInterval(() => {
 			const $el = $('.attachment-details, .image-editor');
 			console.log('interval', $el);
 			if ($el.find('.details-image, .imgedit-crop-wrap img').length && !$('.image-focal').length) {
 				try {
+					console.log('try', $el);
 					$el.initFocalPoint();
 				} catch (err) {
 					console.log(err);
