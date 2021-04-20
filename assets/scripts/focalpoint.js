@@ -377,7 +377,9 @@
 	};
 
 	$.responsivePics.focalPoint.initAttachment = function(id) {
-		console.log('initAttachment', id);
+		return (
+			console.log('initAttachment', id)
+		);
 	};
 
 	$(doc).on('ready', () => {
