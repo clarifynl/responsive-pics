@@ -13,9 +13,10 @@ class RP_Focal_Point extends ResponsivePics {
 	 * Enqueues all necessary CSS and Scripts
 	 */
 	public static function load_scripts() {
+		// Scripts
 		$assets = ResponsivePicsWP::$enqueue->enqueue('focalpoint', 'admin', [
 			'js'        => true,
-			'css'       => false,
+			'css'       => true,
 			'js_dep'    => ['jquery'],
 			'css_dep'   => [],
 			'in_footer' => false
@@ -23,6 +24,7 @@ class RP_Focal_Point extends ResponsivePics {
 		$entry_point = array_pop($assets['js']);
 		wp_localize_script($entry_point['handle'], 'focalPointL10n', self::focal_point_l10n());
 
+		// Styles
 		$assets = ResponsivePicsWP::$enqueue->enqueue('focalpoint', 'admin', [
 			'js'  => false,
 			'css' => true
