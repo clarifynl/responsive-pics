@@ -1,7 +1,4 @@
 /* global jQuery, ajaxurl, focalPointL10n */
-
-// compress: terser --compress --mangle --output focalpoint.min.js -- focalpoint.js
-
 (function($, win, doc) {
 	function maxRange(val1, val2, val3) {
 		let result = val1;
@@ -375,6 +372,7 @@
 
 	$.fn.initFocalPoint = function(options) {
 		return this.each(function() {
+			console.log('initFocalPoint', this);
 			new $.imageFocal.focalPoint(this, options).init();
 		});
 	};
