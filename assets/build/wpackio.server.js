@@ -1,6 +1,6 @@
 module.exports = {
-	host: undefined,
-	proxy: 'http://localhost:8080',
+	host: '192.168.50.5',
+	proxy: 'http://localhost',
 	port: 3000,
 	ui: {
 		port: 3001,
@@ -12,5 +12,5 @@ module.exports = {
 		scroll: true,
 		forms: true,
 	},
-	distPublicPath: undefined,
+	distPublicPath: '/app/mu-plugins/responsive-pics/dist/',
 };
