@@ -4,7 +4,7 @@ class RP_Focal_Point extends ResponsivePics {
 
 	public function __construct() {
 		add_action('admin_enqueue_scripts',   ['RP_Focal_Point', 'load_scripts']);
-		add_action('print_media_templates',   ['RP_Focal_Point', 'customize_attachment_template']);
+		add_action('print_media_templates',   ['RP_Focal_Point', 'edit_media_template']);
 		add_action('wp_ajax_get_focal_point', ['RP_Focal_Point', 'get_focal_point']);
 		add_action('wp_ajax_set_focal_point', ['RP_Focal_Point', 'set_focal_point']);
 	}
@@ -50,11 +50,13 @@ class RP_Focal_Point extends ResponsivePics {
 	 *
 	 * @see https://stackoverflow.com/a/25948448/2078474
 	 */
-	public static function customize_attachment_template() { ?>
-		<script>
+	public static function edit_media_template() { ?>
+		<script type="text/javascript" id="tmpl-responsive-pics">
 			jQuery(document).ready(function($) {
-				$('script#tmpl-attachment-details-two-column:first, script#tmpl-image-editor:first').prepend('<div class="attachment-id hidden" id="attachment-id" data-id="{{ data.id }}"/>');
-				$('script#tmpl-attachment-details-two-column:first, script#tmpl-image-editor:first').append('<script type="text/javascript">jQuery.responsivePics.focalPoint.initAttachment({{ data.id }});</' + 'script>');
+				var script = document.createElement('script');
+				script.setAttribute('type', 'text/javascript');
+				script.text = 'jQuery.responsivePics.focalPoint.initAttachment("{{ data.id }}");';
+				$('script#tmpl-attachment-details-two-column:first, script#tmpl-image-editor:first').append(script);
 			});
 		</script>
 	<?php }
