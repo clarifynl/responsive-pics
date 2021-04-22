@@ -388,6 +388,7 @@
 		win.setInterval(() => {
 			const $el = $('.attachment-details, .image-editor');
 			if ($el.find('.details-image, .imgedit-crop-wrap img').length && !$('.image-focal').length) {
+				console.log($el);
 				try {
 					$el.initFocalPoint();
 				} catch (err) {
