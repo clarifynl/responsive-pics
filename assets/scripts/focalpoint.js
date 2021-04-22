@@ -78,7 +78,7 @@
 			init() {
 				self.attachment.$el = $(`.${CLASSES.IMAGE_FOCAL_IMG}`);
 				self.attachment.getData();
-				self.attachment.$el.load(() => {
+				self.attachment.$el.on('load', () => {
 					self.attachment.updateDimensionData();
 				});
 			},
@@ -384,7 +384,7 @@
 		}
 	};
 
-	$(doc).on('ready', () => {
+	$(doc).ready(() => {
 		win.setInterval(() => {
 			const $el = $('.attachment-details, .image-editor');
 			if ($el.find('.details-image, .imgedit-crop-wrap img').length && !$('.image-focal').length) {
