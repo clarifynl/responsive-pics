@@ -371,7 +371,6 @@
 	};
 
 	$.fn.initFocalPoint = function(id) {
-		console.log('initFocalPoint', this, parseInt(id));
 		return this.each(function() {
 			new $.responsivePics.focalPoint(this, parseInt(id)).init();
 		});
@@ -379,7 +378,7 @@
 
 	$.responsivePics.focalPoint.initAttachment = function(id) {
 		const $el = $('.attachment-details, .image-editor');
-		if ($el.find('.details-image, .imgedit-crop-wrap img').length && !$('.image-focal').length) {
+		if ($el.find('.details-image, .imgedit-crop-wrap img').length) {
 			return $el.initFocalPoint(id);
 		}
 	};
