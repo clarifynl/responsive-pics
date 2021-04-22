@@ -26,7 +26,7 @@
 
 	$.responsivePics = $.responsivePics || {};
 
-	$.responsivePics.focalPoint = function(el, options) {
+	$.responsivePics.focalPoint = function(el, attachmentId, options) {
 		const self = this;
 
 		self.$el = $(el);
@@ -76,15 +76,15 @@
 				y: 50
 			},
 			init() {
+				console.log('init', attachmentId);
 				self.attachment.$el = $(`.${CLASSES.IMAGE_FOCAL_IMG}`);
+				self.attachment.id = attachmentId;
 				self.attachment.getData();
 				self.attachment.$el.on('load', () => {
 					self.attachment.updateDimensionData();
 				});
 			},
 			getData() {
-				self.attachment.id = $(self.el).find('#attachment-id').data('id');
-
 				const attachment = {
 					'id': self.attachment.id
 				};
@@ -370,31 +370,17 @@
 		myDefaultValue: ''
 	};
 
-	$.fn.initFocalPoint = function(options) {
-		console.log('initFocalPoint', options);
+	$.fn.initFocalPoint = function(id) {
+		console.log('initFocalPoint', this, parseInt(id));
 		return this.each(function() {
-			new $.responsivePics.focalPoint(this, options).init();
+			new $.responsivePics.focalPoint(this, parseInt(id)).init();
 		});
 	};
 
 	$.responsivePics.focalPoint.initAttachment = function(id) {
 		const $el = $('.attachment-details, .image-editor');
 		if ($el.find('.details-image, .imgedit-crop-wrap img').length && !$('.image-focal').length) {
-			// return $el.initFocalPoint(id);
+			return $el.initFocalPoint(id);
 		}
 	};
-
-	$(doc).ready(() => {
-		win.setInterval(() => {
-			const $el = $('.attachment-details, .image-editor');
-			if ($el.find('.details-image, .imgedit-crop-wrap img').length && !$('.image-focal').length) {
-				console.log($el);
-				try {
-					$el.initFocalPoint();
-				} catch (err) {
-					console.log(err);
-				}
-			}
-		}, 500);
-	});
 })(jQuery, window, document);
