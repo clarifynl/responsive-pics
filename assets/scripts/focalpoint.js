@@ -371,7 +371,7 @@
 	};
 
 	$.fn.initFocalPoint = function(options) {
-		console.log(options);
+		console.log('initFocalPoint', options);
 		return this.each(function() {
 			new $.responsivePics.focalPoint(this, options).init();
 		});
@@ -384,16 +384,16 @@
 		}
 	};
 
-	// $(doc).on('ready', () => {
-	// 	win.setInterval(() => {
-	// 		const $el = $('.attachment-details, .image-editor');
-	// 		if ($el.find('.details-image, .imgedit-crop-wrap img').length && !$('.image-focal').length) {
-	// 			try {
-	// 				$el.initFocalPoint();
-	// 			} catch (err) {
-	// 				console.log(err);
-	// 			}
-	// 		}
-	// 	}, 500);
-	// });
+	$(doc).on('ready', () => {
+		win.setInterval(() => {
+			const $el = $('.attachment-details, .image-editor');
+			if ($el.find('.details-image, .imgedit-crop-wrap img').length && !$('.image-focal').length) {
+				try {
+					$el.initFocalPoint();
+				} catch (err) {
+					console.log(err);
+				}
+			}
+		}, 500);
+	});
 })(jQuery, window, document);
