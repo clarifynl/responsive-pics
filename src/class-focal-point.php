@@ -4,7 +4,8 @@ class RP_Focal_Point extends ResponsivePics {
 
 	public function __construct() {
 		add_action('admin_enqueue_scripts',   ['RP_Focal_Point', 'load_scripts']);
-		add_action('print_media_templates',   ['RP_Focal_Point', 'edit_media_template']);
+		add_action('wp_enqueue_media',        ['RP_Focal_Point', 'add_custom_media_template']);
+		// add_action('print_media_templates',   ['RP_Focal_Point', 'edit_media_template']);
 		add_action('wp_ajax_get_focal_point', ['RP_Focal_Point', 'get_focal_point']);
 		add_action('wp_ajax_set_focal_point', ['RP_Focal_Point', 'set_focal_point']);
 	}
@@ -32,6 +33,13 @@ class RP_Focal_Point extends ResponsivePics {
 	}
 
 	/**
+	 * Wherever the Media Modal is deployed, also deploy our overrides.
+	 */
+	public static function add_custom_media_template() {
+		add_action('admin_print_footer_scripts', ['RP_Focal_Point', 'override_media_templates'], 11);
+	}
+
+	/**
 	 * Return all the translation strings necessary for the javascript
 	 *
 	 * @return array
@@ -46,10 +54,32 @@ class RP_Focal_Point extends ResponsivePics {
 	}
 
 	/**
+	 * Our attachment override
+	 * https://www.ibenic.com/extending-wordpress-media-uploader-embed-options/
+	 */
+	public static function override_media_templates() {
+		include('views/attachment-details-two-column.php'); ?>
+		<script>
+			(function(media){
+				var attTwoColsOld = wp.media.view.Attachment.Details.TwoColumn;
+				wp.media.view.Attachment.Details.TwoColumn = attTwoColsOld.extend({
+					template: wp.template('attachment-details-two-column-focal-point'),
+					editAttachment: function(event) {
+						if (event) {
+							event.preventDefault();
+						}
+						this.controller.content.mode('edit-image');
+					}
+				});
+			})(wp.media);
+		</script>
+	<?php }
+
+	/**
 	 * Add attachment id to "Attachments Details Two Column & Image Editor" Backbone micro template
 	 *
 	 * @see https://stackoverflow.com/a/25948448/2078474
-	 */
+
 	public static function edit_media_template() { ?>
 		<script type="text/javascript" id="tmpl-responsive-pics">
 			jQuery(document).ready(function($) {
@@ -57,9 +87,13 @@ class RP_Focal_Point extends ResponsivePics {
 				script.setAttribute('type', 'text/javascript');
 				script.text = 'jQuery.responsivePics.focalPoint.initAttachment("{{ data.id }}");';
 				$('script#tmpl-attachment-details-two-column:first, script#tmpl-image-editor:first').append(script);
+				$('.edit-attachment').on('click', function() {
+					alert('click');
+					jQuery.responsivePics.focalPoint.initAttachment("{{ data.id }}");
+				});
 			});
 		</script>
-	<?php }
+	<?php } */
 
 	/**
 	 * Get the focalpoint of the attachment from the post meta

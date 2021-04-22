@@ -48,15 +48,7 @@
 		};
 
 		self.addInterfaceElements = function() {
-			const $el = $('.edit-attachment-frame .attachment-media-view .details-image, .edit-attachment-frame .image-editor .imgedit-crop-wrap img');
-
-			$el.addClass(CLASSES.IMAGE_FOCAL_IMG);
-			$el.wrap(`<div class="${CLASSES.IMAGE_FOCAL}"><div class="${CLASSES.IMAGE_FOCAL_WRAPPER}"></div></div>`);
-
-			const $focalWrapper = $(`.${CLASSES.IMAGE_FOCAL_WRAPPER}`);
-
-			$focalWrapper.append(`<div class="${CLASSES.IMAGE_FOCAL_POINT}"></div>`);
-			$focalWrapper.append(`<div class="${CLASSES.IMAGE_FOCAL_CLICKAREA}"></div>`);
+			// const $el = $('.edit-attachment-frame .attachment-media-view .details-image, .edit-attachment-frame .image-editor .imgedit-crop-wrap img');
 
 			$responsivePics = $(`.${CLASSES.IMAGE_FOCAL}`);
 			$clickArea = $(`.${CLASSES.IMAGE_FOCAL_CLICKAREA}`);
@@ -300,12 +292,6 @@
 			$el     : false,
 			isSaving: false,
 			init() {
-				const button = `<button type="button" class="${CLASSES.BUTTON} ${CLASSES.BUTTON_DISABLED} crop-attachment ${CLASSES.IMAGE_FOCAL_BUTTON}">${responsivePicsL10n.saveButton}</button>`;
-
-				$(self.el)
-					.find('.attachment-actions, .imgedit-submit')
-					.append(button);
-
 				self.saveButton.$el = $(`.${CLASSES.IMAGE_FOCAL_BUTTON}`);
 				self.saveButton.$el.on('click', self.sendImageCropDataByAjax);
 			},
@@ -371,6 +357,7 @@
 	};
 
 	$.fn.initFocalPoint = function(id) {
+		console.log('initFocalPoint', this, parseInt(id));
 		return this.each(function() {
 			new $.responsivePics.focalPoint(this, parseInt(id)).init();
 		});
@@ -378,7 +365,7 @@
 
 	$.responsivePics.focalPoint.initAttachment = function(id) {
 		const $el = $('.attachment-details, .image-editor');
-		if ($el.find('.details-image, .imgedit-crop-wrap img').length) {
+		if ($el.find('.details-image, .imgedit-crop-wrap img').length && !$('.image-focal').length) {
 			return $el.initFocalPoint(id);
 		}
 	};
