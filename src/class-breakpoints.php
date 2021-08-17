@@ -105,12 +105,20 @@ class RP_Breakpoints extends ResponsivePics {
 
 	// sort breakpoints from small to wide
 	public static function sort_by_breakpoint($a, $b) {
-		return $a['breakpoint'] < $b['breakpoint'];
+		if ($a == $b) {
+			return 0;
+		}
+		
+		return $a['breakpoint'] < $b['breakpoint'] ? -1 : 1;
 	}
 
 	// sort breakpoints from wide to small
 	public static function sort_by_breakpoint_reverse($a, $b) {
-		return $b['breakpoint'] < $a['breakpoint'];
+		if ($a == $b) {
+			return 0;
+		}
+		
+		return $b['breakpoint'] < $a['breakpoint'] ? -1 : 1;
 	}
 
 	// sort defined breakpoints from small to wide
