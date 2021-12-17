@@ -126,6 +126,6 @@ class RP_Breakpoints extends ResponsivePics {
 		$index_a = array_search($a['breakpoint'], array_keys(self::$breakpoints));
 		$index_b = array_search($b['breakpoint'], array_keys(self::$breakpoints));
 
-		return $index_a > $index_b;
+		return $index_a > $index_b ? 1 : -1;
 	}
 }
