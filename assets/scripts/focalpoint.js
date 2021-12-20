@@ -3,12 +3,14 @@
 		var media = wp.media;
 
 		// A region requires a parent view to live inside.
-		var RegionParentViewConstructor = wp.Backbone.View.extend({
+		var RegionParentViewConstructor = wp.media.view.Attachment.Details.extend({
 			initialize: function() {
+				console.log(this);
 				this.on('attachment-actions:create', this.onCreateRegion, this);
 			},
-			onCreateRegion: function( region ) {
-				var RegionViewConstructor = wp.Backbone.View.extend({
+			onCreateRegion: function(region) {
+				console.log('onCreateRegion');
+				var RegionViewConstructor = wp.media.view.Attachment.Details.extend({
 					template: wp.template('attachment-focal-point')
 				});
 				region.view = new RegionViewConstructor();
