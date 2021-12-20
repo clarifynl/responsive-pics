@@ -1,11 +1,10 @@
 (function($) {
 	$(document).ready( function() {
+		var media = wp.media;
 
-		var _AttachmentDisplay = wp.media.view.Attachment.Details;
-		wp.media.view.Attachment.Details = _AttachmentDisplay.extend({
-			tagName:   'div',
-			className: 'attachment-focal-point',
-			template: wp.media.template('attachment-focal-point'),
+		// Wrap the render() function to append controls
+		console.log(media.view.Attachment.Details);
+		media.view.Attachment.Details = media.view.Attachment.Details.extend({
 			// events: {
 			// 	'click button.dmc': 'removeDupSelectOriginal'
 			// },
@@ -15,13 +14,12 @@
 			// 	});
 			// 	media.view.Attachment.prototype.initialize.apply( this, arguments );
 			// },
-			// render: function() {
-			// 	if ( this.get_dup_original() ) {
-			// 		media.view.Attachment.prototype.render.apply( this, arguments );
-			// 		this.focusManager.focus();
-			// 	}
-			// 	return this;
-			// }
+			render: function() {
+				console.log('render subview');
+				media.view.Attachment.prototype.render.apply(this, arguments);
+				this.$el.append(media.template('attachment-focal-point'));
+				return this;
+			}
 		});
 	});
 })(jQuery);
