@@ -1,30 +1,22 @@
 (function($) {
 	$(document).ready( function() {
-		var media = wp.media;
-
-		// A region requires a parent view to live inside.
-		var RegionParentViewConstructor = wp.media.view.Attachment.Details.extend({
-			initialize: function() {
-				console.log(this);
-				this.on('attachment-actions:create', this.onCreateRegion, this);
+		wp.media.view.Attachment.Details = wp.media.view.Attachment.Details.extend({
+			initialize: function(){
+				this.model.on('change', this.render, this);
 			},
-			onCreateRegion: function(region) {
-				console.log('onCreateRegion');
-				var RegionViewConstructor = wp.media.view.Attachment.Details.extend({
-					template: wp.template('attachment-focal-point')
-				});
-				region.view = new RegionViewConstructor();
+			render: function(){
+				wp.media.view.Attachment.prototype.render.apply(this, arguments);
+
+				// Detach the views, append our custom fields, make sure that our data is fully updated and re-render the updated view.
+				this.views.detach();
+				this.$el.append(wp.media.template('attachment-focal-point')(this.model.toJSON()));
+				this.model.fetch();
+				this.views.render();
+
+				// This is the preferred convention for all render functions.
+				return this;
 			}
 		});
-
-		// Wrap the render() function to append controls
-		// media.view.Attachment.Details = media.view.Attachment.Details.extend({
-		// 	render: function() {
-		// 		media.view.Attachment.prototype.render.apply(this, arguments);
-		// 		this.$el.append(media.template('attachment-focal-point'));
-		// 		return this;
-		// 	}
-		// });
 	});
 })(jQuery);
 
