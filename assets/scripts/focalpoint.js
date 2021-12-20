@@ -3,13 +3,14 @@
  */
 (function($) {
 	$(document).ready( function() {
+		console.log(wp.media);
 		wp.media.view.Attachment.Details = wp.media.view.Attachment.Details.extend({
 			initialize: function() {
 				this.model.on('change', this.render, this);
 			},
 			render: function(){
-				wp.media.view.Attachment.prototype.render.apply(this, arguments);
 				console.log(this.model);
+				wp.media.view.Attachment.prototype.render.apply(this, arguments);
 
 				// Detach the views, append our custom fields, make sure that our data is fully updated and re-render the updated view.
 				// this.views.detach();
