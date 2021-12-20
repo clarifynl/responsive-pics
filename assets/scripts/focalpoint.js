@@ -1,17 +1,21 @@
+/*
+ * https://gist.github.com/sunnyratilal/5650341
+ */
 (function($) {
 	$(document).ready( function() {
 		wp.media.view.Attachment.Details = wp.media.view.Attachment.Details.extend({
-			initialize: function(){
+			initialize: function() {
 				this.model.on('change', this.render, this);
 			},
 			render: function(){
 				wp.media.view.Attachment.prototype.render.apply(this, arguments);
+				console.log(this.model);
 
 				// Detach the views, append our custom fields, make sure that our data is fully updated and re-render the updated view.
-				this.views.detach();
+				// this.views.detach();
 				this.$el.append(wp.media.template('attachment-focal-point')(this.model.toJSON()));
-				this.model.fetch();
-				this.views.render();
+				// this.model.fetch();
+				// this.views.render();
 
 				// This is the preferred convention for all render functions.
 				return this;
