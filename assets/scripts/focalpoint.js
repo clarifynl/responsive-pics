@@ -2,25 +2,27 @@
 	$(document).ready( function() {
 		var media = wp.media;
 
-		// Wrap the render() function to append controls
-		console.log(media.view.Attachment.Details);
-		media.view.Attachment.Details = media.view.Attachment.Details.extend({
-			// events: {
-			// 	'click button.dmc': 'removeDupSelectOriginal'
-			// },
-			// initialize: function() {
-			// 	this.focusManager = new media.view.FocusManager({
-			// 		el: this.el
-			// 	});
-			// 	media.view.Attachment.prototype.initialize.apply( this, arguments );
-			// },
-			render: function() {
-				console.log('render subview');
-				media.view.Attachment.prototype.render.apply(this, arguments);
-				this.$el.append(media.template('attachment-focal-point'));
-				return this;
+		// A region requires a parent view to live inside.
+		var RegionParentViewConstructor = wp.Backbone.View.extend({
+			initialize: function() {
+				this.on('attachment-actions:create', this.onCreateRegion, this);
+			},
+			onCreateRegion: function( region ) {
+				var RegionViewConstructor = wp.Backbone.View.extend({
+					template: wp.template('attachment-focal-point')
+				});
+				region.view = new RegionViewConstructor();
 			}
 		});
+
+		// Wrap the render() function to append controls
+		// media.view.Attachment.Details = media.view.Attachment.Details.extend({
+		// 	render: function() {
+		// 		media.view.Attachment.prototype.render.apply(this, arguments);
+		// 		this.$el.append(media.template('attachment-focal-point'));
+		// 		return this;
+		// 	}
+		// });
 	});
 })(jQuery);
 
