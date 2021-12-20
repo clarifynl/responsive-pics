@@ -1,3 +1,33 @@
+(function($) {
+	$(document).ready( function() {
+
+		var _AttachmentDisplay = wp.media.view.Attachment.Details;
+		wp.media.view.Attachment.Details = _AttachmentDisplay.extend({
+			tagName:   'div',
+			className: 'attachment-focal-point',
+			template: wp.media.template('attachment-focal-point'),
+			// events: {
+			// 	'click button.dmc': 'removeDupSelectOriginal'
+			// },
+			// initialize: function() {
+			// 	this.focusManager = new media.view.FocusManager({
+			// 		el: this.el
+			// 	});
+			// 	media.view.Attachment.prototype.initialize.apply( this, arguments );
+			// },
+			// render: function() {
+			// 	if ( this.get_dup_original() ) {
+			// 		media.view.Attachment.prototype.render.apply( this, arguments );
+			// 		this.focusManager.focus();
+			// 	}
+			// 	return this;
+			// }
+		});
+	});
+})(jQuery);
+
+
+
 /* global jQuery, ajaxurl, responsivePicsL10n */
 (function($, win, doc) {
 	function maxRange(val1, val2, val3) {
