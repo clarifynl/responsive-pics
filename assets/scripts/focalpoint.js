@@ -6,17 +6,17 @@
 		var TwoColumn = wp.media.view.Attachment.Details.TwoColumn;
 
 		wp.media.view.Attachment.Details.TwoColumn = TwoColumn.extend({
-			render: function(){
-				// Ensure that the main attachment fields are rendered.
+			render: function() {
+				// Ensure that the main view is rendered.
 				wp.media.view.Attachment.prototype.render.apply(this, arguments);
 				var focalPoint = wp.media.template('attachment-focal-point');
-				console.log(this.$el, focalPoint);
+				console.log(this.$el);
 
 				// Detach the views, append our custom fields, make sure that our data is fully updated and re-render the updated view.
-				this.views.detach();
-				this.$el.append(focalPoint(this.model.toJSON()));
-				this.model.fetch();
-				this.views.render();
+				// this.views.detach();
+				this.$el.find('.attachment-actions').append(focalPoint(this.model.toJSON()));
+				// this.model.fetch();
+				// this.views.render();
 			}
 		});
 	});
