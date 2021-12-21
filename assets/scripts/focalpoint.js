@@ -4,9 +4,6 @@
 (function($) {
 	$(document).ready( function() {
 		wp.media.view.Attachment.Details.TwoColumn = wp.media.view.Attachment.Details.TwoColumn.extend({
-			initialize: function() {
-				this.model.on('change', this.render, this);
-			},
 			render: function(){
 				console.log(this.model);
 				wp.media.view.Attachment.Details.TwoColumn.prototype.render.apply(this, arguments);
