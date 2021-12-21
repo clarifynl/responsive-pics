@@ -7,8 +7,7 @@
 
 		wp.media.view.Attachment.Details.TwoColumn = wp.media.view.Attachment.Details.TwoColumn.extend({
 			initialize: function() {
-				console.log('initialize', this.model);
-				// wp.media.view.Attachment.Details.TwoColumn.prototype.initialize.apply(this, arguments);
+				wp.media.view.Attachment.Details.TwoColumn.prototype.initialize.apply(this, arguments);
 			},
 			render: function(){
 				console.log('render', this.model);
