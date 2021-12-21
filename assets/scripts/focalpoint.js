@@ -4,7 +4,7 @@
 (function($) {
 	$(document).ready( function() {
 		var TwoColumn = wp.media.view.Attachment.Details.TwoColumn;
-		var RPTwoColumn;
+		console.log(TwoColumn);
 
 		TwoColumn = TwoColumn.extend({
 			initialize: function() {
@@ -15,6 +15,7 @@
 				console.log('render', TwoColumn);
 				TwoColumn.prototype.render.apply(this, arguments);
 				// this.$el.append(wp.media.template('attachment-focal-point')(this.model.toJSON()));
+				return this;
 			}
 		});
 	});
