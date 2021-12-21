@@ -3,10 +3,12 @@
 class RP_Focal_Point extends ResponsivePics {
 
 	public function __construct() {
-		add_action('admin_enqueue_scripts',   ['RP_Focal_Point', 'load_scripts']);
-		add_action('print_media_templates',   ['RP_Focal_Point', 'print_media_templates']);
-		add_action('wp_ajax_get_focal_point', ['RP_Focal_Point', 'get_focal_point']);
-		add_action('wp_ajax_set_focal_point', ['RP_Focal_Point', 'set_focal_point']);
+		add_action('admin_enqueue_scripts',     ['RP_Focal_Point', 'load_scripts']);
+		add_action('print_media_templates',     ['RP_Focal_Point', 'print_media_templates']);
+		add_filter('attachment_fields_to_edit', ['RP_Focal_Point', 'attachment_fields_to_edit'], 10, 2);
+		add_filter('attachment_fields_to_save', ['RP_Focal_Point', 'attachment_fields_to_save'], 10, 2);
+		add_action('wp_ajax_get_focal_point',   ['RP_Focal_Point', 'get_focal_point']);
+		add_action('wp_ajax_set_focal_point',   ['RP_Focal_Point', 'set_focal_point']);
 	}
 
 	/**
@@ -42,6 +44,35 @@ class RP_Focal_Point extends ResponsivePics {
 			</button>
 		</script>
 		<?php
+	}
+
+	/**
+	 * Add custom focal point attachment field
+	 */
+	public static function attachment_fields_to_edit($form_fields, $post) {
+		$focal_point = get_post_meta($post->ID, 'responsive_pics_focal_point', true);
+		var_dump($focal_point);
+		$form_fields['responsive_pics_focal_point_x'] = array(
+			'label' => 'Focal Point X',
+			'input' => 'number',
+			'value' => $focal_point,
+			'helps' => 'This is help text'
+		);
+
+		return $form_fields;
+	}
+
+	/**
+	 * Save custom focal point attachment field
+	 */
+	public static function attachment_fields_to_save($post, $attachment) {
+		if( isset($attachment['text_field']) ){
+			update_post_meta($post['ID'], 'text_field', sanitize_text_field( $attachment['text_field']));
+		}else{
+			delete_post_meta($post['ID'], 'text_field' );
+		}
+
+		return $post;
 	}
 
 	/**
