@@ -4,17 +4,18 @@
 (function($) {
 	$(document).ready( function() {
 		var TwoColumn = wp.media.view.Attachment.Details.TwoColumn;
-		console.log(wp.media.view.Attachment);
 
-		TwoColumn = wp.media.view.Attachment.Details.TwoColumn.extend({
+		wp.media.view.Attachment.Details.TwoColumn = wp.media.view.Attachment.Details.TwoColumn.extend({
 			initialize: function() {
-				console.log('initialize', TwoColumn);
-				TwoColumn.prototype.initialize.apply(this, arguments);
+				console.log('initialize', this.model);
+				// wp.media.view.Attachment.Details.TwoColumn.prototype.initialize.apply(this, arguments);
+				this.model.on('change', this.render, this);
 			},
 			render: function(){
-				console.log('render', TwoColumn);
-				TwoColumn.prototype.render.apply(this, arguments);
+				console.log('render', this.model);
+				wp.media.view.Attachment.Details.TwoColumn.prototype.render.apply(this, arguments);
 				// this.$el.append(wp.media.template('attachment-focal-point')(this.model.toJSON()));
+				return this;
 			}
 		});
 	});
