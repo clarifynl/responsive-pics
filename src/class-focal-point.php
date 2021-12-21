@@ -55,13 +55,13 @@ class RP_Focal_Point extends ResponsivePics {
 			'label'      => 'Focal Point X-axis (%)',
 			'input'      => 'number',
 			'value'      => isset($focal_point['x']) ? $focal_point['x'] : 50,
-			'exclusions' => array('audio', 'video', 'pdf', 'application')
+			'exclusions' => array('audio', 'video', 'application')
 		);
 		$form_fields['responsive_pics_focal_point_y'] = array(
 			'label'      => 'Focal Point Y-axis (%)',
 			'input'      => 'number',
 			'value'      => isset($focal_point['y']) ? $focal_point['y'] : 50,
-			'exclusions' => array('audio', 'video', 'pdf', 'application')
+			'exclusions' => array('audio', 'video', 'application')
 		);
 
 		return $form_fields;
