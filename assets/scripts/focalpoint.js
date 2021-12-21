@@ -3,10 +3,9 @@
  */
 (function($) {
 	$(document).ready( function() {
-		var Details = wp.media.view.Attachment.Details,
-			TwoColumn;
+		var Details = wp.media.view.Attachment.Details;
+		var TwoColumn = Details.TwoColumn;
 
-		console.log(Details);
 		TwoColumn = Details.extend({
 			initialize: function() {
 				console.log('initialize', this.model);
