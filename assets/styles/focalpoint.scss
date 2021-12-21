@@ -8,6 +8,11 @@
 		overflow: hidden;
 	}
 
+	img,
+	&__img {
+		margin-bottom: 0;
+	}
+
 	&__clickarea {
 		position: absolute;
 		z-index: 10;
