@@ -4,9 +4,9 @@
 (function($) {
 	$(document).ready( function() {
 		var TwoColumn = wp.media.view.Attachment.Details.TwoColumn;
-		console.log(TwoColumn);
+		console.log(wp.media.view.Attachment);
 
-		TwoColumn = TwoColumn.extend({
+		TwoColumn = wp.media.view.Attachment.Details.TwoColumn.extend({
 			initialize: function() {
 				console.log('initialize', TwoColumn);
 				TwoColumn.prototype.initialize.apply(this, arguments);
@@ -15,7 +15,6 @@
 				console.log('render', TwoColumn);
 				TwoColumn.prototype.render.apply(this, arguments);
 				// this.$el.append(wp.media.template('attachment-focal-point')(this.model.toJSON()));
-				return this;
 			}
 		});
 	});
