@@ -3,8 +3,8 @@
  */
 (function($) {
 	$(document).ready( function() {
-		console.log(wp.media);
-		wp.media.view.Attachment.Details = wp.media.view.Attachment.Details.extend({
+		console.log(wp.media.view);
+		wp.media.view.Attachment = wp.media.view.Attachment.extend({
 			initialize: function() {
 				this.model.on('change', this.render, this);
 			},
