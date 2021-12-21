@@ -4,17 +4,17 @@
 (function($) {
 	$(document).ready( function() {
 		var Details = wp.media.view.Attachment.Details,
-		TwoColumn;
+			TwoColumn;
 
 		TwoColumn = Details.extend({
 			initialize: function() {
 				console.log('initialize', this.model);
-				this.model.on('change', this.render, this);
+				Details.prototype.initialize.apply( this, arguments );
 			},
 			render: function(){
 				console.log('render', this.model);
 				Details.prototype.render.apply(this, arguments);
-				this.$el.append(wp.media.template('attachment-focal-point')(this.model.toJSON()));
+				// this.$el.append(wp.media.template('attachment-focal-point')(this.model.toJSON()));
 			}
 		});
 	});
