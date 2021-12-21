@@ -3,10 +3,13 @@
  */
 (function($) {
 	$(document).ready( function() {
-		var RPTwoColumn = wp.media.view.Attachment.Details.TwoColumn.extend({
+		var TwoColumn = wp.media.view.Attachment.Details.TwoColumn;
+		var RPTwoColumn;
+
+		RPTwoColumn = TwoColumn.extend({
 			render: function(){
 				// Ensure that the main attachment fields are rendered.
-				wp.media.view.Attachment.prototype.render.apply(this, arguments);
+				// wp.media.view.Attachment.prototype.render.apply(this, arguments);
 
 				// Detach the views, append our custom fields, make sure that our data is fully updated and re-render the updated view.
 				this.views.detach();
