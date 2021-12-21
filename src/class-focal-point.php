@@ -52,22 +52,16 @@ class RP_Focal_Point extends ResponsivePics {
 	public static function attachment_fields_to_edit($form_fields, $post) {
 		$focal_point = get_post_meta($post->ID, 'responsive_pics_focal_point', true);
 		$form_fields['responsive_pics_focal_point_x'] = array(
-			'label'      => 'Focal Point X-axis',
+			'label'      => 'Focal Point X-axis (%)',
 			'input'      => 'number',
-			'value'      => isset($focal_point['x']) ? $focal_point['x'] : null,
-			'exclusions' => array('audio', 'video', 'pdf', 'application'),
-			'extra_rows' => [
-				'sufix' => '%'
-			]
+			'value'      => isset($focal_point['x']) ? $focal_point['x'] : 50,
+			'exclusions' => array('audio', 'video', 'pdf', 'application')
 		);
 		$form_fields['responsive_pics_focal_point_y'] = array(
-			'label'      => 'Focal Point Y-axis',
+			'label'      => 'Focal Point Y-axis (%)',
 			'input'      => 'number',
-			'value'      => isset($focal_point['y']) ? $focal_point['y'] : null,
-			'exclusions' => array('audio', 'video', 'pdf', 'application'),
-			'extra_rows' => [
-				'sufix' => '%'
-			]
+			'value'      => isset($focal_point['y']) ? $focal_point['y'] : 50,
+			'exclusions' => array('audio', 'video', 'pdf', 'application')
 		);
 
 		return $form_fields;
@@ -77,10 +71,16 @@ class RP_Focal_Point extends ResponsivePics {
 	 * Save custom focal point attachment field
 	 */
 	public static function attachment_fields_to_save($post, $attachment) {
-		if( isset($attachment['text_field']) ){
-			update_post_meta($post['ID'], 'text_field', sanitize_text_field( $attachment['text_field']));
-		}else{
-			delete_post_meta($post['ID'], 'text_field' );
+		if (isset($attachment['responsive_pics_focal_point_x']) && isset($attachment['responsive_pics_focal_point_y'])) {
+			$focal_point_x = $attachment['responsive_pics_focal_point_x'];
+			$focal_point_y = $attachment['responsive_pics_focal_point_y'];
+			$focal_point   = [
+				'x' => $focal_point_x,
+				'y' => $focal_point_y
+			];
+			update_post_meta($post['ID'], 'responsive_pics_focal_point', $focal_point);
+		} else {
+			delete_post_meta($post['ID'], 'responsive_pics_focal_point' );
 		}
 
 		return $post;
