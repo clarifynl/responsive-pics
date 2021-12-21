@@ -3,17 +3,17 @@
  */
 (function($) {
 	$(document).ready( function() {
-		var Details = wp.media.view.Attachment.Details;
-		var TwoColumn = Details.TwoColumn;
+		var TwoColumn = wp.media.view.Attachment.Details.TwoColumn;
+		var RPTwoColumn;
 
-		TwoColumn = Details.extend({
+		RPTwoColumn = TwoColumn.extend({
 			initialize: function() {
 				console.log('initialize', this.model);
-				Details.prototype.initialize.apply( this, arguments );
+				TwoColumn.prototype.initialize.apply(this, arguments);
 			},
 			render: function(){
 				console.log('render', this.model);
-				Details.prototype.render.apply(this, arguments);
+				TwoColumn.prototype.render.apply(this, arguments);
 				// this.$el.append(wp.media.template('attachment-focal-point')(this.model.toJSON()));
 			}
 		});
