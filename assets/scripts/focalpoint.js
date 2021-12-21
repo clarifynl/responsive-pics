@@ -25,6 +25,13 @@
 		 */
 		const initFocalPoint = id => {
 			console.log(`initFocalPoint: ${id}`);
+			/*
+			 * 1. load existing coordinates
+			 * 2. show/hide save button
+			 * 3. getData
+			 * 4. updateDimensionData
+			 * 5. updateStylePosition & updateStyleBackground
+			 */
 		};
 	});
 })(jQuery);

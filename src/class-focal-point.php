@@ -76,7 +76,8 @@ class RP_Focal_Point extends ResponsivePics {
 	 * Save custom focal point attachment field
 	 */
 	public static function attachment_fields_to_save($post, $attachment) {
-		if (isset($attachment['responsive_pics_focal_point_x']) && isset($attachment['responsive_pics_focal_point_y'])) {
+		if (isset($attachment['responsive_pics_focal_point_x']) &&
+			isset($attachment['responsive_pics_focal_point_y'])) {
 			$focal_point_x = $attachment['responsive_pics_focal_point_x'];
 			$focal_point_y = $attachment['responsive_pics_focal_point_y'];
 			$focal_point   = [
