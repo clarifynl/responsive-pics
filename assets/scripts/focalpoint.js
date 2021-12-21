@@ -11,7 +11,7 @@
 			},
 			render: function(){
 				// Ensure that the main attachment fields are rendered.
-				wp.media.view.Attachment.Details.TwoColumn.prototype.render.apply(this, arguments);
+				// wp.media.view.Attachment.Details.TwoColumn.prototype.render.apply(this, arguments);
 
 				// Detach the views, append our custom fields, make sure that our data is fully updated and re-render the updated view.
 				this.views.detach();
