@@ -4,7 +4,8 @@
 (function($) {
 	$(document).ready( function() {
 		var TwoColumn = wp.media.view.Attachment.Details.TwoColumn;
-		TwoColumn = TwoColumn.extend({
+
+		wp.media.view.Attachment.Details.TwoColumn = wp.media.view.Attachment.Details.TwoColumn.extend({
 			render: function(){
 				// Ensure that the main attachment fields are rendered.
 				wp.media.view.Attachment.prototype.render.apply(this, arguments);
