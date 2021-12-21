@@ -16,7 +16,9 @@
 				// Append subviews
 				var selectView   = wp.media.template('attachment-select-focal-point');
 				var selectParent = this.$el.find('.thumbnail');
+				var selectImg    = this.$el.find('.details-image');
 				selectParent.append(selectView);
+				selectImg.prependTo(selectView.find('.image-focal__wrapper'));
 
 				var saveView   = wp.media.template('attachment-save-focal-point');
 				var saveParent = this.$el.find('.attachment-actions');
