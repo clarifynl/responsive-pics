@@ -6,13 +6,13 @@
 		var TwoColumn = wp.media.view.Attachment.Details.TwoColumn;
 		var RPTwoColumn;
 
-		RPTwoColumn = TwoColumn.extend({
+		TwoColumn = TwoColumn.extend({
 			initialize: function() {
-				console.log('initialize', this.model);
+				console.log('initialize', TwoColumn);
 				TwoColumn.prototype.initialize.apply(this, arguments);
 			},
 			render: function(){
-				console.log('render', this.model);
+				console.log('render', TwoColumn);
 				TwoColumn.prototype.render.apply(this, arguments);
 				// this.$el.append(wp.media.template('attachment-focal-point')(this.model.toJSON()));
 			}
