@@ -1,9 +1,13 @@
 .image-focal {
 	display: block;
+	max-height: 90%;
+	max-height: calc(100% - 42px);
 	user-select: none;
 
 	&__wrapper {
 		position: relative;
+		max-height: 90%;
+		max-height: calc(100% - 42px);
 		overflow: hidden;
 	}
 
