@@ -1,20 +1,14 @@
 .image-focal {
 	display: block;
-	margin: 0 auto;
-	max-width: 100%;
-	max-height: 90%;
-	max-height: calc(100% - 42px);
 	user-select: none;
 
 	&__wrapper {
 		position: relative;
-		display: inline-block;
 		overflow: hidden;
 	}
 
-	img,
-	&__img {
-		margin: 0 auto;
+	img.details-image {
+		margin: 0 auto !important;
 	}
 
 	&__clickarea {
@@ -80,14 +74,6 @@
 
 		.image-focal__clickarea {
 			background-color: rgba(0, 0, 0, .4);
-		}
-	}
-}
-
-.edit-attachment-frame {
-	.attachment-media-view {
-		.details-image.image-focal__img {
-			margin-bottom: 0;
 		}
 	}
 }
