@@ -2,7 +2,7 @@
  * https://gist.github.com/sunnyratilal/5650341
  */
 (function($) {
-	$(document).ready( function() {
+	$(document).ready(() => {
 		/*
 		 * Render Attachment view
 		 */
@@ -15,9 +15,15 @@
 				var subView    = wp.media.template('attachment-focal-point');
 				var parentView = this.$el.find('.attachment-actions');
 				parentView.append(subView);
-			},
-
+				// Init
+				console.log(this.model);
+				initFocalPoint(this.model.id);
+			}
 		});
+
+		const initFocalPoint = id => {
+			console.log(`initFocalPoint: ${id}`);
+		};
 	});
 })(jQuery);
 
