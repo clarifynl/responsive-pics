@@ -4,8 +4,7 @@ class RP_Focal_Point extends ResponsivePics {
 
 	public function __construct() {
 		add_action('admin_enqueue_scripts',   ['RP_Focal_Point', 'load_scripts']);
-		// add_action('wp_enqueue_media',        ['RP_Focal_Point', 'add_custom_media_template']);
-		add_action('print_media_templates',   ['RP_Focal_Point', 'edit_media_template']);
+		add_action('print_media_templates',   ['RP_Focal_Point', 'print_media_templates']);
 		add_action('wp_ajax_get_focal_point', ['RP_Focal_Point', 'get_focal_point']);
 		add_action('wp_ajax_set_focal_point', ['RP_Focal_Point', 'set_focal_point']);
 	}
@@ -33,19 +32,14 @@ class RP_Focal_Point extends ResponsivePics {
 	}
 
 	/**
-	 * Wherever the Media Modal is deployed, also deploy our overrides.
+	 * Print custom media templates
 	 */
-	public static function add_custom_media_template() {
-		add_action('admin_print_footer_scripts', ['RP_Focal_Point', 'override_media_templates'], 11);
-	}
-
-	/**
-	 * Add subview to media modal
-	 */
-	public static function edit_media_template() {
+	public static function print_media_templates() {
 		?>
 		<script type="text/html" id="tmpl-attachment-focal-point">
-			<button type="button" class="button button-disabled crop-attachment image-focal__button"><?php _e('Save Focal Point', RESPONSIVE_PICS_TEXTDOMAIN); ?></button>
+			<button type="button" class="button button-disabled save-attachment-focal-point">
+				<?php _e('Save Focal Point', RESPONSIVE_PICS_TEXTDOMAIN); ?>
+			</button>
 		</script>
 		<?php
 	}
@@ -63,28 +57,6 @@ class RP_Focal_Point extends ResponsivePics {
 			'tryAgain'   => __('Please Try Again', RESPONSIVE_PICS_TEXTDOMAIN)
 		];
 	}
-
-	/**
-	 * Our attachment override
-	 * https://www.ibenic.com/extending-wordpress-media-uploader-embed-options/
-	 */
-	public static function override_media_templates() {
-		include('views/attachment-details-two-column.php'); ?>
-		<script>
-			(function(media){
-				var attTwoColsOld = wp.media.view.Attachment.Details.TwoColumn;
-				wp.media.view.Attachment.Details.TwoColumn = attTwoColsOld.extend({
-					template: wp.template('attachment-details-two-column-focal-point'),
-					editAttachment: function(event) {
-						if (event) {
-							event.preventDefault();
-						}
-						this.controller.content.mode('edit-image');
-					}
-				});
-			})(wp.media);
-		</script>
-	<?php }
 
 	/**
 	 * Get the focalpoint of the attachment from the post meta
