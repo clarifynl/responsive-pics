@@ -4,7 +4,7 @@
 (function($) {
 	$(document).ready( function() {
 		var TwoColumn = wp.media.view.Attachment.Details.TwoColumn;
-		var RPTwoColumn = wp.media.view.Attachment.Details.TwoColumn;
+		var RPTwoColumn;
 
 		RPTwoColumn = TwoColumn.extend({
 			render: function(){
@@ -18,6 +18,8 @@
 				this.views.render();
 			}
 		});
+
+		return RPTwoColumn;
 	});
 })(jQuery);
 
