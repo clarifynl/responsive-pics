@@ -3,23 +3,18 @@
  */
 (function($) {
 	$(document).ready( function() {
-		wp.media.view.Attachment.Details.TwoColumn = wp.media.view.Attachment.Details.TwoColumn.extend({
+		var Details = wp.media.view.Attachment.Details;
+		var TwoColumn;
+
+		TwoColumn = Details.extend({
 			initialize: function() {
 				console.log('initialize', this.model);
 				this.model.on('change', this.render, this);
 			},
 			render: function(){
 				console.log('render', this.model);
-				wp.media.view.Attachment.Details.TwoColumn.prototype.render.apply(this, arguments);
-
-				// Detach the views, append our custom fields, make sure that our data is fully updated and re-render the updated view.
-				this.views.detach();
+				Details.prototype.render.apply(this, arguments);
 				this.$el.append(wp.media.template('attachment-focal-point')(this.model.toJSON()));
-				this.model.fetch();
-				this.views.render();
-
-				// This is the preferred convention for all render functions.
-				return this;
 			}
 		});
 	});
