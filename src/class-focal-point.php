@@ -50,18 +50,23 @@ class RP_Focal_Point extends ResponsivePics {
 	 * Add custom focal point attachment field
 	 */
 	public static function attachment_fields_to_edit($form_fields, $post) {
+		// Exclude applications
+		if (preg_match('/application/', $post->post_mime_type)) {
+			return $form_fields;
+		}
+
 		$focal_point = get_post_meta($post->ID, 'responsive_pics_focal_point', true);
 		$form_fields['responsive_pics_focal_point_x'] = array(
 			'label'      => 'Focal Point X-axis (%)',
 			'input'      => 'number',
 			'value'      => isset($focal_point['x']) ? $focal_point['x'] : 50,
-			'exclusions' => array('audio', 'video', 'application')
+			'exclusions' => array('audio', 'video')
 		);
 		$form_fields['responsive_pics_focal_point_y'] = array(
 			'label'      => 'Focal Point Y-axis (%)',
 			'input'      => 'number',
 			'value'      => isset($focal_point['y']) ? $focal_point['y'] : 50,
-			'exclusions' => array('audio', 'video', 'application')
+			'exclusions' => array('audio', 'video')
 		);
 
 		return $form_fields;
