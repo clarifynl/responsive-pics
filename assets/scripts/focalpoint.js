@@ -15,12 +15,14 @@
 				var subView    = wp.media.template('attachment-focal-point');
 				var parentView = this.$el.find('.attachment-actions');
 				parentView.append(subView);
-				// Init
-				console.log(this.model);
+				// Init Focal Point
 				initFocalPoint(this.model.id);
 			}
 		});
 
+		/*
+		 * Init Focal Point
+		 */
 		const initFocalPoint = id => {
 			console.log(`initFocalPoint: ${id}`);
 		};
