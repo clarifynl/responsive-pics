@@ -4,7 +4,7 @@
 (function($) {
 	$(document).ready( function() {
 		var TwoColumn = wp.media.view.Attachment.Details.TwoColumn;
-		var RPTwoColumn = TwoColumn;
+		var RPTwoColumn = wp.media.view.Attachment.Details.TwoColumn;
 
 		RPTwoColumn = TwoColumn.extend({
 			render: function(){
