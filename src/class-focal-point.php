@@ -51,12 +51,23 @@ class RP_Focal_Point extends ResponsivePics {
 	 */
 	public static function attachment_fields_to_edit($form_fields, $post) {
 		$focal_point = get_post_meta($post->ID, 'responsive_pics_focal_point', true);
-		var_dump($focal_point);
 		$form_fields['responsive_pics_focal_point_x'] = array(
-			'label' => 'Focal Point X',
-			'input' => 'number',
-			'value' => $focal_point,
-			'helps' => 'This is help text'
+			'label'      => 'Focal Point X-axis',
+			'input'      => 'number',
+			'value'      => isset($focal_point['x']) ? $focal_point['x'] : null,
+			'exclusions' => array('audio', 'video', 'pdf', 'application'),
+			'extra_rows' => [
+				'sufix' => '%'
+			]
+		);
+		$form_fields['responsive_pics_focal_point_y'] = array(
+			'label'      => 'Focal Point Y-axis',
+			'input'      => 'number',
+			'value'      => isset($focal_point['y']) ? $focal_point['y'] : null,
+			'exclusions' => array('audio', 'video', 'pdf', 'application'),
+			'extra_rows' => [
+				'sufix' => '%'
+			]
 		);
 
 		return $form_fields;
