@@ -12,7 +12,7 @@
 			},
 			render: function(){
 				console.log('render', this.model);
-				wp.media.view.Attachment.Details.TwoColumn.prototype.render.apply(this, arguments);
+				// wp.media.view.Attachment.Details.TwoColumn.prototype.render.apply(this, arguments);
 				// this.$el.append(wp.media.template('attachment-focal-point')(this.model.toJSON()));
 				return this;
 			}
