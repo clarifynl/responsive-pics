@@ -3,8 +3,8 @@
  */
 (function($) {
 	$(document).ready( function() {
-		var Details = wp.media.view.Attachment.Details;
-		var TwoColumn;
+		var Details = wp.media.view.Attachment.Details,
+		TwoColumn;
 
 		TwoColumn = Details.extend({
 			initialize: function() {
