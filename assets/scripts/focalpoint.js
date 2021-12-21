@@ -9,7 +9,6 @@
 			initialize: function() {
 				console.log('initialize', this.model);
 				// wp.media.view.Attachment.Details.TwoColumn.prototype.initialize.apply(this, arguments);
-				this.model.on('change', this.render, this);
 			},
 			render: function(){
 				console.log('render', this.model);
