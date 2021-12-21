@@ -7,6 +7,7 @@
 
 		wp.media.view.Attachment.Details.TwoColumn = TwoColumn.extend({
 			render: function(){
+				console.log(this.model);
 				// Ensure that the main attachment fields are rendered.
 				// wp.media.view.Attachment.prototype.render.apply(this, arguments);
 
