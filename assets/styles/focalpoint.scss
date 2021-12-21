@@ -1,16 +1,19 @@
 .image-focal {
-	display: block;
-	height: 100%;
+	display: flex;
+	justify-content: center;
+	height: inherit;
 	user-select: none;
 
 	&__wrapper {
 		position: relative;
-		height: 100%;
+		height: 90%;
+		height: calc(100% - 42px);
 		overflow: hidden;
 	}
 
 	img.details-image {
 		margin: 0 auto !important;
+		max-height: 100% !important;
 	}
 
 	&__clickarea {
