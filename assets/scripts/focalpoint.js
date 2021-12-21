@@ -14,8 +14,9 @@
 				// Append subview
 				var subView    = wp.media.template('attachment-focal-point');
 				var parentView = this.$el.find('.attachment-actions');
-				parentView.append(subView(this.model.toJSON()));
-			}
+				parentView.append(subView);
+			},
+
 		});
 	});
 })(jQuery);
