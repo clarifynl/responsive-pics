@@ -9,12 +9,19 @@
 		var TwoColumn = wp.media.view.Attachment.Details.TwoColumn;
 		wp.media.view.Attachment.Details.TwoColumn = TwoColumn.extend({
 			render: function() {
+				console.log(this.model);
 				// Ensure that the main view is rendered.
 				wp.media.view.Attachment.prototype.render.apply(this, arguments);
-				// Append subview
-				var subView    = wp.media.template('attachment-focal-point');
-				var parentView = this.$el.find('.attachment-actions');
-				parentView.append(subView);
+
+				// Append subviews
+				var selectView   = wp.media.template('attachment-select-focal-point');
+				var selectParent = this.$el.find('.thumbnail');
+				selectParent.append(selectView);
+
+				var saveView   = wp.media.template('attachment-save-focal-point');
+				var saveParent = this.$el.find('.attachment-actions');
+				saveParent.append(saveView);
+
 				// Init Focal Point
 				initFocalPoint(this.model.id);
 			}
