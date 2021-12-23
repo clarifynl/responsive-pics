@@ -39,17 +39,21 @@ class RP_Focal_Point extends ResponsivePics {
 	public static function print_media_templates() {
 		?>
 		<script type="text/html" id="tmpl-attachment-select-focal-point">
-			<div class="image-focal">
-				<div class="image-focal__wrapper">
-					<div class="image-focal__point"></div>
-					<div class="image-focal__clickarea"></div>
+			<# if (data.type === 'image') { #>
+				<div class="image-focal">
+					<div class="image-focal__wrapper">
+						<div class="image-focal__point"></div>
+						<div class="image-focal__clickarea"></div>
+					</div>
 				</div>
-			</div>
+			<# } #>
 		</script>
 		<script type="text/html" id="tmpl-attachment-save-focal-point">
-			<button type="button" class="button button-disabled save-attachment-focal-point">
-				<?php _e('Save Focal Point', RESPONSIVE_PICS_TEXTDOMAIN); ?>
-			</button>
+			<# if (data.type === 'image') { #>
+				<button type="button" class="button button-disabled save-attachment-focal-point">
+					<?php _e('Save Focal Point', RESPONSIVE_PICS_TEXTDOMAIN); ?>
+				</button>
+			<# } #>
 		</script>
 		<?php
 	}
