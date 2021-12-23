@@ -37,7 +37,7 @@
 		};
 
 		/*
-		 * Render Attachment view
+		 * Extend Attachment view
 		 */
 		var TwoColumn = wp.media.view.Attachment.Details.TwoColumn;
 		wp.media.view.Attachment.Details.TwoColumn = TwoColumn.extend({
@@ -57,9 +57,6 @@
 				// This is the preferred convention for all render functions.
 				return this;
 			},
-			saveCompat: function(data, options) {
-				console.log('saveCompat', data);
-			},
 			change: function() {
 				const compat = this.model.get('compat');
 				console.log('change', compat.item);
@@ -68,6 +65,15 @@
 				if (type === 'image') {
 					initFocalPoint(this.model);
 				}
+			}
+		});
+
+		/*
+		 * Extend Attachment model
+		 */
+		wp.media.model.Attachment = wp.media.model.Attachment.extend( {
+			saveCompat: function(data, options) {
+				console.log('saveCompat', data);
 			}
 		});
 	});
