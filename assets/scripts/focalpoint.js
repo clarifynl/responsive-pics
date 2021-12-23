@@ -43,7 +43,7 @@
 		wp.media.view.Attachment.Details.TwoColumn = TwoColumn.extend({
 			initialize: function() {
 				// Always make sure that our content is up to date.
-				this.model.on('change', this.change, this);
+				this.model.on('change:compat', this.change, this);
 			},
 			render: function() {
 				// Ensure that the main view is rendered.
@@ -58,6 +58,8 @@
 				return this;
 			},
 			change: function() {
+				const compat = this.model.get('compat');
+				console.log(compat);
 				// Re-init Focal Point for images
 				const { type } = this.model.attributes;
 				if (type === 'image') {
