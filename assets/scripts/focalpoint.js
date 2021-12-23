@@ -57,9 +57,12 @@
 				// This is the preferred convention for all render functions.
 				return this;
 			},
+			saveCompat: function(data, options) {
+				console.log('saveCompat', data);
+			},
 			change: function() {
 				const compat = this.model.get('compat');
-				console.log(compat);
+				console.log('change', compat.item);
 				// Re-init Focal Point for images
 				const { type } = this.model.attributes;
 				if (type === 'image') {
