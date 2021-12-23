@@ -1,13 +1,11 @@
 .image-focal {
 	display: flex;
 	justify-content: center;
-	height: inherit;
+	margin-bottom: 16px;
 	user-select: none;
 
 	&__wrapper {
 		position: relative;
-		height: 90%;
-		height: calc(100% - 42px);
 		overflow: hidden;
 	}
 
