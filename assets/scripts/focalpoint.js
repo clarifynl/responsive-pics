@@ -9,6 +9,19 @@
 		let _hover = false;
 		let _move = false;
 
+		const offset = {
+			x: 0,
+			y: 0
+		};
+		const position = {
+			x: 0,
+			y: 0
+		};
+		const clickPosition = {
+			x: 0,
+			y: 0
+		};
+
 		/*
 		 * Init templates
 		 */
@@ -36,7 +49,24 @@
 			}
 		};
 
+		const updateClickPosition = (t, e) => {
+			const pos = {
+				x: 0,
+				y: 0
+			};
+
+			if (e !== true) {
+				const o = offset;
+
+				pos.x = t.pageX - o.x;
+				pos.y = t.pageY - o.y;
+			}
+
+			clickPosition = pos;
+		};
+
 		const startMove = (t, e) => {
+			updateClickPosition(t, e);
 			// self.attachment.updateDimensionData();
 			// self.focusInterface.updateDimensionData().updateClickPosition(t, e);
 			// self.saveButton.highlight();
