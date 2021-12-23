@@ -104,6 +104,21 @@
 				.on('mouseleave', () => {
 					hover(false);
 				});
+
+			window
+				.on('mouseup', e => {
+					if (e.which === 1) {
+						_move = false;
+						_active = false;
+						$imageFocal.removeClass('is-active');
+					}
+				})
+				.on('mousemove', e => {
+					move(e);
+				})
+				.on('resize', () => {
+					// updateDimensionData().updateStyle();
+				});
 		};
 
 		/*
