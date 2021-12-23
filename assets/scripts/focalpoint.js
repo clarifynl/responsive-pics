@@ -9,15 +9,15 @@
 		let _hover = false;
 		let _move = false;
 
-		const offset = {
+		let offset = {
 			x: 0,
 			y: 0
 		};
-		const position = {
+		let position = {
 			x: 0,
 			y: 0
 		};
-		const clickPosition = {
+		let clickPosition = {
 			x: 0,
 			y: 0
 		};
