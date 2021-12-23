@@ -1,6 +1,3 @@
-/*
- * https://gist.github.com/sunnyratilal/5650341
- */
 (function($) {
 	$(document).ready(() => {
 		/*
@@ -47,14 +44,15 @@
 			render: function() {
 				// Ensure that the main view is rendered.
 				wp.media.view.Attachment.prototype.render.apply(this, arguments);
-
 				// Init Focal Point for images
 				const { type } = this.model.attributes;
-				console.log(this.model, type);
 				if (type === 'image') {
 					initTemplates(this.$el);
 					initFocalPoint(this.model);
 				}
+			},
+			change: function() {
+				console.log('TwoColumn change');
 			}
 		});
 	});
