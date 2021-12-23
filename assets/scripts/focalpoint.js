@@ -14,11 +14,10 @@
 			var selectImg    = element.find('.details-image');
 
 			if (selectView) {
+				selectParent.prepend(selectView);
 				$imageFocal        = element.find('.image-focal');
 				$imageFocalWrapper = element.find('.image-focal__wrapper');
 				$imageFocalPoint   = element.find('.image-focal__point');
-
-				selectParent.prepend(selectView);
 				selectImg.prependTo($imageFocalWrapper);
 			}
 
