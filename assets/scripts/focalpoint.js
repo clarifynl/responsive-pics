@@ -22,24 +22,30 @@
 		};
 
 		/*
+		 * Init Focus Interface
+		 */
+		const initFocusInterface = (view, x, y) => {
+			const focusInterface = $(view).find('.image-focal__point');
+			focusInterface.css({
+				left: `${x}%`,
+				top: `${y}%`,
+				display: 'block'
+			});
+		};
+
+		/*
 		 * Init Focal Point
 		 */
-		const initFocalPoint = attachment => {
+		const initFocalPoint = (view, attachment) => {
 			const { id } = attachment;
 			const compat = attachment.get('compat');
 
 			if (compat.item) {
 				const focalPointX = $(compat.item).find('.compat-field-responsive_pics_focal_point_x input').val();
 				const focalPointY = $(compat.item).find('.compat-field-responsive_pics_focal_point_y input').val();
-				console.log(`initFocalPoint: ${id}`, focalPointX, focalPointY);
+
+				initFocusInterface(view, focalPointX, focalPointY);
 			}
-			/*
-			 * 1. load existing coordinates
-			 * 2. show/hide save button
-			 * 3. getData
-			 * 4. updateDimensionData
-			 * 5. updateStylePosition & updateStyleBackground
-			 */
 		};
 
 		/*
@@ -58,9 +64,9 @@
 				const { type } = this.model.attributes;
 				if (type === 'image') {
 					initTemplates(this.$el);
-					initFocalPoint(this.model);
+					initFocalPoint(this.$el, this.model);
 				}
-				// This is the preferred convention for all render functions.
+
 				return this;
 			},
 			change: function() {
