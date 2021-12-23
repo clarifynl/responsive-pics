@@ -1,5 +1,7 @@
 (function($) {
 	$(document).ready(() => {
+		let $focusInterface;
+
 		/*
 		 * Init templates
 		 */
@@ -19,14 +21,15 @@
 			if (saveView) {
 				saveParent.append(saveView);
 			}
+
+			$focusInterface = element.find('.image-focal__point');
 		};
 
 		/*
 		 * Init Focus Interface
 		 */
-		const initFocusInterface = (view, x, y) => {
-			const focusInterface = $(view).find('.image-focal__point');
-			focusInterface.css({
+		const initFocusInterface = (x, y) => {
+			$focusInterface.css({
 				left: `${x}%`,
 				top: `${y}%`,
 				display: 'block'
@@ -64,7 +67,7 @@
 				const { type } = this.model.attributes;
 				if (type === 'image') {
 					initTemplates(this.$el);
-					initFocalPoint(this.$el, this.model);
+					initFocalPoint(this.model);
 				}
 
 				return this;
