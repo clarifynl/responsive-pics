@@ -28,8 +28,8 @@
 		 * Init Focal Point
 		 */
 		const initFocalPoint = attachment => {
-			const { id = attachmentId } = attachment;
-			console.log(`initFocalPoint: ${attachmentId}`);
+			const { id } = attachment;
+			console.log(`initFocalPoint: ${id}`);
 			/*
 			 * 1. load existing coordinates
 			 * 2. show/hide save button
@@ -49,9 +49,9 @@
 				wp.media.view.Attachment.prototype.render.apply(this, arguments);
 
 				// Init Focal Point for images
-				const { type = attachmentType } = this.model.attributes;
-				console.log(this.model, attachmentType);
-				if (attachmentType === 'image') {
+				const { type } = this.model.attributes;
+				console.log(this.model, type);
+				if (type === 'image') {
 					initTemplates(this.$el);
 					initFocalPoint(this.model);
 				}
