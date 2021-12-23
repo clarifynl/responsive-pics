@@ -3,6 +3,11 @@
 		let $imageFocal;
 		let $imageFocalWrapper;
 		let $imageFocalPoint;
+		let $imageFocalClickarea;
+
+		let _active = false;
+		let _hover = false;
+		let _move = false;
 
 		/*
 		 * Init templates
@@ -15,9 +20,11 @@
 
 			if (selectView) {
 				selectParent.prepend(selectView);
-				$imageFocal        = element.find('.image-focal');
-				$imageFocalWrapper = element.find('.image-focal__wrapper');
-				$imageFocalPoint   = element.find('.image-focal__point');
+				// Set image focal elements
+				$imageFocal          = element.find('.image-focal');
+				$imageFocalWrapper   = element.find('.image-focal__wrapper');
+				$imageFocalPoint     = element.find('.image-focal__point');
+				$imageFocalClickarea = element.find('.image-focal__clickarea');
 				selectImg.prependTo($imageFocalWrapper);
 			}
 
@@ -36,14 +43,35 @@
 
 			$imageFocal.addClass('is-active');
 
-			// self.focusInterface.state.move = true;
-			// self.focusInterface.state.active = true;
+			_move = true;
+			_active = true;
+		};
 
-			return this;
+		const move = e => {
+			if (!_move) {
+				return false;
+			}
+
+			// const a = {};
+			// const offset = self.attachment.offset;
+			// const pos = self.focusInterface.clickPosition;
+
+			// a.x = e.pageX - offset.x - pos.x;
+			// a.y = e.pageY - offset.y - pos.y;
+			// a.x = maxRange(a.x, 0, self.attachment.width);
+			// a.y = maxRange(a.y, 0, self.attachment.height);
+
+			// self.attachment.focalPoint = {
+			// 	x: a.x / self.attachment.width * 100,
+			// 	y: a.y / self.attachment.height * 100
+			// };
+
+			// self.focusInterface.position = a;
+			// self.focusInterface.updateStyle();
 		};
 
 		const hover = val => {
-			// self.focusInterface.state.hover = val;
+			_hover = val;
 			$imageFocal.toggleClass('is-hover', val);
 		};
 
@@ -56,6 +84,13 @@
 				top: `${y}%`,
 				display: 'block'
 			});
+
+			$imageFocalClickarea
+				.on('mousedown', e => {
+					if (e.which === 1) {
+						startMove(e, true).move(e);
+					}
+				});
 
 			$imageFocalPoint
 				.on('mousedown', e => {
@@ -98,7 +133,7 @@
 			render: function() {
 				// Ensure that the main view is rendered.
 				wp.media.view.Attachment.prototype.render.apply(this, arguments);
-				// Init Focal Point for images
+				// Init focal point for images
 				const { type } = this.model.attributes;
 				if (type === 'image') {
 					initTemplates(this.$el);
@@ -108,7 +143,7 @@
 				return this;
 			},
 			change: function() {
-				// Re-init Focal Point for images
+				// Re-init focal point for images
 				const { type } = this.model.attributes;
 				if (type === 'image') {
 					initFocalPoint(this.model);
