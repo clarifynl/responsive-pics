@@ -39,7 +39,7 @@
 		/*
 		 * Init Focal Point
 		 */
-		const initFocalPoint = (view, attachment) => {
+		const initFocalPoint = attachment => {
 			const { id } = attachment;
 			const compat = attachment.get('compat');
 
@@ -47,7 +47,7 @@
 				const focalPointX = $(compat.item).find('.compat-field-responsive_pics_focal_point_x input').val();
 				const focalPointY = $(compat.item).find('.compat-field-responsive_pics_focal_point_y input').val();
 
-				initFocusInterface(view, focalPointX, focalPointY);
+				initFocusInterface(focalPointX, focalPointY);
 			}
 		};
 
