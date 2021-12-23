@@ -43,7 +43,7 @@
 		wp.media.view.Attachment.Details.TwoColumn = TwoColumn.extend({
 			initialize: function() {
 				// Always make sure that our content is up to date.
-				this.model.on('change', this.change);
+				this.model.on('change', this.change, this);
 			},
 			render: function() {
 				// Ensure that the main view is rendered.
