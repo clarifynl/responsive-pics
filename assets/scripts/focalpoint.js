@@ -54,9 +54,15 @@
 					initTemplates(this.$el);
 					initFocalPoint(this.model);
 				}
+				// This is the preferred convention for all render functions.
+				return this;
 			},
 			change: function() {
-				console.log('change', this.model);
+				// Re-init Focal Point for images
+				const { type } = this.model.attributes;
+				if (type === 'image') {
+					initFocalPoint(this.model);
+				}
 			}
 		});
 	});
