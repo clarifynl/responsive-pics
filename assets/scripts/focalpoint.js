@@ -26,7 +26,7 @@
 		 */
 		const initFocalPoint = attachment => {
 			const { id } = attachment;
-			console.log(`initFocalPoint: ${id}`);
+			console.log(`initFocalPoint: ${id}`, attachment);
 			/*
 			 * 1. load existing coordinates
 			 * 2. show/hide save button
