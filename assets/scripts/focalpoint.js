@@ -59,7 +59,7 @@
 			},
 			change: function() {
 				const compat = this.model.get('compat');
-				console.log('change', compat.item.get());
+				console.log('change', $(compat.item));
 				// Re-init Focal Point for images
 				const { type } = this.model.attributes;
 				if (type === 'image') {
