@@ -58,8 +58,8 @@
 				return this;
 			},
 			change: function() {
-				const compat = this.model.get('compat');
-				console.log('change', $(compat.item));
+				const compat = this.model.get('compat-attachment-fields');
+				console.log('change', compat);
 				// Re-init Focal Point for images
 				const { type } = this.model.attributes;
 				if (type === 'image') {
