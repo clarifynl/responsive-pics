@@ -4,7 +4,7 @@ class RP_Focal_Point extends ResponsivePics {
 
 	public function __construct() {
 		add_action('admin_enqueue_scripts',     ['RP_Focal_Point', 'load_scripts']);
-		add_action('print_media_templates',     ['RP_Focal_Point', 'print_media_templates']);
+		add_action('print_media_templates',     ['RP_Focal_Point', 'print_media_templates'], 10, 1);
 		add_filter('attachment_fields_to_edit', ['RP_Focal_Point', 'attachment_fields_to_edit'], 10, 2);
 		add_filter('attachment_fields_to_save', ['RP_Focal_Point', 'attachment_fields_to_save'], 10, 2);
 		add_action('wp_ajax_get_focal_point',   ['RP_Focal_Point', 'get_focal_point']);
@@ -39,21 +39,17 @@ class RP_Focal_Point extends ResponsivePics {
 	public static function print_media_templates() {
 		?>
 		<script type="text/html" id="tmpl-attachment-select-focal-point">
-			<# if (data.type === 'image') { #>
-				<div class="image-focal">
-					<div class="image-focal__wrapper">
-						<div class="image-focal__point"></div>
-						<div class="image-focal__clickarea"></div>
-					</div>
+			<div class="image-focal">
+				<div class="image-focal__wrapper">
+					<div class="image-focal__point"></div>
+					<div class="image-focal__clickarea"></div>
 				</div>
-			<# } #>
+			</div>
 		</script>
 		<script type="text/html" id="tmpl-attachment-save-focal-point">
-			<# if (data.type === 'image') { #>
-				<button type="button" class="button button-disabled save-attachment-focal-point">
-					<?php _e('Save Focal Point', RESPONSIVE_PICS_TEXTDOMAIN); ?>
-				</button>
-			<# } #>
+			<button type="button" class="button button-disabled save-attachment-focal-point">
+				<?php _e('Save Focal Point', RESPONSIVE_PICS_TEXTDOMAIN); ?>
+			</button>
 		</script>
 		<?php
 	}

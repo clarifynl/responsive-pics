@@ -4,36 +4,32 @@
 (function($) {
 	$(document).ready(() => {
 		/*
-		 * Render Attachment view
+		 * Init templates
 		 */
-		var TwoColumn = wp.media.view.Attachment.Details.TwoColumn;
-		wp.media.view.Attachment.Details.TwoColumn = TwoColumn.extend({
-			render: function() {
-				console.log(this.model);
-				// Ensure that the main view is rendered.
-				wp.media.view.Attachment.prototype.render.apply(this, arguments);
-
-				// Append subviews
-				var selectView   = wp.media.template('attachment-select-focal-point');
-				var selectParent = this.$el.find('.thumbnail');
-				var selectImg    = this.$el.find('.details-image');
+		const initTemplates = element => {
+			// Append focal point selector
+			var selectView   = wp.media.template('attachment-select-focal-point');
+			var selectParent = element.find('.thumbnail');
+			var selectImg    = element.find('.details-image');
+			if (selectView) {
 				selectParent.prepend(selectView);
-				selectImg.prependTo(this.$el.find('.image-focal__wrapper'));
-
-				var saveView   = wp.media.template('attachment-save-focal-point');
-				var saveParent = this.$el.find('.attachment-actions');
-				saveParent.append(saveView);
-
-				// Init Focal Point
-				initFocalPoint(this.model.id);
+				selectImg.prependTo(element.find('.image-focal__wrapper'));
 			}
-		});
+
+			// Append focal point save button
+			var saveView   = wp.media.template('attachment-save-focal-point');
+			var saveParent = element.find('.attachment-actions');
+			if (saveView) {
+				saveParent.append(saveView);
+			}
+		};
 
 		/*
 		 * Init Focal Point
 		 */
-		const initFocalPoint = id => {
-			console.log(`initFocalPoint: ${id}`);
+		const initFocalPoint = attachment => {
+			const { id = attachmentId } = attachment;
+			console.log(`initFocalPoint: ${attachmentId}`);
 			/*
 			 * 1. load existing coordinates
 			 * 2. show/hide save button
@@ -42,6 +38,25 @@
 			 * 5. updateStylePosition & updateStyleBackground
 			 */
 		};
+
+		/*
+		 * Render Attachment view
+		 */
+		var TwoColumn = wp.media.view.Attachment.Details.TwoColumn;
+		wp.media.view.Attachment.Details.TwoColumn = TwoColumn.extend({
+			render: function() {
+				// Ensure that the main view is rendered.
+				wp.media.view.Attachment.prototype.render.apply(this, arguments);
+
+				// Init Focal Point for images
+				const { type = attachmentType } = this.model.attributes;
+				console.log(this.model, attachmentType);
+				if (attachmentType === 'image') {
+					initTemplates(this.$el);
+					initFocalPoint(this.model);
+				}
+			}
+		});
 	});
 })(jQuery);
 
