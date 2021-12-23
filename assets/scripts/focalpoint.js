@@ -59,21 +59,12 @@
 			},
 			change: function() {
 				const compat = this.model.get('compat');
-				console.log('change', compat.item);
+				console.log('change', compat.item.get());
 				// Re-init Focal Point for images
 				const { type } = this.model.attributes;
 				if (type === 'image') {
 					initFocalPoint(this.model);
 				}
-			}
-		});
-
-		/*
-		 * Extend Attachment model
-		 */
-		wp.media.View = wp.media.View.extend( {
-			saveCompat: function(data, options) {
-				console.log('saveCompat', data);
 			}
 		});
 	});
