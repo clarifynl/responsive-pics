@@ -41,6 +41,10 @@
 		 */
 		var TwoColumn = wp.media.view.Attachment.Details.TwoColumn;
 		wp.media.view.Attachment.Details.TwoColumn = TwoColumn.extend({
+			initialize: function() {
+				console.log('initialize');
+				this.model.on('change', this.change, this);
+			},
 			render: function() {
 				// Ensure that the main view is rendered.
 				wp.media.view.Attachment.prototype.render.apply(this, arguments);
@@ -52,7 +56,7 @@
 				}
 			},
 			change: function() {
-				console.log('TwoColumn change');
+				console.log('change', this);
 			}
 		});
 	});
