@@ -71,7 +71,7 @@
 		/*
 		 * Extend Attachment model
 		 */
-		wp.media.model.Attachment = wp.media.model.Attachment.extend( {
+		wp.media.View = wp.media.View.extend( {
 			saveCompat: function(data, options) {
 				console.log('saveCompat', data);
 			}
