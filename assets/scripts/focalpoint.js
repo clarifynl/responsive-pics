@@ -59,7 +59,7 @@
 			},
 			change: function() {
 				const compat = this.model.get('compat');
-				console.log('change', $(compat.item).find('.compat-field-responsive_pics_focal_point_x'));
+				console.log('change', $(compat.item).find('.compat-field-responsive_pics_focal_point_x input').val(), $(compat.item).find('.compat-field-responsive_pics_focal_point_y input').val());
 				// Re-init Focal Point for images
 				const { type } = this.model.attributes;
 				if (type === 'image') {
