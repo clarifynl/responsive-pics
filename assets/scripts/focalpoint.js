@@ -1,6 +1,8 @@
 (function($) {
 	$(document).ready(() => {
-		let $focusInterface;
+		let $imageFocal;
+		let $imageFocalWrapper;
+		let $imageFocalPoint;
 
 		/*
 		 * Init templates
@@ -10,9 +12,14 @@
 			var selectView   = wp.media.template('attachment-select-focal-point');
 			var selectParent = element.find('.thumbnail');
 			var selectImg    = element.find('.details-image');
+
 			if (selectView) {
+				$imageFocal        = element.find('.image-focal');
+				$imageFocalWrapper = element.find('.image-focal__wrapper');
+				$imageFocalPoint   = element.find('.image-focal__point');
+
 				selectParent.prepend(selectView);
-				selectImg.prependTo(element.find('.image-focal__wrapper'));
+				selectImg.prependTo($imageFocalWrapper);
 			}
 
 			// Append focal point save button
@@ -21,19 +28,48 @@
 			if (saveView) {
 				saveParent.append(saveView);
 			}
+		};
 
-			$focusInterface = element.find('.image-focal__point');
+		const startMove = (t, e) => {
+			// self.attachment.updateDimensionData();
+			// self.focusInterface.updateDimensionData().updateClickPosition(t, e);
+			// self.saveButton.highlight();
+
+			$imageFocal.addClass('is-active');
+
+			// self.focusInterface.state.move = true;
+			// self.focusInterface.state.active = true;
+
+			return this;
+		};
+
+		const hover = val => {
+			// self.focusInterface.state.hover = val;
+			$imageFocal.toggleClass('is-hover', val);
 		};
 
 		/*
 		 * Init Focus Interface
 		 */
 		const initFocusInterface = (x, y) => {
-			$focusInterface.css({
+			$imageFocalPoint.css({
 				left: `${x}%`,
 				top: `${y}%`,
 				display: 'block'
 			});
+
+			$imageFocalPoint
+				.on('mousedown', e => {
+					if (e.which === 1) {
+						startMove(e);
+					}
+				})
+				.on('mouseenter', () => {
+					hover(true);
+				})
+				.on('mouseleave', () => {
+					hover(false);
+				});
 		};
 
 		/*
