@@ -105,7 +105,7 @@
 					hover(false);
 				});
 
-			window
+			$(window)
 				.on('mouseup', e => {
 					if (e.which === 1) {
 						_move = false;
