@@ -68,9 +68,10 @@
 			var selectView   = wp.media.template('attachment-select-focal-point');
 			var selectParent = element.find('.thumbnail');
 			var selectImage  = element.find('.details-image');
+
 			console.log(selectImage.width(), selectImage.height());
 			selectImage.on('load', e => {
-				console.log($(e.currentTarget).width(), $(e.currentTarget).height());
+				console.log(e, e.width(), e.height(), $(e.currentTarget).width(), $(e.currentTarget).height());
 			});
 
 			if (selectView) {
