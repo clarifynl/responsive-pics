@@ -18,7 +18,6 @@
 		};
 
 		const dragOverFocalPoint = e => {
-			console.log('dragOverFocalPoint');
 			e.stopPropagation();
 			e.preventDefault();
 		};
