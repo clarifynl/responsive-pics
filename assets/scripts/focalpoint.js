@@ -22,13 +22,13 @@
 
 		const dragOverFocalPoint = e => {
 			console.log('dragOverFocalPoint', e.target);
-			e.stopPropagation();
+			// e.stopPropagation();
 			e.preventDefault();
 		};
 
 		const dropFocalPoint = e => {
 			console.log('dropFocalPoint', e.target);
-			e.stopPropagation();
+			// e.stopPropagation();
 			e.preventDefault();
 		};
 
