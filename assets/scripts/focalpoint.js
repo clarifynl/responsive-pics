@@ -13,7 +13,7 @@
 
 		const startDragFocalPoint = e => {
 			$imageFocal.addClass('is-dragging');
-			e.originalEvent.dataTransfer.effectAllowed = 'move';
+			// e.originalEvent.dataTransfer.effectAllowed = 'move';
 		};
 
 		const draggingFocalPoint = e => {
@@ -25,14 +25,12 @@
 		};
 
 		const dragOverFocalPoint = e => {
-			e.stopPropagation();
 			e.preventDefault();
-			e.originalEvent.dataTransfer.dropEffect = 'move';
+			e.originalEvent.dataTransfer.dropEffect = 'none';
 		};
 
 		const dropFocalPoint = e => {
-			e.originalEvent.stopPropagation();
-			e.originalEvent.preventDefault();
+			e.preventDefault();
 			console.log('dropFocalPoint', $imageFocalPoint.position());
 
 			// self.attachment.focalPoint = {
