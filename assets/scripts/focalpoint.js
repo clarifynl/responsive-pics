@@ -6,6 +6,11 @@
 		let $imageFocalPoint;
 		let $imageFocalClickarea;
 
+		let imageDimensions = {
+			width: 0,
+			height: 0
+		};
+
 		const startDragFocalPoint = e => {
 			$imageFocal.addClass('is-dragging');
 		};
@@ -28,6 +33,11 @@
 			e.preventDefault();
 			console.log('dropFocalPoint', $imageFocalPoint.position());
 
+			// self.attachment.focalPoint = {
+			// 	x: a.x / self.attachment.width * 100,
+			// 	y: a.y / self.attachment.height * 100
+			// };
+
 			// $imageFocalPoint.css({
 			// 	left: `${x}%`,
 			// 	top: `${y}%`,
@@ -39,15 +49,17 @@
 		 * Init Focus Interface
 		 */
 		const initFocusInterface = (x, y) => {
-			console.log($image, $image.width(), $image.height());
 			$image.on('load', e => {
-				console.log($(e.currentTarget).width(), $(e.currentTarget).height());
+				imageDimensions = {
+					width: $(e.currentTarget).width(),
+					height: $(e.currentTarget).height()
+				};
 			});
 
-			// $imageFocalWrapper.css({
-			// 	width: $image.width(),
-			// 	height: $image.height()
-			// });
+			$imageFocalWrapper.css({
+				width: imageDimensions.width,
+				height: imageDimensions.height
+			});
 
 			$imageFocalPoint.css({
 				left: `${x}%`,
@@ -71,10 +83,6 @@
 			var selectView   = wp.media.template('attachment-select-focal-point');
 			var selectParent = element.find('.thumbnail');
 			var selectImage  = element.find('.details-image');
-
-			selectImage.on('load', e => {
-				console.log($(e.currentTarget).width(), $(e.currentTarget).height());
-			});
 
 			if (selectView) {
 				selectParent.prepend(selectView);
