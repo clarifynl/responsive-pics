@@ -5,9 +5,29 @@
 		let $imageFocalPoint;
 		let $imageFocalClickarea;
 
-		const hover = val => {
-			_hover = val;
-			$imageFocal.toggleClass('is-hover', val);
+		const startDragFocalPoint = e => {
+			console.log('startDragFocalPoint', e.target);
+			e.preventDefault();
+		};
+
+		const draggingFocalPoint = e => {
+			console.log('draggingFocalPoint', e.target);
+			e.preventDefault();
+		};
+
+		const endDragFocalPoint = e => {
+			console.log('endDragFocalPoint', e.target);
+			e.preventDefault();
+		};
+
+		const dragOverFocalPoint = e => {
+			console.log('dragOverFocalPoint', e.target);
+			e.preventDefault();
+		};
+
+		const dropFocalPoint = e => {
+			console.log('dropFocalPoint', e.target);
+			e.preventDefault();
 		};
 
 		/*
