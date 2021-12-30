@@ -14,7 +14,7 @@
 		const startDragFocalPoint = e => {
 			$('body.supports-drag-drop').off('dragover.wp-uploader');
 			$imageFocal.addClass('is-dragging');
-			e.originalEvent.dataTransfer.effectAllowed = 'none';
+			e.originalEvent.dataTransfer.effectAllowed = 'move';
 		};
 
 		const draggingFocalPoint = e => {
@@ -28,7 +28,7 @@
 		const dragOverFocalPoint = e => {
 			e.stopPropagation();
 			e.preventDefault();
-			e.originalEvent.dataTransfer.dropEffect = 'none';
+			e.originalEvent.dataTransfer.dropEffect = 'move';
 		};
 
 		const dropFocalPoint = e => {
