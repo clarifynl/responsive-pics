@@ -75,9 +75,9 @@
 }
 
 body.focal-point-dragging {
-	&.drag-drop.drag-over {
-		#drag-drop-area {
-			border-color: #ff0;
+	&.supports-drag-drop.drag-over {
+		.uploader-window {
+			display: none !important;
 		}
 	}
 }
