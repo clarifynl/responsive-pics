@@ -449,11 +449,13 @@ import 'lazysizes/plugins/aspectratio/ls.aspectratio.js';
 Please submit any issues you experience with the **ResponsivePics** library over at [Github](https://github.com/booreiland/responsive-pics/issues).
 
 ## Todo's
+* Add Gutenberg Blocks support.
+* Add WPML (Media) support for focal point.
 * Limit api usage with sizes presets to prevent abuse.
 * Enable more crop functionality by switching to `$wp_editor->crop` instead of `$wp_editor->resize`.
 * Add functions `get_picture_data`, `get_image_data` and `get_background_data` to retrieve available sources and sizes as data instead of html markup.
 * Add **bulk delete** functionality for all resized/cropped images.
-* Add support for **multiple background images** syntax.
+* Add **multiple background images** syntax support.
 
 ## Maintainers
 **ResponsivePics** is developed and maintained by:
