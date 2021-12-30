@@ -25,8 +25,8 @@
 		};
 
 		const dragOverFocalPoint = e => {
-			e.originalEvent.stopPropagation();
-			e.originalEvent.preventDefault();
+			e.stopPropagation();
+			e.preventDefault();
 			e.originalEvent.dataTransfer.dropEffect = 'move';
 		};
 
@@ -72,7 +72,7 @@
 			$imageFocalWrapper.on('dragover', dragOverFocalPoint);
 			$imageFocalWrapper.on('drop', dropFocalPoint);
 			$imageFocalPoint.on('dragstart', startDragFocalPoint);
-			$imageFocalPoint.on('drag', draggingFocalPoint);
+			// $imageFocalPoint.on('drag', draggingFocalPoint);
 			$imageFocalPoint.on('dragend', endDragFocalPoint);
 		};
 
