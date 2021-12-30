@@ -18,16 +18,16 @@
 		};
 
 		const dragOverFocalPoint = e => {
-			console.log('dragOverFocalPoint', e.target);
+			console.log('dragOverFocalPoint');
 			e.stopPropagation();
 			e.preventDefault();
 		};
 
 		const dropFocalPoint = e => {
-			console.log('dropFocalPoint', e.target);
 			e.stopPropagation();
 			e.preventDefault();
 			$imageFocalWrapper.append($imageFocalPoint);
+			console.log('dropFocalPoint', $imageFocalPoint.position());
 		};
 
 		/*
