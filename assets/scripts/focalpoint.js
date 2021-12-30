@@ -12,6 +12,7 @@
 		};
 
 		const startDragFocalPoint = e => {
+			console.log(e, e.target.id);
 			$imageFocal.addClass('is-dragging');
 			e.dataTransfer.setData('text', e.target.id);
 			e.dataTransfer.effectAllowed = 'move';
