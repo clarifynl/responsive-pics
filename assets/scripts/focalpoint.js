@@ -77,7 +77,7 @@
 				$imageFocalPoint     = element.find('.image-focal__point');
 				$imageFocalClickarea = element.find('.image-focal__clickarea');
 				selectImage.prependTo($imageFocalWrapper);
-				$image               = element.find('.details-image');
+				$image               = $imageFocalWrapper.find('.details-image');
 				console.log($image);
 			}
 
