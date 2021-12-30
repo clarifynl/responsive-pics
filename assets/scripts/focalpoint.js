@@ -78,7 +78,7 @@
 				$imageFocalClickarea = element.find('.image-focal__clickarea');
 				selectImage.prependTo($imageFocalWrapper);
 				$image               = $imageFocalWrapper.find('.details-image');
-				console.log($image);
+				console.log($image.width(), $image.height());
 			}
 
 			// Append focal point save button
