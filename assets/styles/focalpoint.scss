@@ -62,19 +62,11 @@
 		}
 	}
 
-	&.is-hover {
-		.image-focal__point:before {
-			background-color: #008ec2;
-		}
-
-		.image-focal__clickarea {
-			background-color: rgba(0, 0, 0, .2);
-		}
-	}
-
-	&.is-active {
-		.image-focal__point:before {
-			background-color: #f90;
+	&.is-dragging {
+		.image-focal__point {
+			&::before {
+				background-color: #f90;
+			}
 		}
 
 		.image-focal__clickarea {

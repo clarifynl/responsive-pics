@@ -6,7 +6,7 @@
 		let $imageFocalClickarea;
 
 		const startDragFocalPoint = e => {
-			console.log('startDragFocalPoint', e.target);
+			$imageFocal.addClass('is-dragging');
 		};
 
 		const draggingFocalPoint = e => {
@@ -14,7 +14,7 @@
 		};
 
 		const endDragFocalPoint = e => {
-			console.log('endDragFocalPoint', e.target);
+			$imageFocal.removeClass('is-dragging');
 		};
 
 		const dragOverFocalPoint = e => {
@@ -25,8 +25,8 @@
 		const dropFocalPoint = e => {
 			e.stopPropagation();
 			e.preventDefault();
-			$imageFocalWrapper.append($imageFocalPoint);
 			console.log('dropFocalPoint', $imageFocalPoint.position());
+			$imageFocalWrapper.append($imageFocalPoint);
 		};
 
 		/*
