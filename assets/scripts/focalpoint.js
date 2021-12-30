@@ -12,6 +12,7 @@
 		};
 
 		const startDragFocalPoint = e => {
+			$(body).off('dragover.wp-uploader');
 			$imageFocal.addClass('is-dragging');
 			e.originalEvent.dataTransfer.effectAllowed = 'none';
 		};
