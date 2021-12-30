@@ -25,7 +25,7 @@
 		const dropFocalPoint = e => {
 			console.log('dropFocalPoint', e.target);
 			e.preventDefault();
-			e.target.append($imageFocalPoint);
+			$(e.target).append($imageFocalPoint);
 		};
 
 		/*
