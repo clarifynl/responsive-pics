@@ -12,8 +12,9 @@
 		};
 
 		const startDragFocalPoint = e => {
-			$('body.supports-drag-drop').off('dragover.wp-uploader');
-			$imageFocal.addClass('is-dragging');
+			$('body.supports-drag-drop').unbind('.wp-uploader');
+			// $('body.supports-drag-drop').off('dragover.wp-uploader');
+			$('body').addClass('focal-point-dragging');
 			e.originalEvent.dataTransfer.effectAllowed = 'move';
 		};
 
@@ -22,7 +23,8 @@
 		};
 
 		const endDragFocalPoint = e => {
-			$imageFocal.removeClass('is-dragging');
+			$('body').removeClass('focal-point-dragging');
+			$('body.supports-drag-drop').bind('.wp-uploader');
 		};
 
 		const dragOverFocalPoint = e => {

@@ -50,7 +50,7 @@
 		will-change: left, top;
 
 		&,
-		.is-dragging & {
+		body.focal-point-dragging & {
 			cursor: move;
 		}
 
@@ -67,9 +67,17 @@
 			transition: .2s all cubic-bezier(.4, 0, .2, 1);
 			transform: translate(-50%, -50%);
 
-			.is-dragging & {
+			body.focal-point-dragging & {
 				background-color: rgba(0, 0, 0, 1);
 			}
+		}
+	}
+}
+
+body.focal-point-dragging {
+	&.drag-drop.drag-over {
+		#drag-drop-area {
+			border-color: #ff0;
 		}
 	}
 }
