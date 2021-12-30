@@ -13,6 +13,8 @@
 
 		const startDragFocalPoint = e => {
 			$imageFocal.addClass('is-dragging');
+			e.dataTransfer.setData('text', e.target.id);
+			e.dataTransfer.effectAllowed = 'move';
 		};
 
 		const draggingFocalPoint = e => {
@@ -26,11 +28,13 @@
 		const dragOverFocalPoint = e => {
 			e.stopPropagation();
 			e.preventDefault();
+			e.dataTransfer.dropEffect = 'move';
 		};
 
 		const dropFocalPoint = e => {
 			e.stopPropagation();
 			e.preventDefault();
+			const data = e.dataTransfer.getData('text');
 			console.log('dropFocalPoint', $imageFocalPoint.position());
 
 			// self.attachment.focalPoint = {
