@@ -54,11 +54,10 @@
 					width: $(e.currentTarget).width(),
 					height: $(e.currentTarget).height()
 				};
-			});
-
-			$imageFocalWrapper.css({
-				width: imageDimensions.width,
-				height: imageDimensions.height
+				$imageFocalWrapper.css({
+					width: `${imageDimensions.width}px`,
+					height: `${imageDimensions.height}px`
+				});
 			});
 
 			$imageFocalPoint.css({
