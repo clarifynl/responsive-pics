@@ -66,6 +66,8 @@
 
 	&.is-dragging {
 		.image-focal__point {
+			cursor: move;
+
 			&::before {
 				background-color: #f90;
 			}
