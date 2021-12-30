@@ -90,7 +90,7 @@
 		 */
 		const startDragFocalPoint = e => {
 			$('body').addClass('focal-point-dragging');
-			e.dataTransfer.setData('text', e.target.id);
+			e.originalEvent.dataTransfer.setData('text', e.target.id);
 			e.originalEvent.dataTransfer.effectAllowed = 'move';
 		};
 
@@ -108,7 +108,7 @@
 			e.stopPropagation();
 			e.preventDefault();
 
-			const dragId = e.dataTransfer.getData('text');
+			const dragId = e.originalEvent.dataTransfer.getData('text');
 			const dragPosition = $(`#${dragId}`).position();
 			console.log(dragId, dragPosition);
 
