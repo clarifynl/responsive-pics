@@ -1,5 +1,8 @@
 (function($) {
 	$(document).ready(() => {
+		/**
+		 * Set variables
+		 */
 		let $image;
 		let $imageFocal;
 		let $imageFocalWrapper;
@@ -11,75 +14,7 @@
 			height: 0
 		};
 
-		const startDragFocalPoint = e => {
-			// $('body.supports-drag-drop').unbind('.wp-uploader');
-			// $('body.supports-drag-drop').off('dragover.wp-uploader');
-			$('body').addClass('focal-point-dragging');
-			e.originalEvent.dataTransfer.effectAllowed = 'move';
-		};
-
-		const draggingFocalPoint = e => {
-			console.log('draggingFocalPoint');
-		};
-
-		const endDragFocalPoint = e => {
-			$('body').removeClass('focal-point-dragging');
-			// $('body.supports-drag-drop').bind('.wp-uploader');
-		};
-
-		const dragOverFocalPoint = e => {
-			e.stopPropagation();
-			e.preventDefault();
-			e.originalEvent.dataTransfer.dropEffect = 'move';
-		};
-
-		const dropFocalPoint = e => {
-			e.stopPropagation();
-			e.preventDefault();
-			console.log('dropFocalPoint', $imageFocalPoint.position());
-
-			// self.attachment.focalPoint = {
-			// 	x: a.x / self.attachment.width * 100,
-			// 	y: a.y / self.attachment.height * 100
-			// };
-
-			// $imageFocalPoint.css({
-			// 	left: `${x}%`,
-			// 	top: `${y}%`,
-			// 	display: 'block'
-			// });
-		};
-
-		/*
-		 * Init Focus Interface
-		 */
-		const initFocusInterface = (x, y) => {
-			$image.on('load', e => {
-				imageDimensions = {
-					width: $(e.currentTarget).width(),
-					height: $(e.currentTarget).height()
-				};
-				$imageFocalWrapper.css({
-					width: `${imageDimensions.width}px`,
-					height: `${imageDimensions.height}px`
-				});
-			});
-
-			$imageFocalPoint.css({
-				left: `${x}%`,
-				top: `${y}%`,
-				display: 'block'
-			});
-
-			// Drag'n drop events
-			$imageFocalWrapper.on('dragover', dragOverFocalPoint);
-			$imageFocalWrapper.on('drop', dropFocalPoint);
-			$imageFocalPoint.on('dragstart', startDragFocalPoint);
-			// $imageFocalPoint.on('drag', draggingFocalPoint);
-			$imageFocalPoint.on('dragend', endDragFocalPoint);
-		};
-
-		/*
+		/**
 		 * Init templates
 		 */
 		const initTemplates = element => {
@@ -107,21 +42,107 @@
 			}
 		};
 
-		/*
-		 * Init Focal Point
+		/**
+		 * Get Focal Point from meta fields
 		 */
-		const initFocalPoint = attachment => {
+		const getFocalPoint = attachment => {
 			const compat = attachment.get('compat');
 
 			if (compat.item) {
 				const focalPointX = $(compat.item).find('.compat-field-responsive_pics_focal_point_x input').val();
 				const focalPointY = $(compat.item).find('.compat-field-responsive_pics_focal_point_y input').val();
 
-				initFocusInterface(focalPointX, focalPointY);
+				return {
+					x: focalPointX,
+					y: focalPointY
+				};
 			}
+
+			return;
 		};
 
-		/*
+		/**
+		 * Calculate Focal Point by relative coordinates
+		 */
+		const calculateFocalPoint = attachment => {
+			return {
+				x: Math.round(attachment.x / imageDimensions.width) * 100,
+				y: Math.round(attachment.y / imageDimensions.height) * 100
+			};
+		};
+
+		/**
+		 * Update Focal Point coordinates
+		 */
+		const setFocalPoint = (x, y) => {
+			console.log(x, y);
+			$imageFocalPoint.css({
+				left: `${x}%`,
+				top: `${y}%`,
+				display: 'block'
+			});
+		};
+
+		/**
+		 * HTML5 Drag events
+		 */
+		const startDragFocalPoint = e => {
+			$('body').addClass('focal-point-dragging');
+			e.originalEvent.dataTransfer.effectAllowed = 'move';
+		};
+
+		const endDragFocalPoint = e => {
+			$('body').removeClass('focal-point-dragging');
+		};
+
+		const dragOverFocalPoint = e => {
+			e.stopPropagation();
+			e.preventDefault();
+			e.originalEvent.dataTransfer.dropEffect = 'move';
+		};
+
+		const dropFocalPoint = e => {
+			e.stopPropagation();
+			e.preventDefault();
+
+			const focalPoint = calculateFocalPoint($imageFocalPoint.position());
+			setFocalPoint(focalPoint.x, focalPoint.y);
+		};
+
+		/**
+		 * Update Focus Interface
+		 */
+		const updateFocusInterface = image => {
+			imageDimensions = {
+				width: image.width(),
+				height: image.height()
+			};
+
+			$imageFocalWrapper.css({
+				width: `${imageDimensions.width}px`,
+				height: `${imageDimensions.height}px`
+			});
+		};
+
+		/**
+		 * Init Focus Interface
+		 */
+		const initFocusInterface = attachment => {
+			const focalPoint = getFocalPoint(attachment);
+			setFocalPoint(focalPoint.x, focalPoint.y);
+
+			// Add image/window listeners
+			$image.on('load', e => updateFocusInterface($(e.currentTarget)));
+			$(window).on('resize', () => updateFocusInterface($image));
+
+			// Drag'n drop events
+			$imageFocalWrapper.on('dragover', dragOverFocalPoint);
+			$imageFocalWrapper.on('drop', dropFocalPoint);
+			$imageFocalPoint.on('dragstart', startDragFocalPoint);
+			$imageFocalPoint.on('dragend', endDragFocalPoint);
+		};
+
+		/**
 		 * Extend Attachment view
 		 */
 		var TwoColumn = wp.media.view.Attachment.Details.TwoColumn;
@@ -137,7 +158,7 @@
 				const { type } = this.model.attributes;
 				if (type === 'image') {
 					initTemplates(this.$el);
-					initFocalPoint(this.model);
+					initFocusInterface(this.model);
 				}
 
 				return this;
@@ -146,7 +167,8 @@
 				// Re-init focal point for images
 				const { type } = this.model.attributes;
 				if (type === 'image') {
-					initFocalPoint(this.model);
+					const focalPoint = getFocalPoint(this.model);
+					setFocalPoint(focalPoint.x, focalPoint.y);
 				}
 			}
 		});
