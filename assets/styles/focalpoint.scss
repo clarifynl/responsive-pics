@@ -30,6 +30,10 @@
 		&:hover {
 			background-color: rgba(0, 0, 0, .1)
 		}
+
+		.is-dragging & {
+			background-color: rgba(0, 0, 0, .4);
+		}
 	}
 
 	&__point {
@@ -61,20 +65,10 @@
 			background-color: rgba(0, 0, 0, .5);
 			transition: .2s all cubic-bezier(.4, 0, .2, 1);
 			transform: translate(-50%, -50%);
-		}
-	}
 
-	&.is-dragging {
-		.image-focal__point {
-			cursor: move !important;
-
-			&::before {
-				background-color: #f90;
+			.is-dragging & {
+				background-color: rgba(0, 0, 0, 1);
 			}
-		}
-
-		.image-focal__clickarea {
-			background-color: rgba(0, 0, 0, .4);
 		}
 	}
 }

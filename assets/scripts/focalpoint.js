@@ -67,8 +67,8 @@
 			});
 
 			// Drag'n drop events
-			$imageFocalWrapper.on('dragover', dragOverFocalPoint);
-			$imageFocalWrapper.on('drop', dropFocalPoint);
+			// $imageFocalWrapper.on('dragover', dragOverFocalPoint);
+			// $imageFocalWrapper.on('drop', dropFocalPoint);
 			$imageFocalPoint.on('dragstart', startDragFocalPoint);
 			$imageFocalPoint.on('drag', draggingFocalPoint);
 			$imageFocalPoint.on('dragend', endDragFocalPoint);
