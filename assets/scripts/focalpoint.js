@@ -26,7 +26,7 @@
 			e.stopPropagation();
 			e.preventDefault();
 			console.log('dropFocalPoint', $imageFocalPoint.position());
-			$imageFocalWrapper.append($imageFocalPoint);
+			// $imageFocalWrapper.prepend($imageFocalPoint);
 		};
 
 		/*
