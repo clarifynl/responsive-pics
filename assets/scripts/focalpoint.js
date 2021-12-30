@@ -1,5 +1,6 @@
 (function($) {
 	$(document).ready(() => {
+		let $image;
 		let $imageFocal;
 		let $imageFocalWrapper;
 		let $imageFocalPoint;
@@ -26,13 +27,25 @@
 			e.stopPropagation();
 			e.preventDefault();
 			console.log('dropFocalPoint', $imageFocalPoint.position());
-			// $imageFocalWrapper.prepend($imageFocalPoint);
+
+			// $imageFocalPoint.css({
+			// 	left: `${x}%`,
+			// 	top: `${y}%`,
+			// 	display: 'block'
+			// });
 		};
 
 		/*
 		 * Init Focus Interface
 		 */
 		const initFocusInterface = (x, y) => {
+			console.log($image);
+
+			$imageFocalWrapper.css({
+				width: $image.width(),
+				height: $image.height()
+			});
+
 			$imageFocalPoint.css({
 				left: `${x}%`,
 				top: `${y}%`,
@@ -54,7 +67,7 @@
 			// Append focal point selector
 			var selectView   = wp.media.template('attachment-select-focal-point');
 			var selectParent = element.find('.thumbnail');
-			var selectImg    = element.find('.details-image');
+			$image           = element.find('.details-image');
 
 			if (selectView) {
 				selectParent.prepend(selectView);
@@ -63,7 +76,7 @@
 				$imageFocalWrapper   = element.find('.image-focal__wrapper');
 				$imageFocalPoint     = element.find('.image-focal__point');
 				$imageFocalClickarea = element.find('.image-focal__clickarea');
-				selectImg.prependTo($imageFocalWrapper);
+				$image.prependTo($imageFocalWrapper);
 			}
 
 			// Append focal point save button
@@ -78,7 +91,6 @@
 		 * Init Focal Point
 		 */
 		const initFocalPoint = attachment => {
-			const { id } = attachment;
 			const compat = attachment.get('compat');
 
 			if (compat.item) {
