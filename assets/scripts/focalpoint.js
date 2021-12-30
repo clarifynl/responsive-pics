@@ -22,11 +22,13 @@
 
 		const dragOverFocalPoint = e => {
 			console.log('dragOverFocalPoint', e.target);
+			e.stopPropagation();
 			e.preventDefault();
 		};
 
 		const dropFocalPoint = e => {
 			console.log('dropFocalPoint', e.target);
+			e.stopPropagation();
 			e.preventDefault();
 		};
 
@@ -39,6 +41,13 @@
 				top: `${y}%`,
 				display: 'block'
 			});
+
+			// Drag'n drop events
+			$imageFocalWrapper.on('dragover', dragOverFocalPoint);
+			$imageFocalWrapper.on('drop', dropFocalPoint);
+			$imageFocalPoint.on('dragstart', startDragFocalPoint);
+			$imageFocalPoint.on('drag', draggingFocalPoint);
+			$imageFocalPoint.on('dragend', endDragFocalPoint);
 		};
 
 		/*

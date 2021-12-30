@@ -40,8 +40,8 @@ class RP_Focal_Point extends ResponsivePics {
 		?>
 		<script type="text/html" id="tmpl-attachment-select-focal-point">
 			<div class="image-focal">
-				<div class="image-focal__wrapper" ondrop="dropFocalPoint(event)" ondragover="dragOverFocalPoint(event)">
-					<div class="image-focal__point" draggable="true" ondragstart="startDragFocalPoint(event)" ondrag="draggingFocalPoint(event)" ondragend="endDragFocalPoint(event)"></div>
+				<div class="image-focal__wrapper">
+					<div class="image-focal__point"></div>
 					<div class="image-focal__clickarea"></div>
 				</div>
 			</div>
