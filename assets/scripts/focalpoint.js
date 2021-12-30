@@ -12,14 +12,12 @@
 		};
 
 		const startDragFocalPoint = e => {
-			console.log(e, e.target.id);
 			$imageFocal.addClass('is-dragging');
-			e.dataTransfer.setData('text', e.target.id);
-			e.dataTransfer.effectAllowed = 'move';
+			e.originalEvent.dataTransfer.effectAllowed = 'move';
 		};
 
 		const draggingFocalPoint = e => {
-			console.log('draggingFocalPoint', e.target);
+			console.log('draggingFocalPoint');
 		};
 
 		const endDragFocalPoint = e => {
@@ -27,15 +25,14 @@
 		};
 
 		const dragOverFocalPoint = e => {
-			e.stopPropagation();
-			e.preventDefault();
-			e.dataTransfer.dropEffect = 'move';
+			e.originalEvent.stopPropagation();
+			e.originalEvent.preventDefault();
+			e.originalEvent.dataTransfer.dropEffect = 'move';
 		};
 
 		const dropFocalPoint = e => {
-			e.stopPropagation();
-			e.preventDefault();
-			const data = e.dataTransfer.getData('text');
+			e.originalEvent.stopPropagation();
+			e.originalEvent.preventDefault();
 			console.log('dropFocalPoint', $imageFocalPoint.position());
 
 			// self.attachment.focalPoint = {
