@@ -65,11 +65,9 @@
 		 * Calculate Focal Point by relative coordinates
 		 */
 		const calculateFocalPoint = attachment => {
-			console.log('calculateFocalPoint', attachment, imageDimensions);
-
 			return {
-				x: Math.round(attachment.x / imageDimensions.width) * 100,
-				y: Math.round(attachment.y / imageDimensions.height) * 100
+				x: Math.round(attachment.left / imageDimensions.width) * 100,
+				y: Math.round(attachment.top / imageDimensions.height) * 100
 			};
 		};
 
@@ -115,8 +113,6 @@
 		 * Update Focus Interface
 		 */
 		const updateFocusInterface = image => {
-			console.log('updateFocusInterface', image);
-
 			imageDimensions = {
 				width: image.width(),
 				height: image.height()
@@ -132,6 +128,7 @@
 		 * Init Focus Interface
 		 */
 		const initFocusInterface = attachment => {
+			// Set focal point
 			const focalPoint = getFocalPoint(attachment);
 			setFocalPoint(focalPoint.x, focalPoint.y);
 
