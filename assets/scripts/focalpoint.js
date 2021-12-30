@@ -65,6 +65,8 @@
 		 * Calculate Focal Point by relative coordinates
 		 */
 		const calculateFocalPoint = attachment => {
+			console.log(attachment, imageDimensions);
+
 			return {
 				x: Math.round(attachment.x / imageDimensions.width) * 100,
 				y: Math.round(attachment.y / imageDimensions.height) * 100
