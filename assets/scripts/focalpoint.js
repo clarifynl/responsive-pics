@@ -27,7 +27,7 @@
 			console.log('dropFocalPoint', e.target);
 			e.stopPropagation();
 			e.preventDefault();
-			$(e.target).append($imageFocalPoint);
+			$imageFocalWrapper.append($imageFocalPoint);
 		};
 
 		/*
@@ -41,7 +41,6 @@
 			});
 
 			// Drag'n drop events
-			console.log($imageFocalPoint, $imageFocalWrapper);
 			$imageFocalWrapper.on('dragover', dragOverFocalPoint);
 			$imageFocalWrapper.on('drop', dropFocalPoint);
 			$imageFocalPoint.on('dragstart', startDragFocalPoint);
