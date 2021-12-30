@@ -64,10 +64,12 @@
 		/**
 		 * Calculate Focal Point by relative coordinates
 		 */
-		const calculateFocalPoint = attachment => {
+		const calculateFocalPoint = position => {
+			console.log(Number((position.left / imageDimensions.width) * 100).toFixed(2));
+
 			return {
-				x: Number.parseFloat((attachment.left / imageDimensions.width) * 100).toFixed(2),
-				y: Number.parseFloat((attachment.top / imageDimensions.height) * 100).toFixed(2)
+				x: Number((position.left / imageDimensions.width) * 100).toFixed(2),
+				y: Number((position.top / imageDimensions.height) * 100).toFixed(2)
 			};
 		};
 
@@ -75,7 +77,7 @@
 		 * Update Focal Point coordinates
 		 */
 		const setFocalPoint = (x, y) => {
-			console.log(x, y);
+			console.log('setFocalPoint', x, y);
 			$imageFocalPoint.css({
 				left: `${x}%`,
 				top: `${y}%`,
@@ -106,6 +108,7 @@
 			e.preventDefault();
 
 			const focalPoint = calculateFocalPoint($imageFocalPoint.position());
+			console.log(focalPoint);
 			setFocalPoint(focalPoint.x, focalPoint.y);
 		};
 
