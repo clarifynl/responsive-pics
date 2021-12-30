@@ -111,11 +111,11 @@
 			// const dragId = e.originalEvent.dataTransfer.getData('text');
 			// const dragEl = $(`#${dragId}`);
 			// $imageFocalWrapper.prepend(dragEl);
-			console.log($imageFocalPoint.position(), $imageFocalPoint.offset());
+			console.log(e.originalEvent.dataTransfer, $imageFocalPoint.position(), $imageFocalPoint.offset());
 			const dragPosition = $imageFocalPoint.position();
 
-			const focalPoint = calculateFocalPoint(dragPosition);
-			setFocalPoint(focalPoint.x, focalPoint.y);
+			// const focalPoint = calculateFocalPoint(dragPosition);
+			// setFocalPoint(focalPoint.x, focalPoint.y);
 		};
 
 		/**
