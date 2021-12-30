@@ -39,7 +39,7 @@
 		 * Init Focus Interface
 		 */
 		const initFocusInterface = (x, y) => {
-			console.log($image.width(), $image.height());
+			console.log($image, $image.outerWidth(), $image.outerHeight());
 
 			// $imageFocalWrapper.css({
 			// 	width: $image.width(),
