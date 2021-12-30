@@ -40,11 +40,14 @@
 		 */
 		const initFocusInterface = (x, y) => {
 			console.log($image, $image.width(), $image.height());
-
-			$imageFocalWrapper.css({
-				width: $image.width(),
-				height: $image.height()
+			$image.on('load', e => {
+				console.log($(e.currentTarget).width(), $(e.currentTarget).height());
 			});
+
+			// $imageFocalWrapper.css({
+			// 	width: $image.width(),
+			// 	height: $image.height()
+			// });
 
 			$imageFocalPoint.css({
 				left: `${x}%`,
@@ -70,7 +73,7 @@
 			var selectImage  = element.find('.details-image');
 
 			selectImage.on('load', e => {
-				console.log($(e), $(e.target), $(e.currentTarget).width(), $(e.currentTarget).height());
+				console.log($(e.currentTarget).width(), $(e.currentTarget).height());
 			});
 
 			if (selectView) {
