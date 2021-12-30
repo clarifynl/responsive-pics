@@ -39,12 +39,12 @@
 		 * Init Focus Interface
 		 */
 		const initFocusInterface = (x, y) => {
-			console.log($image);
+			console.log($image.width(), $image.height());
 
-			$imageFocalWrapper.css({
-				width: $image.width(),
-				height: $image.height()
-			});
+			// $imageFocalWrapper.css({
+			// 	width: $image.width(),
+			// 	height: $image.height()
+			// });
 
 			$imageFocalPoint.css({
 				left: `${x}%`,
@@ -67,7 +67,7 @@
 			// Append focal point selector
 			var selectView   = wp.media.template('attachment-select-focal-point');
 			var selectParent = element.find('.thumbnail');
-			$image           = element.find('.details-image');
+			var selectImg    = element.find('.details-image');
 
 			if (selectView) {
 				selectParent.prepend(selectView);
@@ -76,7 +76,8 @@
 				$imageFocalWrapper   = element.find('.image-focal__wrapper');
 				$imageFocalPoint     = element.find('.image-focal__point');
 				$imageFocalClickarea = element.find('.image-focal__clickarea');
-				$image.prependTo($imageFocalWrapper);
+				selectImg.prependTo($imageFocalWrapper);
+				$image               = $imageFocalWrapper.find('.details-image');
 			}
 
 			// Append focal point save button
