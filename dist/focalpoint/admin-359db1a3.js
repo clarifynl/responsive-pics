@@ -1,0 +1,15 @@
+/*!
+ * 
+ * ResponsivePics
+ * 
+ * @author Booreiland
+ * @version 1.4.0
+ * @link https://responsive.pics
+ * @license undefined
+ * 
+ * Copyright (c) 2021 Booreiland
+ * 
+ * This software is released under the [MIT License](https://github.com/booreiland/responsive-pics/blob/master/LICENSE)
+ */
+(window.wpackioresponsivePicsfocalpointJsonp=window.wpackioresponsivePicsfocalpointJsonp||[]).push([[0],[function(t,e,i){i(1),i(2),t.exports=i(3)},function(t,e,i){var n="responsivePicsdist".replace(/[^a-zA-Z0-9_-]/g,"");i.p=window["__wpackIo".concat(n)]},function(t,e){var i;(i=jQuery)(document).ready((function(){var t,e,n,a={width:0,height:0},o=function(i){var a=wp.media.template("attachment-select-focal-point"),o=i.find(".thumbnail"),c=i.find(".details-image");a&&(o.prepend(a),i.find(".image-focal"),e=i.find(".image-focal__wrapper"),n=i.find(".image-focal__point"),i.find(".image-focal__clickarea"),c.prependTo(e),t=e.find(".details-image"));var r=wp.media.template("attachment-save-focal-point"),d=i.find(".attachment-actions");r&&d.append(r)},c=function(t){var e=t.get("compat");if(e.item)return{x:i(e.item).find(".compat-field-responsive_pics_focal_point_x input").val(),y:i(e.item).find(".compat-field-responsive_pics_focal_point_y input").val()}},r=function(t,e){console.log("setFocalPoint",t,e),n.css({left:"".concat(t,"%"),top:"".concat(e,"%"),display:"block"})},d=function(t){i("body").addClass("focal-point-dragging"),t.originalEvent.dataTransfer.setData("text",t.target.id),t.originalEvent.dataTransfer.effectAllowed="move"},p=function(t){i("body").removeClass("focal-point-dragging")},s=function(t){t.stopPropagation(),t.preventDefault(),t.originalEvent.dataTransfer.dropEffect="move"},l=function(t){t.stopPropagation(),t.preventDefault();var e=t.originalEvent.dataTransfer.getData("text"),n=i("#".concat(e));i(t.target).prepend(n);var o=n.position();console.log(n,o);var c,d=(c=o,console.log(Number(c.left/a.width*100).toFixed(2)),{x:Number(c.left/a.width*100).toFixed(2),y:Number(c.top/a.height*100).toFixed(2)});r(d.x,d.y)},f=function(t){a={width:t.width(),height:t.height()},e.css({width:"".concat(a.width,"px"),height:"".concat(a.height,"px")})},m=function(a){var o=c(a);r(o.x,o.y),t.on("load",(function(t){return f(i(t.currentTarget))})),i(window).on("resize",(function(){return f(t)})),e.on("dragover",s),e.on("drop",l),n.on("dragstart",d),n.on("dragend",p)},g=wp.media.view.Attachment.Details.TwoColumn;wp.media.view.Attachment.Details.TwoColumn=g.extend({initialize:function(){this.model.on("change:compat",this.change,this)},render:function(){wp.media.view.Attachment.prototype.render.apply(this,arguments);var t=this.model.attributes.type;return"image"===t&&(o(this.$el),m(this.model)),this},change:function(){if("image"===this.model.attributes.type){var t=c(this.model);r(t.x,t.y)}}})}))},function(t,e,i){}],[[0,1]]]);
+//# sourceMappingURL=admin-359db1a3.js.map

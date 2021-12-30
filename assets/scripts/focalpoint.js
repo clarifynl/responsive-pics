@@ -109,8 +109,10 @@
 			e.preventDefault();
 
 			const dragId = e.originalEvent.dataTransfer.getData('text');
-			const dragPosition = $(`#${dragId}`).position();
-			console.log(dragId, dragPosition);
+			const dragEl = $(`#${dragId}`);
+			$(e.target).prepend(dragEl);
+			const dragPosition = dragEl.position();
+			console.log(dragEl, dragPosition);
 
 			const focalPoint = calculateFocalPoint(dragPosition);
 			setFocalPoint(focalPoint.x, focalPoint.y);
