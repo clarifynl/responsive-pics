@@ -1,6 +1,6 @@
 {
-  "admin.css": "focalpoint/admin-e0f7f8c2.css",
-  "admin.css.map": "focalpoint/admin-e0f7f8c2.css.map",
+  "admin.css": "focalpoint/admin-b0f9b85e.css",
+  "admin.css.map": "focalpoint/admin-b0f9b85e.css.map",
   "admin.js": "focalpoint/admin-8271109f.js",
   "admin.js.map": "focalpoint/admin-8271109f.js.map",
   "runtime.js": "focalpoint/runtime-4f14b78f.js",
@@ -16,10 +16,10 @@
         "focalpoint/admin-8271109f.js.map"
       ],
       "css": [
-        "focalpoint/admin-e0f7f8c2.css"
+        "focalpoint/admin-b0f9b85e.css"
       ],
       "css.map": [
-        "focalpoint/admin-e0f7f8c2.css.map"
+        "focalpoint/admin-b0f9b85e.css.map"
       ]
     }
   }

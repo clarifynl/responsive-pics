@@ -8,7 +8,9 @@
 	border: 1px solid red;
 
 	&__wrapper {
+		display: inline-block;
 		position: relative;
+		overflow: hidden;
 		border: 1px solid blue;
 	}
 
