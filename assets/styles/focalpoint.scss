@@ -41,18 +41,14 @@
 		z-index: 20;
 		top: 50%;
 		left: 50%;
-		display: none;
+		cursor: move;
+		// display: none;
 		width: 100px;
 		height: 100px;
 		border: 1px solid rgba(255, 255, 255, .5);
 		border-radius: 50%;
 		backface-visibility: hidden;
 		will-change: left, top;
-
-		&,
-		body.focal-point-dragging & {
-			cursor: move;
-		}
 
 		&::before {
 			content: '';
@@ -70,14 +66,6 @@
 			body.focal-point-dragging & {
 				background-color: rgba(0, 0, 0, 1);
 			}
-		}
-	}
-}
-
-body.focal-point-dragging {
-	&.supports-drag-drop.drag-over {
-		.uploader-window {
-			display: none !important;
 		}
 	}
 }

@@ -8,7 +8,6 @@
 		**/
 		init: attachment => {
 			const focalPoint = Focal.getFocalPoint(attachment);
-			console.log(focalPoint);
 
 			Focal.picker = $image;
 			Focal.point  = $imageFocalPoint;
@@ -52,6 +51,7 @@
 		 Move the focal point
 		**/
 		setFocalPoint: e => {
+			console.log('setFocalPoint', e);
 			var pointYOffset = e.offsetY - Focal.point.height() / 2,
 				pointXOffset = e.offsetX - Focal.point.width() / 2;
 
@@ -70,6 +70,7 @@
 		 Move focal point and background position when dragging point
 		**/
 		dragging: e => {
+			console.log('dragging', e);
 			Focal.x = Math.round(e.target.offsetLeft / Focal.picker.width() * 100);
 			Focal.y = Math.round(e.target.offsetTop / Focal.picker.height() * 100);
 		},
