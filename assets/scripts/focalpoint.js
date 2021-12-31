@@ -114,13 +114,25 @@
 		};
 
 		/**
+		 * Update Focus Interface
+		 */
+		const updateFocusInterface = () => {
+			$imageFocalWrapper.css({
+				width: `${$image.width()}px`,
+				height: `${$image.height()}px`
+			});
+		};
+
+		/**
 		 * Init Focus Interface
 		 */
 		const initFocusInterface = attachment => {
 			const focalPoint = getFocalPoint(attachment);
 			$image.on('load', e => {
+				updateFocusInterface();
 				Focal.init(focalPoint);
 			});
+			$(window).on('resize', updateFocusInterface);
 		};
 
 		/**
