@@ -4,18 +4,20 @@
 	max-height: 90%;
 	max-height: calc(100% - 42px);
 	margin-bottom: 16px;
-	user-select: none;
+	border: 1px solid red;
 
 	&__wrapper {
 		display: inline-block;
 		position: relative;
 		overflow: hidden;
+		border: 1px solid blue;
 	}
 
 	img.details-image {
 		display: block;
 		margin: 0 !important;
 		max-height: 100% !important;
+		border: 1px solid green;
 	}
 
 	&__clickarea {
