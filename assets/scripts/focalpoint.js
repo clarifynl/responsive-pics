@@ -96,8 +96,9 @@
 
 		const dragFocalPoint = e => {
 			e.preventDefault();
+
 			if (isDown) {
-				console.log($(e.currentTarget).position());
+				console.log(e);
 				const focalPoint = calculateFocalPoint($(e.currentTarget).position());
 				setFocalPoint(focalPoint.x, focalPoint.y);
 			}
