@@ -128,12 +128,13 @@
 					} = {}
 				} = {}
 			} = attachment;
+			console.log((imgHeight / imgWidth * 100).toFixed(2));
 
 			$image.on('load', e => {
-				$imageFocalWrapper.css({
-					paddingTop: (imgHeight / imgWidth * 100).toFixed(2)
-				});
 				Focal.init(focalPoint);
+				$imageFocalWrapper.css({
+					paddingTop: `${(imgHeight / imgWidth * 100).toFixed(2)}%`
+				});
 			});
 		};
 
