@@ -71,6 +71,7 @@
 		 * Calculate Focal Point by relative coordinates
 		 */
 		const calculateFocalPoint = position => {
+			console.log(position);
 			return {
 				x: Number((position.x / imageDimensions.width) * 100).toFixed(2),
 				y: Number((position.y / imageDimensions.height) * 100).toFixed(2)
@@ -96,6 +97,7 @@
 			isDown = true;
 			$('body').addClass('focal-point-dragging');
 			const offset = $(e.currentTarget).offset();
+			console.log(offset);
 
 			focalPointOffset = {
 				x: offset.left - e.pageX,
