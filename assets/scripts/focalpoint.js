@@ -117,9 +117,15 @@
 		 * Init Focus Interface
 		 */
 		const initFocusInterface = attachment => {
+			console.log(attachment);
 			const focalPoint = getFocalPoint(attachment);
-			$image.on('load', e => Focal.init(focalPoint));
-			// $(window).on('resize', () => updateFocusInterface($image));
+
+			$image.on('load', e => {
+				// $imageFocalWrapper.css({
+				// 	paddingTop: 
+				// });
+				Focal.init(focalPoint);
+			});
 		};
 
 		/**
