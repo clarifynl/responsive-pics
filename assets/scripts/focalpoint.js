@@ -20,10 +20,10 @@
 		 Event Listeners
 		**/
 		setEventListeners: () => {
-			Focal.picker.on('click', this.setFocalPoint);
+			Focal.picker.on('click', Focal.setFocalPoint);
 			Focal.point.draggable({
 				cursor: 'move',
-				drag: this.dragging,
+				drag: Focal.dragging,
 				containment: $imageFocalWrapper
 			});
 		},
