@@ -40,8 +40,10 @@ class RP_Focal_Point extends ResponsivePics {
 		?>
 		<script type="text/html" id="tmpl-attachment-select-focal-point">
 			<div class="image-focal">
-				<div class="image-focal__point" id="focal-point"></div>
-				<div class="image-focal__clickarea"></div>
+				<div class="image-focal__wrapper">
+					<div class="image-focal__point" id="focal-point"></div>
+					<div class="image-focal__clickarea"></div>
+				</div>
 			</div>
 		</script>
 		<script type="text/html" id="tmpl-attachment-save-focal-point">
