@@ -90,8 +90,9 @@
 		 */
 		const startDragFocalPoint = e => {
 			$('body').addClass('focal-point-dragging');
+			console.log(e.currentTarget.position());
 			// e.originalEvent.dataTransfer.setData('text', e.target.id);
-			e.originalEvent.dataTransfer.effectAllowed = 'move';
+			// e.originalEvent.dataTransfer.effectAllowed = 'move';
 		};
 
 		const endDragFocalPoint = e => {
@@ -146,10 +147,11 @@
 			$(window).on('resize', () => updateFocusInterface($image));
 
 			// Drag'n drop events
-			$imageFocalWrapper.on('dragover', dragOverFocalPoint);
-			$imageFocalWrapper.on('drop', dropFocalPoint);
-			$imageFocalPoint.on('dragstart', startDragFocalPoint);
-			$imageFocalPoint.on('dragend', endDragFocalPoint);
+			$imageFocalPoint.on('mousedown', startDragFocalPoint);
+			// $imageFocalWrapper.on('dragover', dragOverFocalPoint);
+			// $imageFocalWrapper.on('drop', dropFocalPoint);
+			// $imageFocalPoint.on('dragstart', startDragFocalPoint);
+			// $imageFocalPoint.on('dragend', endDragFocalPoint);
 		};
 
 		/**
