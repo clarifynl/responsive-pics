@@ -7,7 +7,7 @@
 		 Set variables
 		**/
 		init: focalPoint => {
-			Focal.wrapper = $imageFocalWrapper;
+			Focal.wrapper = $imageFocal;
 			Focal.picker = $image;
 			Focal.point  = $imageFocalPoint;
 			Focal.x = focalPoint.x;
@@ -79,11 +79,11 @@
 				selectParent.prepend(selectView);
 				// Set image focal elements
 				$imageFocal          = element.find('.image-focal');
-				$imageFocalWrapper   = element.find('.image-focal__wrapper');
+				// $imageFocalWrapper   = element.find('.image-focal__wrapper');
 				$imageFocalPoint     = element.find('.image-focal__point');
 				$imageFocalClickarea = element.find('.image-focal__clickarea');
-				selectImage.prependTo($imageFocalWrapper);
-				$image               = $imageFocalWrapper.find('.details-image');
+				selectImage.prependTo($imageFocal);
+				$image               = $imageFocal.find('.details-image');
 			}
 
 			// Append focal point save button
@@ -128,11 +128,10 @@
 					} = {}
 				} = {}
 			} = attachment;
-			console.log((imgHeight / imgWidth * 100).toFixed(2));
 
 			$image.on('load', e => {
 				Focal.init(focalPoint);
-				$imageFocalWrapper.css({
+				$imageFocal.css({
 					paddingTop: `${(imgHeight / imgWidth * 100).toFixed(2)}%`
 				});
 			});
