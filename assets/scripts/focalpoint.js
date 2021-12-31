@@ -9,6 +9,7 @@
 		let $imageFocalPoint;
 		let $imageFocalClickarea;
 
+		let isDown = false;
 		let imageDimensions = {
 			width: 0,
 			height: 0
@@ -89,34 +90,22 @@
 		 * HTML5 Drag events
 		 */
 		const startDragFocalPoint = e => {
+			isDown = true;
 			$('body').addClass('focal-point-dragging');
-			console.log($(e.currentTarget).position());
-			// e.originalEvent.dataTransfer.setData('text', e.target.id);
-			// e.originalEvent.dataTransfer.effectAllowed = 'move';
+		};
+
+		const dragFocalPoint = e => {
+			e.preventDefault();
+			if (isDown) {
+				console.log($(e.currentTarget).position());
+				const focalPoint = calculateFocalPoint($(e.currentTarget).position());
+				setFocalPoint(focalPoint.x, focalPoint.y);
+			}
 		};
 
 		const endDragFocalPoint = e => {
 			$('body').removeClass('focal-point-dragging');
-		};
-
-		const dragOverFocalPoint = e => {
-			e.stopPropagation();
-			e.preventDefault();
-			e.originalEvent.dataTransfer.dropEffect = 'move';
-		};
-
-		const dropFocalPoint = e => {
-			e.stopPropagation();
-			e.preventDefault();
-
-			// const dragId = e.originalEvent.dataTransfer.getData('text');
-			// const dragEl = $(`#${dragId}`);
-			// $imageFocalWrapper.prepend(dragEl);
-			console.log(e.originalEvent.dataTransfer, $imageFocalPoint.position(), $imageFocalPoint.offset());
-			const dragPosition = $imageFocalPoint.position();
-
-			// const focalPoint = calculateFocalPoint(dragPosition);
-			// setFocalPoint(focalPoint.x, focalPoint.y);
+			isDown = false;
 		};
 
 		/**
@@ -148,10 +137,8 @@
 
 			// Drag'n drop events
 			$imageFocalPoint.on('mousedown', startDragFocalPoint);
-			// $imageFocalWrapper.on('dragover', dragOverFocalPoint);
-			// $imageFocalWrapper.on('drop', dropFocalPoint);
-			// $imageFocalPoint.on('dragstart', startDragFocalPoint);
-			// $imageFocalPoint.on('dragend', endDragFocalPoint);
+			$imageFocalPoint.on('mousemove', dragFocalPoint);
+			$imageFocalPoint.on('mouseup', endDragFocalPoint);
 		};
 
 		/**
