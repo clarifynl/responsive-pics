@@ -1,17 +1,29 @@
 .image-focal {
 	display: flex;
-	justify-content: center;
+	flex-flow: column nowrap;
+	align-items: center;
 	max-height: 90%;
 	max-height: calc(100% - 42px);
 	margin-bottom: 16px;
 	user-select: none;
+	border: 1px solid red;
 
 	&__wrapper {
+		display: flex;
+		align-items: stretch;
+		// min-height: 100%;
+		border: 1px solid green;
+	}
+
+	&__intrinsic {
+		flex: 1 1 100%;
+		align-self: stretch;
 		position: relative;
 		overflow: hidden;
 		height: 0;
 		max-height: 100%;
 		padding-top: percentage(3/4);
+		border: 1px solid blue;
 	}
 
 	img.details-image {
