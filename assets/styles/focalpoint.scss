@@ -1,6 +1,5 @@
 .image-focal {
 	display: flex;
-	align-self: center;
 	justify-content: center;
 	max-height: 90%;
 	max-height: calc(100% - 42px);
@@ -8,8 +7,6 @@
 	user-select: none;
 
 	&__wrapper {
-		flex: 1 0 auto;
-		margin: 0 auto;
 		position: relative;
 		overflow: hidden;
 		height: 0;

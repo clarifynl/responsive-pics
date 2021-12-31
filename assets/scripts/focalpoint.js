@@ -74,6 +74,7 @@
 			var selectView   = wp.media.template('attachment-select-focal-point');
 			var selectParent = element.find('.thumbnail');
 			var selectImage  = element.find('.details-image');
+			console.log(selectImage.width());
 
 			if (selectView) {
 				selectParent.prepend(selectView);
@@ -83,6 +84,7 @@
 				$imageFocalPoint     = element.find('.image-focal__point');
 				$imageFocalClickarea = element.find('.image-focal__clickarea');
 				selectImage.prependTo($imageFocalWrapper);
+				$imageFocalWrapper.width(selectImage.width());
 				$image               = $imageFocalWrapper.find('.details-image');
 			}
 
