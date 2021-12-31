@@ -10,11 +10,7 @@
 		let $imageFocalClickarea;
 
 		let isDown = false;
-		let focalPointOffset = {
-			x: 0,
-			y: 0
-		};
-
+		let focalPointOffset;
 		let imageDimensions = {
 			width: 0,
 			height: 0
@@ -71,7 +67,6 @@
 		 * Calculate Focal Point by relative coordinates
 		 */
 		const calculateFocalPoint = position => {
-			console.log(position);
 			return {
 				x: Number((position.x / imageDimensions.width) * 100).toFixed(2),
 				y: Number((position.y / imageDimensions.height) * 100).toFixed(2)
@@ -96,13 +91,7 @@
 		const startDragFocalPoint = e => {
 			isDown = true;
 			$('body').addClass('focal-point-dragging');
-			const offset = $(e.currentTarget).offset();
-			console.log(offset);
-
-			focalPointOffset = {
-				x: offset.left - e.pageX,
-				y: offset.top - e.pageY
-			};
+			focalPointOffset = $imageFocalWrapper.offset();
 		};
 
 		const dragFocalPoint = e => {
@@ -110,10 +99,9 @@
 
 			if (isDown) {
 				const focalPointPosition = {
-					x: e.pageX + focalPointOffset.x,
-					y: e.pageY + focalPointOffset.y
+					x: e.pageX - focalPointOffset.left,
+					y: e.pageY - focalPointOffset.top
 				};
-				console.log(focalPointOffset, focalPointPosition);
 				const focalPoint = calculateFocalPoint(focalPointPosition);
 				setFocalPoint(focalPoint.x, focalPoint.y);
 			}
