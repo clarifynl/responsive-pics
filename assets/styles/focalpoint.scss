@@ -1,9 +1,7 @@
 .image-focal {
 	position: relative;
 	display: flex;
-	flex-direction: column;
-	align-items: center;
-	justify-content: stretch;
+	justify-content: center;
 	max-height: 90%;
 	max-height: calc(100% - 42px);
 	margin-bottom: 16px;
@@ -11,8 +9,6 @@
 
 	&__wrapper {
 		position: relative;
-		flex: 1 0 auto;
-		max-height: 100%;
 		border: 1px solid blue;
 	}
 
