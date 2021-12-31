@@ -6,13 +6,13 @@
 		/**
 		 Set variables
 		**/
-		init: attachment => {
-			const focalPoint = Focal.getFocalPoint(attachment);
-
+		init: focalPoint => {
+			Focal.wrapper = $imageFocalWrapper;
 			Focal.picker = $image;
 			Focal.point  = $imageFocalPoint;
 			Focal.x = focalPoint.x;
 			Focal.y = focalPoint.y;
+			Focal.positionFocalPoint(focalPoint);
 			Focal.setEventListeners();
 		},
 
@@ -24,41 +24,30 @@
 			Focal.point.draggable({
 				cursor: 'move',
 				drag: Focal.dragging,
-				containment: $imageFocalWrapper
+				containment: Focal.wrapper
 			});
 		},
 
-		/**
-		 * Get Focal Point from meta fields
-		 */
-		getFocalPoint: attachment => {
-			const compat = attachment.get('compat');
-
-			if (compat.item) {
-				const focalPointX = $(compat.item).find('.compat-field-responsive_pics_focal_point_x input').val();
-				const focalPointY = $(compat.item).find('.compat-field-responsive_pics_focal_point_y input').val();
-
-				return {
-					x: focalPointX,
-					y: focalPointY
-				};
-			}
-
-			return;
+		positionFocalPoint: position => {
+			console.log('positionFocalPoint', position);
+			Focal.point.css({
+				top: position.y,
+				left: position.x
+			});
 		},
 
 		/**
 		 Move the focal point
 		**/
 		setFocalPoint: e => {
-			console.log('setFocalPoint', e);
 			var pointYOffset = e.offsetY - Focal.point.height() / 2,
 				pointXOffset = e.offsetX - Focal.point.width() / 2;
 
+			console.log('setFocalPoint', pointXOffset, pointYOffset);
+
 			Focal.point.css({
 				top: pointYOffset,
-				left: pointXOffset,
-				display: 'block'
+				left: pointXOffset
 			});
 
 			Focal.x = Math.round((e.pageY - $(this).offset().top) / Focal.picker.height() * 100);
@@ -106,11 +95,30 @@
 		};
 
 		/**
+		 * Get Focal Point from meta fields
+		 */
+		const getFocalPoint = attachment => {
+			const compat = attachment.get('compat');
+
+			if (compat.item) {
+				const focalPointX = $(compat.item).find('.compat-field-responsive_pics_focal_point_x input').val();
+				const focalPointY = $(compat.item).find('.compat-field-responsive_pics_focal_point_y input').val();
+
+				return {
+					x: focalPointX,
+					y: focalPointY
+				};
+			}
+
+			return;
+		};
+
+		/**
 		 * Init Focus Interface
 		 */
 		const initFocusInterface = attachment => {
-			// Add image/window listeners
-			$image.on('load', e => Focal.init(attachment));
+			const focalPoint = getFocalPoint(attachment);
+			$image.on('load', e => Focal.init(focalPoint));
 			// $(window).on('resize', () => updateFocusInterface($image));
 		};
 
@@ -139,9 +147,10 @@
 				// Re-init focal point for images
 				const { type } = this.model.attributes;
 				if (type === 'image') {
-					focalPoint = Focal.getFocalPoint(this.model);
+					focalPoint = getFocalPoint(this.model);
 					Focal.x = focalPoint.x;
 					Focal.y = focalPoint.y;
+					Focal.positionFocalPoint(focalPoint);
 				}
 			}
 		});
