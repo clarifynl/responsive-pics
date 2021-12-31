@@ -29,10 +29,9 @@
 		},
 
 		positionFocalPoint: position => {
-			console.log('positionFocalPoint', position);
 			Focal.point.css({
-				top: `${position.y}%`,
-				left: `${position.x}%`
+				left: `${position.x}%`,
+				top: `${position.y}%`
 			});
 		},
 
@@ -43,15 +42,15 @@
 			var pointYOffset = e.offsetY - Focal.point.height() / 2,
 				pointXOffset = e.offsetX - Focal.point.width() / 2;
 
-			console.log('setFocalPoint', pointXOffset, pointYOffset);
-
 			Focal.point.css({
-				top: pointYOffset,
-				left: pointXOffset
+				left: pointXOffset,
+				top: pointYOffset
 			});
 
 			Focal.x = Math.round((e.pageY - $(this).offset().top) / Focal.picker.height() * 100);
 			Focal.y = Math.round((e.pageX - $(this).offset().left) / Focal.picker.width() * 100);
+
+			console.log('setFocalPoint', Focal.x, Focal.y);
 		},
 
 
@@ -59,9 +58,10 @@
 		 Move focal point and background position when dragging point
 		**/
 		dragging: e => {
-			console.log('dragging', e);
 			Focal.x = Math.round(e.target.offsetLeft / Focal.picker.width() * 100);
 			Focal.y = Math.round(e.target.offsetTop / Focal.picker.height() * 100);
+
+			console.log('dragging', Focal.x, Focal.y);
 		},
 	};
 
