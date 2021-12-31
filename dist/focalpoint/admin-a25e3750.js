@@ -1,0 +1,15 @@
+/*!
+ * 
+ * ResponsivePics
+ * 
+ * @author Booreiland
+ * @version 1.4.0
+ * @link https://responsive.pics
+ * @license undefined
+ * 
+ * Copyright (c) 2021 Booreiland
+ * 
+ * This software is released under the [MIT License](https://github.com/booreiland/responsive-pics/blob/master/LICENSE)
+ */
+(window.wpackioresponsivePicsfocalpointJsonp=window.wpackioresponsivePicsfocalpointJsonp||[]).push([[0],[function(i,t,e){e(1),e(2),i.exports=e(3)},function(i,t,e){var o="responsivePicsdist".replace(/[^a-zA-Z0-9_-]/g,"");e.p=window["__wpackIo".concat(o)]},function(i,t){!function(i){var t=this,e={init:function(i){e.wrapper=$imageFocalWrapper,e.picker=$image,e.point=$imageFocalPoint,e.x=i.x,e.y=i.y,e.positionFocalPoint(i),e.setEventListeners()},setEventListeners:function(){e.picker.on("click",e.setFocalPoint),e.point.draggable({cursor:"move",drag:e.dragging,containment:e.wrapper})},positionFocalPoint:function(i){e.point.css({left:"".concat(i.x,"%"),top:"".concat(i.y,"%")})},setFocalPoint:function(o){var a=o.offsetY-e.point.height()/2,n=o.offsetX-e.point.width()/2;e.point.css({left:n,top:a}),e.x=Math.round((o.pageY-i(t).offset().top)/e.picker.height()*100),e.y=Math.round((o.pageX-i(t).offset().left)/e.picker.width()*100),console.log("setFocalPoint",e.x,e.y)},dragging:function(i){e.x=Math.round(i.target.offsetLeft/e.picker.width()*100),e.y=Math.round(i.target.offsetTop/e.picker.height()*100),console.log("dragging",e.x,e.y)}};i(document).ready((function(){var t=function(i){var t=wp.media.template("attachment-select-focal-point"),e=i.find(".thumbnail"),o=i.find(".details-image");t&&(e.prepend(t),$imageFocal=i.find(".image-focal"),$imageFocalWrapper=i.find(".image-focal__wrapper"),$imageFocalPoint=i.find(".image-focal__point"),$imageFocalClickarea=i.find(".image-focal__clickarea"),o.prependTo($imageFocalWrapper),$image=$imageFocalWrapper.find(".details-image"));var a=wp.media.template("attachment-save-focal-point"),n=i.find(".attachment-actions");a&&n.append(a)},o=function(t){var e=t.get("compat");if(e.item)return{x:i(e.item).find(".compat-field-responsive_pics_focal_point_x input").val(),y:i(e.item).find(".compat-field-responsive_pics_focal_point_y input").val()}},a=function(i){var t=o(i),a=i.attributes,n=(a=void 0===a?{}:a).sizes,c=(n=void 0===n?{}:n).large,p=(c=void 0===c?{}:c).width,r=c.height;$image.on("load",(function(i){e.init(t),$imageFocalWrapper.css({paddingTop:"".concat((r/p*100).toFixed(2),"%")})}))},n=wp.media.view.Attachment.Details.TwoColumn;wp.media.view.Attachment.Details.TwoColumn=n.extend({initialize:function(){this.model.on("change:compat",this.change,this)},render:function(){wp.media.view.Attachment.prototype.render.apply(this,arguments);var i=this.model.attributes.type;return"image"===i&&(t(this.$el),a(this.model)),this},change:function(){"image"===this.model.attributes.type&&(focalPoint=o(this.model),e.x=focalPoint.x,e.y=focalPoint.y,e.positionFocalPoint(focalPoint))}})}))}(jQuery)},function(i,t,e){}],[[0,1]]]);
+//# sourceMappingURL=admin-a25e3750.js.map
