@@ -90,7 +90,7 @@
 		 */
 		const startDragFocalPoint = e => {
 			$('body').addClass('focal-point-dragging');
-			console.log(e.currentTarget.position());
+			console.log($(e.currentTarget).position());
 			// e.originalEvent.dataTransfer.setData('text', e.target.id);
 			// e.originalEvent.dataTransfer.effectAllowed = 'move';
 		};
