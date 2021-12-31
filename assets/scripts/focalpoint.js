@@ -1,21 +1,63 @@
 (function($) {
-	$(document).ready(() => {
+	/**
+	 Small plugin to set the focal point of an image
+	**/
+	const Focal = {
 		/**
-		 * Set variables
-		 */
-		let $image;
-		let $imageFocal;
-		let $imageFocalWrapper;
-		let $imageFocalPoint;
-		let $imageFocalClickarea;
+		 Set variables
+		**/
+		init: () => {
+			const focalPoint = getFocalPoint(attachment);
+			console.log(focalPoint);
 
-		let isDown = false;
-		let focalPointOffset;
-		let imageDimensions = {
-			width: 0,
-			height: 0
-		};
+			Focal.picker = $image;
+			Focal.point  = $imageFocalPoint;
+			Focal.x = focalPoint.x;
+			Focal.y = focalPoint.y;
+			Focal.setEventListeners();
+		},
 
+		/**
+		 Event Listeners
+		**/
+		setEventListeners: () => {
+			Focal.picker.on('click', this.setFocalPoint);
+			Focal.point.draggable({
+				cursor: 'move',
+				drag: this.dragging,
+				containment: $imageFocalWrapper
+			});
+		},
+
+
+		/**
+		 Move the focal point
+		**/
+		setFocalPoint: e => {
+			var pointYOffset = e.offsetY - Focal.point.height() / 2,
+				pointXOffset = e.offsetX - Focal.point.width() / 2;
+
+			Focal.point.css({
+				top: pointYOffset,
+				left: pointXOffset,
+				display: 'block'
+			});
+
+			Focal.x = Math.round((e.pageY - $(this).offset().top) / Focal.picker.height() * 100);
+			Focal.y = Math.round((e.pageX - $(this).offset().left) / Focal.picker.width() * 100);
+		},
+
+
+		/**
+		 Move focal point and background position when dragging point
+		**/
+		dragging: e => {
+			Focal.x = Math.round(e.target.offsetLeft / Focal.picker.width() * 100);
+			Focal.y = Math.round(e.target.offsetTop / Focal.picker.height() * 100);
+		},
+	};
+
+	$(document).ready(() => {
 		/**
 		 * Init templates
 		 */
@@ -64,85 +106,15 @@
 		};
 
 		/**
-		 * Calculate Focal Point by relative coordinates
-		 */
-		const calculateFocalPoint = position => {
-			return {
-				x: Number((position.x / imageDimensions.width) * 100).toFixed(2),
-				y: Number((position.y / imageDimensions.height) * 100).toFixed(2)
-			};
-		};
-
-		/**
-		 * Update Focal Point coordinates
-		 */
-		const setFocalPoint = (x, y) => {
-			console.log('setFocalPoint', x, y);
-			$imageFocalPoint.css({
-				left: `${x}%`,
-				top: `${y}%`,
-				display: 'block'
-			});
-		};
-
-		/**
-		 * HTML5 Drag events
-		 */
-		const startDragFocalPoint = e => {
-			isDown = true;
-			$('body').addClass('focal-point-dragging');
-			focalPointOffset = $imageFocalWrapper.offset();
-		};
-
-		const dragFocalPoint = e => {
-			e.preventDefault();
-
-			if (isDown) {
-				const focalPointPosition = {
-					x: e.pageX - focalPointOffset.left,
-					y: e.pageY - focalPointOffset.top
-				};
-				const focalPoint = calculateFocalPoint(focalPointPosition);
-				setFocalPoint(focalPoint.x, focalPoint.y);
-			}
-		};
-
-		const endDragFocalPoint = e => {
-			$('body').removeClass('focal-point-dragging');
-			isDown = false;
-		};
-
-		/**
-		 * Update Focus Interface
-		 */
-		const updateFocusInterface = image => {
-			imageDimensions = {
-				width: image.width(),
-				height: image.height()
-			};
-
-			$imageFocalWrapper.css({
-				width: `${imageDimensions.width}px`,
-				height: `${imageDimensions.height}px`
-			});
-		};
-
-		/**
 		 * Init Focus Interface
 		 */
 		const initFocusInterface = attachment => {
-			// Set focal point
-			const focalPoint = getFocalPoint(attachment);
-			setFocalPoint(focalPoint.x, focalPoint.y);
-
 			// Add image/window listeners
 			$image.on('load', e => updateFocusInterface($(e.currentTarget)));
 			$(window).on('resize', () => updateFocusInterface($image));
 
-			// Drag'n drop events
-			$imageFocalPoint.on('mousedown', startDragFocalPoint);
-			$imageFocalPoint.on('mousemove', dragFocalPoint);
-			$imageFocalPoint.on('mouseup', endDragFocalPoint);
+			// Init
+			Focal.init();
 		};
 
 		/**
@@ -171,7 +143,8 @@
 				const { type } = this.model.attributes;
 				if (type === 'image') {
 					const focalPoint = getFocalPoint(this.model);
-					setFocalPoint(focalPoint.x, focalPoint.y);
+					Focal.x = focalPoint.x;
+					Focal.y = focalPoint.y;
 				}
 			}
 		});
