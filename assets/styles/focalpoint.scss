@@ -41,30 +41,37 @@
 		z-index: 20;
 		top: 50%;
 		left: 50%;
+		width: 1px;
+		height: 1px;
 		cursor: move;
-		width: 100px;
-		height: 100px;
-		border: 1px solid rgba(255, 255, 255, .5);
-		border-radius: 50%;
-		transform: translate(-50%, -50%);
-		transform-origin: 50% 50%;
 
-		&::before {
+		&::before,
+		&::after {
 			content: '';
 			position: absolute;
 			top: 50%;
 			left: 50%;
+			border-radius: 50%;
+			transform: translate(-50%, -50%);
+		}
+
+		&::before {
 			width: 10px;
 			height: 10px;
 			border: 2px solid #fff;
 			border-radius: 50%;
 			background-color: rgba(0, 0, 0, .5);
 			transition: .2s all cubic-bezier(.4, 0, .2, 1);
-			transform: translate(-50%, -50%);
 
 			body.focal-point-dragging & {
 				background-color: rgba(0, 0, 0, 1);
 			}
+		}
+
+		&::after {
+			width: 100px;
+			height: 100px;
+			border: 1px solid rgba(255, 255, 255, .5);
 		}
 	}
 }
