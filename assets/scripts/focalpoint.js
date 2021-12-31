@@ -6,8 +6,8 @@
 		/**
 		 Set variables
 		**/
-		init: () => {
-			const focalPoint = getFocalPoint(attachment);
+		init: attachment => {
+			const focalPoint = this.getFocalPoint(attachment);
 			console.log(focalPoint);
 
 			Focal.picker = $image;
@@ -29,6 +29,24 @@
 			});
 		},
 
+		/**
+		 * Get Focal Point from meta fields
+		 */
+		getFocalPoint: attachment => {
+			const compat = attachment.get('compat');
+
+			if (compat.item) {
+				const focalPointX = $(compat.item).find('.compat-field-responsive_pics_focal_point_x input').val();
+				const focalPointY = $(compat.item).find('.compat-field-responsive_pics_focal_point_y input').val();
+
+				return {
+					x: focalPointX,
+					y: focalPointY
+				};
+			}
+
+			return;
+		},
 
 		/**
 		 Move the focal point
@@ -87,25 +105,6 @@
 		};
 
 		/**
-		 * Get Focal Point from meta fields
-		 */
-		const getFocalPoint = attachment => {
-			const compat = attachment.get('compat');
-
-			if (compat.item) {
-				const focalPointX = $(compat.item).find('.compat-field-responsive_pics_focal_point_x input').val();
-				const focalPointY = $(compat.item).find('.compat-field-responsive_pics_focal_point_y input').val();
-
-				return {
-					x: focalPointX,
-					y: focalPointY
-				};
-			}
-
-			return;
-		};
-
-		/**
 		 * Init Focus Interface
 		 */
 		const initFocusInterface = attachment => {
@@ -114,7 +113,7 @@
 			$(window).on('resize', () => updateFocusInterface($image));
 
 			// Init
-			Focal.init();
+			Focal.init(attachment);
 		};
 
 		/**
@@ -142,7 +141,7 @@
 				// Re-init focal point for images
 				const { type } = this.model.attributes;
 				if (type === 'image') {
-					const focalPoint = getFocalPoint(this.model);
+					focalPoint = Focal.getFocalPoint(this.model);
 					Focal.x = focalPoint.x;
 					Focal.y = focalPoint.y;
 				}
