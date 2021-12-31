@@ -1,6 +1,7 @@
 (function($) {
 	/**
 	 Small plugin to set the focal point of an image
+	 Source: https://codepen.io/vinsongrant/pen/QGodXV
 	**/
 	const Focal = {
 		/**
