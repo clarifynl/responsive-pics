@@ -11,6 +11,7 @@
 
 		let isDown = false;
 		let focalPointOffset = [0,0];
+		let focalPointPosition;
 		let imageDimensions = {
 			width: 0,
 			height: 0
@@ -94,8 +95,6 @@
 			isDown = true;
 			$('body').addClass('focal-point-dragging');
 			const offset = $(e.currentTarget).offset();
-			console.log('x: ', e.pageX, e.originalEvent.clientX);
-			console.log('y: ', e.pageY, e.originalEvent.clientY);
 
 			focalPointOffset = [
 				offset.left - e.pageX,
@@ -107,7 +106,13 @@
 			e.preventDefault();
 
 			if (isDown) {
-				console.log(e);
+				console.log('x: ', e.pageX, e.originalEvent.clientX);
+				console.log('y: ', e.pageY, e.originalEvent.clientY);
+
+				focalPointPosition = {
+					x : e.pageX,
+					y : e.pageY
+				};
 			}
 		};
 
