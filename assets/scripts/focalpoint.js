@@ -109,11 +109,8 @@
 		 */
 		const initFocusInterface = attachment => {
 			// Add image/window listeners
-			$image.on('load', e => updateFocusInterface($(e.currentTarget)));
-			$(window).on('resize', () => updateFocusInterface($image));
-
-			// Init
-			Focal.init(attachment);
+			$image.on('load', e => Focal.init(attachment));
+			// $(window).on('resize', () => updateFocusInterface($image));
 		};
 
 		/**
