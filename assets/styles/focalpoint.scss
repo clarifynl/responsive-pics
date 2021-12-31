@@ -1,15 +1,16 @@
 .image-focal {
 	display: flex;
 	justify-content: center;
+	max-height: 90%;
+	max-height: calc(100% - 42px);
+	margin-bottom: 16px;
 	user-select: none;
 
 	&__wrapper {
 		position: relative;
 		overflow: hidden;
 		height: 0;
-		max-height: 90%;
-		max-height: calc(100% - 42px);
-		margin-bottom: 16px;
+		max-height: 100%;
 		padding-top: percentage(3/4);
 	}
 
