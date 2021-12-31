@@ -7,7 +7,7 @@
 		 Set variables
 		**/
 		init: attachment => {
-			const focalPoint = this.getFocalPoint(attachment);
+			const focalPoint = Focal.getFocalPoint(attachment);
 			console.log(focalPoint);
 
 			Focal.picker = $image;
