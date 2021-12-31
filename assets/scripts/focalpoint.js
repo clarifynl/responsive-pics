@@ -31,8 +31,8 @@
 		positionFocalPoint: position => {
 			console.log('positionFocalPoint', position);
 			Focal.point.css({
-				top: position.y,
-				left: position.x
+				top: `${position.y}%`,
+				left: `${position.x}%`
 			});
 		},
 
