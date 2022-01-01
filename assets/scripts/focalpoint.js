@@ -123,6 +123,13 @@
 		};
 
 		/**
+		 * Save Focal Point
+		 */
+		const saveFocalPoint = () => {
+			console.log('saveFocalPoint', Focal.x, Focal.y);
+		};
+
+		/**
 		 * Update Focus Interface
 		 */
 		const updateFocusInterface = () => {
@@ -141,6 +148,8 @@
 				updateFocusInterface();
 				Focal.init(focalPoint);
 			});
+
+			$imageFocalSave.on('click', saveFocalPoint);
 
 			$(window).on('resize', updateFocusInterface);
 		};
