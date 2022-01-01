@@ -5,13 +5,11 @@
 	max-height: 90%;
 	max-height: calc(100% - 42px);
 	margin-bottom: 16px;
-	border: 1px solid red;
 
 	&__wrapper {
 		display: inline-block;
 		position: relative;
 		overflow: hidden;
-		border: 1px solid blue;
 	}
 
 	img.details-image {
@@ -60,7 +58,6 @@
 		&::before {
 			width: 10px;
 			height: 10px;
-			border: 2px solid #fff;
 			border-radius: 50%;
 			background-color: rgba(0, 0, 0, .5);
 			transition: .2s all cubic-bezier(.4, 0, .2, 1);
@@ -71,11 +68,15 @@
 		}
 
 		&::after {
-			width: 10%;
-			height: 10%;
-			min-width: 50px;
-			min-height: 50px;
+			width: 100px;
+			height: 100px;
+			max-width: 50vw;
+			max-height: 50vh;
 			border: 1px solid rgba(255, 255, 255, .5);
+
+			body.focal-point-dragging & {
+				border-color: rgba(255, 255, 255, 1);
+			}
 		}
 	}
 }
