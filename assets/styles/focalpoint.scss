@@ -31,7 +31,7 @@
 			background-color: rgba(0, 0, 0, .1)
 		}
 
-		.is-dragging & {
+		body.focal-point-dragging & {
 			background-color: rgba(0, 0, 0, .4);
 		}
 	}
