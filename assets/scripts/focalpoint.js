@@ -48,13 +48,23 @@
 		},
 
 		setFocalPoint: e => {
-			Focal.x = Math.round((e.pageY - Focal.picker.offset().top) / Focal.picker.height() * 100);
-			Focal.y = Math.round((e.pageX - Focal.picker.offset().left) / Focal.picker.width() * 100);
+			var pointYOffset = e.offsetY - Focal.point.height() / 2,
+				pointXOffset = e.offsetX - Focal.point.width() / 2;
 
 			Focal.point.css({
-				left: `${Focal.x}%`,
-				top: `${Focal.y}%`
+				left: pointXOffset,
+				top: pointYOffset
 			});
+
+			console.log(pointXOffset, pointYOffset);
+
+			// Focal.x = Math.round(e.target.offsetLeft / Focal.picker.width() * 100);
+			// Focal.y = Math.round(e.target.offsetTop / Focal.picker.height() * 100);
+
+			// Focal.point.css({
+			// 	left: `${Focal.x}%`,
+			// 	top: `${Focal.y}%`
+			// });
 		},
 
 		startDrag: e => {
