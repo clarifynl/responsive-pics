@@ -9,7 +9,7 @@
 		**/
 		init: focalPoint => {
 			Focal.wrapper = $imageFocalWrapper;
-			Focal.picker = $image;
+			Focal.picker = $imageFocalClickarea;
 			Focal.point  = $imageFocalPoint;
 			Focal.x = focalPoint.x;
 			Focal.y = focalPoint.y;
@@ -24,7 +24,9 @@
 			Focal.picker.on('click', Focal.setFocalPoint);
 			Focal.point.draggable({
 				cursor: 'move',
+				start: Focal.startDrag,
 				drag: Focal.dragging,
+				stop: Focal.stopDrag,
 				containment: Focal.wrapper
 			});
 		},
@@ -36,9 +38,6 @@
 			});
 		},
 
-		/**
-		 Move the focal point
-		**/
 		setFocalPoint: e => {
 			var pointYOffset = e.offsetY - Focal.point.height() / 2,
 				pointXOffset = e.offsetX - Focal.point.width() / 2;
@@ -54,16 +53,22 @@
 			console.log('setFocalPoint', Focal.x, Focal.y);
 		},
 
+		startDrag: e => {
+			$('body').addClass('focal-point-dragging');
+			console.log('start drag', Focal.x, Focal.y);
+		},
 
-		/**
-		 Move focal point and background position when dragging point
-		**/
 		dragging: e => {
 			Focal.x = Math.round(e.target.offsetLeft / Focal.picker.width() * 100);
 			Focal.y = Math.round(e.target.offsetTop / Focal.picker.height() * 100);
 
 			console.log('dragging', Focal.x, Focal.y);
 		},
+
+		stopDrag: e => {
+			$('body').removeClass('focal-point-dragging');
+			console.log('stop drag', Focal.x, Focal.y);
+		}
 	};
 
 	$(document).ready(() => {
@@ -118,7 +123,6 @@
 		 * Update Focus Interface
 		 */
 		const updateFocusInterface = () => {
-			console.log('updateFocusInterface', $image.width(), $image.height());
 			$imageFocalWrapper.css({
 				width: `${$image.width()}px`,
 				height: `${$image.height()}px`
@@ -130,10 +134,12 @@
 		 */
 		const initFocusInterface = attachment => {
 			const focalPoint = getFocalPoint(attachment);
+
 			$image.on('load', e => {
 				updateFocusInterface();
 				Focal.init(focalPoint);
 			});
+
 			$(window).on('resize', updateFocusInterface);
 		};
 
@@ -142,14 +148,13 @@
 		 */
 		var TwoColumn = wp.media.view.Attachment.Details.TwoColumn;
 		wp.media.view.Attachment.Details.TwoColumn = TwoColumn.extend({
+			// Always make sure that our content is up to date.
 			initialize: function() {
-				// Always make sure that our content is up to date.
 				this.model.on('change:compat', this.change, this);
 			},
+			// Init focal point for images
 			render: function() {
-				// Ensure that the main view is rendered.
 				wp.media.view.Attachment.prototype.render.apply(this, arguments);
-				// Init focal point for images
 				const { type } = this.model.attributes;
 				if (type === 'image') {
 					initTemplates(this.$el);
@@ -158,8 +163,8 @@
 
 				return this;
 			},
+			// Re-init focal point for images
 			change: function() {
-				// Re-init focal point for images
 				const { type } = this.model.attributes;
 				if (type === 'image') {
 					focalPoint = getFocalPoint(this.model);
