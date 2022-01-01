@@ -118,6 +118,7 @@
 		 * Update Focus Interface
 		 */
 		const updateFocusInterface = () => {
+			console.log('updateFocusInterface', $image.width(), $image.height());
 			$imageFocalWrapper.css({
 				width: `${$image.width()}px`,
 				height: `${$image.height()}px`
