@@ -56,8 +56,8 @@
 				top: pointYOffset
 			});
 
-			Focal.x = Math.round((e.pageY - Focal.picker.top) / Focal.picker.height() * 100);
-			Focal.y = Math.round((e.pageX - Focal.picker.left) / Focal.picker.width() * 100);
+			Focal.x = Math.round((e.pageY - Focal.picker.offset().top) / Focal.picker.height() * 100);
+			Focal.y = Math.round((e.pageX - Focal.picker.offset().left) / Focal.picker.width() * 100);
 
 			console.log('setFocalPoint', Focal.x, Focal.y);
 		},
