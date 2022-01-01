@@ -48,6 +48,8 @@
 		},
 
 		setFocalPoint: e => {
+			$imageFocalSave.removeClass('button-disabled');
+
 			var pointYOffset = e.offsetY - Focal.point.height() / 2,
 				pointXOffset = e.offsetX - Focal.point.width() / 2;
 
