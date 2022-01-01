@@ -52,14 +52,9 @@
 				pointXOffset = e.offsetX - Focal.point.width() / 2;
 
 			// Convert absolute coordinates to percentages
-			Focal.x = Math.round(pointXOffset / Focal.picker.width() * 100);
-			Focal.y = Math.round(pointYOffset / Focal.picker.height() * 100);
-
+			Focal.x = Number(pointXOffset / Focal.picker.width() * 100).toFixed(2);
+			Focal.y = Number(pointYOffset / Focal.picker.height() * 100).toFixed(2);
 			Focal.positionFocalPoint(Focal);
-			// Focal.point.css({
-			// 	left: `${Focal.x}%`,
-			// 	top: `${Focal.y}%`
-			// });
 		},
 
 		startDrag: e => {
@@ -68,17 +63,13 @@
 		},
 
 		dragging: e => {
-			Focal.x = Math.round(e.target.offsetLeft / Focal.picker.width() * 100);
-			Focal.y = Math.round(e.target.offsetTop / Focal.picker.height() * 100);
+			Focal.x = Number(e.target.offsetLeft / Focal.picker.width() * 100).toFixed(2);
+			Focal.y = Number(e.target.offsetTop / Focal.picker.height() * 100).toFixed(2);
 		},
 
 		stopDrag: e => {
 			$('body').removeClass('focal-point-dragging');
 			Focal.positionFocalPoint(Focal);
-			// Focal.point.css({
-			// 	left: `${Focal.x}%`,
-			// 	top: `${Focal.y}%`
-			// });
 		}
 	};
 
