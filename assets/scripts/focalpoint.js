@@ -1,5 +1,14 @@
 (function($) {
 	/**
+	 Set variables
+	**/
+	let $imageFocal;
+	let $imageFocalWrapper;
+	let $imageFocalPoint;
+	let $imageFocalClickarea;
+	let $imageFocalSave;
+
+	/**
 	 Small plugin to set the focal point of an image
 	 Source: https://codepen.io/vinsongrant/pen/QGodXV
 	**/
@@ -47,27 +56,28 @@
 				top: pointYOffset
 			});
 
-			Focal.x = Math.round((e.pageY - $(this).offset().top) / Focal.picker.height() * 100);
-			Focal.y = Math.round((e.pageX - $(this).offset().left) / Focal.picker.width() * 100);
+			Focal.x = Math.round((e.pageY - Focal.picker.top) / Focal.picker.height() * 100);
+			Focal.y = Math.round((e.pageX - Focal.picker.left) / Focal.picker.width() * 100);
 
 			console.log('setFocalPoint', Focal.x, Focal.y);
 		},
 
 		startDrag: e => {
 			$('body').addClass('focal-point-dragging');
-			console.log('start drag', Focal.x, Focal.y);
+			$imageFocalSave.removeClass('button-disabled');
 		},
 
 		dragging: e => {
 			Focal.x = Math.round(e.target.offsetLeft / Focal.picker.width() * 100);
 			Focal.y = Math.round(e.target.offsetTop / Focal.picker.height() * 100);
-
-			console.log('dragging', Focal.x, Focal.y);
 		},
 
 		stopDrag: e => {
 			$('body').removeClass('focal-point-dragging');
-			console.log('stop drag', Focal.x, Focal.y);
+			Focal.point.css({
+				left: `${Focal.x}%`,
+				top: `${Focal.y}%`
+			});
 		}
 	};
 
@@ -77,9 +87,9 @@
 		 */
 		const initTemplates = element => {
 			// Append focal point selector
-			var selectView   = wp.media.template('attachment-select-focal-point');
-			var selectParent = element.find('.thumbnail');
-			var selectImage  = element.find('.details-image');
+			const selectView   = wp.media.template('attachment-select-focal-point');
+			const selectParent = element.find('.thumbnail');
+			const selectImage  = element.find('.details-image');
 
 			if (selectView) {
 				selectParent.prepend(selectView);
@@ -93,10 +103,11 @@
 			}
 
 			// Append focal point save button
-			var saveView   = wp.media.template('attachment-save-focal-point');
-			var saveParent = element.find('.attachment-actions');
+			const saveView   = wp.media.template('attachment-save-focal-point');
+			const saveParent = element.find('.attachment-actions');
 			if (saveView) {
 				saveParent.append(saveView);
+				$imageFocalSave = element.find('button.save-attachment-focal-point');
 			}
 		};
 
@@ -124,8 +135,7 @@
 		 */
 		const updateFocusInterface = () => {
 			$imageFocalWrapper.css({
-				width: `${$image.width()}px`,
-				// height: `${$image.height()}px`
+				width: `${$image.width()}px`
 			});
 		};
 
