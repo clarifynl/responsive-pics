@@ -51,20 +51,15 @@
 			var pointYOffset = e.offsetY - Focal.point.height() / 2,
 				pointXOffset = e.offsetX - Focal.point.width() / 2;
 
+			Focal.x = Math.round(pointXOffset / Focal.picker.width() * 100);
+			Focal.y = Math.round(pointYOffset / Focal.picker.height() * 100);
+
+			console.log(pointXOffset, Focal.x, pointYOffset, Focal.y);
+
 			Focal.point.css({
-				left: pointXOffset,
-				top: pointYOffset
+				left: `${Focal.x}%`,
+				top: `${Focal.y}%`
 			});
-
-			console.log(pointXOffset, pointYOffset);
-
-			// Focal.x = Math.round(e.target.offsetLeft / Focal.picker.width() * 100);
-			// Focal.y = Math.round(e.target.offsetTop / Focal.picker.height() * 100);
-
-			// Focal.point.css({
-			// 	left: `${Focal.x}%`,
-			// 	top: `${Focal.y}%`
-			// });
 		},
 
 		startDrag: e => {
