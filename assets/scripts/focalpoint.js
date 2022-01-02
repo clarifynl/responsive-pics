@@ -7,8 +7,6 @@
 	let $imageFocalPoint;
 	let $imageFocalClickarea;
 	let $imageFocalSave;
-	let $inputFocalPointX;
-	let $inputFocalPointY;
 
 	/**
 	 Focal
@@ -110,23 +108,35 @@
 		 * Get Focal Point from meta fields
 		 */
 		const getFocalPoint = attachment => {
-			console.log($inputFocalPointX.val(), $inputFocalPointY.val());
-			return {
-				x: $inputFocalPointX.val(),
-				y: $inputFocalPointY.val()
-			};
+			const compat = attachment.get('compat');
+
+			if (compat.item) {
+				const focalPointX = $(compat.item).find('.compat-field-responsive_pics_focal_point_x input').val();
+				const focalPointY = $(compat.item).find('.compat-field-responsive_pics_focal_point_y input').val();
+
+				return {
+					x: focalPointX,
+					y: focalPointY
+				};
+			}
+
+			return;
 		};
 
 		/**
 		 * Save Focal Point
 		 */
 		const saveFocalPoint = attachment => {
-			$inputFocalPointX.css('border', '1px solid red');
+			const {id} = attachment;
+			const compat = attachment.get('compat');
+			console.log(wp.media.view.find(`#attachments-${id}-responsive_pics_focal_point_x`));
 
-			$inputFocalPointX.val(Focal.x);
-			$inputFocalPointY.val(Focal.y);
+			if (compat.item) {
+				$(compat.item).find(`#attachments-${id}-responsive_pics_focal_point_x`).val(Focal.x);
+				$(compat.item).find(`#attachments-${id}-responsive_pics_focal_point_y`).val(Focal.y);
 
-			console.log('saveFocalPoint', $inputFocalPointX, $inputFocalPointY, Focal.x, Focal.y);
+				console.log('saveFocalPoint', wp.media.view, Focal.x, Focal.y);
+			}
 		};
 
 		/**
@@ -142,7 +152,7 @@
 		 * Init Focus Interface
 		 */
 		const initFocusInterface = attachment => {
-			const focalPoint = getFocalPoint();
+			const focalPoint = getFocalPoint(attachment);
 
 			// Interface
 			$(window).on('resize', updateFocusInterface);
@@ -165,11 +175,6 @@
 		wp.media.view.Attachment.Details.TwoColumn = TwoColumn.extend({
 			// Always make sure that our content is up to date.
 			initialize: function() {
-				const compat = this.model.get('compat');
-				if (compat.item) {
-					$inputFocalPointX = $(compat.item).find(`#attachments-${this.model.id}-responsive_pics_focal_point_x`);
-					$inputFocalPointY = $(compat.item).find(`#attachments-${this.model.id}-responsive_pics_focal_point_y`);
-				}
 				this.model.on('change:compat', this.change, this);
 			},
 			// Init focal point for images
@@ -187,8 +192,7 @@
 			change: function() {
 				const { type } = this.model.attributes;
 				if (type === 'image') {
-					focalPoint = getFocalPoint();
-					console.log(focalPoint);
+					focalPoint = getFocalPoint(this.model);
 					Focal.x = focalPoint.x;
 					Focal.y = focalPoint.y;
 					Focal.positionFocalPoint(focalPoint);
