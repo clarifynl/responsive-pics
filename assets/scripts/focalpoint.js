@@ -132,6 +132,9 @@
 			if (compat.item) {
 				const focalPointX = $(compat.item).find('.compat-field-responsive_pics_focal_point_x input');
 				const focalPointY = $(compat.item).find('.compat-field-responsive_pics_focal_point_y input');
+
+				console.log('saveFocalPoint', focalPointX, Focal.x, focalPointY, Focal.y);
+
 				focalPointX.val(Focal.x);
 				focalPointY.val(Focal.y);
 			}
@@ -160,7 +163,8 @@
 			});
 
 			// Save button
-			$imageFocalSave.on('click', () => {
+			$imageFocalSave.on('click', e => {
+				e.preventDefault();
 				saveFocalPoint(attachment);
 			});
 		};
