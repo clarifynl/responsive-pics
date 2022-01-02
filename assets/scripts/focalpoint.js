@@ -129,13 +129,12 @@
 		const saveFocalPoint = attachment => {
 			const {id} = attachment;
 			const compat = attachment.get('compat');
-			console.log(wp.media.view.find(`#attachments-${id}-responsive_pics_focal_point_x`));
 
 			if (compat.item) {
 				$(compat.item).find(`#attachments-${id}-responsive_pics_focal_point_x`).val(Focal.x);
 				$(compat.item).find(`#attachments-${id}-responsive_pics_focal_point_y`).val(Focal.y);
 
-				console.log('saveFocalPoint', wp.media.view, Focal.x, Focal.y);
+				console.log('saveFocalPoint', wp.media, Focal.x, Focal.y);
 			}
 		};
 
