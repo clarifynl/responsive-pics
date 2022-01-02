@@ -1,6 +1,6 @@
 (function($) {
 	/**
-	 Set variables
+	 Global variables
 	**/
 	let $imageFocal;
 	let $imageFocalWrapper;
@@ -9,8 +9,7 @@
 	let $imageFocalSave;
 
 	/**
-	 Small plugin to set the focal point of an image
-	 Source: https://codepen.io/vinsongrant/pen/QGodXV
+	 Focal
 	**/
 	const Focal = {
 		/**
@@ -127,8 +126,15 @@
 		/**
 		 * Save Focal Point
 		 */
-		const saveFocalPoint = () => {
-			console.log('saveFocalPoint', Focal.x, Focal.y);
+		const saveFocalPoint = attachment => {
+			const compat = attachment.get('compat');
+
+			if (compat.item) {
+				const focalPointX = $(compat.item).find('.compat-field-responsive_pics_focal_point_x input');
+				const focalPointY = $(compat.item).find('.compat-field-responsive_pics_focal_point_y input');
+				focalPointX.val(Focal.x);
+				focalPointY.val(Focal.y);
+			}
 		};
 
 		/**
@@ -146,14 +152,17 @@
 		const initFocusInterface = attachment => {
 			const focalPoint = getFocalPoint(attachment);
 
+			// Interface
+			$(window).on('resize', updateFocusInterface);
 			$image.on('load', e => {
 				updateFocusInterface();
 				Focal.init(focalPoint);
 			});
 
-			$imageFocalSave.on('click', saveFocalPoint);
-
-			$(window).on('resize', updateFocusInterface);
+			// Save button
+			$imageFocalSave.on('click', () => {
+				saveFocalPoint(attachment);
+			});
 		};
 
 		/**
