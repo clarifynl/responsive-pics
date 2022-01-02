@@ -129,9 +129,14 @@
 		const saveFocalPoint = attachment => {
 			const {id} = attachment;
 			const compat = attachment.get('compat');
-			console.log(id, compat);
 
 			if (compat.item) {
+				console.log(
+					$(compat.item).find('.compat-field-responsive_pics_focal_point_x input'),
+					$(compat.item).find('#attachments-766-responsive_pics_focal_point_x'),
+					$(compat.item).find(`input[name="attachments[${id}][responsive_pics_focal_point_x]"]`)
+				);
+
 				$(compat.item).find(`input[name="attachments[${id}][responsive_pics_focal_point_x]"]`).val(`${Focal.x}`);
 				$(compat.item).find(`input[name="attachments[${id}][responsive_pics_focal_point_y]"]`).val(`${Focal.y}`);
 
