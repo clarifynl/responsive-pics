@@ -130,13 +130,8 @@
 			const compat = attachment.get('compat');
 
 			if (compat.item) {
-				const focalPointX = $(compat.item).find('.compat-field-responsive_pics_focal_point_x input');
-				const focalPointY = $(compat.item).find('.compat-field-responsive_pics_focal_point_y input');
-
-				console.log('saveFocalPoint', focalPointX, Focal.x, focalPointY, Focal.y);
-
-				focalPointX.val(Focal.x);
-				focalPointY.val(Focal.y);
+				$(compat.item).find('.compat-field-responsive_pics_focal_point_x input').val(Focal.x);
+				$(compat.item).find('.compat-field-responsive_pics_focal_point_y input').val(Focal.y);
 			}
 		};
 
