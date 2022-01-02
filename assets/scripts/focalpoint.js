@@ -110,6 +110,7 @@
 		 * Get Focal Point from meta fields
 		 */
 		const getFocalPoint = attachment => {
+			console.log($inputFocalPointX.val(), $inputFocalPointY.val());
 			return {
 				x: $inputFocalPointX.val(),
 				y: $inputFocalPointY.val()
@@ -187,6 +188,7 @@
 				const { type } = this.model.attributes;
 				if (type === 'image') {
 					focalPoint = getFocalPoint();
+					console.log(focalPoint);
 					Focal.x = focalPoint.x;
 					Focal.y = focalPoint.y;
 					Focal.positionFocalPoint(focalPoint);
