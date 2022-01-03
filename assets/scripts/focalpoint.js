@@ -181,12 +181,8 @@
 			// Init focal point for images
 			render: function() {
 				wp.media.view.Attachment.prototype.render.apply(this, arguments);
+				this.model.fetch();
 				const { type } = this.model.attributes;
-				const Attachment = this.model.fetch({
-					success: function(data) {
-						console.log(data);
-					}
-				});
 
 				if (type === 'image') {
 					initTemplates(this.$el);
