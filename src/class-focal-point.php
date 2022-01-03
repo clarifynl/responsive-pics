@@ -118,7 +118,7 @@ class RP_Focal_Point extends ResponsivePics {
 	/**
 	 * Adding custom attachment fields to REST api response
 	 */
-	private static function rest_api_init() {
+	public static function rest_api_init() {
 		register_rest_field(
 			'attachment',
 			'focal_point', [
