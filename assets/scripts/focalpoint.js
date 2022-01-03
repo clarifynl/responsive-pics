@@ -182,10 +182,7 @@
 			render: function() {
 				wp.media.view.Attachment.prototype.render.apply(this, arguments);
 				const { type } = this.model.attributes;
-
-				var media = new wp.api.models.Media({ id: this.model.id });
-				media.fetch();
-				console.log(this.model.get('focal_point'), media);
+				console.log(this.model.get('focal_point'), this.model.fetch());
 
 				if (type === 'image') {
 					initTemplates(this.$el);
