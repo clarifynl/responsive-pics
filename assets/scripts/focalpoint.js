@@ -108,6 +108,7 @@
 		 * Get Focal Point from meta fields
 		 */
 		const getFocalPoint = attachment => {
+			console.log(attachment);
 			const compat = attachment.get('compat');
 
 			if (compat.item) {
@@ -131,6 +132,7 @@
 			const compat = attachment.get('compat');
 
 			if (compat.item) {
+				// not working
 				$(compat.item).find(`#attachments-${id}-responsive_pics_focal_point_x`).val(Focal.x);
 				$(compat.item).find(`#attachments-${id}-responsive_pics_focal_point_y`).val(Focal.y);
 
