@@ -115,7 +115,14 @@
 			};
 
 			attachment.set('focalPoint', focalPoint);
-			attachment.save({focalPoint});
+			attachment.save('focalPoint', focalPoint, {
+				success: (model, response, options) => {
+					console.log('save success', response);
+				},
+				error: (model, response, options) => {
+					console.log('save error', response);
+				}
+			});
 		};
 
 		/**
@@ -132,7 +139,6 @@
 		 */
 		const initFocusInterface = attachment => {
 			const focalPoint = attachment.get('focalPoint');
-			console.log('initFocusInterface', focalPoint);
 
 			// Interface
 			$(window).on('resize', updateFocusInterface);
@@ -153,14 +159,14 @@
 		 */
 		var TwoColumn = wp.media.view.Attachment.Details.TwoColumn;
 		wp.media.view.Attachment.Details.TwoColumn = TwoColumn.extend({
-			// Always make sure that our content is up to date.
+			// Listen to focalPoint change
 			initialize: function() {
 				this.model.on('change:focalPoint', this.change, this);
 			},
 			// Init focal point for images
 			render: function() {
 				wp.media.view.Attachment.prototype.render.apply(this, arguments);
-				const {type} = this.model.attributes;
+				const type = this.model.get('type');
 
 				if (type === 'image') {
 					initTemplates(this.$el);
@@ -173,7 +179,7 @@
 			change: function() {
 				const type       = this.model.get('type');
 				const focalPoint = this.model.get('focalPoint');
-				console.log('change:focalPoint', type, focalPoint);
+				console.log('change:focalPoint', focalPoint);
 
 				if (type === 'image') {
 					Focal.positionFocalPoint(focalPoint);
