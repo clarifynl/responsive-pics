@@ -2,6 +2,7 @@
 	/**
 	 Global variables
 	**/
+	let _self;
 	let $image;
 	let $imageFocal;
 	let $imageFocalWrapper;
@@ -129,7 +130,7 @@
 				}
 			})
 			.done(data => {
-				wp.media.view.Attachment.Details.TwoColumn.prototype.render(TwoColumn);
+				wp.media.view.Attachment.Details.TwoColumn.prototype.render(_self);
 			})
 			.fail((jqXHR, textStatus) => {
 				console.log('save focal point error', jqXHR);
@@ -175,11 +176,11 @@
 		wp.media.view.Attachment.Details.TwoColumn = TwoColumn.extend({
 			// Listen to focalPoint change
 			initialize: function() {
+				_self = this;
 				this.model.on('change:focalPoint', this.change, this);
 			},
 			// Init focal point for images
 			render: function() {
-				console.log(TwoColumn, this, arguments);
 				wp.media.view.Attachment.prototype.render.apply(this, arguments);
 				const type = this.model.get('type');
 
