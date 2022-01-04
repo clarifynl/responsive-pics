@@ -129,11 +129,10 @@
 				}
 			})
 			.success(data => {
-				console.log('save success', data);
-				attachment.trigger('render');
+				TwoColumn.trigger('change');
 			})
 			.error((jqXHR, textStatus) => {
-				console.log('save error', jqXHR);
+				console.log('save focal point error', jqXHR);
 			})
 			.complete(() => {
 				$imageFocalSave.addClass('button-disabled');
@@ -172,7 +171,7 @@
 		/**
 		 * Extend Attachment view
 		 */
-		var TwoColumn = wp.media.view.Attachment.Details.TwoColumn;
+		const TwoColumn = wp.media.view.Attachment.Details.TwoColumn;
 		wp.media.view.Attachment.Details.TwoColumn = TwoColumn.extend({
 			// Listen to focalPoint change
 			initialize: function() {
