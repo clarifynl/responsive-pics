@@ -120,7 +120,7 @@
 					console.log('save success', response);
 				},
 				error: (model, response, options) => {
-					console.log('save error', response);
+					console.log('save error', model, response, options);
 				}
 			});
 		};
