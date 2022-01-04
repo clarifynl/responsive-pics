@@ -130,8 +130,9 @@
 				}
 			})
 			.done(data => {
-				_self.render();
-				// wp.media.view.Attachment.prototype.render.apply(_self);
+				_self.initialize();
+				// _self.render();
+				// wp.media.view.Attachment.render();
 			})
 			.fail((jqXHR, textStatus) => {
 				console.log('save focal point error', jqXHR);
@@ -196,7 +197,6 @@
 			change: function() {
 				const type       = this.model.get('type');
 				const focalPoint = this.model.get('focalPoint');
-				console.log('change:focalPoint', focalPoint);
 
 				if (type === 'image') {
 					Focal.positionFocalPoint(focalPoint);
