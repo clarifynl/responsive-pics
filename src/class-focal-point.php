@@ -147,9 +147,9 @@ class RP_Focal_Point extends ResponsivePics {
 	 */
 	public static function save_focal_point() {
 		$attachment  = isset($_POST['attachment']) ? $_POST['attachment'] : [];
-		$focal_point = isset($attachment['focal_point']) ? $attachment['focal_point'] : null;
+		$focal_point = isset($attachment['focalPoint']) ? $attachment['focalPoint'] : null;
 		$post_id     = isset($attachment['id']) ? $attachment['id'] : null;
-		syslog(LOG_DEBUG, 'save_focal_point: '. json_encode($attachment));
+		syslog(LOG_DEBUG, 'save_focal_point: '. json_encode($focal_point));
 
 		// Save the focal point if there is one
 		if ($post_id && is_array($focal_point)) {

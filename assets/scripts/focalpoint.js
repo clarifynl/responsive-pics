@@ -126,8 +126,7 @@
 				data: {
 					action: 'save_focal_point',
 					attachment: attachment.attributes
-				},
-				// dataType: 'json',
+				}
 			}, {
 				success: (model, response, options) => {
 					console.log('save success', response);
