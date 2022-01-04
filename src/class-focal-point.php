@@ -108,7 +108,7 @@ class RP_Focal_Point extends ResponsivePics {
 	public static function register_rest_field() {
 		register_rest_field(
 			'attachment',
-			'focal_point', [
+			'focalPoint', [
 				'get_callback' => function($attachment) {
 					return get_post_meta($attachment['id'], 'responsive_pics_focal_point', true);
 				}
