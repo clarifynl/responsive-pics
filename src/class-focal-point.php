@@ -105,7 +105,7 @@ class RP_Focal_Point extends ResponsivePics {
 	 * Add focal point to attachment data for JavaScript
 	 */
 	public static function wp_prepare_attachment_for_js($response, $attachment, $meta) {
-		$focal_point = get_post_meta($attachment['id'], 'responsive_pics_focal_point', true);
+		$focal_point = get_post_meta($attachment->ID, 'responsive_pics_focal_point', true);
 
 		if (!empty($focal_point)) {
 			$response['focal_point'] = $focal_point;
