@@ -119,15 +119,37 @@
 				y: Focal.y
 			};
 
-			attachment.set({'responsive_pics_focal_point': focalPoint});
-			attachment.save(attachment.toJSON(), {
-				success: (model, response, options) => {
-					console.log('save success', response);
+			console.log(wp.ajax.settings.url);
+			$.ajax({
+				type: 'POST',
+				url :wp.ajax.settings.url,
+				data: {
+					action: 'save_focal_point',
+					attachment,
+					focalPoint
 				},
-				error: (model, response, options) => {
-					console.log('save error', response);
-				}
+				dataType: 'json'
+			})
+			.always(result => {
+				console.log(result);
+				$imageFocalSave.addClass('button-disabled');
+			})
+			.success(result => {
+				attachment.set({focalPoint});
+			})
+			.error(error => {
+				console.log(error);
 			});
+
+			// attachment.set({focalPoint});
+			// attachment.save(attachment.toJSON(), {
+			// 	success: (model, response, options) => {
+			// 		console.log('save success', response);
+			// 	},
+			// 	error: (model, response, options) => {
+			// 		console.log('save error', response);
+			// 	}
+			// });
 		};
 
 		/**
@@ -143,7 +165,7 @@
 		 * Init Focus Interface
 		 */
 		const initFocusInterface = attachment => {
-			const focalPoint = attachment.get('responsive_pics_focal_point');
+			const focalPoint = attachment.get('focalPoint');
 
 			// Interface
 			$(window).on('resize', updateFocusInterface);
@@ -166,7 +188,7 @@
 		wp.media.view.Attachment.Details.TwoColumn = TwoColumn.extend({
 			// Listen to focalPoint change
 			initialize: function() {
-				this.model.on('change:responsive_pics_focal_point', this.change, this);
+				this.model.on('change:focalPoint', this.change, this);
 			},
 			// Init focal point for images
 			render: function() {
@@ -183,8 +205,8 @@
 			// Re-init focal point for images
 			change: function() {
 				const type       = this.model.get('type');
-				const focalPoint = this.model.get('responsive_pics_focal_point');
-				console.log('change:responsive_pics_focal_point', focalPoint);
+				const focalPoint = this.model.get('focalPoint');
+				console.log('change:focalPoint', focalPoint);
 
 				if (type === 'image') {
 					Focal.positionFocalPoint(focalPoint);

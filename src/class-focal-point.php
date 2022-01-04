@@ -9,8 +9,7 @@ class RP_Focal_Point extends ResponsivePics {
 		add_filter('attachment_fields_to_save',    ['RP_Focal_Point', 'attachment_fields_to_save'], 10, 2);
 		add_filter('wp_prepare_attachment_for_js', ['RP_Focal_Point', 'wp_prepare_attachment_for_js'], 10, 3);
 		add_action('rest_api_init',                ['RP_Focal_Point', 'register_rest_field']);
-		add_action('wp_ajax_get_focal_point',      ['RP_Focal_Point', 'get_focal_point']);
-		add_action('wp_ajax_set_focal_point',      ['RP_Focal_Point', 'set_focal_point']);
+		add_action('wp_ajax_save_focal_point',     ['RP_Focal_Point', 'save_focal_point']);
 	}
 
 	/**
@@ -123,7 +122,7 @@ class RP_Focal_Point extends ResponsivePics {
 		$focal_point = get_post_meta($attachment->ID, 'responsive_pics_focal_point', true);
 
 		if (!empty($focal_point)) {
-			$response['responsive_pics_focal_point'] = $focal_point;
+			$response['focalPoint'] = $focal_point;
 		}
 
 		return $response;
@@ -144,28 +143,9 @@ class RP_Focal_Point extends ResponsivePics {
 	}
 
 	/**
-	 * Get the focalpoint of the attachment from the post meta
-	 */
-	public static function get_focal_point() {
-		$attachment  = isset($_POST['attachment']) ? $_POST['attachment'] : [];
-		$post_id     = isset($attachment['id']) ? $attachment['id'] : null;
-		$focal_point = get_post_meta($post_id, 'responsive_pics_focal_point', true);
-
-		// Return the focal point if there is one
-		if ($post_id && is_array($focal_point)) {
-			wp_send_json_success([
-				'focal_point' => $focal_point
-			]);
-		}
-
-		// Return the ajax call
-		wp_send_json_error();
-	}
-
-	/**
 	 * Set the focalpoint of the attachment as post meta
 	 */
-	public static function set_focal_point() {
+	public static function save_focal_point() {
 		$attachment  = isset($_POST['attachment']) ? $_POST['attachment'] : [];
 		$focal_point = isset($attachment['focal_point']) ? $attachment['focal_point'] : null;
 		$post_id     = isset($attachment['id']) ? $attachment['id'] : null;
