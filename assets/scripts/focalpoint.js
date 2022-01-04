@@ -119,35 +119,8 @@
 				y: Focal.y
 			};
 
-			$.ajax({
-				type: 'POST',
-				url: wp.ajax.settings.url,
-				data: {
-					action: 'save_focal_point',
-					attachment
-				},
-				dataType: 'json'
-			})
-			.always(result => {
-				console.log(result);
-				$imageFocalSave.addClass('button-disabled');
-			})
-			.success(result => {
-				attachment.set({focalPoint});
-			})
-			.error(error => {
-				console.log(error);
-			});
-
-			// attachment.set({focalPoint});
-			// attachment.save(attachment.toJSON(), {
-			// 	success: (model, response, options) => {
-			// 		console.log('save success', response);
-			// 	},
-			// 	error: (model, response, options) => {
-			// 		console.log('save error', response);
-			// 	}
-			// });
+			attachment.set({focalPoint});
+			attachment.save();
 		};
 
 		/**
@@ -209,6 +182,25 @@
 				if (type === 'image') {
 					Focal.positionFocalPoint(focalPoint);
 				}
+			},
+			// Custom save function
+			save: function() {
+				return Backbone.ajax(_.extend({
+					url: this.model.url(),
+					method: 'POST',
+					data: {
+						action: 'save_focal_point',
+						attachment: this.model.attributes
+					},
+					dataType: 'json',
+				}, {
+					success: (model, response, options) => {
+						console.log('save success', response);
+					},
+					error: (model, response, options) => {
+						console.log('save error', response);
+					}
+				}));
 			}
 		});
 	});
