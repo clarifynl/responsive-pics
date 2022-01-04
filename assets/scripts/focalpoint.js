@@ -119,14 +119,12 @@
 				y: Focal.y
 			};
 
-			console.log(wp.ajax.settings.url);
 			$.ajax({
 				type: 'POST',
-				url :wp.ajax.settings.url,
+				url: wp.ajax.settings.url,
 				data: {
 					action: 'save_focal_point',
-					attachment,
-					focalPoint
+					attachment
 				},
 				dataType: 'json'
 			})
