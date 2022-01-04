@@ -2,6 +2,7 @@
 	/**
 	 Global variables
 	**/
+	let $image;
 	let $imageFocal;
 	let $imageFocalWrapper;
 	let $imageFocalPoint;
