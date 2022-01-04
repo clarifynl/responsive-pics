@@ -128,13 +128,13 @@
 					attachment: attachment.attributes
 				}
 			})
-			.success(data => {
-				wp.media.view.Attachment.prototype.render();
+			.done(data => {
+				wp.media.view.Attachment.Details.TwoColumn.render();
 			})
-			.error((jqXHR, textStatus) => {
+			.fail((jqXHR, textStatus) => {
 				console.log('save focal point error', jqXHR);
 			})
-			.complete(() => {
+			.always(() => {
 				$imageFocalSave.addClass('button-disabled');
 			});
 		};
