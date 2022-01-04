@@ -119,15 +119,16 @@
 				y: Focal.y
 			};
 
-			attachment.set('focalPoint', focalPoint);
-			attachment.save('focalPoint', focalPoint, {
-				success: (model, response, options) => {
-					console.log('save success', response);
-				},
-				error: (model, response, options) => {
-					console.log('save error', response);
-				}
-			});
+			attachment.set({focalPoint});
+			attachment.save({focalPoint});
+			// attachment.save('focalPoint', focalPoint, {
+			// 	success: (model, response, options) => {
+			// 		console.log('save success', response);
+			// 	},
+			// 	error: (model, response, options) => {
+			// 		console.log('save error', response);
+			// 	}
+			// });
 		};
 
 		/**
