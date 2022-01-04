@@ -146,7 +146,6 @@ class RP_Focal_Point extends ResponsivePics {
 	 * Set the focalpoint of the attachment as post meta
 	 */
 	public static function save_focal_point() {
-		syslog(LOG_DEBUG, 'save_focal_point');
 		$attachment  = isset($_POST['attachment']) ? $_POST['attachment'] : [];
 		$focal_point = isset($attachment['focal_point']) ? $attachment['focal_point'] : null;
 		$post_id     = isset($attachment['id']) ? $attachment['id'] : null;

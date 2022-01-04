@@ -125,7 +125,7 @@
 				method: 'POST',
 				data: {
 					action: 'save_focal_point',
-					// attachment: attachment.attributes
+					attachment: attachment.attributes
 				},
 				// dataType: 'json',
 			}, {
