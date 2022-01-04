@@ -185,6 +185,7 @@
 			},
 			// Custom save function
 			save: function() {
+				console.log('save model', Backbone.ajax);
 				return Backbone.ajax(_.extend({
 					url: this.model.url(),
 					method: 'POST',
