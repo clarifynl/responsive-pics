@@ -130,9 +130,8 @@
 				}
 			})
 			.done(data => {
-				_self.initialize();
 				// _self.render();
-				// wp.media.view.Attachment.render();
+				console.log(wp.media.view.Attachment);
 			})
 			.fail((jqXHR, textStatus) => {
 				console.log('save focal point error', jqXHR);
