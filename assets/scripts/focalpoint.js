@@ -173,19 +173,8 @@
 		/**
 		 * Extend Attachment view
 		 */
-		wp.media.view.Attachment.Details = wp.media.view.Attachment.Details.extend({
-			// Listen to focalPoint changes
-			initialize: function() {
-				console.log('initialize');
-			},
-			render: function() {
-				console.log('render');
-				wp.media.view.Attachment.prototype.render.apply(this, arguments);
-			}
-		});
-
-		const TwoColumn = wp.media.view.Attachment.Details.TwoColumn;
-		wp.media.view.Attachment.Details.TwoColumn = TwoColumn.extend({
+		console.log(wp.media.view.Attachment.Details);
+		wp.media.view.Attachment.Details.TwoColumn = wp.media.view.Attachment.Details.TwoColumn.extend({
 			// Listen to focalPoint changes
 			initialize: function() {
 				_view = this;
