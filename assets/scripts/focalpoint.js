@@ -179,6 +179,7 @@
 			},
 			// Init focal point for images
 			render: function() {
+				console.log(this, arguments);
 				wp.media.view.Attachment.prototype.render.apply(this, arguments);
 				const type = this.model.get('type');
 
