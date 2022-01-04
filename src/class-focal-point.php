@@ -146,6 +146,7 @@ class RP_Focal_Point extends ResponsivePics {
 				'show_in_rest' => true
 			]
 		);
+	}
 
 	/**
 	 * Get the focalpoint of the attachment from the post meta
