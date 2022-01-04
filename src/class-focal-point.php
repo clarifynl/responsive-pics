@@ -20,7 +20,7 @@ class RP_Focal_Point extends ResponsivePics {
 		$assets = ResponsivePicsWP::$enqueue->enqueue('focalpoint', 'admin', [
 			'js'        => true,
 			'css'       => true,
-			'js_dep'    => ['jquery', 'jquery-ui-draggable'],
+			'js_dep'    => ['jquery'],
 			'css_dep'   => [],
 			'in_footer' => false
 		]);

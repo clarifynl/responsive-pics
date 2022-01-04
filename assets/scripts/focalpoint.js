@@ -28,13 +28,17 @@
 		**/
 		setEventListeners: () => {
 			Focal.picker.on('click', Focal.setFocalPoint);
-			Focal.point.draggable({
-				cursor: 'move',
-				start: Focal.startDrag,
-				drag: Focal.dragging,
-				stop: Focal.stopDrag,
-				containment: Focal.wrapper
-			});
+			console.log(typeof($.ui.draggable));
+
+			if (typeof($.ui.draggable) !== 'undefined'){
+				Focal.point.draggable({
+					cursor: 'move',
+					start: Focal.startDrag,
+					drag: Focal.dragging,
+					stop: Focal.stopDrag,
+					containment: Focal.wrapper
+				});
+			}
 		},
 
 		positionFocalPoint: position => {
@@ -114,7 +118,6 @@
 				y: Focal.y
 			};
 
-			console.log(attachment.url());
 			attachment.set('focalPoint', focalPoint);
 			attachment.save('focalPoint', focalPoint, {
 				success: (model, response, options) => {
