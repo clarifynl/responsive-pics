@@ -29,9 +29,9 @@
 		**/
 		setEventListeners: () => {
 			Focal.picker.on('click', Focal.setFocalPoint);
-			console.log(typeof($.ui.draggable));
 
-			if (typeof($.ui.draggable) !== 'undefined'){
+			// Check if jQuery UI Draggable widget is active
+			if (typeof($.ui.draggable) === 'function') {
 				Focal.point.draggable({
 					cursor: 'move',
 					start: Focal.startDrag,
