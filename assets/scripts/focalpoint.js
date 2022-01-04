@@ -130,7 +130,8 @@
 				}
 			})
 			.done(data => {
-				_self.update();
+				// _self.update();
+				_self.views.render();
 			})
 			.fail((jqXHR, textStatus) => {
 				console.log('save focal point error', jqXHR);
@@ -203,7 +204,6 @@
 				return this;
 			},
 			update: function() {
-				console.log('update views');
 				this.views.detach();
 				this.model.fetch();
 				this.views.render();
