@@ -173,16 +173,11 @@
 		/**
 		 * Extend Attachment view
 		 */
-		console.log(wp.media.view);
-		console.log(wp.media.view.Attachment);
-		console.log(wp.media.view.Attachment.Details);
-
-		const TwoColumn = wp.media.view.Attachment.Details.TwoColumn;
-		wp.media.view.Attachment.Details.TwoColumn = TwoColumn.extend({
+		const TwoColumn = wp.media.view.Attachment.Details;
+		wp.media.view.Attachment.Details = TwoColumn.extend({
 			// Listen to focalPoint changes
 			initialize: function() {
 				_view = this;
-				console.log(this.views);
 				this.model.on('change:focalPoint', this.change, this);
 			},
 			// Init focal point for images
