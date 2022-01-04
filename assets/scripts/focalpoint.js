@@ -130,7 +130,8 @@
 				}
 			})
 			.done(data => {
-				wp.media.view.Attachment.Details.TwoColumn.prototype.render(_self);
+				console.log(_self);
+				// wp.media.view.Attachment.Details.TwoColumn.prototype.render(_self);
 			})
 			.fail((jqXHR, textStatus) => {
 				console.log('save focal point error', jqXHR);
@@ -181,6 +182,7 @@
 			},
 			// Init focal point for images
 			render: function() {
+				console.log(_self);
 				wp.media.view.Attachment.prototype.render.apply(this, arguments);
 				const type = this.model.get('type');
 
