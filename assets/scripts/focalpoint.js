@@ -173,9 +173,12 @@
 		/**
 		 * Extend Attachment view
 		 */
-		// console.log(wp.media.view, wp.media.view.Attachment, wp.media.view.EditAttachments);
+		console.log(wp.media.view);
+		console.log(wp.media.view.Attachment);
+		console.log(Backbone.View);
+
 		// const TwoColumn = wp.media.view.Attachment.Details.TwoColumn;
-		const MyView = Backbone.View.extend({
+		const MyView = wp.media.view.Attachment.Details.TwoColumn.extend({
 			// Listen to focalPoint changes
 			initialize: function() {
 				_view = this;
