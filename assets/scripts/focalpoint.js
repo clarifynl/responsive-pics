@@ -129,8 +129,8 @@
 				}
 			})
 			.done(data => {
-				console.log(wp.media.view.Attachment.Details.TwoColumn);
-				// wp.media.view.Attachment.Details.TwoColumn;
+				console.log(wp.media.view.Attachment.Details.TwoColumn.prototype);
+				// wp.media.view.Attachment.Details.TwoColumn.prototype;
 			})
 			.fail((jqXHR, textStatus) => {
 				console.log('save focal point error', jqXHR);
