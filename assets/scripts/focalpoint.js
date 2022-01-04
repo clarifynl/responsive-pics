@@ -19,8 +19,6 @@
 			Focal.wrapper = $imageFocalWrapper;
 			Focal.picker = $imageFocalClickarea;
 			Focal.point  = $imageFocalPoint;
-			Focal.x = focalPoint.x;
-			Focal.y = focalPoint.y;
 			Focal.positionFocalPoint(focalPoint);
 			Focal.setEventListeners();
 		},
@@ -40,6 +38,9 @@
 		},
 
 		positionFocalPoint: position => {
+			Focal.x = position.x;
+			Focal.y = position.y;
+
 			Focal.point.css({
 				left: `${position.x}%`,
 				top: `${position.y}%`
@@ -105,39 +106,13 @@
 		};
 
 		/**
-		 * Get Focal Point from meta fields
-		 */
-		const getFocalPoint = attachment => {
-			console.log(attachment);
-			const compat = attachment.get('compat');
-
-			if (compat.item) {
-				const focalPointX = $(compat.item).find('.compat-field-responsive_pics_focal_point_x input').val();
-				const focalPointY = $(compat.item).find('.compat-field-responsive_pics_focal_point_y input').val();
-
-				return {
-					x: focalPointX,
-					y: focalPointY
-				};
-			}
-
-			return;
-		};
-
-		/**
 		 * Save Focal Point
 		 */
 		const saveFocalPoint = attachment => {
-			const {id} = attachment;
-			const compat = attachment.get('compat');
-
-			if (compat.item) {
-				// not working
-				$(compat.item).find(`#attachments-${id}-responsive_pics_focal_point_x`).val(Focal.x);
-				$(compat.item).find(`#attachments-${id}-responsive_pics_focal_point_y`).val(Focal.y);
-
-				console.log('saveFocalPoint', wp.media, Focal.x, Focal.y);
-			}
+			attachment.set('focalPoint', {
+				x: Focal.x,
+				y: Focal.y
+			});
 		};
 
 		/**
@@ -153,7 +128,8 @@
 		 * Init Focus Interface
 		 */
 		const initFocusInterface = attachment => {
-			const focalPoint = getFocalPoint(attachment);
+			const focalPoint = attachment.get('focalPoint');
+			console.log('initFocusInterface', focalPoint);
 
 			// Interface
 			$(window).on('resize', updateFocusInterface);
@@ -176,13 +152,12 @@
 		wp.media.view.Attachment.Details.TwoColumn = TwoColumn.extend({
 			// Always make sure that our content is up to date.
 			initialize: function() {
-				this.model.on('change:compat', this.change, this);
+				this.model.on('change:focalPoint', this.change, this);
 			},
 			// Init focal point for images
 			render: function() {
 				wp.media.view.Attachment.prototype.render.apply(this, arguments);
-				this.model.fetch();
-				const { type } = this.model.attributes;
+				const {type} = this.model.attributes;
 
 				if (type === 'image') {
 					initTemplates(this.$el);
@@ -193,11 +168,11 @@
 			},
 			// Re-init focal point for images
 			change: function() {
-				const { type } = this.model.attributes;
+				const type       = this.model.get('type');
+				const focalPoint = this.model.get('focalPoint');
+				console.log('change:focalPoint', type, focalPoint);
+
 				if (type === 'image') {
-					focalPoint = getFocalPoint(this.model);
-					Focal.x = focalPoint.x;
-					Focal.y = focalPoint.y;
 					Focal.positionFocalPoint(focalPoint);
 				}
 			}
