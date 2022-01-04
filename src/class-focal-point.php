@@ -123,7 +123,7 @@ class RP_Focal_Point extends ResponsivePics {
 		$focal_point = get_post_meta($attachment->ID, 'responsive_pics_focal_point', true);
 
 		if (!empty($focal_point)) {
-			$response['focalPoint'] = $focal_point;
+			$response['responsive_pics_focal_point'] = $focal_point;
 		}
 
 		return $response;

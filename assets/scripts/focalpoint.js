@@ -119,7 +119,7 @@
 				y: Focal.y
 			};
 
-			attachment.set({focalPoint});
+			attachment.set({'responsive_pics_focal_point': focalPoint});
 			attachment.save(attachment.toJSON(), {
 				success: (model, response, options) => {
 					console.log('save success', response);
@@ -143,7 +143,7 @@
 		 * Init Focus Interface
 		 */
 		const initFocusInterface = attachment => {
-			const focalPoint = attachment.get('focalPoint');
+			const focalPoint = attachment.get('responsive_pics_focal_point');
 
 			// Interface
 			$(window).on('resize', updateFocusInterface);
@@ -166,7 +166,7 @@
 		wp.media.view.Attachment.Details.TwoColumn = TwoColumn.extend({
 			// Listen to focalPoint change
 			initialize: function() {
-				this.model.on('change:focalPoint', this.change, this);
+				this.model.on('change:responsive_pics_focal_point', this.change, this);
 			},
 			// Init focal point for images
 			render: function() {
@@ -183,8 +183,8 @@
 			// Re-init focal point for images
 			change: function() {
 				const type       = this.model.get('type');
-				const focalPoint = this.model.get('focalPoint');
-				console.log('change:focalPoint', focalPoint);
+				const focalPoint = this.model.get('responsive_pics_focal_point');
+				console.log('change:responsive_pics_focal_point', focalPoint);
 
 				if (type === 'image') {
 					Focal.positionFocalPoint(focalPoint);
