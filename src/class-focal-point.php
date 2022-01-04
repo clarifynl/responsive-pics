@@ -7,8 +7,8 @@ class RP_Focal_Point extends ResponsivePics {
 		add_action('print_media_templates',        ['RP_Focal_Point', 'print_media_templates'], 10, 1);
 		add_filter('attachment_fields_to_edit',    ['RP_Focal_Point', 'attachment_fields_to_edit'], 10, 2);
 		add_filter('attachment_fields_to_save',    ['RP_Focal_Point', 'attachment_fields_to_save'], 10, 2);
-		add_action('rest_api_init',                ['RP_Focal_Point', 'register_rest_field']);
 		add_filter('wp_prepare_attachment_for_js', ['RP_Focal_Point', 'wp_prepare_attachment_for_js'], 10, 3);
+		add_action('rest_api_init',                ['RP_Focal_Point', 'register_rest_field']);
 		add_action('wp_ajax_get_focal_point',      ['RP_Focal_Point', 'get_focal_point']);
 		add_action('wp_ajax_set_focal_point',      ['RP_Focal_Point', 'set_focal_point']);
 	}
