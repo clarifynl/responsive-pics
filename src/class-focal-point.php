@@ -3,14 +3,13 @@
 class RP_Focal_Point extends ResponsivePics {
 
 	public function __construct() {
-		add_action('admin_enqueue_scripts',     ['RP_Focal_Point', 'load_scripts']);
-		add_action('print_media_templates',     ['RP_Focal_Point', 'print_media_templates'], 10, 1);
-		add_filter('attachment_fields_to_edit', ['RP_Focal_Point', 'attachment_fields_to_edit'], 10, 2);
-		add_filter('attachment_fields_to_save', ['RP_Focal_Point', 'attachment_fields_to_save'], 10, 2);
-		add_action('rest_api_init',             ['RP_Focal_Point', 'register_rest_field']);
-		add_action('rest_api_init',             ['RP_Focal_Point', 'register_meta']);
-		add_action('wp_ajax_get_focal_point',   ['RP_Focal_Point', 'get_focal_point']);
-		add_action('wp_ajax_set_focal_point',   ['RP_Focal_Point', 'set_focal_point']);
+		add_action('admin_enqueue_scripts',        ['RP_Focal_Point', 'load_scripts']);
+		add_action('print_media_templates',        ['RP_Focal_Point', 'print_media_templates'], 10, 1);
+		add_filter('attachment_fields_to_edit',    ['RP_Focal_Point', 'attachment_fields_to_edit'], 10, 2);
+		add_filter('attachment_fields_to_save',    ['RP_Focal_Point', 'attachment_fields_to_save'], 10, 2);
+		add_filter('wp_prepare_attachment_for_js', ['RP_Focal_Point', 'wp_prepare_attachment_for_js'], 10, 3);
+		add_action('wp_ajax_get_focal_point',      ['RP_Focal_Point', 'get_focal_point']);
+		add_action('wp_ajax_set_focal_point',      ['RP_Focal_Point', 'set_focal_point']);
 	}
 
 	/**
@@ -21,7 +20,7 @@ class RP_Focal_Point extends ResponsivePics {
 		$assets = ResponsivePicsWP::$enqueue->enqueue('focalpoint', 'admin', [
 			'js'        => true,
 			'css'       => true,
-			'js_dep'    => ['jquery', 'jquery-ui', 'wp-api'],
+			'js_dep'    => ['jquery', 'jquery-ui-draggable'],
 			'css_dep'   => [],
 			'in_footer' => false
 		]);
@@ -103,6 +102,19 @@ class RP_Focal_Point extends ResponsivePics {
 	}
 
 	/**
+	 * Add focal point to attachment data for JavaScript
+	 */
+	public static function wp_prepare_attachment_for_js($response, $attachment, $meta) {
+		$focal_point = get_post_meta($attachment['id'], 'responsive_pics_focal_point', true);
+
+		if (!empty($focal_point)) {
+			$response['focal_point'] = $focal_point;
+		}
+
+		return $response;
+	}
+
+	/**
 	 * Return all the translation strings necessary for the javascript
 	 *
 	 * @return array
@@ -114,38 +126,6 @@ class RP_Focal_Point extends ResponsivePics {
 			'saved'      => __('Saved', RESPONSIVE_PICS_TEXTDOMAIN),
 			'tryAgain'   => __('Please Try Again', RESPONSIVE_PICS_TEXTDOMAIN)
 		];
-	}
-
-	/**
-	 * Adding custom attachment fields to REST api response
-	 */
-	public static function register_rest_field() {
-		register_rest_field(
-			'attachment',
-			'focal_point', [
-				'get_callback' => function($attachment) {
-					return get_post_meta($attachment['id'], 'responsive_pics_focal_point', true);
-				}
-			]
-		);
-	}
-
-	/**
-	 * Adding meta fields to REST api response
-	 */
-	public static function register_meta() {
-		register_meta(
-			'attachment',
-			'focal_point_meta', [
-				'type'           => 'object',
-				'single'         => true,
-				'default'        => (object) [
-					'x' => 50,
-					'y' => 50
-				],
-				'show_in_rest' => true
-			]
-		);
 	}
 
 	/**
