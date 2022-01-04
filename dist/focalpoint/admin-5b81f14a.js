@@ -1,0 +1,15 @@
+/*!
+ * 
+ * ResponsivePics
+ * 
+ * @author Booreiland
+ * @version 1.4.0
+ * @link https://responsive.pics
+ * @license undefined
+ * 
+ * Copyright (c) 2022 Booreiland
+ * 
+ * This software is released under the [MIT License](https://github.com/booreiland/responsive-pics/blob/master/LICENSE)
+ */
+(window.wpackioresponsivePicsfocalpointJsonp=window.wpackioresponsivePicsfocalpointJsonp||[]).push([[0],[function(t,o,i){i(1),i(2),t.exports=i(3)},function(t,o,i){var n="responsivePicsdist".replace(/[^a-zA-Z0-9_-]/g,"");i.p=window["__wpackIo".concat(n)]},function(t,o){var i,n,e,a,c,s;i=jQuery,s={init:function(t){s.wrapper=n,s.picker=a,s.point=e,s.positionFocalPoint(t),s.setEventListeners()},setEventListeners:function(){s.picker.on("click",s.setFocalPoint),s.point.draggable({cursor:"move",start:s.startDrag,drag:s.dragging,stop:s.stopDrag,containment:s.wrapper})},positionFocalPoint:function(t){s.x=t.x,s.y=t.y,s.point.css({left:"".concat(t.x,"%"),top:"".concat(t.y,"%")})},setFocalPoint:function(t){c.removeClass("button-disabled");var o=t.offsetY-s.point.height()/2,i=t.offsetX-s.point.width()/2;s.x=Number(i/s.picker.width()*100).toFixed(2),s.y=Number(o/s.picker.height()*100).toFixed(2),s.positionFocalPoint(s)},startDrag:function(t){i("body").addClass("focal-point-dragging"),c.removeClass("button-disabled")},dragging:function(t){s.x=Number(t.target.offsetLeft/s.picker.width()*100).toFixed(2),s.y=Number(t.target.offsetTop/s.picker.height()*100).toFixed(2)},stopDrag:function(t){i("body").removeClass("focal-point-dragging"),s.positionFocalPoint(s)}},i(document).ready((function(){var t=function(t){var o=wp.media.template("attachment-select-focal-point"),i=t.find(".thumbnail"),s=t.find(".details-image");o&&(i.prepend(o),t.find(".image-focal"),n=t.find(".image-focal__wrapper"),e=t.find(".image-focal__point"),a=t.find(".image-focal__clickarea"),s.prependTo(n),$image=n.find(".details-image"));var r=wp.media.template("attachment-save-focal-point"),p=t.find(".attachment-actions");r&&(p.append(r),c=t.find("button.save-attachment-focal-point"))},o=function(){n.css({width:"".concat($image.width(),"px")})},r=function(t){var n=t.get("focalPoint");i(window).on("resize",o),$image.on("load",(function(t){o(),s.init(n)})),c.on("click",(function(o){o.preventDefault(),function(t){var o={x:s.x,y:s.y};console.log(t.url()),t.set("focalPoint",o),t.save("focalPoint",o,{success:function(t,o,i){console.log("save success",o)},error:function(t,o,i){console.log("save error",o)}})}(t)}))},p=wp.media.view.Attachment.Details.TwoColumn;wp.media.view.Attachment.Details.TwoColumn=p.extend({initialize:function(){this.model.on("change:focalPoint",this.change,this)},render:function(){wp.media.view.Attachment.prototype.render.apply(this,arguments);var o=this.model.get("type");return"image"===o&&(t(this.$el),r(this.model)),this},change:function(){var t=this.model.get("type"),o=this.model.get("focalPoint");console.log("change:focalPoint",o),"image"===t&&s.positionFocalPoint(o)}})}))},function(t,o,i){}],[[0,1]]]);
+//# sourceMappingURL=admin-5b81f14a.js.map
