@@ -173,12 +173,12 @@
 		/**
 		 * Extend Attachment view
 		 */
+		console.log(wp.media.view.Attachment);
 		const TwoColumn = wp.media.view.Attachment.Details.TwoColumn;
 		wp.media.view.Attachment.Details.TwoColumn = TwoColumn.extend({
 			// Listen to focalPoint changes
 			initialize: function() {
 				_view = this;
-				console.log(this);
 				this.model.on('change:focalPoint', this.change, this);
 			},
 			// Init focal point for images
