@@ -120,7 +120,22 @@
 			};
 
 			attachment.set({focalPoint});
-			attachment.save();
+			$.ajax({
+				url: wp.ajax.settings.url,
+				method: 'POST',
+				data: {
+					action: 'save_focal_point',
+					// attachment: attachment.attributes
+				},
+				// dataType: 'json',
+			}, {
+				success: (model, response, options) => {
+					console.log('save success', response);
+				},
+				error: (model, response, options) => {
+					console.log('save error', response);
+				}
+			});
 		};
 
 		/**
@@ -182,26 +197,6 @@
 				if (type === 'image') {
 					Focal.positionFocalPoint(focalPoint);
 				}
-			},
-			// Custom save function
-			save: function() {
-				console.log('save model', Backbone.ajax);
-				return Backbone.ajax(_.extend({
-					url: this.model.url(),
-					method: 'POST',
-					data: {
-						action: 'save_focal_point',
-						attachment: this.model.attributes
-					},
-					dataType: 'json',
-				}, {
-					success: (model, response, options) => {
-						console.log('save success', response);
-					},
-					error: (model, response, options) => {
-						console.log('save error', response);
-					}
-				}));
 			}
 		});
 	});
