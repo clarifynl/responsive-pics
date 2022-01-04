@@ -215,7 +215,7 @@
 				}
 			});
 		} else {
-			wp.media.view.Attachment.Details = wp.media.view.Attachment.Details.extend({
+			wp.media.view.EditImage = wp.media.view.EditImage.extend({
 				initialize: function() {
 					console.log('initialize');
 				},
