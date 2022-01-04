@@ -127,13 +127,16 @@
 					action: 'save_focal_point',
 					attachment: attachment.attributes
 				}
-			}, {
-				success: (model, response, options) => {
-					console.log('save success', response);
-				},
-				error: (model, response, options) => {
-					console.log('save error', response);
-				}
+			})
+			.success(data => {
+				console.log('save success', data);
+				attachment.trigger('render');
+			})
+			.error((jqXHR, textStatus) => {
+				console.log('save error', jqXHR);
+			})
+			.complete(() => {
+				$imageFocalSave.addClass('button-disabled');
 			});
 		};
 
