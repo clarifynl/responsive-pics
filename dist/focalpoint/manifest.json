@@ -1,19 +1,19 @@
 {
   "admin.css": "focalpoint/admin-6979d0e8.css",
   "admin.css.map": "focalpoint/admin-6979d0e8.css.map",
-  "admin.js": "focalpoint/admin-f024701f.js",
-  "admin.js.map": "focalpoint/admin-f024701f.js.map",
+  "admin.js": "focalpoint/admin-ed5fe61f.js",
+  "admin.js.map": "focalpoint/admin-ed5fe61f.js.map",
   "runtime.js": "focalpoint/runtime-4f14b78f.js",
   "runtime.js.map": "focalpoint/runtime-4f14b78f.js.map",
   "wpackioEp": {
     "admin": {
       "js": [
         "focalpoint/runtime-4f14b78f.js",
-        "focalpoint/admin-f024701f.js"
+        "focalpoint/admin-ed5fe61f.js"
       ],
       "js.map": [
         "focalpoint/runtime-4f14b78f.js.map",
-        "focalpoint/admin-f024701f.js.map"
+        "focalpoint/admin-ed5fe61f.js.map"
       ],
       "css": [
         "focalpoint/admin-6979d0e8.css"
