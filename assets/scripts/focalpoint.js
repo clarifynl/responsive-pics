@@ -173,44 +173,47 @@
 		/**
 		 * Extend Attachment view
 		 */
-		console.log(wp.media.view.Attachment.Details);
-		wp.media.view.Attachment.Details.TwoColumn = wp.media.view.Attachment.Details.TwoColumn.extend({
-			// Listen to focalPoint changes
-			initialize: function() {
-				_view = this;
-				this.model.on('change:focalPoint', this.change, this);
-			},
-			// Init focal point for images
-			render: function() {
-				wp.media.view.Attachment.prototype.render.apply(this, arguments);
-				const type = this.model.get('type');
+		console.log(wp.media.view.Attachment);
+		const TwoColumnView = wp.media.view.Attachment.Details.TwoColumn;
+		if (TwoColumnView) {
+			wp.media.view.Attachment.Details.TwoColumn = TwoColumnView.extend({
+				// Listen to focalPoint changes
+				initialize: function() {
+					_view = this;
+					this.model.on('change:focalPoint', this.change, this);
+				},
+				// Init focal point for images
+				render: function() {
+					wp.media.view.Attachment.prototype.render.apply(this, arguments);
+					const type = this.model.get('type');
 
-				if (type === 'image') {
-					initTemplates(this.$el);
-					initFocusInterface(this.model);
+					if (type === 'image') {
+						initTemplates(this.$el);
+						initFocusInterface(this.model);
+					}
+
+					return this;
+				},
+				// Re-init focal point for images
+				change: function() {
+					const type       = this.model.get('type');
+					const focalPoint = this.model.get('focalPoint');
+
+					if (type === 'image') {
+						Focal.positionFocalPoint(focalPoint);
+					}
+
+					return this;
+				},
+				// Detach the views, make sure that our data is fully updated and re-render the updated view.
+				update: function() {
+					this.views.detach();
+					this.model.fetch();
+					this.views.render();
+
+					return this;
 				}
-
-				return this;
-			},
-			// Re-init focal point for images
-			change: function() {
-				const type       = this.model.get('type');
-				const focalPoint = this.model.get('focalPoint');
-
-				if (type === 'image') {
-					Focal.positionFocalPoint(focalPoint);
-				}
-
-				return this;
-			},
-			// Detach the views, make sure that our data is fully updated and re-render the updated view.
-			update: function() {
-				this.views.detach();
-				this.model.fetch();
-				this.views.render();
-
-				return this;
-			}
-		});
+			});
+		}
 	});
 })(jQuery);
