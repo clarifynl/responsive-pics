@@ -109,10 +109,13 @@
 		 * Save Focal Point
 		 */
 		const saveFocalPoint = attachment => {
-			attachment.set('focalPoint', {
+			const focalPoint = {
 				x: Focal.x,
 				y: Focal.y
-			});
+			};
+
+			attachment.set('focalPoint', focalPoint);
+			attachment.save({focalPoint});
 		};
 
 		/**
