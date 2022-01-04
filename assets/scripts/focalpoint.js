@@ -173,7 +173,7 @@
 		/**
 		 * Extend Attachment view
 		 */
-		console.log(wp.media);
+		console.log(wp.media.view, wp.media.view.Attachment, wp.media.view.EditAttachments);
 		const TwoColumn = wp.media.view.Attachment.Details.TwoColumn;
 		wp.media.view.Attachment.Details.TwoColumn = TwoColumn.extend({
 			// Listen to focalPoint changes
