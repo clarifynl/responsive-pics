@@ -214,6 +214,18 @@
 					return this;
 				}
 			});
+		} else {
+			wp.media.view.Attachment.Details = wp.media.view.Attachment.Details.extend({
+				initialize: function() {
+					console.log('initialize');
+				},
+				render: function() {
+					console.log('render');
+					wp.media.view.Attachment.prototype.render.apply(this, arguments);
+
+					return this;
+				}
+			});
 		}
 	});
 })(jQuery);
