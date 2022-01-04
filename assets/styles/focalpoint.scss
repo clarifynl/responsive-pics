@@ -27,14 +27,14 @@
 		height: 100%;
 		transition: .8s all;
 
-		&:hover,
-		&:focus {
-			background-color: rgba(0, 0, 0, .25)
-		}
+		// &:hover,
+		// &:focus {
+		// 	background-color: rgba(0, 0, 0, .25)
+		// }
 
-		body.focal-point-dragging & {
-			background-color: rgba(0, 0, 0, .5);
-		}
+		// body.focal-point-dragging & {
+		// 	background-color: rgba(0, 0, 0, .5);
+		// }
 	}
 
 	&__point {
@@ -45,6 +45,7 @@
 		width: 1px;
 		height: 1px;
 		cursor: move;
+		box-shadow: 0 0 0 9999px rgba(0, 0, 0, .25);
 
 		&::before,
 		&::after {
