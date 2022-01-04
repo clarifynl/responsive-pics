@@ -130,7 +130,7 @@
 				}
 			})
 			.done(data => {
-				wp.media.view.Attachment.Details.TwoColumn.render();
+				_self.render();
 				// wp.media.view.Attachment.prototype.render.apply(_self);
 			})
 			.fail((jqXHR, textStatus) => {
