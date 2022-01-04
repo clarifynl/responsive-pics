@@ -173,7 +173,7 @@
 		/**
 		 * Extend Attachment view
 		 */
-		console.log(wp.media.view.Attachment);
+		console.log(wp.media.view);
 		const TwoColumnView = wp.media.view.Attachment.Details.TwoColumn;
 		if (TwoColumnView) {
 			wp.media.view.Attachment.Details.TwoColumn = TwoColumnView.extend({
