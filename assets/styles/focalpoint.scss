@@ -25,16 +25,6 @@
 		left: 0;
 		width: 100%;
 		height: 100%;
-		transition: .8s all;
-
-		// &:hover,
-		// &:focus {
-		// 	background-color: rgba(0, 0, 0, .25)
-		// }
-
-		// body.focal-point-dragging & {
-		// 	background-color: rgba(0, 0, 0, .5);
-		// }
 	}
 
 	&__point {
@@ -45,7 +35,6 @@
 		width: 1px;
 		height: 1px;
 		cursor: move;
-		box-shadow: 0 0 0 9999px rgba(0, 0, 0, .25);
 
 		&::before,
 		&::after {
@@ -75,9 +64,11 @@
 			max-width: 5vw;
 			max-height: 5vw;
 			border: 1px solid rgba(255, 255, 255, .5);
+			box-shadow: 0 0 0 9999px rgba(0, 0, 0, .25);
 
 			body.focal-point-dragging & {
 				border-color: rgba(255, 255, 255, 1);
+				box-shadow: 0 0 0 9999px rgba(0, 0, 0, .5);
 			}
 		}
 	}
