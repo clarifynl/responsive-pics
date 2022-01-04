@@ -173,7 +173,17 @@
 		/**
 		 * Extend Attachment view
 		 */
-		console.log(wp.media.view.Attachment);
+		wp.media.view.Attachment.Details = wp.media.view.Attachment.Details.extend({
+			// Listen to focalPoint changes
+			initialize: function() {
+				console.log('initialize');
+			},
+			render: function() {
+				console.log('render');
+				wp.media.view.Attachment.prototype.render.apply(this, arguments);
+			}
+		});
+
 		const TwoColumn = wp.media.view.Attachment.Details.TwoColumn;
 		wp.media.view.Attachment.Details.TwoColumn = TwoColumn.extend({
 			// Listen to focalPoint changes
