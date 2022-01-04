@@ -2,7 +2,7 @@
 	/**
 	 Global variables
 	**/
-	let _self;
+	let _view;
 	let $image;
 	let $imageFocal;
 	let $imageFocalWrapper;
@@ -122,16 +122,16 @@
 
 			attachment.set({focalPoint});
 			$.ajax({
-				url: wp.ajax.settings.url,
+				url: wp?.ajax?.settings?.url,
 				method: 'POST',
 				data: {
 					action: 'save_focal_point',
-					attachment: attachment.attributes
+					attachment: attachment?.attributes
 				}
 			})
+			// Update view on succesfull save
 			.done(data => {
-				// _self.update();
-				_self.views.render();
+				_view.update();
 			})
 			.fail((jqXHR, textStatus) => {
 				console.log('save focal point error', jqXHR);
@@ -175,9 +175,9 @@
 		 */
 		const TwoColumn = wp.media.view.Attachment.Details.TwoColumn;
 		wp.media.view.Attachment.Details.TwoColumn = TwoColumn.extend({
-			// Listen to focalPoint change
+			// Listen to focalPoint changes
 			initialize: function() {
-				_self = this;
+				_view = this;
 				this.model.on('change:focalPoint', this.change, this);
 			},
 			// Init focal point for images
@@ -203,6 +203,7 @@
 
 				return this;
 			},
+			// Detach the views, make sure that our data is fully updated and re-render the updated view.
 			update: function() {
 				this.views.detach();
 				this.model.fetch();
