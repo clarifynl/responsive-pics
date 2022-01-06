@@ -218,15 +218,14 @@
 		/**
 		 * Extend EditImage view
 		 */
-		let EditImageView = wp.media.view.EditImage.Details;
+		let EditImageView = wp.media.view.EditImage;
 		if (EditImageView) {
-			wp.media.view.EditImage.Details = EditImageView.extend({
+			wp.media.view.EditImage = EditImageView.extend({
 				initialize: function() {
 					console.log('EditImage initialize');
 				},
 				render: function() {
-					console.log('EditImage render', this.model);
-					console.log(wp.media.view, wp.media.view.EditImage);
+					console.log('EditImage render', this.model, this.$el);
 					wp.media.view.EditImage.prototype.initialize.apply(this, arguments);
 
 					return this;
