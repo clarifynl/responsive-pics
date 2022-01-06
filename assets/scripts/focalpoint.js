@@ -237,7 +237,7 @@
 		/**
 		 * Extend EditImage view
 		 */
-		const EditImageView = wp.media.view.EditImage.Details;
+		let EditImageView = wp.media.view.EditImage.Details;
 		if (EditImageView) {
 			EditImageView = EditImageView.extend({
 				// Add focalPoint change listener
