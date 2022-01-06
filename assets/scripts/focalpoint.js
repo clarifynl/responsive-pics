@@ -245,11 +245,13 @@
 					_view = this;
 					this.model.on('change:focalPoint', this.change, this);
 					wp.media.view.EditImage.prototype.initialize.apply(this, arguments);
+					console.log('EditImageView initialize');
 				},
 				// Init extended template
 				render: function() {
 					wp.media.view.EditImage.prototype.render.apply(this, arguments);
 					renderView(this);
+					console.log('EditImageView render');
 				},
 				// Cancel view
 				back: function() {
