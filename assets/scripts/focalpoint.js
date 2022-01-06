@@ -218,7 +218,7 @@
 		/**
 		 * Extend EditImage view
 		 */
-		let EditImageView = wp.media.view.EditImage;
+		const EditImageView = wp.media.view.EditImage;
 		if (EditImageView) {
 			wp.media.view.EditImage = EditImageView.extend({
 				initialize: function() {
