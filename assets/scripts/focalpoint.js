@@ -181,10 +181,10 @@
 		 * Extended view render
 		 */
 		const renderView = view => {
-			console.log('renderView', view);
+			console.log('renderView', window.imageEdit);
 			const type = view.model.get('type');
 
-			view.editor.on('imgLoaded', () => {
+			window.imageEdit.on('imgLoaded', () => {
 				console.log('imageEdit imgLoaded');
 			});
 
