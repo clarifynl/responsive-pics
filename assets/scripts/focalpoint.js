@@ -174,7 +174,10 @@
 		 * Extended view render
 		 */
 		const renderView = view => {
+			const id   = view.model.get('id');
 			const type = view.model.get('type');
+
+			console.log(view.$el.find(`#image-editor-${id}`));
 
 			if (type === 'image') {
 				initTemplates(view.$el);
