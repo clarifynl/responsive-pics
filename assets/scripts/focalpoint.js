@@ -223,11 +223,24 @@
 			wp.media.view.EditImage.Details = EditImageView.extend({
 				initialize: function() {
 					console.log('EditImage initialize');
-					wp.media.view.EditImage.prototype.initialize.apply(this, arguments);
+					// wp.media.view.EditImage.prototype.initialize.apply(this, arguments);
+					_view = this;
+					this.model.on('change:focalPoint', this.change, this);
 				},
 				render: function() {
 					console.log('EditImage render', this.$el);
 					wp.media.view.EditImage.prototype.render.apply(this, arguments);
+
+					return this;
+				},
+				change: function() {
+					console.log('EditImage change', this.$el);
+					const type       = this.model.get('type');
+					const focalPoint = this.model.get('focalPoint');
+
+					// if (type === 'image') {
+					// 	Focal.positionFocalPoint(focalPoint);
+					// }
 
 					return this;
 				}
