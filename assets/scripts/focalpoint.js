@@ -237,12 +237,11 @@
 				initialize: function(options) {
 					_view = this;
 					this.editor = window.imageEdit;
-					// this.model.listenTo(this.editor, 'imgLoaded', this.imgLoaded);
-					console.log(wp.media.view.events);
-
 					this.frame  = options.frame;
-					this.model.on('change:focalPoint', this.change, this);
 					wp.media.view.EditImage.prototype.initialize.apply(this, arguments);
+
+					console.log(this.editor, wp.media.view);
+					this.model.on('change:focalPoint', this.change, this);
 				},
 				loadEditor: function() {
 					wp.media.view.EditImage.prototype.loadEditor.apply(this, arguments);
