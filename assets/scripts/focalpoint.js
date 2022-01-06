@@ -181,6 +181,7 @@
 		 * Extended view render
 		 */
 		const renderView = view => {
+			console.log('changeView', view);
 			const type = view.model.get('type');
 
 			if (type === 'image') {
@@ -193,7 +194,6 @@
 		 * Extended view changed
 		 */
 		const changeView = view => {
-			console.log('changeView', view);
 			const type       = view.model.get('type');
 			const focalPoint = view.model.get('focalPoint');
 
@@ -239,24 +239,17 @@
 			wp.media.view.EditImage.Details = EditImageView.extend({
 				// Add focalPoint change listener
 				initialize: function(options) {
-					console.log('EditImageView initialize');
 					_view = this;
 					this.model.on('change:focalPoint', this.change, this);
 					wp.media.view.EditImage.prototype.initialize.apply(this, arguments);
 				},
 				loadEditor: function() {
-					console.log('EditImageView loadEditor');
 					wp.media.view.EditImage.prototype.loadEditor.apply(this, arguments);
 					renderView(this);
 				},
 				// Cancel view
 				back: function() {
-					console.log('EditImageView back');
 					this.frame.content.mode('edit-metadata');
-				},
-				refresh: function() {
-					console.log('EditImageView refresh');
-					this.model.fetch();
 				},
 				// Re-init focal point on input change
 				change: function() {
