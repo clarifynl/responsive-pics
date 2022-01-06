@@ -254,7 +254,7 @@
 					_view = this;
 					this.frame  = options.frame;
 					wp.media.view.EditImage.prototype.initialize.apply(this, arguments);
-					$(document).on('image-editor-ui-ready', this.imageLoaded);
+					$(document).one('image-editor-ui-ready', this.imageLoaded);
 					this.model.on('change:focalPoint', this.change, this);
 				},
 				// Editor loaded
