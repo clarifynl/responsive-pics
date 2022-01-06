@@ -86,15 +86,13 @@
 		 * Init templates
 		 */
 		const initTemplates = element => {
-			console.log(element);
-
 			// Append focal point selector
 			const selectView   = wp.media.template('attachment-select-focal-point');
-			const selectParent = element.find('.thumbnail, .imgedit-crop-wrap');
-			const selectImage  = element.find('.details-image, .imgedit-crop-wrap img');
+			const selectParent = element.find('.thumbnail, .imgedit-panel-content .imgedit-crop-wrap');
+			const selectImage  = selectParent.find('img');
+			console.log(selectParent, selectImage);
 
 			if (selectView) {
-				console.log(selectParent, selectImage);
 				selectParent.prepend(selectView);
 				// Set image focal elements
 				$imageFocal          = element.find('.image-focal');
