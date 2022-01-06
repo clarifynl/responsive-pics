@@ -228,8 +228,16 @@
 		/**
 		 * Extend EditImage view
 		 */
-		wp.media.events.on('all', e => {
-			console.log(e);
+		wp.media.events.on( 'editor:image-update', args => {
+			console.log(args);
+		});
+
+		wp.media.events.on( 'editor:image-edit', args => {
+			console.log(args);
+		});
+
+		wp.media.events.on( 'editor:frame-create', args => {
+			console.log(args);
 		});
 
 		let EditImageView = wp.media.view.EditImage.Details;
