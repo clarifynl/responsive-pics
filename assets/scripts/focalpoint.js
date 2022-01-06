@@ -220,14 +220,13 @@
 		 */
 		const EditImageView = wp.media.view.EditImage.Details;
 		if (EditImageView) {
-			console.log(EditImageView);
 			wp.media.view.EditImage.Details = EditImageView.extend({
 				initialize: function() {
 					console.log('EditImage initialize');
 				},
 				render: function() {
 					console.log('EditImage render', this.model);
-					wp.media.View.prototype.initialize.apply(this, arguments);
+					wp.media.view.prototype.initialize.apply(this, arguments);
 
 					return this;
 				}
