@@ -244,10 +244,11 @@
 				initialize: function(options) {
 					console.log('EditImage Details initialize');
 					_view = this;
-					wp.media.view.EditImage.prototype.initialize.apply(this, arguments);
-					this.editor = window.imageEdit;
+					this.editor     = window.imageEdit;
+					this.frame      = options.frame;
 					this.controller = options.controller;
 					this.model.on('change:focalPoint', this.change, this);
+					wp.media.view.EditImage.prototype.initialize.apply(this, arguments);
 
 					return this;
 				},
@@ -262,8 +263,7 @@
 				// Cancel view
 				back: function() {
 					console.log('EditImage Details back');
-					var lastState = this.controller.lastState();
-					this.controller.setState(lastState);
+					this.frame.content.mode('edit-metadata');
 
 					return this;
 				},
