@@ -173,9 +173,9 @@
 		/**
 		 * Extend TwoColumn view
 		 */
-		let TwoColumnView = wp.media.view.Attachment.Details.TwoColumn;
+		const TwoColumnView = wp.media.view.Attachment.Details.TwoColumn;
 		if (TwoColumnView) {
-			TwoColumnView = TwoColumnView.extend({
+			wp.media.view.Attachment.Details.TwoColumn = TwoColumnView.extend({
 				// Listen to focalPoint changes
 				initialize: function() {
 					_view = this;
@@ -183,7 +183,7 @@
 				},
 				// Init focal point for images
 				render: function() {
-					wp.media.View.Attachment.prototype.render.apply(this, arguments);
+					wp.media.view.Attachment.prototype.render.apply(this, arguments);
 					const type = this.model.get('type');
 
 					if (type === 'image') {
