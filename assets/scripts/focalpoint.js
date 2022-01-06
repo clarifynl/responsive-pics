@@ -178,6 +178,8 @@
 			const id   = view.model.get('id');
 			const type = view.model.get('type');
 
+			// hook into: imageEdit.imgLoaded event
+
 			if (type === 'image') {
 				initTemplates(view.$el, id);
 				initFocusInterface(view.model);
@@ -228,31 +230,26 @@
 		/**
 		 * Extend EditImage view
 		 */
-		wp.media.events.on( 'editor:image-update', args => {
-			console.log(args);
-		});
-
-		wp.media.events.on( 'editor:image-edit', args => {
-			console.log(args);
-		});
-
-		wp.media.events.on( 'editor:frame-create', args => {
-			console.log(args);
-		});
-
 		let EditImageView = wp.media.view.EditImage.Details;
 		if (EditImageView) {
 			wp.media.view.EditImage.Details = EditImageView.extend({
 				// Add focalPoint change listener
 				initialize: function(options) {
 					_view = this;
-					this.frame = options.frame;
+					this.editor = window.imageEdit;
+					console.log('initialize', this.editor);
+					this.editor.on('imgLoaded', this.imgLoaded, this);
+
+					this.frame  = options.frame;
 					this.model.on('change:focalPoint', this.change, this);
 					wp.media.view.EditImage.prototype.initialize.apply(this, arguments);
 				},
 				loadEditor: function() {
 					wp.media.view.EditImage.prototype.loadEditor.apply(this, arguments);
 					renderView(this);
+				},
+				imgLoaded: function() {
+					console.log('imgLoaded', this.editor);
 				},
 				// Cancel view
 				back: function() {
