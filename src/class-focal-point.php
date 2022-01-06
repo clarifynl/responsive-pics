@@ -48,7 +48,7 @@ class RP_Focal_Point extends ResponsivePics {
 			</div>
 		</script>
 		<script type="text/html" id="tmpl-attachment-save-focal-point">
-			<button type="button" class="button button-disabled save-attachment-focal-point">
+			<button type="button" class="button save-attachment-focal-point" disabled="true">
 				<?php _e('Save Focal Point', RESPONSIVE_PICS_TEXTDOMAIN); ?>
 			</button>
 		</script>

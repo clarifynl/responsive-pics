@@ -54,7 +54,7 @@
 		},
 
 		setFocalPoint: e => {
-			$imageFocalSave.removeClass('button-disabled');
+			$imageFocalSave.attr('disabled', false);
 
 			var pointYOffset = e.offsetY - Focal.point.height() / 2,
 				pointXOffset = e.offsetX - Focal.point.width() / 2;
@@ -67,7 +67,7 @@
 
 		startDrag: e => {
 			$('body').addClass('focal-point-dragging');
-			$imageFocalSave.removeClass('button-disabled');
+			$imageFocalSave.attr('disabled', false);
 		},
 
 		dragging: e => {
@@ -90,9 +90,9 @@
 			const selectView   = wp.media.template('attachment-select-focal-point');
 			const selectParent = element.find(`.thumbnail, #image-editor-${id}`);
 			const selectImage  = selectParent.find('img');
-			console.log(selectParent, selectImage);
 
-			if (selectView) {
+			if (selectView && selectParent && selectImage) {
+				console.log(selectParent, selectImage);
 				selectParent.prepend(selectView);
 				// Set image focal elements
 				$imageFocal          = element.find('.image-focal');
@@ -138,7 +138,7 @@
 				console.log('save focal point error', jqXHR);
 			})
 			.always(() => {
-				$imageFocalSave.addClass('button-disabled');
+				$imageFocalSave.attr('disabled', true);
 			});
 		};
 
@@ -178,14 +178,13 @@
 			const id   = view.model.get('id');
 			const type = view.model.get('type');
 
-			$(document).on('image-editor-ui-ready', e => {
-				console.log(view.$el);
-				initTemplates(view.$el, id);
-			});
-
 			if (type === 'image') {
 				initTemplates(view.$el, id);
 				initFocusInterface(view.model);
+
+				$(document).on('image-editor-ui-ready', e => {
+					initTemplates(view.$el, id);
+				});
 			}
 		}
 
