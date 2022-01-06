@@ -86,6 +86,8 @@
 		 * Init templates
 		 */
 		const initTemplates = element => {
+			console.log(element);
+
 			// Append focal point selector
 			const selectView   = wp.media.template('attachment-select-focal-point');
 			const selectParent = element.find('.thumbnail');
@@ -175,7 +177,6 @@
 		 * Extended view render
 		 */
 		const renderView = view => {
-			console.log('renderView', view);
 			const type = view.model.get('type');
 
 			if (type === 'image') {
@@ -207,29 +208,21 @@
 				initialize: function() {
 					_view = this;
 					this.model.on('change:focalPoint', this.change, this);
-
-					return this;
 				},
 				// Init extended template
 				render: function() {
 					wp.media.view.Attachment.prototype.render.apply(this, arguments);
 					renderView(this);
-
-					return this;
 				},
 				// Re-init focal point on input change
 				change: function() {
 					changeView(this);
-
-					return this;
 				},
 				// Update view on focal point js change
 				update: function() {
 					this.views.detach();
 					this.model.fetch();
 					this.views.render();
-
-					return this;
 				}
 			});
 		}
