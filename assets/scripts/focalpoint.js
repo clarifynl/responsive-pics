@@ -176,7 +176,7 @@
 		const renderView = view => {
 			const type = view.model.get('type');
 
-			view.find('.imgedit-crop-wrap img').on('load', () => {
+			view.$el.find('.imgedit-crop-wrap img').on('load', () => {
 				console.log('imageEdit imgLoaded');
 				initTemplates(view.$el);
 			});
