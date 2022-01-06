@@ -223,10 +223,10 @@
 			wp.media.view.EditImage.Details = EditImageView.extend({
 				initialize: function() {
 					console.log('EditImage initialize');
+					wp.media.view.EditImage.prototype.initialize.apply( this, arguments );
 				},
 				render: function() {
-					console.log('EditImage render', this.model, this.$el);
-					// wp.media.view.EditImage.prototype.initialize.apply(this, arguments);
+					console.log('EditImage render', this.$el);
 
 					return this;
 				}
