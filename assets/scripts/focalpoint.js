@@ -188,6 +188,7 @@
 		 * Extended view changed
 		 */
 		const changeView = view => {
+			console.log('changeView', view.$el);
 			const type       = view.model.get('type');
 			const focalPoint = view.model.get('focalPoint');
 
