@@ -90,7 +90,7 @@
 			const selectView   = wp.media.template('attachment-select-focal-point');
 			const selectParent = element.find(`.thumbnail, #image-editor-${id}`);
 			const selectImage  = selectParent.find('img');
-			console.log(selectParent, selectImage);
+			console.log(element.find(`#image-editor-${id}`), element.find(`#image-editor-${id} .imgedit-wrap`));
 
 			if (selectView) {
 				selectParent.prepend(selectView);
@@ -188,7 +188,6 @@
 		 * Extended view changed
 		 */
 		const changeView = view => {
-			console.log('changeView', view.$el);
 			const type       = view.model.get('type');
 			const focalPoint = view.model.get('focalPoint');
 
