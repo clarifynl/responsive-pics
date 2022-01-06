@@ -90,6 +90,7 @@
 			const selectView   = wp.media.template('attachment-select-focal-point');
 			const selectParent = element.find('.thumbnail');
 			const selectImage  = element.find('.details-image');
+			console.log(selectView, selectParent, selectImage);
 
 			if (selectView) {
 				selectParent.prepend(selectView);
@@ -171,42 +172,58 @@
 		};
 
 		/**
+		 * Extended view render
+		 */
+		const renderView = view => {
+			console.log('renderView', view);
+			const type = view.model.get('type');
+
+			if (type === 'image') {
+				initTemplates(view.$el);
+				initFocusInterface(view.model);
+			}
+		}
+
+		/**
+		 * Extended view changed
+		 */
+		const changeView = view => {
+			console.log('changeView', view);
+			const type       = view.model.get('type');
+			const focalPoint = view.model.get('focalPoint');
+
+			if (type === 'image') {
+				Focal.positionFocalPoint(focalPoint);
+			}
+		};
+
+		/**
 		 * Extend TwoColumn view
 		 */
 		const TwoColumnView = wp.media.view.Attachment.Details.TwoColumn;
 		if (TwoColumnView) {
 			wp.media.view.Attachment.Details.TwoColumn = TwoColumnView.extend({
-				// Listen to focalPoint changes
+				// Add focalPoint change listener
 				initialize: function() {
 					_view = this;
 					this.model.on('change:focalPoint', this.change, this);
 
 					return this;
 				},
-				// Init focal point for images
+				// Init extended template
 				render: function() {
 					wp.media.view.Attachment.prototype.render.apply(this, arguments);
-					const type = this.model.get('type');
-
-					if (type === 'image') {
-						initTemplates(this.$el);
-						initFocusInterface(this.model);
-					}
+					renderView(this);
 
 					return this;
 				},
-				// Re-init focal point for images
+				// Re-init focal point on input change
 				change: function() {
-					const type       = this.model.get('type');
-					const focalPoint = this.model.get('focalPoint');
-
-					if (type === 'image') {
-						Focal.positionFocalPoint(focalPoint);
-					}
+					changeView(this);
 
 					return this;
 				},
-				// Detach the views, make sure that our data is fully updated and re-render the updated view.
+				// Update view on focal point js change
 				update: function() {
 					this.views.detach();
 					this.model.fetch();
@@ -223,28 +240,32 @@
 		const EditImageView = wp.media.view.EditImage.Details;
 		if (EditImageView) {
 			wp.media.view.EditImage.Details = EditImageView.extend({
+				// Add focalPoint change listener
 				initialize: function() {
-					console.log('EditImage initialize');
 					_view = this;
 					wp.media.view.EditImage.prototype.initialize.apply(this, arguments);
 					this.model.on('change:focalPoint', this.change, this);
 
 					return this;
 				},
+				// Init extended template
 				render: function() {
-					console.log('EditImage render', this.$el);
 					wp.media.view.EditImage.prototype.render.apply(this, arguments);
+					renderView(this);
 
 					return this;
 				},
+				// Re-init focal point on input change
 				change: function() {
-					console.log('EditImage change', this.model);
-					const type       = this.model.get('type');
-					const focalPoint = this.model.get('focalPoint');
+					changeView(this);
 
-					// if (type === 'image') {
-					// 	Focal.positionFocalPoint(focalPoint);
-					// }
+					return this;
+				},
+				// Update view on focal point js change
+				update: function() {
+					this.views.detach();
+					this.model.fetch();
+					this.views.render();
 
 					return this;
 				}
