@@ -88,9 +88,9 @@
 		const initTemplates = element => {
 			// Append focal point selector
 			const selectView   = wp.media.template('attachment-select-focal-point');
-			const selectParent = $(element).find('.thumbnail, .imgedit-wrap .imgedit-panel-content .imgedit-crop-wrap');
+			const selectParent = element.find('.thumbnail, .imgedit-wrap .imgedit-panel-content .imgedit-crop-wrap');
 			const selectImage  = selectParent.find('img');
-			console.log(selectParent, selectImage);
+			console.log(element, selectView, selectParent, selectImage);
 
 			if (selectView) {
 				selectParent.prepend(selectView);
@@ -237,20 +237,13 @@
 					this.model.on('change:focalPoint', this.change, this);
 					wp.media.view.EditImage.prototype.initialize.apply(this, arguments);
 				},
-				// Init extended template
-				// render: function() {
-				// 	console.log('EditImageView render');
-				// 	wp.media.view.EditImage.prototype.render.apply(this, arguments);
-				// },
 				loadEditor: function() {
-					console.log('EditImageView loadEditor');
 					wp.media.view.EditImage.prototype.loadEditor.apply(this, arguments);
 					renderView(this);
 				},
 				// Cancel view
 				back: function() {
-					wp.media.view.EditImage.prototype.back.apply(this, arguments);
-					// this.frame.content.mode('edit-metadata');
+					this.frame.content.mode('edit-metadata');
 				},
 				// Re-init focal point on input change
 				change: function() {
