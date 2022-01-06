@@ -173,9 +173,9 @@
 		/**
 		 * Extend TwoColumn view
 		 */
-		const TwoColumnView = wp.media.View.Attachment.Details.TwoColumn;
+		let TwoColumnView = wp.media.view.Attachment.Details.TwoColumn;
 		if (TwoColumnView) {
-			wp.media.View.Attachment.Details.TwoColumn = TwoColumnView.extend({
+			TwoColumnView = TwoColumnView.extend({
 				// Listen to focalPoint changes
 				initialize: function() {
 					_view = this;
@@ -218,17 +218,16 @@
 		/**
 		 * Extend EditImage view
 		 */
-		console.log(wp.media.view);
-		const EditImageView = wp.media.View.EditImage.Details;
+		let EditImageView = wp.media.view.EditImage.Details;
 		if (EditImageView) {
 			console.log(EditImageView);
-			wp.media.View.EditImage.Details = EditImageView.extend({
+			EditImageView = EditImageView.extend({
 				initialize: function() {
 					console.log('EditImage initialize');
 				},
 				render: function() {
 					console.log('EditImage render', this.model);
-					wp.media.View.EditImage.prototype.initialize.apply(this, arguments);
+					wp.media.view.EditImage.prototype.initialize.apply(this, arguments);
 
 					return this;
 				}
