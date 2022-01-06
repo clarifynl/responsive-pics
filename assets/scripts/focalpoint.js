@@ -171,7 +171,7 @@
 		};
 
 		/**
-		 * Extend Attachment view
+		 * Extend TwoColumn view
 		 */
 		console.log(wp.media.view);
 		const TwoColumnView = wp.media.view.Attachment.Details.TwoColumn;
@@ -214,14 +214,20 @@
 					return this;
 				}
 			});
-		} else {
-			wp.media.view.EditImage = wp.media.view.EditImage.extend({
+		}
+
+		/**
+		 * Extend EditImage view
+		 */
+		const EditImageView = wp.media.view.EditImage;
+		if (EditImageView) {
+			wp.media.view.EditImage = EditImageView.extend({
 				initialize: function() {
-					console.log('initialize');
+					console.log('EditImage initialize');
 				},
 				render: function() {
-					console.log('render');
-					wp.media.view.Attachment.prototype.render.apply(this, arguments);
+					console.log('EditImage render');
+					wp.media.view.prototype.render.apply(this, arguments);
 
 					return this;
 				}
