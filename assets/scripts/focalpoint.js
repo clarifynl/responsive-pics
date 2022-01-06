@@ -290,6 +290,14 @@
 
 					return this;
 				},
+				// Cancel view
+				back: function() {
+					console.log('EditImage Details back');
+					var lastState = this.controller.lastState();
+					this.controller.setState(lastState);
+
+					return this;
+				},
 				// Re-init focal point on input change
 				change: function() {
 					changeView(this);
