@@ -176,12 +176,6 @@
 		const renderView = view => {
 			const type = view.model.get('type');
 
-			console.log(view.$el, $(view.$el).find('.imgedit-crop-wrap'));
-			$(view.$el).find('.imgedit-crop-wrap img').on('load', () => {
-				console.log('imageEdit imgLoaded');
-				initTemplates(view.$el);
-			});
-
 			if (type === 'image') {
 				initTemplates(view.$el);
 				initFocusInterface(view.model);
@@ -238,6 +232,7 @@
 				// Add focalPoint change listener
 				initialize: function(options) {
 					_view = this;
+					this.frame = options.frame;
 					this.model.on('change:focalPoint', this.change, this);
 					wp.media.view.EditImage.prototype.initialize.apply(this, arguments);
 				},
