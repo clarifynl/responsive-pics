@@ -85,11 +85,12 @@
 		/**
 		 * Init templates
 		 */
-		const initTemplates = element => {
+		const initTemplates = (element, id) => {
 			// Append focal point selector
 			const selectView   = wp.media.template('attachment-select-focal-point');
-			const selectParent = element.find('.thumbnail, .imgedit-crop-wrap');
+			const selectParent = element.find(`.thumbnail, #image-editor-${id}`);
 			const selectImage  = selectParent.find('img');
+			console.log(selectParent, selectImage);
 
 			if (selectView) {
 				selectParent.prepend(selectView);
@@ -177,10 +178,8 @@
 			const id   = view.model.get('id');
 			const type = view.model.get('type');
 
-			console.log(view.$el.find(`#image-editor-${id}`));
-
 			if (type === 'image') {
-				initTemplates(view.$el);
+				initTemplates(view.$el, id);
 				initFocusInterface(view.model);
 			}
 		}
