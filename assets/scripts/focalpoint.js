@@ -265,7 +265,7 @@
 				},
 				// Editor image loaded
 				imageLoaded: function() {
-					console.log(imageLoaded);
+					console.log('imageLoaded');
 					const id   = this.model.get('id');
 					const type = this.model.get('type');
 
