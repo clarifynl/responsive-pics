@@ -85,7 +85,34 @@
 		/**
 		 * Init templates
 		 */
-		const initTemplates = (element, id) => {
+		const initTwoColumnTemplate = (element, id) => {
+			// Append focal point selector
+			const selectView   = wp.media.template('attachment-select-focal-point');
+			const selectParent = element.find(`.thumbnail, #image-editor-${id}`);
+			const selectImage  = selectParent.find('img');
+
+			if (selectView && selectParent && selectImage) {
+				console.log(selectParent, selectImage);
+				selectParent.prepend(selectView);
+				// Set image focal elements
+				$imageFocal          = element.find('.image-focal');
+				$imageFocalWrapper   = element.find('.image-focal__wrapper');
+				$imageFocalPoint     = element.find('.image-focal__point');
+				$imageFocalClickarea = element.find('.image-focal__clickarea');
+				selectImage.prependTo($imageFocalWrapper);
+				$image               = $imageFocalWrapper.find('.details-image');
+			}
+
+			// Append focal point save button
+			const saveView   = wp.media.template('attachment-save-focal-point');
+			const saveParent = element.find('.attachment-actions, .imgedit-submit');
+			if (saveView) {
+				saveParent.append(saveView);
+				$imageFocalSave = element.find('button.save-attachment-focal-point');
+			}
+		};
+
+		const initEditTemplate = (element, id) => {
 			// Append focal point selector
 			const selectView   = wp.media.template('attachment-select-focal-point');
 			const selectParent = element.find(`.thumbnail, #image-editor-${id}`);
@@ -201,7 +228,7 @@
 					const type = this.model.get('type');
 
 					if (type === 'image') {
-						initTemplates(this.$el, id);
+						initTwoColumnTemplate(this.$el, id);
 						initFocusInterface(this.model);
 					}
 				},
@@ -232,17 +259,17 @@
 					$(document).on('image-editor-ui-ready', this.imageLoaded, this);
 					this.model.on('change:focalPoint', this.change, this);
 				},
-				// Editor loaded
-				loadEditor: function() {
-					wp.media.view.EditImage.prototype.loadEditor.apply(this, arguments);
-				},
+				// // Editor loaded
+				// loadEditor: function() {
+				// 	wp.media.view.EditImage.prototype.loadEditor.apply(this, arguments);
+				// },
 				// Editor image loaded
 				imageLoaded: function() {
 					const id   = this.model.get('id');
 					const type = this.model.get('type');
 
 					if (type === 'image') {
-						initTemplates(this.$el, id);
+						initEditTemplate(this.$el, id);
 						initFocusInterface(this.model);
 					}
 				},
