@@ -173,7 +173,6 @@
 		/**
 		 * Extend TwoColumn view
 		 */
-		console.log(wp.media.view);
 		const TwoColumnView = wp.media.view.Attachment.Details.TwoColumn;
 		if (TwoColumnView) {
 			wp.media.view.Attachment.Details.TwoColumn = TwoColumnView.extend({
@@ -227,7 +226,7 @@
 				},
 				render: function() {
 					console.log('EditImage render');
-					wp.media.view.prototype.render.apply(this, arguments);
+					wp.media.view.EditImage.prototype.render.apply(this, arguments);
 
 					return this;
 				}
