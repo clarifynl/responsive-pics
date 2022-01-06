@@ -88,15 +88,8 @@
 		const initTemplates = element => {
 			// Append focal point selector
 			const selectView   = wp.media.template('attachment-select-focal-point');
-			const selectParent = element.find('.thumbnail, .imgedit-wrap .imgedit-panel-content .imgedit-crop-wrap');
+			const selectParent = element.find('.thumbnail, .imgedit-crop-wrap');
 			const selectImage  = selectParent.find('img');
-
-			console.log(element);
-			setTimeout(() => {
-				console.log(element.find('.imgedit-wrap'));
-				console.log(element.find('.imgedit-panel-content'));
-				console.log(element.find('.imgedit-crop-wrap'));
-			}, 1000);
 
 			if (selectView) {
 				selectParent.prepend(selectView);
@@ -181,11 +174,11 @@
 		 * Extended view render
 		 */
 		const renderView = view => {
-			console.log('renderView', window.imageEdit);
 			const type = view.model.get('type');
 
-			window.imageEdit.on('imgLoaded', () => {
+			view.find('.imgedit-crop-wrap img').on('load', () => {
 				console.log('imageEdit imgLoaded');
+				initTemplates(view.$el);
 			});
 
 			if (type === 'image') {
