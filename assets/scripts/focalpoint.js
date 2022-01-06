@@ -172,23 +172,6 @@
 		};
 
 		/**
-		 * Extended view render
-		 */
-		const renderView = view => {
-			const id   = view.model.get('id');
-			const type = view.model.get('type');
-
-			if (type === 'image') {
-				initTemplates(view.$el, id);
-				initFocusInterface(view.model);
-
-				$(document).on('image-editor-ui-ready', e => {
-					initTemplates(view.$el, id);
-				});
-			}
-		}
-
-		/**
 		 * Extended view changed
 		 */
 		const changeView = view => {
@@ -214,7 +197,13 @@
 				// Init extended template
 				render: function() {
 					wp.media.view.Attachment.prototype.render.apply(this, arguments);
-					renderView(this);
+					const id   = this.model.get('id');
+					const type = this.model.get('type');
+
+					if (type === 'image') {
+						initTemplates(this.$el, id);
+						initFocusInterface(this.model);
+					}
 				},
 				// Re-init focal point on input change
 				change: function() {
@@ -240,12 +229,22 @@
 					_view = this;
 					this.frame  = options.frame;
 					wp.media.view.EditImage.prototype.initialize.apply(this, arguments);
+					$(document).on('image-editor-ui-ready', this.imageLoaded, this);
 					this.model.on('change:focalPoint', this.change, this);
 				},
 				// Editor loaded
 				loadEditor: function() {
 					wp.media.view.EditImage.prototype.loadEditor.apply(this, arguments);
-					renderView(this);
+				},
+				// Editor image loaded
+				imageLoaded: function() {
+					const id   = this.model.get('id');
+					const type = this.model.get('type');
+
+					if (type === 'image') {
+						initTemplates(this.$el, id);
+						initFocusInterface(this.model);
+					}
 				},
 				// Cancel button
 				back: function() {
