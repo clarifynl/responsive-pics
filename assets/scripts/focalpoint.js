@@ -226,7 +226,7 @@
 				},
 				render: function() {
 					console.log('EditImage render', this.model, this.$el);
-					wp.media.view.EditImage.prototype.initialize.apply(this, arguments);
+					// wp.media.view.EditImage.prototype.initialize.apply(this, arguments);
 
 					return this;
 				}
