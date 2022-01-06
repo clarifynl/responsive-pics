@@ -266,12 +266,12 @@
 				// Editor image loaded
 				imageLoaded: function() {
 					console.log('imageLoaded');
-					const id   = this.model.get('id');
-					const type = this.model.get('type');
+					const id   = _view.model.get('id');
+					const type = _view.model.get('type');
 
 					if (type === 'image') {
-						initEditTemplate(this.$el, id);
-						initFocusInterface(this.model);
+						initEditTemplate(_view.$el, id);
+						initFocusInterface(_view.model);
 					}
 				},
 				// Cancel button
