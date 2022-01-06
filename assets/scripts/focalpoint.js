@@ -90,9 +90,9 @@
 			const selectView   = wp.media.template('attachment-select-focal-point');
 			const selectParent = element.find('.thumbnail');
 			const selectImage  = element.find('.details-image');
-			console.log(selectView, selectParent, selectImage);
 
 			if (selectView) {
+				console.log(selectParent, selectImage);
 				selectParent.prepend(selectView);
 				// Set image focal elements
 				$imageFocal          = element.find('.image-focal');
@@ -234,14 +234,48 @@
 			});
 		}
 
+		const EditImageView = wp.media.view.EditImage;
+		if (EditImageView) {
+			wp.media.view.EditImage = EditImageView.extend({
+				initialize: function(options) {
+					console.log('EditImage initialize');
+					this.editor = window.imageEdit;
+					this.controller = options.controller;
+					wp.media.view.prototype.initialize.apply(this, arguments);
+
+					return this;
+				},
+				loadEditor: function() {
+					console.log('EditImage loadEditor');
+					this.editor.open(this.model.get('id'), this.model.get('nonces').edit, this);
+
+					return this;
+				},
+				back: function() {
+					console.log('EditImage back');
+					var lastState = this.controller.lastState();
+					this.controller.setState(lastState);
+
+					return this;
+				},
+				render: function() {
+					console.log('EditImage render');
+					wp.media.view.prototype.render.apply(this, arguments);
+
+					return this;
+				}
+			});
+		}
+
 		/**
 		 * Extend EditImage view
 		 */
-		const EditImageView = wp.media.view.EditImage.Details;
-		if (EditImageView) {
-			wp.media.view.EditImage.Details = EditImageView.extend({
+		const EditImageDetailsView = wp.media.view.EditImage.Details;
+		if (EditImageDetailsView) {
+			wp.media.view.EditImage.Details = EditImageDetailsView.extend({
 				// Add focalPoint change listener
 				initialize: function() {
+					console.log('EditImage Details initialize');
 					_view = this;
 					wp.media.view.EditImage.prototype.initialize.apply(this, arguments);
 					this.model.on('change:focalPoint', this.change, this);
@@ -250,6 +284,7 @@
 				},
 				// Init extended template
 				render: function() {
+					console.log('EditImage Details render');
 					wp.media.view.EditImage.prototype.render.apply(this, arguments);
 					renderView(this);
 
