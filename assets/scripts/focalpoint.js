@@ -88,9 +88,15 @@
 		const initTemplates = element => {
 			// Append focal point selector
 			const selectView   = wp.media.template('attachment-select-focal-point');
-			const selectParent = element.find('.thumbnail, #imgedit-crop-765');
+			const selectParent = element.find('.thumbnail, .imgedit-wrap .imgedit-panel-content .imgedit-crop-wrap');
 			const selectImage  = selectParent.find('img');
-			console.log(element, selectView, selectParent, selectImage);
+
+			console.log(element);
+			setTimeout(() => {
+				console.log(element.find('.imgedit-wrap'));
+				console.log(element.find('.imgedit-panel-content'));
+				console.log(element.find('.imgedit-crop-wrap'));
+			}, 1000);
 
 			if (selectView) {
 				selectParent.prepend(selectView);
