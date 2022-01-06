@@ -259,10 +259,10 @@
 					$(document).on('image-editor-ui-ready', this.imageLoaded, this);
 					this.model.on('change:focalPoint', this.change, this);
 				},
-				// // Editor loaded
-				// loadEditor: function() {
-				// 	wp.media.view.EditImage.prototype.loadEditor.apply(this, arguments);
-				// },
+				// Editor loaded
+				loadEditor: function() {
+					wp.media.view.EditImage.prototype.loadEditor.apply(this, arguments);
+				},
 				// Editor image loaded
 				imageLoaded: function() {
 					const id   = this.model.get('id');
