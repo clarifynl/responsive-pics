@@ -220,8 +220,8 @@
 		 */
 		let EditImageView = wp.media.view.EditImage.Details;
 		if (EditImageView) {
-			console.log(EditImageView);
-			EditImageView = EditImageView.extend({
+			console.log(wp.media.view);
+			wp.media.view.EditImage.Details = EditImageView.extend({
 				initialize: function() {
 					console.log('EditImage initialize');
 				},
