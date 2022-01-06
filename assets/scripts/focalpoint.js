@@ -234,39 +234,6 @@
 			});
 		}
 
-		const EditImageView = wp.media.view.EditImage;
-		if (EditImageView) {
-			wp.media.view.EditImage = EditImageView.extend({
-				initialize: function(options) {
-					console.log('EditImage initialize');
-					this.editor = window.imageEdit;
-					this.controller = options.controller;
-					wp.media.View.prototype.initialize.apply(this, arguments);
-
-					return this;
-				},
-				loadEditor: function() {
-					console.log('EditImage loadEditor');
-					this.editor.open(this.model.get('id'), this.model.get('nonces').edit, this);
-
-					return this;
-				},
-				back: function() {
-					console.log('EditImage back');
-					var lastState = this.controller.lastState();
-					this.controller.setState(lastState);
-
-					return this;
-				},
-				render: function() {
-					console.log('EditImage render');
-					wp.media.View.prototype.render.apply(this, arguments);
-
-					return this;
-				}
-			});
-		}
-
 		/**
 		 * Extend EditImage view
 		 */
@@ -278,6 +245,8 @@
 					console.log('EditImage Details initialize');
 					_view = this;
 					wp.media.view.EditImage.prototype.initialize.apply(this, arguments);
+					this.editor = window.imageEdit;
+					this.controller = options.controller;
 					this.model.on('change:focalPoint', this.change, this);
 
 					return this;
