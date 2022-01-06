@@ -241,7 +241,7 @@
 					console.log('EditImage initialize');
 					this.editor = window.imageEdit;
 					this.controller = options.controller;
-					wp.media.view.prototype.initialize.apply(this, arguments);
+					wp.media.View.prototype.initialize.apply(this, arguments);
 
 					return this;
 				},
@@ -260,7 +260,7 @@
 				},
 				render: function() {
 					console.log('EditImage render');
-					wp.media.view.prototype.render.apply(this, arguments);
+					wp.media.View.prototype.render.apply(this, arguments);
 
 					return this;
 				}
