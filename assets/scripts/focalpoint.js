@@ -180,6 +180,8 @@
 				initialize: function() {
 					_view = this;
 					this.model.on('change:focalPoint', this.change, this);
+
+					return this;
 				},
 				// Init focal point for images
 				render: function() {
@@ -223,9 +225,11 @@
 			wp.media.view.EditImage.Details = EditImageView.extend({
 				initialize: function() {
 					console.log('EditImage initialize');
-					// wp.media.view.EditImage.prototype.initialize.apply(this, arguments);
 					_view = this;
+					wp.media.view.EditImage.prototype.initialize.apply(this, arguments);
 					this.model.on('change:focalPoint', this.change, this);
+
+					return this;
 				},
 				render: function() {
 					console.log('EditImage render', this.$el);
@@ -234,7 +238,7 @@
 					return this;
 				},
 				change: function() {
-					console.log('EditImage change', this.$el);
+					console.log('EditImage change', this.model);
 					const type       = this.model.get('type');
 					const focalPoint = this.model.get('focalPoint');
 
