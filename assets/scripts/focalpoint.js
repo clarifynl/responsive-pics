@@ -237,8 +237,7 @@
 				initialize: function(options) {
 					_view = this;
 					this.editor = window.imageEdit;
-					console.log('initialize', this.editor);
-					this.editor.on('imgLoaded', this.imgLoaded, this);
+					this.model.listenTo(this.editor, 'imgLoaded', this.imgLoaded);
 
 					this.frame  = options.frame;
 					this.model.on('change:focalPoint', this.change, this);
@@ -249,7 +248,7 @@
 					renderView(this);
 				},
 				imgLoaded: function() {
-					console.log('imgLoaded', this.editor);
+					console.log('imgLoaded');
 				},
 				// Cancel view
 				back: function() {
