@@ -228,6 +228,14 @@
 		/**
 		 * Extend EditImage view
 		 */
+		wp.media.events.on('all', e => {
+			console.log(e);
+		});
+
+		wp.media.frame.on('all', e => {
+			console.log(e);
+		});
+
 		let EditImageView = wp.media.view.EditImage.Details;
 		if (EditImageView) {
 			wp.media.view.EditImage.Details = EditImageView.extend({
