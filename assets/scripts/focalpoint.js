@@ -90,7 +90,7 @@
 			const selectView   = wp.media.template('attachment-select-focal-point');
 			const selectParent = element.find(`.thumbnail, #image-editor-${id}`);
 			const selectImage  = selectParent.find('img');
-			console.log(element.find(`#image-editor-${id}`), element.find(`#image-editor-${id} .imgedit-wrap`));
+			console.log(selectParent, selectImage);
 
 			if (selectView) {
 				selectParent.prepend(selectView);
@@ -229,10 +229,6 @@
 		 * Extend EditImage view
 		 */
 		wp.media.events.on('all', e => {
-			console.log(e);
-		});
-
-		wp.media.frame.on('all', e => {
 			console.log(e);
 		});
 
