@@ -90,8 +90,8 @@
 
 			// Append focal point selector
 			const selectView   = wp.media.template('attachment-select-focal-point');
-			const selectParent = element.find('.thumbnail');
-			const selectImage  = element.find('.details-image');
+			const selectParent = element.find('.thumbnail, .imgedit-crop-wrap');
+			const selectImage  = element.find('.details-image, .imgedit-crop-wrap img');
 
 			if (selectView) {
 				console.log(selectParent, selectImage);
@@ -107,7 +107,7 @@
 
 			// Append focal point save button
 			const saveView   = wp.media.template('attachment-save-focal-point');
-			const saveParent = element.find('.attachment-actions');
+			const saveParent = element.find('.attachment-actions, .imgedit-submit');
 			if (saveView) {
 				saveParent.append(saveView);
 				$imageFocalSave = element.find('button.save-attachment-focal-point');
