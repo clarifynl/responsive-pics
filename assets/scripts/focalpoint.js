@@ -181,8 +181,12 @@
 		 * Extended view render
 		 */
 		const renderView = view => {
-			console.log('changeView', view);
+			console.log('renderView', view);
 			const type = view.model.get('type');
+
+			view.editor.on('imgLoaded', () => {
+				console.log('imageEdit imgLoaded');
+			});
 
 			if (type === 'image') {
 				initTemplates(view.$el);
