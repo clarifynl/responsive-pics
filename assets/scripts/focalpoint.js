@@ -238,19 +238,19 @@
 					wp.media.view.EditImage.prototype.initialize.apply(this, arguments);
 				},
 				// Init extended template
-				render: function() {
-					console.log('EditImageView render');
-					wp.media.view.EditImage.prototype.render.apply(this, arguments);
-				},
+				// render: function() {
+				// 	console.log('EditImageView render');
+				// 	wp.media.view.EditImage.prototype.render.apply(this, arguments);
+				// },
 				loadEditor: function() {
 					console.log('EditImageView loadEditor');
-					// this.editor.open( this.model.get( 'id' ), this.model.get( 'nonces' ).edit, this );
 					wp.media.view.EditImage.prototype.loadEditor.apply(this, arguments);
 					renderView(this);
 				},
 				// Cancel view
 				back: function() {
-					this.frame.content.mode('edit-metadata');
+					wp.media.view.EditImage.prototype.back.apply(this, arguments);
+					// this.frame.content.mode('edit-metadata');
 				},
 				// Re-init focal point on input change
 				change: function() {
