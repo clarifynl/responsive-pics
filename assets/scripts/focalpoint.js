@@ -239,7 +239,11 @@
 				},
 				// Init extended template
 				render: function() {
-					wp.media.view.EditImage.prototype.render.apply(this, arguments);
+					console.log('EditImageView render');
+					// wp.media.view.EditImage.prototype.render.apply(this, arguments);
+				},
+				loadEditor: function() {
+					console.log('EditImageView loadEditor');
 					renderView(this);
 				},
 				// Cancel view
