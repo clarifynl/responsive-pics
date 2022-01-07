@@ -102,7 +102,7 @@ class RP_Focal_Point extends ResponsivePics {
 						'x' => 50,
 						'y' => 50
 					];
-
+					syslog(LOG_DEBUG, 'focal_point: ' . json_encode($focal_point));
 					return $focal_point ?: $default;
 				}
 			]

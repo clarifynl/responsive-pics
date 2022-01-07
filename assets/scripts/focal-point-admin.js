@@ -112,10 +112,10 @@
 		};
 
 		const initImageEditor = (element, id) => {
-			console.log(element, id);
 			// Append focal point selector
 			const selectView   = wp.media.template('image-edit-focal-point');
 			const selectParent = element.find(`#imgedit-crop-${id}`);
+			console.log(element, id, selectView, selectParent);
 
 			if (selectView && selectParent.length) {
 				selectParent.append(selectView);
@@ -302,17 +302,7 @@
 				initialize: function() {
 					_view = this;
 					Attachment.prototype.initialize.apply(this, arguments);
-				},
-				editAttachment: function(event) {
-					const editState = this.controller.states.get('edit-image');
-					if (window.imageEdit && editState) {
-						event.preventDefault();
-						editState.set('image', this.model);
-						this.controller.setState('edit-image');
-						$(document).one('image-editor-ui-ready', this.editorLoaded);
-					} else {
-						this.$el.addClass('needs-refresh');
-					}
+					$(document).one('image-editor-ui-ready', this.editorLoaded);
 				},
 				editorLoaded: function() {
 					$(document).off('image-editor-ui-ready', this.editorLoaded);
@@ -320,7 +310,6 @@
 					const type = _view.model.get('type');
 
 					if (type === 'image') {
-						console.log(_view.$el);
 						initImageEditor(_view.$el, id);
 						initFocusInterface(_view.model);
 					}
