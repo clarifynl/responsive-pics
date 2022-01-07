@@ -315,6 +315,11 @@
 						initImageEditor(_view.$el, id);
 						initFocusInterface(_view.model);
 					}
+				},
+				update: function() {
+					this.views.detach();
+					this.model.fetch();
+					this.views.render();
 				}
 			});
 		}
