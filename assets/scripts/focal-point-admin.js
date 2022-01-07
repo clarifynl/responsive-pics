@@ -208,7 +208,7 @@
 		};
 
 		/**
-		 * Extend TwoColumn view
+		 * Extend Attachment Details TwoColumn view
 		 */
 		const TwoColumnView = wp.media.view.Attachment.Details.TwoColumn;
 		if (TwoColumnView) {
@@ -242,26 +242,29 @@
 			});
 		}
 
-		let EditImage = wp.media.view.EditImage;
-		if (EditImage) {
-			wp.media.view.EditImage = EditImage.extend({
+		/**
+		 * Extend EditImage view
+		 */
+		let EditImageView = wp.media.view.EditImage;
+		if (EditImageView) {
+			wp.media.view.EditImage = EditImageView.extend({
 				initialize: function(options) {
 					console.log('EditImage initialize');
-					wp.media.view.EditImage.prototype.initialize.apply(this, arguments);
+					wp.media.view.prototype.initialize.apply(this, arguments);
 				},
 				loadEditor: function() {
-					console.log('EditImage initialize');
-					wp.media.view.EditImage.prototype.loadEditor.apply(this, arguments);
+					console.log('EditImage loadEditor');
+					wp.media.view.prototype.loadEditor.apply(this, arguments);
 				}
 			});
 		}
 
 		/**
-		 * Extend EditImage view
+		 * Extend EditImage Details view
 		 */
-		let EditImageView = wp.media.view.EditImage.Details;
-		if (EditImageView) {
-			wp.media.view.EditImage.Details = EditImageView.extend({
+		let EditImageDetailsView = wp.media.view.EditImage.Details;
+		if (EditImageDetailsView) {
+			wp.media.view.EditImage.Details = EditImageDetailsView.extend({
 				// Add focalPoint change listener
 				initialize: function(options) {
 					_view = this;
