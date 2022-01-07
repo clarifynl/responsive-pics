@@ -244,7 +244,7 @@
 
 		/**
 		 * Extend EditImage view
-		 */
+		 *
 		let EditImageView = wp.media.view.EditImage;
 		if (EditImageView) {
 			wp.media.view.EditImage = EditImageView.extend({
@@ -255,26 +255,26 @@
 					console.log('EditImage loadEditor');
 				}
 			});
-		}
+		} */
 
 		/**
 		 * Extend EditImage Details view
 		 */
-		let EditImageDetailsView = wp.media.view.EditImage.Details;
+		let EditImageDetailsView = wp.media.view.EditImage;
 		if (EditImageDetailsView) {
-			wp.media.view.EditImage.Details = EditImageDetailsView.extend({
+			wp.media.view.EditImage = EditImageDetailsView.extend({
 				// Add focalPoint change listener
 				initialize: function(options) {
 					console.log('EditImage.Details initialize');
 					_view = this;
 					this.frame  = options.frame;
-					wp.media.view.EditImage.prototype.initialize.apply(this, arguments);
+					wp.media.View.prototype.initialize.apply(this, arguments);
 					this.model.on('change:focalPoint', this.change, this);
 				},
 				// Editor loaded
 				loadEditor: function() {
 					console.log('EditImage.Details loadEditor');
-					wp.media.view.EditImage.prototype.loadEditor.apply(this, arguments);
+					// wp.media.view.EditImage.prototype.loadEditor.apply(this, arguments);
 					$(document).one('image-editor-ui-ready', this.imageLoaded);
 				},
 				// Editor image loaded
