@@ -248,7 +248,7 @@
 
 		/**
 		 * Extend Attachment Details view
-		 */
+		 *
 		if (AttachmentDetails) {
 			wp.media.view.Attachment.Details = AttachmentDetails.extend({
 				initialize: function() {
@@ -259,7 +259,7 @@
 					console.log('AttachmentDetails editAttachment');
 				}
 			});
-		}
+		}/
 
 		/**
 		 * Extend EditImage Details view
