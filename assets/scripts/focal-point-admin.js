@@ -18,8 +18,6 @@
 		 Set variables
 		**/
 		init: focalPoint => {
-			console.log(focalPoint);
-
 			Focal.wrapper  = $imageFocalWrapper;
 			Focal.picker   = $imageFocalClickarea;
 			Focal.point    = $imageFocalPoint;
@@ -46,12 +44,12 @@
 			}
 		},
 
-		positionFocalPoint: position => {
-			console.log(position);
+		positionFocalPoint: coordinates => {
+			console.log(coordinates);
 
 			Focal.point.css({
-				left: `${position.x}%`,
-				top: `${position.y}%`
+				left: `${coordinates.x}%`,
+				top: `${coordinates.y}%`
 			});
 		},
 
