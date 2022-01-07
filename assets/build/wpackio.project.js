@@ -17,8 +17,8 @@ module.exports = {
 			name: 'focalpoint',
 			entry: {
 				admin: [
-					'./assets/scripts/focalpoint-admin.js',
-					'./assets/styles/focalpoint-admin.scss'
+					'./assets/scripts/focal-point-admin.js',
+					'./assets/styles/focal-point-admin.scss'
 				]
 			}
 		}

@@ -54,7 +54,7 @@
 		},
 
 		setFocalPoint: e => {
-			$imageFocalSave.attr('disabled', false);
+			$imageFocalSave.removeAttr('disabled');
 
 			var pointYOffset = e.offsetY - Focal.point.height() / 2,
 				pointXOffset = e.offsetX - Focal.point.width() / 2;
@@ -67,7 +67,7 @@
 
 		startDrag: e => {
 			$('body').addClass('focal-point-dragging');
-			$imageFocalSave.attr('disabled', false);
+			$imageFocalSave.removeAttr('disabled');
 		},
 
 		dragging: e => {
@@ -87,7 +87,7 @@
 		 */
 		const initAttachmentDetails = (element, id) => {
 			// Append focal point selector
-			const selectView   = wp.media.template('attachment-select-focal-point');
+			const selectView   = wp.media.template('attachment-details-focal-point');
 			const selectParent = element.find('.thumbnail');
 			const selectImage  = selectParent.find('img');
 
@@ -113,20 +113,16 @@
 
 		const initImgEdit = (element, id) => {
 			// Append focal point selector
-			const selectView   = wp.media.template('attachment-select-focal-point');
+			const selectView   = wp.media.template('edit-image-focal-point');
 			const selectParent = element.find(`#imgedit-crop-${id}`);
 
 			if (selectView && selectParent.length) {
-				console.log($(selectView).find('.image-focal__point'));
-				console.log($(selectView).find('.image-focal__clickarea'));
-
-				selectParent.append($(selectView).find('.image-focal__point'));
-				selectParent.append($(selectView).find('.image-focal__clickarea'));
+				selectParent.append(selectView);
 				// Set image focal elements
 				$imageFocalWrapper   = selectParent;
-				$imageFocalPoint     = selectParent.find('.image-focal__point');
-				$imageFocalClickarea = selectParent.find('.image-focal__clickarea');
-				$image               = selectParent.find('img');
+				$imageFocalPoint     = element.find('.image-focal__point');
+				$imageFocalClickarea = element.find('.image-focal__clickarea');
+				$image               = $imageFocalWrapper.find('img');
 			}
 
 			// Append focal point save button
@@ -164,7 +160,7 @@
 				console.log('save focal point error', jqXHR);
 			})
 			.always(() => {
-				$imageFocalSave.attr('disabled', true);
+				$imageFocalSave.attr('disabled', 'disabled');
 			});
 		};
 
