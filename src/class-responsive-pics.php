@@ -117,7 +117,7 @@ class ResponsivePics {
 	}
 
 	// set grid gutter width, in pixels
-	public static function setGutter($value = 20) {
+	public static function setGutter($value = 30) {
 		self::$gutter = $value;
 	}
 
