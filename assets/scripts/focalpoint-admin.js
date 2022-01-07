@@ -117,14 +117,16 @@
 			const selectParent = element.find(`#imgedit-crop-${id}`);
 
 			if (selectView && selectParent.length) {
-				console.log($(selectView));
+				console.log($(selectView).find('.image-focal__point'));
+				console.log($(selectView).find('.image-focal__clickarea'));
+
 				selectParent.append($(selectView).find('.image-focal__point'));
 				selectParent.append($(selectView).find('.image-focal__clickarea'));
 				// Set image focal elements
 				$imageFocalWrapper   = selectParent;
-				$imageFocalPoint     = element.find('.image-focal__point');
-				$imageFocalClickarea = element.find('.image-focal__clickarea');
-				$image               = $imageFocalWrapper.find('img');
+				$imageFocalPoint     = selectParent.find('.image-focal__point');
+				$imageFocalClickarea = selectParent.find('.image-focal__clickarea');
+				$image               = selectParent.find('img');
 			}
 
 			// Append focal point save button
