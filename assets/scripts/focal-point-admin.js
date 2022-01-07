@@ -113,7 +113,7 @@
 
 		const initImgEdit = (element, id) => {
 			// Append focal point selector
-			const selectView   = wp.media.template('edit-image-focal-point');
+			const selectView   = wp.media.template('image-edit-focal-point');
 			const selectParent = element.find(`#imgedit-crop-${id}`);
 
 			if (selectView && selectParent.length) {
