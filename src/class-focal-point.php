@@ -97,7 +97,13 @@ class RP_Focal_Point extends ResponsivePics {
 			'attachment',
 			'focal_point', [
 				'get_callback' => function($attachment) {
-					return get_post_meta($attachment['id'], 'responsive_pics_focal_point', true);
+					$focal_point = get_post_meta($attachment['id'], 'responsive_pics_focal_point', true);
+					$default = [
+						'x' => 50,
+						'y' => 50
+					];
+
+					return $focal_point ?: $default;
 				}
 			]
 		);

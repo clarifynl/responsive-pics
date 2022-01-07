@@ -111,7 +111,7 @@
 			}
 		};
 
-		const initImgEdit = (element, id) => {
+		const initImageEditor = (element, id) => {
 			console.log(element, id);
 			// Append focal point selector
 			const selectView   = wp.media.template('image-edit-focal-point');
@@ -273,7 +273,7 @@
 					const type = _view.model.get('type');
 
 					if (type === 'image') {
-						initImgEdit(_view.$el, id);
+						initImageEditor(_view.$el, id);
 						initFocusInterface(_view.model);
 					}
 				},
@@ -302,6 +302,8 @@
 				initialize: function() {
 					_view = this;
 					Attachment.prototype.initialize.apply(this, arguments);
+				},
+				editAttachment: function() {
 					$(document).one('image-editor-ui-ready', this.editorLoaded);
 				},
 				editorLoaded: function() {
@@ -310,7 +312,8 @@
 					const type = _view.model.get('type');
 
 					if (type === 'image') {
-						initImgEdit(_view.$el, id);
+						console.log(_view.$el);
+						initImageEditor(_view.$el, id);
 						initFocusInterface(_view.model);
 					}
 				}
