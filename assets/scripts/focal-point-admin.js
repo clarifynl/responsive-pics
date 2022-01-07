@@ -124,8 +124,8 @@
 				selectParent.append(selectView);
 				// Set image focal elements
 				$imageFocalWrapper   = selectParent;
-				$imageFocalPoint     = element.find('.image-focal__point');
-				$imageFocalClickarea = element.find('.image-focal__clickarea');
+				$imageFocalPoint     = imageEditor.find('.image-focal__point');
+				$imageFocalClickarea = imageEditor.find('.image-focal__clickarea');
 				$image               = $imageFocalWrapper.find('img');
 			}
 
@@ -134,7 +134,7 @@
 			const saveParent = imageEditor.find('.imgedit-submit');
 			if (saveView) {
 				saveParent.append(saveView);
-				$imageFocalSave = element.find('button.save-attachment-focal-point');
+				$imageFocalSave = imageEditor.find('button.save-attachment-focal-point');
 			}
 		};
 
