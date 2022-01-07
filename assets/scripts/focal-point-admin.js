@@ -207,10 +207,14 @@
 			}
 		};
 
+		const Attachment = wp.media.view.Attachment;
+		const TwoColumnView = wp.media.view.Attachment.Details.TwoColumn;
+		const AttachmentDetails = wp.media.view.Attachment.Details;
+		const EditImageDetailsView = wp.media.view.EditImage.Details;
+
 		/**
 		 * Extend Attachment Details TwoColumn view
 		 */
-		const TwoColumnView = wp.media.view.Attachment.Details.TwoColumn;
 		if (TwoColumnView) {
 			wp.media.view.Attachment.Details.TwoColumn = TwoColumnView.extend({
 				// Add focalPoint change listener
@@ -220,7 +224,7 @@
 				},
 				// Init extended template
 				render: function() {
-					wp.media.view.Attachment.prototype.render.apply(this, arguments);
+					Attachment.prototype.render.apply(this, arguments);
 					const id   = this.model.get('id');
 					const type = this.model.get('type');
 
@@ -242,23 +246,19 @@
 			});
 		}
 
-		let EditAttachments = wp.media.view.MediaFrame.EditAttachments;
-		let EditImageDetailsView = wp.media.view.EditImage.Details;
-
 		/**
-		 * Extend MediaFrame ImageDetails view
+		 * Extend Attachment Details view
 		 */
-		if (EditAttachments) {
-			wp.media.view.MediaFrame.EditAttachments = EditAttachments.extend({
-				initialize: function(options) {
-					console.log('EditAttachments initialize');
-					wp.media.view.Frame.prototype.initialize.apply(this, arguments);
+		if (AttachmentDetails) {
+			wp.media.view.Attachment.Details = AttachmentDetails.extend({
+				initialize: function() {
+					console.log('AttachmentDetails initialize');
+					Attachment.prototype.initialize.apply(this, arguments);
+					// this.model.on('change:focalPoint', this.change, this);
 				},
-				editImageMode: function(contentRegion) {
-					console.log('EditAttachments editImageMode');
-				},
-				editImageModeRender: function( view ) {
-					console.log('EditAttachments editImageModeRender');
+				editAttachment: function() {
+					console.log('AttachmentDetails editAttachment');
+					Attachment.prototype.editAttachment.apply(this, arguments);
 				}
 			});
 		}
