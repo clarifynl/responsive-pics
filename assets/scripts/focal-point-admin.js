@@ -296,6 +296,10 @@
 					console.log('EditImage initialize');
 					wp.media.View.prototype.initialize.apply(this, arguments);
 				},
+				render: function() {
+					console.log('EditImage render');
+					wp.media.View.prototype.render.apply(this, arguments);
+				},
 				loadEditor: function() {
 					console.log('EditImage loadEditor');
 				}
