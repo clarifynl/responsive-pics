@@ -85,13 +85,13 @@
 		/**
 		 * Init templates
 		 */
-		const initTwoColumnTemplate = (element, id) => {
+		const initAttachmentDetails = (element, id) => {
 			// Append focal point selector
 			const selectView   = wp.media.template('attachment-select-focal-point');
 			const selectParent = element.find('.thumbnail');
 			const selectImage  = selectParent.find('img');
 
-			if (selectView && selectParent && selectImage) {
+			if (selectView && selectParent.length && selectImage.length) {
 				selectParent.prepend(selectView);
 				// Set image focal elements
 				$imageFocal          = element.find('.image-focal');
@@ -99,7 +99,7 @@
 				$imageFocalPoint     = element.find('.image-focal__point');
 				$imageFocalClickarea = element.find('.image-focal__clickarea');
 				selectImage.prependTo($imageFocalWrapper);
-				$image               = $imageFocalWrapper.find('.details-image');
+				$image               = $imageFocalWrapper.find('img');
 			}
 
 			// Append focal point save button
@@ -111,21 +111,21 @@
 			}
 		};
 
-		const initEditTemplate = (element, id) => {
+		const initImgEdit = (element, id) => {
 			// Append focal point selector
 			const selectView   = wp.media.template('attachment-select-focal-point');
-			const selectParent = element.find(`#image-editor-${id}`);
+			const selectParent = element.find(`#imgedit-crop-${id}`);
 			const selectImage  = selectParent.find('img');
 
-			if (selectView && selectParent && selectImage) {
-				// selectParent.prepend(selectView);
+			if (selectView && selectParent.length && selectImage.length) {
+				selectParent.prepend(selectView);
 				// Set image focal elements
 				$imageFocal          = element.find('.image-focal');
 				$imageFocalWrapper   = element.find('.image-focal__wrapper');
 				$imageFocalPoint     = element.find('.image-focal__point');
 				$imageFocalClickarea = element.find('.image-focal__clickarea');
-				// selectImage.prependTo($imageFocalWrapper);
-				$image               = $imageFocalWrapper.find('.details-image');
+				selectImage.prependTo($imageFocalWrapper);
+				$image               = $imageFocalWrapper.find('img');
 			}
 
 			// Append focal point save button
@@ -226,7 +226,7 @@
 					const type = this.model.get('type');
 
 					if (type === 'image') {
-						initTwoColumnTemplate(this.$el, id);
+						initAttachmentDetails(this.$el, id);
 						initFocusInterface(this.model);
 					}
 				},
@@ -254,20 +254,21 @@
 					_view = this;
 					this.frame  = options.frame;
 					wp.media.view.EditImage.prototype.initialize.apply(this, arguments);
-					$(document).one('image-editor-ui-ready', this.imageLoaded);
 					this.model.on('change:focalPoint', this.change, this);
 				},
 				// Editor loaded
 				loadEditor: function() {
 					wp.media.view.EditImage.prototype.loadEditor.apply(this, arguments);
+					$(document).one('image-editor-ui-ready', this.imageLoaded);
 				},
 				// Editor image loaded
 				imageLoaded: function() {
+					$(document).off('image-editor-ui-ready', this.imageLoaded);
 					const id   = _view.model.get('id');
 					const type = _view.model.get('type');
 
 					if (type === 'image') {
-						initEditTemplate(_view.$el, id);
+						initImgEdit(_view.$el, id);
 						initFocusInterface(_view.model);
 					}
 				},
