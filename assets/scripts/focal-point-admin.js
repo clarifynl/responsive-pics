@@ -262,7 +262,7 @@
 		 */
 		let EditImageDetailsView = wp.media.view.EditImage.Details;
 		if (EditImageDetailsView) {
-			wp.media.view.EditImage.Details = EditImageDetailsView.extend({
+			wp.media.view.EditImage.Details = wp.media.view.EditImage.extend({
 				// Add focalPoint change listener
 				initialize: function(options) {
 					console.log('EditImage.Details initialize');
