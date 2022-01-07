@@ -55,8 +55,8 @@
 		setFocalPoint: e => {
 			$imageFocalSave.removeAttr('disabled');
 
-			var pointYOffset = e.offsetY - Focal.point.height() / 2,
-				pointXOffset = e.offsetX - Focal.point.width() / 2;
+			const pointYOffset = e.offsetY - Focal.point.height() / 2;
+			const pointXOffset = e.offsetX - Focal.point.width() / 2;
 
 			// Convert absolute coordinates to percentages
 			Focal.position.x = Number(pointXOffset / Focal.picker.width() * 100).toFixed(2);
@@ -180,7 +180,7 @@
 			const focalPoint = attachment.get('focalPoint');
 			Focal.init(focalPoint);
 
-			// Interface
+			// Layout change
 			$(window).on('resize', updateFocusInterface);
 			$image.on('load', e => {
 				updateFocusInterface();
@@ -250,6 +250,7 @@
 			wp.media.view.EditImage.Details = EditImageView.extend({
 				// Add focalPoint change listener
 				initialize: function(options) {
+					console.log('EditImage initialize');
 					_view = this;
 					this.frame  = options.frame;
 					wp.media.view.EditImage.prototype.initialize.apply(this, arguments);
@@ -257,11 +258,13 @@
 				},
 				// Editor loaded
 				loadEditor: function() {
+					console.log('EditImage loadEditor');
 					wp.media.view.EditImage.prototype.loadEditor.apply(this, arguments);
 					$(document).one('image-editor-ui-ready', this.imageLoaded);
 				},
 				// Editor image loaded
 				imageLoaded: function() {
+					console.log('EditImage imageLoaded');
 					$(document).off('image-editor-ui-ready', this.imageLoaded);
 					const id   = _view.model.get('id');
 					const type = _view.model.get('type');
