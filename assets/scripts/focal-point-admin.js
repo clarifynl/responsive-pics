@@ -242,21 +242,23 @@
 			});
 		}
 
-		const Select = wp.media.view.MediaFrame.Select;
-		let MediaFramePost = wp.media.view.MediaFrame.Post;
+		let EditAttachments = wp.media.view.MediaFrame.EditAttachments;
 		let EditImageDetailsView = wp.media.view.EditImage.Details;
 
 		/**
 		 * Extend MediaFrame ImageDetails view
 		 */
-		if (MediaFramePost) {
-			wp.media.view.MediaFrame.Post = MediaFramePost.extend({
+		if (EditAttachments) {
+			wp.media.view.MediaFrame.EditAttachments = EditAttachments.extend({
 				initialize: function(options) {
-					console.log('MediaFramePost initialize');
-					Select.prototype.initialize.apply(this, arguments);
+					console.log('EditAttachments initialize');
+					wp.media.view.Frame.prototype.initialize.apply(this, arguments);
 				},
-				editImageContent: function() {
-					console.log('MediaFramePost editImageContent');
+				editImageMode: function(contentRegion) {
+					console.log('EditAttachments editImageMode');
+				},
+				editImageModeRender: function( view ) {
+					console.log('EditAttachments editImageModeRender');
 				}
 			});
 		}
