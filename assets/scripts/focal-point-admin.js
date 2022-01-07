@@ -254,11 +254,9 @@
 				initialize: function() {
 					console.log('AttachmentDetails initialize');
 					Attachment.prototype.initialize.apply(this, arguments);
-					// this.model.on('change:focalPoint', this.change, this);
 				},
 				editAttachment: function() {
 					console.log('AttachmentDetails editAttachment');
-					Attachment.prototype.editAttachment.apply(this, arguments);
 				}
 			});
 		}
