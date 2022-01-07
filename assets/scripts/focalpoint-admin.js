@@ -117,8 +117,9 @@
 			const selectParent = element.find(`#imgedit-crop-${id}`);
 
 			if (selectView && selectParent.length) {
-				selectParent.append(selectView.find('.image-focal__point'));
-				selectParent.append(selectView.find('.image-focal__clickarea'));
+				console.log($(selectView));
+				selectParent.append($(selectView).find('.image-focal__point'));
+				selectParent.append($(selectView).find('.image-focal__clickarea'));
 				// Set image focal elements
 				$imageFocalWrapper   = selectParent;
 				$imageFocalPoint     = element.find('.image-focal__point');
