@@ -242,18 +242,31 @@
 			});
 		}
 
-		/**
-		 * Extend EditImage (Details) view
-		 */
-		console.log(wp.media.view);
-		let EditImageView = wp.media.view.EditImage;
+		let ImageDetailsView = wp.media.view.MediaFrame.ImageDetails;
 		let EditImageDetailsView = wp.media.view.EditImage.Details;
 
+		/**
+		 * Extend MediaFrame ImageDetails view
+		 */
+		if (ImageDetailsView) {
+			wp.media.view.MediaFrame.ImageDetails = ImageDetailsView.extend({
+				initialize: function(options) {
+					console.log('ImageDetails initialize');
+					wp.media.view.MediaFrame.Select.prototype.initialize.apply(this, arguments);
+				},
+				editImageContent: function() {
+					console.log('ImageDetails editImageContent');
+				}
+			});
+		}
+
+		/**
+		 * Extend EditImage Details view
+		 */
 		if (EditImageDetailsView) {
 			wp.media.view.EditImage.Details = EditImageDetailsView.extend({
 				// Add focalPoint change listener
 				initialize: function(options) {
-					console.log('EditImage.Details initialize');
 					_view = this;
 					this.frame  = options.frame;
 					wp.media.view.EditImage.prototype.initialize.apply(this, arguments);
@@ -261,7 +274,6 @@
 				},
 				// Editor loaded
 				loadEditor: function() {
-					console.log('EditImage.Details loadEditor');
 					wp.media.view.EditImage.prototype.loadEditor.apply(this, arguments);
 					$(document).one('image-editor-ui-ready', this.imageLoaded);
 				},
