@@ -256,9 +256,6 @@
 					Attachment.prototype.initialize.apply(this, arguments);
 					this.controller.on('change:edit-image', this.editImage, this);
 				},
-				editAttachment: function() {
-					console.log('AttachmentDetails editAttachment');
-				},
 				editImage: function() {
 					console.log('AttachmentDetails editImage');
 				}
