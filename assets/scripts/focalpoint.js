@@ -118,13 +118,13 @@
 			const selectImage  = selectParent.find('img');
 
 			if (selectView && selectParent.length && selectImage.length) {
-				selectParent.prepend(selectView);
+				// selectParent.prepend(selectView);
 				// Set image focal elements
 				$imageFocal          = element.find('.image-focal');
 				$imageFocalWrapper   = element.find('.image-focal__wrapper');
 				$imageFocalPoint     = element.find('.image-focal__point');
 				$imageFocalClickarea = element.find('.image-focal__clickarea');
-				selectImage.prependTo($imageFocalWrapper);
+				// selectImage.prependTo($imageFocalWrapper);
 				$image               = $imageFocalWrapper.find('img');
 			}
 
@@ -181,6 +181,7 @@
 		 */
 		const initFocusInterface = attachment => {
 			const focalPoint = attachment.get('focalPoint');
+			console.log('initFocusInterface', attachment, focalPoint, $image);
 
 			// Interface
 			$(window).on('resize', updateFocusInterface);
