@@ -18,9 +18,10 @@
 		 Set variables
 		**/
 		init: focalPoint => {
-			Focal.wrapper = $imageFocalWrapper;
-			Focal.picker = $imageFocalClickarea;
-			Focal.point  = $imageFocalPoint;
+			Focal.wrapper  = $imageFocalWrapper;
+			Focal.picker   = $imageFocalClickarea;
+			Focal.point    = $imageFocalPoint;
+			Focal.position = focalPoint;
 			Focal.positionFocalPoint(focalPoint);
 			Focal.setEventListeners();
 		},
@@ -44,9 +45,6 @@
 		},
 
 		positionFocalPoint: position => {
-			Focal.x = position.x;
-			Focal.y = position.y;
-
 			Focal.point.css({
 				left: `${position.x}%`,
 				top: `${position.y}%`
@@ -60,9 +58,10 @@
 				pointXOffset = e.offsetX - Focal.point.width() / 2;
 
 			// Convert absolute coordinates to percentages
-			Focal.x = Number(pointXOffset / Focal.picker.width() * 100).toFixed(2);
-			Focal.y = Number(pointYOffset / Focal.picker.height() * 100).toFixed(2);
-			Focal.positionFocalPoint(Focal);
+			Focal.position.x = Number(pointXOffset / Focal.picker.width() * 100).toFixed(2);
+			Focal.position.y = Number(pointYOffset / Focal.picker.height() * 100).toFixed(2);
+
+			Focal.positionFocalPoint(Focal.position);
 		},
 
 		startDrag: e => {
@@ -71,13 +70,13 @@
 		},
 
 		dragging: e => {
-			Focal.x = Number(e.target.offsetLeft / Focal.picker.width() * 100).toFixed(2);
-			Focal.y = Number(e.target.offsetTop / Focal.picker.height() * 100).toFixed(2);
+			Focal.position.x = Number(e.target.offsetLeft / Focal.picker.width() * 100).toFixed(2);
+			Focal.position.y = Number(e.target.offsetTop / Focal.picker.height() * 100).toFixed(2);
 		},
 
 		stopDrag: e => {
 			$('body').removeClass('focal-point-dragging');
-			Focal.positionFocalPoint(Focal);
+			Focal.positionFocalPoint(Focal.position);
 		}
 	};
 
@@ -139,8 +138,8 @@
 		 */
 		const saveFocalPoint = attachment => {
 			const focalPoint = {
-				x: Focal.x,
-				y: Focal.y
+				x: Focal.position.x,
+				y: Focal.position.y
 			};
 
 			attachment.set({focalPoint});
@@ -178,7 +177,7 @@
 		 */
 		const initFocusInterface = attachment => {
 			const focalPoint = attachment.get('focalPoint');
-			console.log('initFocusInterface', attachment, focalPoint, $image);
+			Focal.init(focalPoint);
 
 			// Interface
 			$(window).on('resize', updateFocusInterface);
@@ -202,6 +201,7 @@
 			const focalPoint = view.model.get('focalPoint');
 
 			if (type === 'image') {
+				Focal.position = focalPoint;
 				Focal.positionFocalPoint(focalPoint);
 			}
 		};

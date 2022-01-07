@@ -1,9 +1,11 @@
 /**
  * Image Editor
+ * Make sure wrapper is same width as image
  */
 .image-editor {
 	.imgedit-crop-wrap {
 		display: inline-flex;
+		overflow: hidden;
 	}
 }
 
