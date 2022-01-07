@@ -112,6 +112,7 @@
 		};
 
 		const initImgEdit = (element, id) => {
+			console.log(element, id);
 			// Append focal point selector
 			const selectView   = wp.media.template('image-edit-focal-point');
 			const selectParent = element.find(`#imgedit-crop-${id}`);
@@ -177,6 +178,7 @@
 		 * Init Focus Interface
 		 */
 		const initFocusInterface = attachment => {
+			console.log(attachment);
 			const focalPoint = attachment.get('focalPoint');
 			Focal.init(focalPoint);
 
@@ -207,6 +209,7 @@
 			}
 		};
 
+		const EditImage = wp.media.view.EditImage;
 		const Attachment = wp.media.view.Attachment;
 		const TwoColumnView = wp.media.view.Attachment.Details.TwoColumn;
 		const AttachmentDetails = wp.media.view.Attachment.Details;
@@ -247,31 +250,6 @@
 		}
 
 		/**
-		 * Extend Attachment Details view
-		 */
-		if (AttachmentDetails) {
-			wp.media.view.Attachment.Details = AttachmentDetails.extend({
-				initialize: function() {
-					console.log('AttachmentDetails initialize');
-					_view = this;
-					Attachment.prototype.initialize.apply(this, arguments);
-					$(document).one('image-editor-ui-ready', this.editorLoaded);
-				},
-				editorLoaded: function() {
-					console.log('AttachmentDetails editorLoaded');
-					$(document).off('image-editor-ui-ready', this.editorLoaded);
-					const id   = _view.model.get('id');
-					const type = _view.model.get('type');
-
-					if (type === 'image') {
-						initImgEdit(_view.$el, id);
-						initFocusInterface(_view.model);
-					}
-				}
-			});
-		}
-
-		/**
 		 * Extend EditImage Details view
 		 */
 		if (EditImageDetailsView) {
@@ -280,12 +258,12 @@
 				initialize: function(options) {
 					_view = this;
 					this.frame  = options.frame;
-					wp.media.view.EditImage.prototype.initialize.apply(this, arguments);
+					EditImage.prototype.initialize.apply(this, arguments);
 					this.model.on('change:focalPoint', this.change, this);
 				},
 				// Editor loaded
 				loadEditor: function() {
-					wp.media.view.EditImage.prototype.loadEditor.apply(this, arguments);
+					EditImage.prototype.loadEditor.apply(this, arguments);
 					$(document).one('image-editor-ui-ready', this.imageLoaded);
 				},
 				// Editor image loaded
@@ -312,6 +290,29 @@
 					this.views.detach();
 					this.model.fetch();
 					this.views.render();
+				}
+			});
+		}
+
+		/**
+		 * Extend Attachment Details view
+		 */
+		if (AttachmentDetails) {
+			wp.media.view.Attachment.Details = AttachmentDetails.extend({
+				initialize: function() {
+					_view = this;
+					Attachment.prototype.initialize.apply(this, arguments);
+					$(document).one('image-editor-ui-ready', this.editorLoaded);
+				},
+				editorLoaded: function() {
+					$(document).off('image-editor-ui-ready', this.editorLoaded);
+					const id   = _view.model.get('id');
+					const type = _view.model.get('type');
+
+					if (type === 'image') {
+						initImgEdit(_view.$el, id);
+						initFocusInterface(_view.model);
+					}
 				}
 			});
 		}
