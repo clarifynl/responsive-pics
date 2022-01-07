@@ -44,12 +44,11 @@
 			}
 		},
 
-		positionFocalPoint: coordinates => {
-			console.log(coordinates);
-
+		positionFocalPoint: position => {
 			Focal.point.css({
-				left: `${coordinates.x}%`,
-				top: `${coordinates.y}%`
+				left: `${position.x}%`,
+				top: `${position.y}%`,
+				position: 'absolute'
 			});
 		},
 
