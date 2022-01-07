@@ -245,6 +245,7 @@
 		/**
 		 * Extend EditImage (Details) view
 		 */
+		console.log(wp.media.view);
 		let EditImageView = wp.media.view.EditImage;
 		let EditImageDetailsView = wp.media.view.EditImage.Details;
 
@@ -288,20 +289,6 @@
 					this.views.detach();
 					this.model.fetch();
 					this.views.render();
-				}
-			});
-		} else if (EditImageView) {
-			wp.media.view.EditImage = EditImageView.extend({
-				initialize: function(options) {
-					console.log('EditImage initialize');
-					wp.media.View.prototype.initialize.apply(this, arguments);
-				},
-				render: function() {
-					console.log('EditImage render');
-					wp.media.View.prototype.render.apply(this, arguments);
-				},
-				loadEditor: function() {
-					console.log('EditImage loadEditor');
 				}
 			});
 		}
