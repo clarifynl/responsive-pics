@@ -102,9 +102,8 @@ class RP_Focal_Point extends ResponsivePics {
 						'x' => 50,
 						'y' => 50
 					];
-					syslog(LOG_DEBUG, 'focal_point: ' . json_encode($focal_point));
 
-					return $focal_point ? $focal_point : $default;
+					return $focal_point ?: $default;
 				}
 			]
 		);
@@ -115,10 +114,12 @@ class RP_Focal_Point extends ResponsivePics {
 	 */
 	public static function wp_prepare_attachment_for_js($response, $attachment, $meta) {
 		$focal_point = get_post_meta($attachment->ID, 'responsive_pics_focal_point', true);
+		$default = [
+			'x' => 50,
+			'y' => 50
+		];
 
-		if (!empty($focal_point)) {
-			$response['focalPoint'] = $focal_point;
-		}
+		$response['focalPoint'] = $focal_point ?: $default;
 
 		return $response;
 	}
