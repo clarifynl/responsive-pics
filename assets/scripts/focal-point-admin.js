@@ -255,20 +255,20 @@
 					console.log('EditImage loadEditor');
 				}
 			});
-		} */
+		}*/
 
 		/**
 		 * Extend EditImage Details view
 		 */
-		let EditImageDetailsView = wp.media.view.EditImage;
+		let EditImageDetailsView = wp.media.view.EditImage.Details;
 		if (EditImageDetailsView) {
-			wp.media.view.EditImage = EditImageDetailsView.extend({
+			wp.media.view.EditImage.Details = EditImageDetailsView.extend({
 				// Add focalPoint change listener
 				initialize: function(options) {
 					console.log('EditImage.Details initialize');
 					_view = this;
 					this.frame  = options.frame;
-					wp.media.View.prototype.initialize.apply(this, arguments);
+					// wp.media.view.EditImage.prototype.initialize.apply(this, arguments);
 					this.model.on('change:focalPoint', this.change, this);
 				},
 				// Editor loaded
