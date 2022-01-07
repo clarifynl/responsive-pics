@@ -115,16 +115,14 @@
 			// Append focal point selector
 			const selectView   = wp.media.template('attachment-select-focal-point');
 			const selectParent = element.find(`#imgedit-crop-${id}`);
-			const selectImage  = selectParent.find('img');
 
-			if (selectView && selectParent.length && selectImage.length) {
-				// selectParent.prepend(selectView);
+			if (selectView && selectParent.length) {
+				selectParent.append(selectView.find('.image-focal__point'));
+				selectParent.append(selectView.find('.image-focal__clickarea'));
 				// Set image focal elements
-				$imageFocal          = element.find('.image-focal');
-				$imageFocalWrapper   = element.find('.image-focal__wrapper');
+				$imageFocalWrapper   = selectParent;
 				$imageFocalPoint     = element.find('.image-focal__point');
 				$imageFocalClickarea = element.find('.image-focal__clickarea');
-				// selectImage.prependTo($imageFocalWrapper);
 				$image               = $imageFocalWrapper.find('img');
 			}
 
