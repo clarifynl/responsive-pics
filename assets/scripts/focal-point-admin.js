@@ -303,8 +303,16 @@
 					_view = this;
 					Attachment.prototype.initialize.apply(this, arguments);
 				},
-				editAttachment: function() {
-					$(document).one('image-editor-ui-ready', this.editorLoaded);
+				editAttachment: function(event) {
+					const editState = this.controller.states.get('edit-image');
+					if (window.imageEdit && editState) {
+						event.preventDefault();
+						editState.set('image', this.model);
+						this.controller.setState('edit-image');
+						$(document).one('image-editor-ui-ready', this.editorLoaded);
+					} else {
+						this.$el.addClass('needs-refresh');
+					}
 				},
 				editorLoaded: function() {
 					$(document).off('image-editor-ui-ready', this.editorLoaded);
