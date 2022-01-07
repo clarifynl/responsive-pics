@@ -301,11 +301,14 @@
 		 */
 		if (AttachmentDetails) {
 			wp.media.view.Attachment.Details = AttachmentDetails.extend({
+				// Add focalPoint change listener
 				initialize: function() {
 					_view = this;
 					Attachment.prototype.initialize.apply(this, arguments);
+					this.model.on('change:focalPoint', this.change, this);
 					$(document).one('image-editor-ui-ready', this.editorLoaded);
 				},
+				// Editor image loaded
 				editorLoaded: function() {
 					$(document).off('image-editor-ui-ready', this.editorLoaded);
 					const id   = _view.model.get('id');
@@ -316,6 +319,11 @@
 						initFocusInterface(_view.model);
 					}
 				},
+				// Re-init focal point on input change
+				change: function() {
+					changeView(this);
+				},
+				// Update view on focal point js change
 				update: function() {
 					this.views.detach();
 					this.model.fetch();
