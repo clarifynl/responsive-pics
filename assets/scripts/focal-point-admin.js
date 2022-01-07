@@ -294,11 +294,10 @@
 			wp.media.view.EditImage = EditImageView.extend({
 				initialize: function(options) {
 					console.log('EditImage initialize');
-					wp.media.view.EditImage.prototype.initialize.apply(this, arguments);
+					wp.media.View.prototype.initialize.apply(this, arguments);
 				},
 				loadEditor: function() {
 					console.log('EditImage loadEditor');
-					wp.media.view.EditImage.prototype.loadEditor.apply(this, arguments);
 				}
 			});
 		}
