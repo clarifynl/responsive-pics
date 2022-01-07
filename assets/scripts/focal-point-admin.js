@@ -250,7 +250,6 @@
 			wp.media.view.EditImage = EditImageView.extend({
 				initialize: function(options) {
 					console.log('EditImage initialize');
-					wp.media.View.prototype.initialize.apply(this, arguments);
 				},
 				loadEditor: function() {
 					console.log('EditImage loadEditor');
