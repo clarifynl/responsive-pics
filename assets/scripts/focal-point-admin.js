@@ -249,12 +249,11 @@
 		if (EditImageView) {
 			wp.media.view.EditImage = EditImageView.extend({
 				initialize: function(options) {
-					console.log('EditImage initialize', wp.media.View);
+					console.log('EditImage initialize');
 					wp.media.View.prototype.initialize.apply(this, arguments);
 				},
 				loadEditor: function() {
 					console.log('EditImage loadEditor');
-					wp.media.View.prototype.loadEditor.apply(this, arguments);
 				}
 			});
 		}
@@ -267,6 +266,7 @@
 			wp.media.view.EditImage.Details = EditImageDetailsView.extend({
 				// Add focalPoint change listener
 				initialize: function(options) {
+					console.log('EditImage.Details initialize');
 					_view = this;
 					this.frame  = options.frame;
 					wp.media.view.EditImage.prototype.initialize.apply(this, arguments);
@@ -274,6 +274,7 @@
 				},
 				// Editor loaded
 				loadEditor: function() {
+					console.log('EditImage.Details loadEditor');
 					wp.media.view.EditImage.prototype.loadEditor.apply(this, arguments);
 					$(document).one('image-editor-ui-ready', this.imageLoaded);
 				},
