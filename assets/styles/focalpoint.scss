@@ -1,15 +1,22 @@
 .image-focal {
 	position: relative;
 	display: flex;
-	justify-content: center;
-	max-height: 90%;
-	max-height: calc(100% - 42px);
-	margin-bottom: 16px;
+
+	.thumbnail & {
+		justify-content: center;
+		max-height: 90%;
+		max-height: calc(100% - 42px);
+		margin-bottom: 16px;
+	}
 
 	&__wrapper {
-		display: inline-block;
+		display: inline-flex;
 		position: relative;
 		overflow: hidden;
+
+		.imgedit-crop-wrap & {
+			display: inline-flex;
+		}
 	}
 
 	img.details-image {
