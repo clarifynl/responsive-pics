@@ -248,18 +248,22 @@
 
 		/**
 		 * Extend Attachment Details view
-		 *
+		 */
 		if (AttachmentDetails) {
 			wp.media.view.Attachment.Details = AttachmentDetails.extend({
 				initialize: function() {
 					console.log('AttachmentDetails initialize');
 					Attachment.prototype.initialize.apply(this, arguments);
+					this.controller.on('change:edit-image', this.editImage, this);
 				},
 				editAttachment: function() {
 					console.log('AttachmentDetails editAttachment');
+				},
+				editImage: function() {
+					console.log('AttachmentDetails editImage');
 				}
 			});
-		}/
+		}
 
 		/**
 		 * Extend EditImage Details view
