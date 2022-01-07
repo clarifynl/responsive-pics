@@ -242,7 +242,19 @@
 			});
 		}
 
-		console.log(wp.media.view);
+		let EditImage = wp.media.view.EditImage;
+		if (EditImage) {
+			wp.media.view.EditImage = EditImage.extend({
+				initialize: function(options) {
+					console.log('EditImage initialize');
+					wp.media.view.EditImage.prototype.initialize.apply(this, arguments);
+				},
+				loadEditor: function() {
+					console.log('EditImage initialize');
+					wp.media.view.EditImage.prototype.loadEditor.apply(this, arguments);
+				}
+			});
+		}
 
 		/**
 		 * Extend EditImage view
