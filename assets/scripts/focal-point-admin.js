@@ -249,12 +249,12 @@
 		if (EditImageView) {
 			wp.media.view.EditImage = EditImageView.extend({
 				initialize: function(options) {
-					console.log('EditImage initialize');
-					wp.media.view.prototype.initialize.apply(this, arguments);
+					console.log('EditImage initialize', wp.media.View);
+					wp.media.View.prototype.initialize.apply(this, arguments);
 				},
 				loadEditor: function() {
 					console.log('EditImage loadEditor');
-					wp.media.view.prototype.loadEditor.apply(this, arguments);
+					wp.media.View.prototype.loadEditor.apply(this, arguments);
 				}
 			});
 		}
