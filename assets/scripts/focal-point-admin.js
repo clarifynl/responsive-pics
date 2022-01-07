@@ -83,7 +83,7 @@
 
 	$(document).ready(() => {
 		/**
-		 * Init templates
+		 * Attachment Details
 		 */
 		const initAttachmentDetails = (element, id) => {
 			// Append focal point selector
@@ -111,11 +111,14 @@
 			}
 		};
 
+		/**
+		 * Image Editor
+		 */
 		const initImageEditor = (element, id) => {
 			// Append focal point selector
 			const selectView   = wp.media.template('image-edit-focal-point');
-			const selectParent = $('.media-frame-content').find(`.image-editor #imgedit-crop-${id}`);
-			console.log(element, id, selectView, selectParent);
+			const imageEditor  = $('.media-frame-content .image-editor');
+			const selectParent = imageEditor.find(`#imgedit-crop-${id}`);
 
 			if (selectView && selectParent.length) {
 				selectParent.append(selectView);
@@ -128,7 +131,7 @@
 
 			// Append focal point save button
 			const saveView   = wp.media.template('attachment-save-focal-point');
-			const saveParent = element.find('.imgedit-submit');
+			const saveParent = imageEditor.find('.imgedit-submit');
 			if (saveView) {
 				saveParent.append(saveView);
 				$imageFocalSave = element.find('button.save-attachment-focal-point');
@@ -178,7 +181,6 @@
 		 * Init Focus Interface
 		 */
 		const initFocusInterface = attachment => {
-			console.log(attachment);
 			const focalPoint = attachment.get('focalPoint');
 			Focal.init(focalPoint);
 
