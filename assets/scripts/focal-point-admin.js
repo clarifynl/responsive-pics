@@ -253,11 +253,20 @@
 			wp.media.view.Attachment.Details = AttachmentDetails.extend({
 				initialize: function() {
 					console.log('AttachmentDetails initialize');
+					_view = this;
 					Attachment.prototype.initialize.apply(this, arguments);
-					this.controller.on('change:edit-image', this.editImage, this);
+					$(document).one('image-editor-ui-ready', this.editorLoaded);
 				},
-				editImage: function() {
-					console.log('AttachmentDetails editImage');
+				editorLoaded: function() {
+					console.log('AttachmentDetails editorLoaded');
+					$(document).off('image-editor-ui-ready', this.editorLoaded);
+					const id   = _view.model.get('id');
+					const type = _view.model.get('type');
+
+					if (type === 'image') {
+						initImgEdit(_view.$el, id);
+						initFocusInterface(_view.model);
+					}
 				}
 			});
 		}
