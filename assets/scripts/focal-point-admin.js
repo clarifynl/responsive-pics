@@ -78,6 +78,7 @@
 		stopDrag: e => {
 			$('body').removeClass('focal-point-dragging');
 			Focal.positionFocalPoint(Focal.position);
+			_view.model.set({focalPoint: Focal.position});
 		}
 	};
 
@@ -147,7 +148,7 @@
 				y: Focal.position.y
 			};
 
-			attachment.set({focalPoint});
+			console.log(attachment);
 			$.ajax({
 				url: wp?.ajax?.settings?.url,
 				method: 'POST',
@@ -218,7 +219,7 @@
 		const EditImageDetailsView = wp.media.view.EditImage.Details;
 
 		/**
-		 * Extend Attachment Details TwoColumn view (Media Library)
+		 * Extend Attachment Details TwoColumn view (Media Library Modal)
 		 */
 		if (TwoColumnView) {
 			wp.media.view.Attachment.Details.TwoColumn = TwoColumnView.extend({
@@ -252,7 +253,7 @@
 		}
 
 		/**
-		 * Extend EditImage Details view (Media Library)
+		 * Extend EditImage Details view (Media Library Modal - Edit Image)
 		 */
 		if (EditImageDetailsView) {
 			wp.media.view.EditImage.Details = EditImageDetailsView.extend({
@@ -297,7 +298,7 @@
 		}
 
 		/**
-		 * Extend Attachment Details view (Post Edit)
+		 * Extend Attachment Details view (Post Edit Modal)
 		 */
 		if (AttachmentDetails) {
 			wp.media.view.Attachment.Details = AttachmentDetails.extend({
