@@ -16,7 +16,7 @@
 	position: relative;
 	display: flex;
 
-	.thumbnail & {
+	.attachment-media-view & {
 		justify-content: center;
 		max-height: 90%;
 		max-height: calc(100% - 42px);

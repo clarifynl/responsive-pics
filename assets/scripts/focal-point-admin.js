@@ -310,7 +310,6 @@
 				},
 				// Init extended template
 				render: function() {
-					console.log('AttachmentDetails render');
 					Attachment.prototype.render.apply(this, arguments);
 					const id   = this.model.get('id');
 					const type = this.model.get('type');
@@ -333,7 +332,6 @@
 				},
 				// Re-init focal point on input change
 				change: function() {
-					console.log('AttachmentDetails change');
 					changeView(this);
 				},
 				// Update view on focal point js change
