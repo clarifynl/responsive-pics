@@ -218,7 +218,7 @@
 		const EditImageDetailsView = wp.media.view.EditImage.Details;
 
 		/**
-		 * Extend Attachment Details TwoColumn view
+		 * Extend Attachment Details TwoColumn view (Media Library)
 		 */
 		if (TwoColumnView) {
 			wp.media.view.Attachment.Details.TwoColumn = TwoColumnView.extend({
@@ -252,7 +252,7 @@
 		}
 
 		/**
-		 * Extend EditImage Details view
+		 * Extend EditImage Details view (Media Library)
 		 */
 		if (EditImageDetailsView) {
 			wp.media.view.EditImage.Details = EditImageDetailsView.extend({
@@ -297,7 +297,7 @@
 		}
 
 		/**
-		 * Extend Attachment Details view
+		 * Extend Attachment Details view (Post Edit)
 		 */
 		if (AttachmentDetails) {
 			wp.media.view.Attachment.Details = AttachmentDetails.extend({
@@ -307,6 +307,18 @@
 					Attachment.prototype.initialize.apply(this, arguments);
 					this.model.on('change:focalPoint', this.change, this);
 					$(document).one('image-editor-ui-ready', this.editorLoaded);
+				},
+				// Init extended template
+				render: function() {
+					console.log('AttachmentDetails render');
+					Attachment.prototype.render.apply(this, arguments);
+					const id   = this.model.get('id');
+					const type = this.model.get('type');
+
+					if (type === 'image') {
+						initAttachmentDetails(this.$el, id);
+						initFocusInterface(this.model);
+					}
 				},
 				// Editor image loaded
 				editorLoaded: function() {
@@ -321,6 +333,7 @@
 				},
 				// Re-init focal point on input change
 				change: function() {
+					console.log('AttachmentDetails change');
 					changeView(this);
 				},
 				// Update view on focal point js change
