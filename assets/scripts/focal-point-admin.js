@@ -148,7 +148,6 @@
 				y: Focal.position.y
 			};
 
-			console.log(attachment);
 			$.ajax({
 				url: wp?.ajax?.settings?.url,
 				method: 'POST',
@@ -333,6 +332,7 @@
 				},
 				// Re-init focal point on input change
 				change: function() {
+					console.log('AttachmentDetails change', this.model);
 					changeView(this);
 				},
 				// Update view on focal point js change
