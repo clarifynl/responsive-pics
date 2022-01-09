@@ -335,11 +335,21 @@
 					console.log('AttachmentDetails change', this.model);
 					changeView(this);
 				},
+				updateSave: function() {
+					console.log('AttachmentDetails updateSave', this.model);
+				},
+				updateSetting: function(event) {
+					console.log('AttachmentDetails updateSetting', this.model);
+				},
 				// Update view on focal point js change
 				update: function() {
+					console.log('AttachmentDetails update', this.model);
 					this.views.detach();
 					this.model.fetch();
 					this.views.render();
+				},
+				save: function() {
+					console.log('AttachmentDetails save', this.model);
 				}
 			});
 		}
