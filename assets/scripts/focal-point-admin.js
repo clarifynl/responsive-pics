@@ -349,6 +349,9 @@
 					this.model.fetch();
 					this.views.render();
 				},
+				updateAll: function() {
+					console.log('AttachmentDetails updateAll', this.model);
+				},
 				save: function() {
 					console.log('AttachmentDetails save', this.model);
 				}
