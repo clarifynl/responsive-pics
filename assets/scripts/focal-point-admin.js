@@ -78,7 +78,8 @@
 		stopDrag: e => {
 			$('body').removeClass('focal-point-dragging');
 			Focal.positionFocalPoint(Focal.position);
-			_view.model.set({focalPoint: Focal.position});
+			_view.model.set('focalPoint', Focal.position);
+			console.log(_view.model);
 		}
 	};
 
