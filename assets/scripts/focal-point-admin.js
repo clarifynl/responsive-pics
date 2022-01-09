@@ -79,7 +79,6 @@
 			$('body').removeClass('focal-point-dragging');
 			Focal.positionFocalPoint(Focal.position);
 			_view.model.set('focalPoint', Focal.position);
-			console.log(_view.model);
 		}
 	};
 
@@ -333,14 +332,7 @@
 				},
 				// Re-init focal point on input change
 				change: function() {
-					console.log('AttachmentDetails change', this.model);
 					changeView(this);
-				},
-				updateSave: function() {
-					console.log('AttachmentDetails updateSave', this.model);
-				},
-				updateSetting: function(event) {
-					console.log('AttachmentDetails updateSetting', this.model);
 				},
 				// Update view on focal point js change
 				update: function() {
@@ -349,11 +341,9 @@
 					this.model.fetch();
 					this.views.render();
 				},
+				// On update image
 				updateAll: function() {
 					console.log('AttachmentDetails updateAll', this.model);
-				},
-				save: function() {
-					console.log('AttachmentDetails save', this.model);
 				}
 			});
 		}
