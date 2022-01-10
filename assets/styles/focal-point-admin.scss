@@ -15,9 +15,9 @@
 .image-focal {
 	position: relative;
 	display: flex;
+	justify-content: center;
 
 	.attachment-media-view & {
-		justify-content: center;
 		max-height: 90%;
 		max-height: calc(100% - 42px);
 		margin-bottom: 16px;
