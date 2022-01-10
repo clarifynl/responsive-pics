@@ -1,7 +1,6 @@
 import FocalPointPicker from './modules/focal-point-picker';
 
 (function($) {
-	let _view;
 
 	$(document).ready(() => {
 		/**
@@ -21,44 +20,6 @@ import FocalPointPicker from './modules/focal-point-picker';
 			}
 		};
 
-		/**
-		 * Save Focal Point
-		 */
-		const saveFocalPoint = attachment => {
-			$.ajax({
-				url: wp?.ajax?.settings?.url,
-				method: 'POST',
-				data: {
-					action: 'save_focal_point',
-					attachment: attachment?.attributes
-				}
-			})
-			.done(data => {
-				// Update view on succesfull save
-				_view.update();
-			})
-			.fail((jqXHR, textStatus) => {
-				console.log('save focal point error', jqXHR);
-			})
-			.always(() => {
-				console.log(_view.controller);
-				_view.controller.setState('edit-image');
-			});
-		};
-
-		/**
-		 * Extended view changed
-		 */
-		const changeView = view => {
-			const type       = view.model.get('type');
-			const focalPoint = view.model.get('focalPoint');
-
-			if (type === 'image') {
-				Focal.position = focalPoint;
-				Focal.positionFocalPoint(focalPoint);
-			}
-		};
-
 		const Attachment = wp.media.view.Attachment;
 		const AttachmentDetails = wp.media.view.Attachment.Details;
 		const TwoColumnView = wp.media.view.Attachment.Details.TwoColumn;
@@ -70,13 +31,11 @@ import FocalPointPicker from './modules/focal-point-picker';
 			wp.media.view.Attachment.Details.TwoColumn = TwoColumnView.extend({
 				// Add focalPoint change listener
 				initialize: function() {
-					_view = this;
 					this.model.on('change:focalPoint', this.change, this);
 				},
 				// Init extended template
 				render: function() {
 					Attachment.prototype.render.apply(this, arguments);
-					const id   = this.model.get('id');
 					const type = this.model.get('type');
 
 					if (type === 'image') {
@@ -86,7 +45,12 @@ import FocalPointPicker from './modules/focal-point-picker';
 				},
 				// Re-init focal point on input change
 				change: function() {
-					changeView(this);
+					const type = this.model.get('type');
+					const focalPoint = this.model.get('focalPoint');
+
+					if (type === 'image') {
+						FocalPointPicker.positionFocalPoint(focalPoint);
+					}
 				},
 				// Update view on focal point js change
 				update: function() {
@@ -104,7 +68,6 @@ import FocalPointPicker from './modules/focal-point-picker';
 			wp.media.view.Attachment.Details = AttachmentDetails.extend({
 				// Add focalPoint change listener
 				initialize: function() {
-					_view = this;
 					Attachment.prototype.initialize.apply(this, arguments);
 					this.model.on('change:focalPoint', this.change, this);
 				},
@@ -121,7 +84,12 @@ import FocalPointPicker from './modules/focal-point-picker';
 				},
 				// Re-init focal point on input change
 				change: function() {
-					changeView(this);
+					const type = this.model.get('type');
+					const focalPoint = this.model.get('focalPoint');
+
+					if (type === 'image') {
+						FocalPointPicker.positionFocalPoint(focalPoint);
+					}
 				},
 				// Update view on focal point js change
 				update: function() {
