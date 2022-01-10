@@ -73,7 +73,7 @@ const FocalPointPicker = {
 				attachment: attachment?.attributes
 			},
 			beforeSend: () => {
-				// FocalPointPicker.view.controller.setState('edit-image');
+				FocalPointPicker.view.updateSave('waiting');
 			}
 		})
 		.done(data => {
@@ -83,8 +83,7 @@ const FocalPointPicker = {
 			console.error('ResponsivePics error while saving focal point', jqXHR.statusText);
 		})
 		.always(() => {
-			console.log(FocalPointPicker.view.controller);
-			// FocalPointPicker.view.controller.setState('edit-image');
+			FocalPointPicker.view.updateSave('ready');
 			request = null;
 		});
 	},
