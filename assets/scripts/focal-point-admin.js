@@ -13,11 +13,8 @@ import FocalPointPicker from './modules/focal-point-picker';
 
 	/**
 	 Focal
-	**/
+	*
 	const Focal = {
-		/**
-		 Set variables
-		**/
 		init: focalPoint => {
 			Focal.wrapper  = $imageFocalWrapper;
 			Focal.picker   = $imageFocalClickarea;
@@ -27,9 +24,6 @@ import FocalPointPicker from './modules/focal-point-picker';
 			Focal.setEventListeners();
 		},
 
-		/**
-		 Event Listeners
-		**/
 		setEventListeners: () => {
 			Focal.picker.on('click', Focal.setFocalPoint);
 
@@ -79,7 +73,7 @@ import FocalPointPicker from './modules/focal-point-picker';
 			$('body').removeClass('focal-point-dragging');
 			Focal.positionFocalPoint(Focal.position);
 		}
-	};
+	};*/
 
 	$(document).ready(() => {
 		/**
@@ -140,15 +134,14 @@ import FocalPointPicker from './modules/focal-point-picker';
 		/**
 		 * Init Focus Interface
 		 */
-		const initFocusInterface = attachment => {
-			const focalPoint = attachment.get('focalPoint');
-			FocalPointPicker.init(focalPoint);
+		const initFocusInterface = view => {
+			FocalPointPicker.init(view);
 
 			// Layout change
 			$(window).on('resize', updateFocusInterface);
 			$image.on('load', e => {
 				updateFocusInterface();
-				FocalPointPicker.init(focalPoint);
+				FocalPointPicker.init(view);
 			});
 		};
 
@@ -187,7 +180,7 @@ import FocalPointPicker from './modules/focal-point-picker';
 
 					if (type === 'image') {
 						initAttachmentDetails(this.$el, id);
-						initFocusInterface(this.model);
+						initFocusInterface(this);
 					}
 				},
 				// Re-init focal point on input change
@@ -222,7 +215,7 @@ import FocalPointPicker from './modules/focal-point-picker';
 
 					if (type === 'image') {
 						initAttachmentDetails(this.$el, id);
-						initFocusInterface(this.model);
+						initFocusInterface(this);
 					}
 				},
 				// Re-init focal point on input change

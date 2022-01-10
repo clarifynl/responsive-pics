@@ -2,8 +2,10 @@ const FocalPointPicker = {
 	/**
 	 Set variables
 	**/
-	init: focalPoint => {
+	init: view => {
+		const focalPoint = view.model.get('focalPoint');
 		console.log('FocalPointPicker init', focalPoint);
+
 		FocalPointPicker.wrapper  = $imageFocalWrapper;
 		FocalPointPicker.picker   = $imageFocalClickarea;
 		FocalPointPicker.point    = $imageFocalPoint;
