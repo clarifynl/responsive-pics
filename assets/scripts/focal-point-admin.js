@@ -1,99 +1,23 @@
 import FocalPointPicker from './modules/focal-point-picker';
 
 (function($) {
-	/**
-	 Global variables
-	**/
 	let _view;
-	let $image;
-	let $imageFocal;
-	let $imageFocalWrapper;
-	let $imageFocalPoint;
-	let $imageFocalClickarea;
-
-	/**
-	 Focal
-	*
-	const Focal = {
-		init: focalPoint => {
-			Focal.wrapper  = $imageFocalWrapper;
-			Focal.picker   = $imageFocalClickarea;
-			Focal.point    = $imageFocalPoint;
-			Focal.position = focalPoint;
-			Focal.positionFocalPoint(focalPoint);
-			Focal.setEventListeners();
-		},
-
-		setEventListeners: () => {
-			Focal.picker.on('click', Focal.setFocalPoint);
-
-			// Check if jQuery UI Draggable widget is active
-			if (typeof($.ui.draggable) === 'function') {
-				Focal.point.draggable({
-					cursor: 'move',
-					start: Focal.startDrag,
-					drag: Focal.dragging,
-					stop: Focal.stopDrag,
-					containment: Focal.wrapper
-				});
-			}
-		},
-
-		positionFocalPoint: position => {
-			Focal.point.css({
-				left: `${position.x}%`,
-				top: `${position.y}%`,
-				position: 'absolute'
-			});
-			_view.model.set('focalPoint', position);
-			// saveFocalPoint(_view.model);
-		},
-
-		setFocalPoint: e => {
-			const pointYOffset = e.offsetY - Focal.point.height() / 2;
-			const pointXOffset = e.offsetX - Focal.point.width() / 2;
-
-			// Convert absolute coordinates to percentages
-			Focal.position.x = Number(pointXOffset / Focal.picker.width() * 100).toFixed(2);
-			Focal.position.y = Number(pointYOffset / Focal.picker.height() * 100).toFixed(2);
-
-			Focal.positionFocalPoint(Focal.position);
-		},
-
-		startDrag: e => {
-			$('body').addClass('focal-point-dragging');
-		},
-
-		dragging: e => {
-			Focal.position.x = Number(e.target.offsetLeft / Focal.picker.width() * 100).toFixed(2);
-			Focal.position.y = Number(e.target.offsetTop / Focal.picker.height() * 100).toFixed(2);
-		},
-
-		stopDrag: e => {
-			$('body').removeClass('focal-point-dragging');
-			Focal.positionFocalPoint(Focal.position);
-		}
-	};*/
 
 	$(document).ready(() => {
 		/**
 		 * Attachment Details
 		 */
-		const initAttachmentDetails = (element, id) => {
+		const initAttachmentDetails = element => {
 			// Append focal point selector
-			const selectView   = wp.media.template('attachment-details-focal-point');
-			const selectParent = element.find('.thumbnail');
-			const selectImage  = selectParent.find('img');
+			const mediaView   = wp.media.template('attachment-details-focal-point');
+			const mediaParent = element.find('.thumbnail');
+			const mediaImage  = mediaParent.find('img');
 
 			// Set image focal elements
-			if (selectView && selectParent.length && selectImage.length) {
-				selectParent.prepend(selectView);
-				$imageFocal          = element.find('.image-focal');
-				$imageFocalWrapper   = element.find('.image-focal__wrapper');
-				$imageFocalPoint     = element.find('.image-focal__point');
-				$imageFocalClickarea = element.find('.image-focal__clickarea');
-				selectImage.prependTo($imageFocalWrapper);
-				$image               = $imageFocalWrapper.find('img');
+			if (mediaView && mediaParent.length && mediaImage.length) {
+				mediaParent.prepend(mediaView);
+				const mediaWrapper = mediaParent.find('.image-focal__wrapper');
+				mediaImage.prependTo(mediaWrapper);
 			}
 		};
 
@@ -119,29 +43,6 @@ import FocalPointPicker from './modules/focal-point-picker';
 			.always(() => {
 				console.log(_view.controller);
 				_view.controller.setState('edit-image');
-			});
-		};
-
-		/**
-		 * Update Focus Interface
-		 */
-		const updateFocusInterface = () => {
-			$imageFocalWrapper.css({
-				width: `${$image.width()}px`
-			});
-		};
-
-		/**
-		 * Init Focus Interface
-		 */
-		const initFocusInterface = view => {
-			FocalPointPicker.init(view);
-
-			// Layout change
-			$(window).on('resize', updateFocusInterface);
-			$image.on('load', e => {
-				updateFocusInterface();
-				FocalPointPicker.init(view);
 			});
 		};
 
@@ -179,8 +80,8 @@ import FocalPointPicker from './modules/focal-point-picker';
 					const type = this.model.get('type');
 
 					if (type === 'image') {
-						initAttachmentDetails(this.$el, id);
-						initFocusInterface(this);
+						initAttachmentDetails(this.$el);
+						FocalPointPicker.init(this);
 					}
 				},
 				// Re-init focal point on input change
@@ -214,8 +115,8 @@ import FocalPointPicker from './modules/focal-point-picker';
 					const type = this.model.get('type');
 
 					if (type === 'image') {
-						initAttachmentDetails(this.$el, id);
-						initFocusInterface(this);
+						initAttachmentDetails(this.$el);
+						FocalPointPicker.init(this);
 					}
 				},
 				// Re-init focal point on input change
