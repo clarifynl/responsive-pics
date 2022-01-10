@@ -71,10 +71,10 @@ const FocalPointPicker = {
 			data: {
 				action: 'save_focal_point',
 				attachment: attachment?.attributes
+			},
+			beforeSend: () => {
+				// FocalPointPicker.view.controller.setState('edit-image');
 			}
-		})
-		.beforeSend(() => {
-			// FocalPointPicker.view.controller.setState('edit-image');
 		})
 		.done(data => {
 			FocalPointPicker.view.update();
