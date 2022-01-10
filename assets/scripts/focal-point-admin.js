@@ -51,7 +51,7 @@
 				position: 'absolute'
 			});
 			_view.model.set('focalPoint', position);
-			saveFocalPoint(_view.model);
+			// saveFocalPoint(_view.model);
 		},
 
 		setFocalPoint: e => {
