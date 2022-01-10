@@ -12,7 +12,6 @@ const FocalPointPicker = {
 		FocalPointPicker.image    = FocalPointPicker.wrapper.find('img');
 		// Add event listners
 		FocalPointPicker.setEventListeners();
-		console.log(view.model);
 		FocalPointPicker.positionFocalPoint(FocalPointPicker.position);
 	},
 	setEventListeners: () => {
