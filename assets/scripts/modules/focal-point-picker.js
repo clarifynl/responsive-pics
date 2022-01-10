@@ -12,6 +12,7 @@ const FocalPointPicker = {
 		FocalPointPicker.image    = FocalPointPicker.wrapper.find('img');
 		// Add event listners
 		FocalPointPicker.setEventListeners();
+		console.log(view.model);
 		FocalPointPicker.positionFocalPoint(FocalPointPicker.position);
 	},
 	setEventListeners: () => {
@@ -43,8 +44,8 @@ const FocalPointPicker = {
 	positionFocalPoint: position => {
 		FocalPointPicker.view.model.set('focalPoint', position);
 		FocalPointPicker.point.css({
-			left: `${position.x}%`,
-			top: `${position.y}%`,
+			left: `${position?.x}%`,
+			top: `${position?.y}%`,
 			position: 'absolute'
 		});
 	},

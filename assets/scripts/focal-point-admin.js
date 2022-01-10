@@ -86,7 +86,6 @@ import FocalPointPicker from './modules/focal-point-picker';
 				change: function() {
 					const type = this.model.get('type');
 					const focalPoint = this.model.get('focalPoint');
-					console.log(focalPoint);
 
 					if (type === 'image') {
 						FocalPointPicker.positionFocalPoint(focalPoint);
