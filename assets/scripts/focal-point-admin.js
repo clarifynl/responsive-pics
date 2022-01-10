@@ -93,14 +93,9 @@ import FocalPointPicker from './modules/focal-point-picker';
 				},
 				// Update view on focal point js change
 				update: function() {
-					console.log('AttachmentDetails update', this.model);
 					this.views.detach();
 					this.model.fetch();
 					this.views.render();
-				},
-				// On update image
-				updateAll: function() {
-					console.log('AttachmentDetails updateAll', this.model);
 				}
 			});
 		}
