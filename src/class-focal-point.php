@@ -39,8 +39,6 @@ class RP_Focal_Point extends ResponsivePics {
 	 */
 	public static function print_media_templates() {
 		include('views/tmpl-attachment-details-focal-point.php');
-		include('views/tmpl-image-edit-focal-point.php');
-		include('views/tmpl-attachment-save-focal-point.php');
 	}
 
 	/**
