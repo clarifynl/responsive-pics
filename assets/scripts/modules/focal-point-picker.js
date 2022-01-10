@@ -26,7 +26,7 @@ const FocalPointPicker = {
 		FocalPointPicker.picker.on('click', FocalPointPicker.setFocalPoint);
 
 		// On drag
-		if (typeof($.ui.draggable) === 'function') {
+		if (typeof(jQuery.ui.draggable) === 'function') {
 			FocalPointPicker.point.draggable({
 				cursor: 'move',
 				start: FocalPointPicker.startDrag,
@@ -62,14 +62,14 @@ const FocalPointPicker = {
 		FocalPointPicker.positionFocalPoint(FocalPointPicker.position);
 	},
 	startDrag: e => {
-		$('body').addClass('focal-point-dragging');
+		jQuery('body').addClass('focal-point-dragging');
 	},
 	dragging: e => {
 		FocalPointPicker.position.x = Number(e.target.offsetLeft / FocalPointPicker.picker.width() * 100).toFixed(2);
 		FocalPointPicker.position.y = Number(e.target.offsetTop / FocalPointPicker.picker.height() * 100).toFixed(2);
 	},
 	stopDrag: e => {
-		$('body').removeClass('focal-point-dragging');
+		jQuery('body').removeClass('focal-point-dragging');
 		FocalPointPicker.positionFocalPoint(FocalPointPicker.position);
 	}
 };
