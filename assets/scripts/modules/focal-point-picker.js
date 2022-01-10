@@ -18,7 +18,6 @@ const FocalPointPicker = {
 		// On layout change
 		jQuery(window).on('resize', FocalPointPicker.updateInterface);
 		FocalPointPicker.image.on('load', e => {
-			console.log('FocalPointPicker image has loaded', FocalPointPicker.image);
 			FocalPointPicker.updateInterface();
 		});
 
@@ -42,13 +41,12 @@ const FocalPointPicker = {
 		});
 	},
 	positionFocalPoint: position => {
+		FocalPointPicker.view.model.set('focalPoint', position);
 		FocalPointPicker.point.css({
 			left: `${position.x}%`,
 			top: `${position.y}%`,
 			position: 'absolute'
 		});
-		FocalPointPicker.view.model.set('focalPoint', position);
-		FocalPointPicker.saveFocalPoint(FocalPointPicker.view.model);
 	},
 	setFocalPoint: e => {
 		const pointYOffset = e.offsetY - FocalPointPicker.point.height() / 2;
@@ -59,6 +57,7 @@ const FocalPointPicker = {
 		FocalPointPicker.position.y = Math.round(pointYOffset / FocalPointPicker.picker.height() * 100);
 
 		FocalPointPicker.positionFocalPoint(FocalPointPicker.position);
+		FocalPointPicker.saveFocalPoint(FocalPointPicker.view.model);
 	},
 	saveFocalPoint: attachment => {
 		jQuery.ajax({
@@ -90,6 +89,7 @@ const FocalPointPicker = {
 	stopDrag: e => {
 		jQuery('body').removeClass('focal-point-dragging');
 		FocalPointPicker.positionFocalPoint(FocalPointPicker.position);
+		FocalPointPicker.saveFocalPoint(FocalPointPicker.view.model);
 	}
 };
 
