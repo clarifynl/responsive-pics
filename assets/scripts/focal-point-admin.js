@@ -50,10 +50,12 @@
 				top: `${position.y}%`,
 				position: 'absolute'
 			});
+			_view.model.set('focalPoint', position);
+			saveFocalPoint(_view.model);
 		},
 
 		setFocalPoint: e => {
-			$imageFocalSave.removeAttr('disabled');
+			// $imageFocalSave.removeAttr('disabled');
 
 			const pointYOffset = e.offsetY - Focal.point.height() / 2;
 			const pointXOffset = e.offsetX - Focal.point.width() / 2;
@@ -67,7 +69,7 @@
 
 		startDrag: e => {
 			$('body').addClass('focal-point-dragging');
-			$imageFocalSave.removeAttr('disabled');
+			// $imageFocalSave.removeAttr('disabled');
 		},
 
 		dragging: e => {
@@ -78,7 +80,6 @@
 		stopDrag: e => {
 			$('body').removeClass('focal-point-dragging');
 			Focal.positionFocalPoint(Focal.position);
-			_view.model.set('focalPoint', Focal.position);
 		}
 	};
 
@@ -104,12 +105,12 @@
 			}
 
 			// Append focal point save button
-			const saveView   = wp.media.template('attachment-save-focal-point');
-			const saveParent = element.find('.attachment-actions');
-			if (saveView) {
-				saveParent.append(saveView);
-				$imageFocalSave = element.find('button.save-attachment-focal-point');
-			}
+			// const saveView   = wp.media.template('attachment-save-focal-point');
+			// const saveParent = element.find('.attachment-actions');
+			// if (saveView) {
+			// 	saveParent.append(saveView);
+			// 	$imageFocalSave = element.find('button.save-attachment-focal-point');
+			// }
 		};
 
 		/**
@@ -143,11 +144,6 @@
 		 * Save Focal Point
 		 */
 		const saveFocalPoint = attachment => {
-			const focalPoint = {
-				x: Focal.position.x,
-				y: Focal.position.y
-			};
-
 			$.ajax({
 				url: wp?.ajax?.settings?.url,
 				method: 'POST',
@@ -164,7 +160,9 @@
 				console.log('save focal point error', jqXHR);
 			})
 			.always(() => {
-				$imageFocalSave.attr('disabled', 'disabled');
+				// $imageFocalSave.attr('disabled', 'disabled');
+				console.log(_view.controller);
+				_view.controller.setState('edit-image');
 			});
 		};
 
@@ -192,10 +190,10 @@
 			});
 
 			// Save button
-			$imageFocalSave.on('click', e => {
-				e.preventDefault();
-				saveFocalPoint(attachment);
-			});
+			// $imageFocalSave.on('click', e => {
+			// 	e.preventDefault();
+			// 	saveFocalPoint(attachment);
+			// });
 		};
 
 		/**
