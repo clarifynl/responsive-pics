@@ -60,7 +60,12 @@ const FocalPointPicker = {
 		FocalPointPicker.saveFocalPoint(FocalPointPicker.view.model);
 	},
 	saveFocalPoint: attachment => {
-		jQuery.ajax({
+		let request;
+		if (request) {
+			request.abort();
+		}
+
+		request = jQuery.ajax({
 			url: wp?.ajax?.settings?.url,
 			method: 'POST',
 			data: {
@@ -68,15 +73,19 @@ const FocalPointPicker = {
 				attachment: attachment?.attributes
 			}
 		})
+		.beforeSend(() => {
+			// FocalPointPicker.view.controller.setState('edit-image');
+		})
 		.done(data => {
 			FocalPointPicker.view.update();
 		})
 		.fail((jqXHR, textStatus) => {
-			console.log('save focal point error', jqXHR);
+			console.error('ResponsivePics error while saving focal point', jqXHR.statusText);
 		})
 		.always(() => {
 			console.log(FocalPointPicker.view.controller);
 			// FocalPointPicker.view.controller.setState('edit-image');
+			request = null;
 		});
 	},
 	startDrag: e => {
