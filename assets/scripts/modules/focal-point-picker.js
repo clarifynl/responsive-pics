@@ -1,6 +1,6 @@
 /**
- Focal Point Picker module
-**/
+ * Focal Point Picker module
+ */
 const FocalPointPicker = {
 	init: view => {
 		const focalPoint = view.model.get('focalPoint');
@@ -17,8 +17,8 @@ const FocalPointPicker = {
 	},
 	setEventListeners: () => {
 		// On layout change
-		$(window).on('resize', FocalPointPicker.updateInterface);
-		$image.on('load', e => {
+		jQuery(window).on('resize', FocalPointPicker.updateInterface);
+		FocalPointPicker.image.on('load', e => {
 			FocalPointPicker.updateInterface();
 		});
 
