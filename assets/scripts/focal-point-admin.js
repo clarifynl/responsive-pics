@@ -8,7 +8,7 @@ import FocalPicker from './modules/focal-picker';
 		 */
 		const initAttachmentDetails = element => {
 			// Append focal point selector
-			const mediaView   = wp.media.template('attachment-details-focal-point');
+			const mediaView   = wp?.media?.template('attachment-details-focal-point');
 			const mediaParent = element.find('.thumbnail');
 			const mediaImage  = mediaParent.find('img');
 
@@ -20,9 +20,12 @@ import FocalPicker from './modules/focal-picker';
 			}
 		};
 
-		const Attachment = wp.media.view.Attachment;
-		const AttachmentDetails = wp.media.view.Attachment.Details;
-		const TwoColumnView = wp.media.view.Attachment.Details.TwoColumn;
+		/**
+		 * Extend WP Media views
+		 */
+		const Attachment = wp?.media?.view?.Attachment;
+		const AttachmentDetails = wp?.media?.view?.Attachment?.Details;
+		const TwoColumnView = wp?.media?.view?.Attachment?.Details?.TwoColumn;
 
 		/**
 		 * Extend Attachment Details TwoColumn view (Media Library Modal)
