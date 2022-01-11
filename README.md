@@ -413,7 +413,7 @@ There are 3 ways you can set the focal point of an image with the interface:
 * By dragging and dropping the focal point circle element on the image.
 * By entering the Focal Point X & Y-axis values as percentages directly in the attachment input fields.
 
-By using one of these options a post meta key named `responsive_pics_focal_point` will be added to the attachment with an array value containing the x & y coordinates as percentages:
+By using one of these options a post meta key named `responsive_pics_focal_point` will be added or updated to the attachment with an array value containing the x & y coordinates as percentages:
 ```php
 [
   'x' => '86',
@@ -421,7 +421,7 @@ By using one of these options a post meta key named `responsive_pics_focal_point
 ]
 ```
 To use this value elsewhere in your theme, you can retrieve it by calling:
-```
+```php
 $focal_point = get_post_meta($attachment_id, 'responsive_pics_focal_point', true);
 ```
 
