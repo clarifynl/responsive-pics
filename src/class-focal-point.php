@@ -76,8 +76,8 @@ class RP_Focal_Point extends ResponsivePics {
 			$focal_point_x = $attachment['responsive_pics_focal_point_x'];
 			$focal_point_y = $attachment['responsive_pics_focal_point_y'];
 			$focal_point   = [
-				'x' => $focal_point_x,
-				'y' => $focal_point_y
+				'x' => round($focal_point_x),
+				'y' => round($focal_point_y)
 			];
 			update_post_meta($post['ID'], 'responsive_pics_focal_point', $focal_point);
 		} else {
