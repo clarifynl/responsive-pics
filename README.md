@@ -240,7 +240,7 @@ GET /wp-json/responsive-pics/v1/get-image/<id>?sizes=<sizes>&crop=<crop>&classes
 | ---------- | ----------- | -------- | -------- | --------------------------------
 | id         | number      | yes      |          | The WordPress image id (e.g. 1).
 | sizes      | string      | yes      |          | A comma-separated string of preferred image sizes (e.g. `'xs-12, sm-6, md-4, lg-3'`). See the [Sizes section](#sizes) for more information.
-| crop       | string      | optional | `false`  | A crop-factor of the width for the desired height within the default range of `0-2` (e.g. `0.75`) with (optional) crop positions in horizontal: `l(eft)`, `c(enter)`, `r(ight)` and vertical direction: `t(op), c(enter)` or `b(ottom)`, or use the selected focal point `f(ocal)` shorthand. See the [Focal Point section](#focal-point) for more information.
+| crop       | string      | optional | `false`  | A crop-factor of the width for the desired height within the default range of `0-2` (e.g. `0.75`) with (optional) crop positions (e.g. `0.75|t l`). See the [Crop position section](#crop-position) for more information.
 | classes    | string      | optional | `null`   | A comma-separated string of additional CSS classes you want to add to the img element (e.g. `'my_img_class'` or `'my_img_class, my_second_img_class'`).
 | lazyload   | boolean     | optional | `false`  | When `true` enables `lazyload` classes and data-srcset attributes. See the [Lazyloading section](#lazyloading) for more information.
 | lqip       | boolean     | optional | `false`  | When `true` enables `LQIP` classes and src attribute. See the [LQIP section](#lqip) for more information.
@@ -308,9 +308,36 @@ The following parameters are available in the sizes syntax:
 | width      | number or string | yes      |         | The desired (max) width of the image. A column definition is a key in `$grid_widths` plus a dash and a column span number (e.g. `'xs-8'`).<br>If the column span number is suffixed with `-full` (e.g. `'xs-8-full'`), the column width is calculated as a percentage of the `$grid_width`, but as the next matching `$breakpoint` width (like in a `.container-fluid`).<br>You can also use `full` as span number (e.g. `'xs-full'`) for full width size based upon next matching `$breakpoint` width.
 | height     | number           | optional |         | The desired (max) height of the image (e.g. `500`).
 | factor     | number           | optional |         | A crop-factor of the width for the desired height within the default range of `0-2` (e.g. `0.75`).
-| crop_x     | string           | optional | c       | Crop position in horizontal direction: `l(eft)`, `c(enter)`, `r(ight)` or use the selected focal point `f(ocal)`. See the [Focal Point section](#focal-point) for more information.
-| crop_y     | string           | optional | c       | Crop position in vertical direction: `t(op), c(enter)` or `b(ottom)`. If not set, `crop_x` will be treated as a shortcut: `'c' = 'center center', 'f' = 'focal point', 't' = 'top center', r = 'right center', 'b' = 'center bottom', 'l' = 'left center'`.
+| crop_x     | string           | optional | c       | Crop position in horizontal direction. See the [Crop position section](#crop-position) for more information.
+| crop_y     | string           | optional | c       | Crop position in vertical direction. See the [Crop position section](#crop-position) for more information.
 
+
+## Crop position <a name="crop-position"></a>
+The following options are available as valid crop position syntax:
+
+### Crop position shorthands
+You can use the following crop position shorthands in horizontal direction (x):
+* `l(eft)`
+* `c(enter)`
+* `r(ight)`
+* `f(ocal)` (See the [Focal Point section](#focal-point) for more information.)
+
+And in vertical direction (y):
+* `t(op)`
+* `c(enter)`
+* `b(ottom)`
+
+If the vertical direction is not set, the horizontal direction `x` will be treated as a shortcut:
+* 'c' = 'center center'
+* 'f' = 'focal point'
+* 't' = 'top center'
+* 'r' = 'right center'
+* 'b' = 'center bottom'
+* 'l' = 'left center'
+
+### Crop position percentages
+You can also use percentages as valid crop position syntax: `75 50`.
+In this case both the coordinates `x` and `y` need to be passed.
 
 ## Process <a name="process"></a>
 
