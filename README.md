@@ -317,23 +317,23 @@ The following options are available as valid crop position syntax:
 
 ### Crop position shorthands
 You can use the following crop position shorthands in horizontal direction (x):
-* `l(eft)`
-* `c(enter)`
-* `r(ight)`
-* `f(ocal)` (See the [Focal Point section](#focal-point) for more information.)
+* `l`: left
+* `c`: center
+* `r`: right
+* `f`: focal (See the [Focal Point section](#focal-point) for more information)
 
 And in vertical direction (y):
-* `t(op)`
-* `c(enter)`
-* `b(ottom)`
+* `t`: top
+* `c`: center
+* `b`: bottom
 
 If the vertical direction is not set, the horizontal direction `x` will be treated as a shortcut:
-* 'c' = 'center center'
-* 'f' = 'focal point'
-* 't' = 'top center'
-* 'r' = 'right center'
-* 'b' = 'center bottom'
-* 'l' = 'left center'
+* `c`: center center
+* `f`: focal point
+* `t`: top center
+* `r`: right center
+* `b`: center bottom
+* `l`: left center
 
 ### Crop position percentages
 You can also use percentages as valid crop position syntax: `75 50`.
