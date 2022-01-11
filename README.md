@@ -312,10 +312,10 @@ The following parameters are available in the sizes syntax:
 | crop_y     | string           | optional | c       | Crop position in vertical direction  (e.g. `b`). See the [Crop position section](#crop-position) for more information.
 
 
-## Crop position <a name="crop-position"></a>
+### Crop position <a name="crop-position"></a>
 The following options are available as valid crop position syntax:
 
-### Crop position shorthands
+#### Crop position shorthands
 You can use the following crop position shorthands in horizontal direction (x):
 * `l`: left
 * `c`: center
@@ -335,7 +335,7 @@ If the vertical direction is not set, the horizontal direction `x` will be treat
 * `b`: center bottom
 * `l`: left center
 
-### Crop position percentages
+#### Crop position percentages
 You can also use percentages as valid crop position syntax: `75 50`.
 In this case both the coordinates `x` and `y` need to be passed.
 
