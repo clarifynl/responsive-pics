@@ -279,20 +279,27 @@ class RP_Process extends ResponsivePics {
 		}
 	}
 
-	// crop values can be single shortcut values (e.g. "c") or two dimensional values (e.g. "l t");
+	/**
+	 * crop can be:
+	 * - single shortcut string value (e.g. "c")
+	 * - two dimensional string values (e.g. "l t")
+	 * - two dimensional numeric values (e.g. 75 25)
+	 *
+	 * @return array
+	 */
 	public function process_crop($input, $focal_point = null) {
 		if ($input === false) {
 			return false;
 		}
 
-		$shortcuts = explode(' ', trim($input));
+		$crop_positions = explode(' ', trim($input));
 
 		// Single shorthand value
-		if (sizeof($shortcuts) === 1) {
-			if (isset(self::$crop_shortcuts[$shortcuts[0]])) {
-				if ($shortcuts[0] === 'f') {
-					if ($this->process_focal_point($focal_point)) {
-						$focal_point = $this->process_focal_point($focal_point);
+		if (sizeof($crop_positions) === 1) {
+			if (isset(self::$crop_shortcuts[$crop_positions[0]])) {
+				if ($crop_positions[0] === 'f') {
+					if (self::$process_focal_point($focal_point)) {
+						$focal_point = self::$process_focal_point($focal_point);
 						return $focal_point;
 					} else {
 						ResponsivePics()->error->add_error('invalid', sprintf('the focal point %s needs to be an array containing an x & y percentage', json_encode($focal_point)), $focal_point);
@@ -300,17 +307,34 @@ class RP_Process extends ResponsivePics {
 					}
 				}
 
-				$shortcuts = self::$crop_shortcuts[$shortcuts[0]];
-				$shortcuts = explode(' ', trim($shortcuts));
+				$crop_positions = self::$crop_shortcuts[$crop_positions[0]];
+				$crop_positions = explode(' ', trim($crop_positions));
 			} else {
-				ResponsivePics()->error->add_error('invalid', sprintf('crop shortcut %s is not defined', $shortcuts[0]), self::$crop_shortcuts);
-				$shortcuts = [];
+				ResponsivePics()->error->add_error('invalid', sprintf('crop shortcut %s is not defined', $crop_positions[0]), self::$crop_shortcuts);
+				$crop_positions = [];
 			}
 		}
 
-		// Both values
+		// Two numeric values
+		if (is_numeric($crop_positions[0]) &&
+			is_numeric($crop_positions[1])) {
+			$x_perc = intval($crop_positions[0]);
+			$y_perc = intval($crop_positions[1]);
+
+			var_dump(self::$process_focal_percentage($x_perc));
+			var_dump(self::$process_focal_percentage($y_perc));
+
+			$crop_percentages = [
+				'x' => $x_perc,
+				'y' => $y_perc
+			];
+
+			return $crop_percentages;
+		}
+
+		// Two string values
 		$result = [];
-		foreach($shortcuts as $key => $value) {
+		foreach ($crop_positions as $key => $value) {
 			if (isset(self::$crop_map[$value]) && $key < 2) {
 				$result[$key === 0 ? 'x' : 'y'] = self::$crop_map[$value];
 			} else {
@@ -319,13 +343,13 @@ class RP_Process extends ResponsivePics {
 			}
 		}
 
-		$crop_percentages = self::process_crop_positions($result);
+		$crop = self::process_crop_positions($result);
 
-		return $crop_percentages;
+		return $crop;
 	}
 
 	// focal point must be an array containing an 'x' & 'y' key with float values
-	public function process_focal_point($focal_point = null) {
+	public static function process_focal_point($focal_point = null) {
 		if (is_array($focal_point) &&
 			array_key_exists('x', $focal_point) &&
 			array_key_exists('y', $focal_point)) {
@@ -336,6 +360,20 @@ class RP_Process extends ResponsivePics {
 		} else {
 			return false;
 		}
+	}
+
+	// focal point must be an integer between 0 and 100
+	public static function process_focal_percentage($focal_position = null) {
+		return filter_var(
+			$focal_position,
+			FILTER_VALIDATE_INT,
+			[
+				'options' => [
+					'min_range' => 0,
+					'max_range' => 100
+				]
+			]
+		);
 	}
 
 	// convert crop positions array 'top left' to coordinates '0 0'
