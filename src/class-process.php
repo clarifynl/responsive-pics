@@ -293,6 +293,9 @@ class RP_Process extends ResponsivePics {
 		}
 
 		$crop_positions = explode(' ', trim($input));
+		if (empty($crop_positions)) {
+			return false;
+		}
 
 		// Single shorthand value
 		if (sizeof($crop_positions) === 1) {
@@ -316,7 +319,8 @@ class RP_Process extends ResponsivePics {
 		}
 
 		// Two numeric values
-		if (is_numeric($crop_positions[0]) &&
+		if (!empty($crop_positions) &&
+			is_numeric($crop_positions[0]) &&
 			is_numeric($crop_positions[1])) {
 			$x_perc = intval($crop_positions[0]);
 			$y_perc = intval($crop_positions[1]);
@@ -473,7 +477,7 @@ class RP_Process extends ResponsivePics {
 						false
 					);
 				} else {
-					$wp_editor->resize($width * $ratio, $height * $ratio);
+					$wp_editor->resize($width * $ratio, $height * $ratio, false);
 				}
 				// Save resized/cropped file
 				$wp_editor->save($resize_path);
