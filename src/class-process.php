@@ -286,6 +286,8 @@ class RP_Process extends ResponsivePics {
 		}
 
 		$shortcuts = explode(' ', trim($input));
+
+		// Single shorthand value
 		if (sizeof($shortcuts) === 1) {
 			if (isset(self::$crop_shortcuts[$shortcuts[0]])) {
 				if ($shortcuts[0] === 'f') {
@@ -306,6 +308,7 @@ class RP_Process extends ResponsivePics {
 			}
 		}
 
+		// Both values
 		$result = [];
 		foreach($shortcuts as $key => $value) {
 			if (isset(self::$crop_map[$value]) && $key < 2) {
@@ -316,7 +319,9 @@ class RP_Process extends ResponsivePics {
 			}
 		}
 
-		return $result;
+		$crop_percentages = self::process_crop_positions($result);
+
+		return $crop_percentages;
 	}
 
 	// focal point must be an array containing an 'x' & 'y' key with float values
@@ -411,9 +416,8 @@ class RP_Process extends ResponsivePics {
 				$wp_editor->set_quality($quality);
 
 				// get crop parameters
-				if ($crop) {
-					$crop_percentages = self::process_crop_positions($crop);
-					$crop_parameters  = self::process_focal_crop($meta_data, ($width * $ratio), ($height * $ratio), $crop_percentages);
+				if (!empty($crop)) {
+					$crop_parameters = self::process_focal_crop($meta_data, ($width * $ratio), ($height * $ratio), $crop);
 					$wp_editor->crop(
 						$crop_parameters['src_x'],
 						$crop_parameters['src_y'],
