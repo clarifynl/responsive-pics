@@ -240,7 +240,7 @@ GET /wp-json/responsive-pics/v1/get-image/<id>?sizes=<sizes>&crop=<crop>&classes
 | ---------- | ----------- | -------- | -------- | --------------------------------
 | id         | number      | yes      |          | The WordPress image id (e.g. 1).
 | sizes      | string      | yes      |          | A comma-separated string of preferred image sizes (e.g. `'xs-12, sm-6, md-4, lg-3'`). See the [Sizes section](#sizes) for more information.
-| crop       | string      | optional | `false`  | A crop-factor of the width for the desired height within the default range of `0-2` (e.g. `0.75`) with (optional) crop positions (e.g. `0.75&#124;t l`). See the [Crop position section](#crop-position) for more information.
+| crop       | string      | optional | `false`  | A crop-factor of the width for the desired height within the default range of `0-2` (e.g. `0.75`) with (optional) crop positions (e.g. <code>0.75&#124;c t</code>). See the [Crop position section](#crop-position) for more information.
 | classes    | string      | optional | `null`   | A comma-separated string of additional CSS classes you want to add to the img element (e.g. `'my_img_class'` or `'my_img_class, my_second_img_class'`).
 | lazyload   | boolean     | optional | `false`  | When `true` enables `lazyload` classes and data-srcset attributes. See the [Lazyloading section](#lazyloading) for more information.
 | lqip       | boolean     | optional | `false`  | When `true` enables `LQIP` classes and src attribute. See the [LQIP section](#lqip) for more information.
