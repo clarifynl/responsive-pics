@@ -240,7 +240,7 @@ GET /wp-json/responsive-pics/v1/get-image/<id>?sizes=<sizes>&crop=<crop>&classes
 | ---------- | ----------- | -------- | -------- | --------------------------------
 | id         | number      | yes      |          | The WordPress image id (e.g. 1).
 | sizes      | string      | yes      |          | A comma-separated string of preferred image sizes (e.g. `'xs-12, sm-6, md-4, lg-3'`). See the [Sizes section](#sizes) for more information.
-| crop       | string      | optional | `false`  | A crop-factor of the width for the desired height within the default range of `0-2` (e.g. `0.75`) with (optional) crop positions (e.g. `0.75|t l`). See the [Crop position section](#crop-position) for more information.
+| crop       | string      | optional | `false`  | A crop-factor of the width for the desired height within the default range of `0-2` (e.g. `0.75`) with (optional) crop positions (e.g. `0.75&#124;t l`). See the [Crop position section](#crop-position) for more information.
 | classes    | string      | optional | `null`   | A comma-separated string of additional CSS classes you want to add to the img element (e.g. `'my_img_class'` or `'my_img_class, my_second_img_class'`).
 | lazyload   | boolean     | optional | `false`  | When `true` enables `lazyload` classes and data-srcset attributes. See the [Lazyloading section](#lazyloading) for more information.
 | lqip       | boolean     | optional | `false`  | When `true` enables `LQIP` classes and src attribute. See the [LQIP section](#lqip) for more information.
@@ -308,8 +308,8 @@ The following parameters are available in the sizes syntax:
 | width      | number or string | yes      |         | The desired (max) width of the image. A column definition is a key in `$grid_widths` plus a dash and a column span number (e.g. `'xs-8'`).<br>If the column span number is suffixed with `-full` (e.g. `'xs-8-full'`), the column width is calculated as a percentage of the `$grid_width`, but as the next matching `$breakpoint` width (like in a `.container-fluid`).<br>You can also use `full` as span number (e.g. `'xs-full'`) for full width size based upon next matching `$breakpoint` width.
 | height     | number           | optional |         | The desired (max) height of the image (e.g. `500`).
 | factor     | number           | optional |         | A crop-factor of the width for the desired height within the default range of `0-2` (e.g. `0.75`).
-| crop_x     | string           | optional | c       | Crop position in horizontal direction. See the [Crop position section](#crop-position) for more information.
-| crop_y     | string           | optional | c       | Crop position in vertical direction. See the [Crop position section](#crop-position) for more information.
+| crop_x     | string           | optional | c       | Crop position in horizontal direction (e.g. `c`). See the [Crop position section](#crop-position) for more information.
+| crop_y     | string           | optional | c       | Crop position in vertical direction  (e.g. `b`). See the [Crop position section](#crop-position) for more information.
 
 
 ## Crop position <a name="crop-position"></a>
