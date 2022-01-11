@@ -1,4 +1,4 @@
-import FocalPointPicker from './modules/focal-point-picker';
+import FocalPicker from './modules/focal-picker';
 
 (function($) {
 
@@ -40,7 +40,7 @@ import FocalPointPicker from './modules/focal-point-picker';
 
 					if (type === 'image') {
 						initAttachmentDetails(this.$el);
-						FocalPointPicker.init(this);
+						FocalPicker.init(this);
 					}
 				},
 				// Re-init focal point on input change
@@ -49,7 +49,7 @@ import FocalPointPicker from './modules/focal-point-picker';
 					const focalPoint = this.model.get('focalPoint');
 
 					if (type === 'image') {
-						FocalPointPicker.positionFocalPoint(focalPoint);
+						FocalPicker.positionFocalPoint(focalPoint);
 					}
 				},
 				// Update view on focal point js change
@@ -79,7 +79,7 @@ import FocalPointPicker from './modules/focal-point-picker';
 
 					if (type === 'image') {
 						initAttachmentDetails(this.$el);
-						FocalPointPicker.init(this);
+						FocalPicker.init(this);
 					}
 				},
 				// Re-init focal point on input change
@@ -88,7 +88,7 @@ import FocalPointPicker from './modules/focal-point-picker';
 					const focalPoint = this.model.get('focalPoint');
 
 					if (type === 'image') {
-						FocalPointPicker.positionFocalPoint(focalPoint);
+						FocalPicker.positionFocalPoint(focalPoint);
 					}
 				},
 				// Update view on focal point js change
