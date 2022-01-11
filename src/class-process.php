@@ -321,15 +321,20 @@ class RP_Process extends ResponsivePics {
 			$x_perc = intval($crop_positions[0]);
 			$y_perc = intval($crop_positions[1]);
 
-			var_dump(self::process_focal_percentage($x_perc));
-			var_dump(self::process_focal_percentage($y_perc));
+			if (self::process_focal_percentage($x_perc) &&
+				self::process_focal_percentage($y_perc)) {
+				$crop_percentages = [
+					'x' => $x_perc,
+					'y' => $y_perc
+				];
 
-			$crop_percentages = [
-				'x' => $x_perc,
-				'y' => $y_perc
-			];
-
-			return $crop_percentages;
+				return $crop_percentages;
+			} else {
+				$direction = self::process_focal_percentage($x_perc) ? 'y' : 'x';
+				$value     = self::process_focal_percentage($x_perc) ? $y_perc : $x_perc;
+				ResponsivePics()->error->add_error('invalid', sprintf('crop_%s position %s is not a percentage', $direction, $value), $crop_positions);
+				return false;
+			}
 		}
 
 		// Two string values
