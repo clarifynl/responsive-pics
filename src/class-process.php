@@ -364,7 +364,7 @@ class RP_Process extends ResponsivePics {
 
 	// focal point must be an integer between 0 and 100
 	public static function process_focal_percentage($focal_position = null) {
-		return filter_var(
+		$is_percentage = filter_var(
 			$focal_position,
 			FILTER_VALIDATE_INT,
 			[
@@ -374,6 +374,8 @@ class RP_Process extends ResponsivePics {
 				]
 			]
 		);
+
+		return is_int($is_percentage);
 	}
 
 	// convert crop positions array 'top left' to coordinates '0 0'
