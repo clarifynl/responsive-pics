@@ -298,8 +298,8 @@ class RP_Process extends ResponsivePics {
 		if (sizeof($crop_positions) === 1) {
 			if (isset(self::$crop_shortcuts[$crop_positions[0]])) {
 				if ($crop_positions[0] === 'f') {
-					if (self::$process_focal_point($focal_point)) {
-						$focal_point = self::$process_focal_point($focal_point);
+					if (self::process_focal_point($focal_point)) {
+						$focal_point = self::process_focal_point($focal_point);
 						return $focal_point;
 					} else {
 						ResponsivePics()->error->add_error('invalid', sprintf('the focal point %s needs to be an array containing an x & y percentage', json_encode($focal_point)), $focal_point);
@@ -321,8 +321,8 @@ class RP_Process extends ResponsivePics {
 			$x_perc = intval($crop_positions[0]);
 			$y_perc = intval($crop_positions[1]);
 
-			var_dump(self::$process_focal_percentage($x_perc));
-			var_dump(self::$process_focal_percentage($y_perc));
+			var_dump(self::process_focal_percentage($x_perc));
+			var_dump(self::process_focal_percentage($y_perc));
 
 			$crop_percentages = [
 				'x' => $x_perc,
