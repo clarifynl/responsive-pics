@@ -58,9 +58,10 @@ class RP_Grid extends ResponsivePics {
 				if ($col < 1 || $col > self::$columns) {
 					ResponsivePics()->error->add_error('invalid', sprintf('number of columns %d should be between 1 and %s', $col, self::$columns), $col);
 				}
+				// get next grid width if available
 				$grid_width = self::$grid_widths[$next_breakpoint];
 				if (!isset($grid_width)) {
-					ResponsivePics()->error->add_error('missing', sprintf('no grid width set for %s', $next_breakpoint), self::$grid_widths);
+					$grid_width = self::$grid_widths[$key];
 				}
 			} else {
 				$grid_width = -1;
