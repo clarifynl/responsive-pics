@@ -141,6 +141,7 @@ class RP_Sources extends ResponsivePics {
 		// Get legacy file path
 		$suffix_legacy            = ResponsivePics()->helpers->get_resized_suffix_legacy($width, $height, $ratio, $crop);
 		$resized_file_path_legacy = join(DIRECTORY_SEPARATOR, [$path_parts['dirname'], $path_parts['filename'] . '-' . $suffix_legacy . '.' . $path_parts['extension']]);
+		$resized_url_legacy       = join(DIRECTORY_SEPARATOR, [dirname($original_url), basename($resized_file_path_legacy)]);
 
 		// if image size does not exist yet as filename (or as legacy filename)
 		if (!file_exists($resized_file_path) &&
@@ -153,8 +154,12 @@ class RP_Sources extends ResponsivePics {
 			}
 
 			return;
-		} else {
+		// new crop suffix
+		} elseif (file_exists($resized_file_path)) {
 			return $resized_url;
+		// legacy crop suffix
+		} elseif (file_exists($resized_file_path_legacy)) {
+			return $resized_url_legacy;
 		}
 	}
 }
