@@ -138,8 +138,13 @@ class RP_Sources extends ResponsivePics {
 			'path'    => (string) $resized_file_path
 		];
 
-		// if image size does not exist yet as filename
-		if (!file_exists($resized_file_path)) {
+		// Get legacy file path
+		$suffix_legacy            = ResponsivePics()->helpers->get_resized_suffix_legacy($width, $height, $ratio, $crop);
+		$resized_file_path_legacy = join(DIRECTORY_SEPARATOR, [$path_parts['dirname'], $path_parts['filename'] . '-' . $suffix_legacy . '.' . $path_parts['extension']]);
+
+		// if image size does not exist yet as filename (or as legacy filename)
+		if (!file_exists($resized_file_path) &&
+			!file_exists($resized_file_path_legacy)) {
 			$is_pending = ResponsivePics()->helpers->is_scheduled_action($resize_request, $id);
 
 			// if image size is not a pending request

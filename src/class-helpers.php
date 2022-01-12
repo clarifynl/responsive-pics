@@ -29,6 +29,37 @@ class RP_Helpers extends ResponsivePics {
 		return $suffix;
 	}
 
+	// get legacy suffix for resized image
+	public function get_resized_suffix_legacy($width, $height, $ratio, $crop) {
+		if ($ratio === 1) {
+			$ratio_indicator = '';
+		} else {
+			$ratio_indicator = '@' . $ratio . 'x';
+		}
+
+		// crop positions
+		if ($crop === false) {
+			$crop_indicator = '';
+		} else {
+			$crop_indicator = '-' . implode('-', $crop);
+
+			if (isset($crop['x']) && is_int($crop['x']) &&
+				isset($crop['y']) && is_int($crop['y'])) {
+				$crop_x_shorthand = array_search($crop['x'], self::$crop_percentages);
+				$crop_y_shorthand = array_search($crop['y'], self::$crop_percentages);
+
+				if ($crop_x_shorthand && $crop_y_shorthand) {
+					$crop_indicator = '-' . $crop_x_shorthand . '-' . $crop_y_shorthand;
+				}
+			}
+		}
+
+		// note: actual dimensions can be different from the dimensions appended to the filename, but we don't know those before we actually resize
+		$suffix = sprintf('%sx%s%s%s', (int)$width, (int)$height, $crop_indicator, $ratio_indicator);
+
+		return $suffix;
+	}
+
 	// get a css rule for targeting high dpi screens
 	public function get_media_query_2x($breakpoint) {
 		return sprintf('@media only screen and (-webkit-min-device-pixel-ratio: 2) and (min-width: %spx), only screen and (min-resolution: 192dpi) and (min-width: %spx)', $breakpoint, $breakpoint);
