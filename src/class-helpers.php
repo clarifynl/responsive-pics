@@ -15,9 +15,9 @@ class RP_Helpers extends ResponsivePics {
 			$crop_indicator = '';
 		} else {
 			$prefix = '';
-			if (isset($crop['x']) && is_float($crop['x']) &&
-				isset($crop['y']) && is_float($crop['y'])) {
-				$prefix = 'focal-';
+			if (isset($crop['x']) &&
+				isset($crop['y'])) {
+				$prefix = 'crop-';
 			}
 
 			$crop_indicator = '-' . $prefix . implode('-', $crop);
