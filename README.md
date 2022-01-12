@@ -100,7 +100,7 @@ ResponsivePics uses the following default variables:
 | `$grid_widths`            | array   | `['xs' => 576, 'sm' => 540, 'md' => 720, 'lg' => 960, 'xl' => 1140, 'xxl' => 1320]` | The maximum widths of your layout in pixels ResponsivePics will use for resizing your images
 | `$max_width_factor`       | number  | `2`        | The maximum factor of the width to use for resizing and cropping the height of an image source
 | `$lazyload_class`         | string  | `lazyload` | The css class to be added on the `img` tag when `lazyload` is enabled
-| `$lqip_width`             | number  | `200`      | The image width to be used for the `LQIP` (low quality image placeholder)
+| `$lqip_width`             | number  | `100`      | The image width to be used for the `LQIP` (low quality image placeholder)
 | `$lqip_class`             | string  | `blur-up`  | The css class to be added on the `img` tag when `LQIP` (low quality image placeholder) is enabled
 | `$image_quality`          | number  | `90`       | The image compression quality in percentage used in the `WP_Image_Editor` when resizing images
 | `$wp_rest_cache`          | boolean | `false`    | Wether to enable cache in the WP Rest API response headers
@@ -168,7 +168,7 @@ if (class_exists('ResponsivePics')) {
 	]);
 	ResponsivePics::setMaxWidthFactor(4);
 	ResponsivePics::setLazyLoadClass('lozad');
-	ResponsivePics::setLqipWidth(100);
+	ResponsivePics::setLqipWidth(200);
 	ResponsivePics::setLqipClass('blurred');
 	ResponsivePics::setImageQuality(85);
 	ResponsivePics::setRestApiCache(true);
@@ -481,7 +481,7 @@ import 'lazysizes';
 When enabling the `lqip` option in the `get_image` function or `/responsive-pics/v1/get-image` API endpoint, this library automatically:
 
 * adds a `blur-up` class to the `<img>` element.
-* adds a fallback `src` attribute on the `<img>` element with a low quality placeholder image with a default width of 200px.
+* adds a fallback `src` attribute on the `<img>` element with a low quality placeholder image with a default width of 100px.
 
 This will enable you to style your placeholder image before the actual high quality image is loaded.
 

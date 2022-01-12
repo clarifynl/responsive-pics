@@ -156,7 +156,7 @@ class ResponsivePics {
 	}
 
 	// set lqip (low quality image placeholder) image width
-	public static function setLqipWidth($width = 200) {
+	public static function setLqipWidth($width = 100) {
 		self::$lqip_width = $width;
 	}
 
