@@ -24,58 +24,35 @@ class RP_Sources extends ResponsivePics {
 				$height = floor($original_height / $original_width * $width);
 			}
 
-			// we can safely resize
-			if ($width < $original_width && $height < $original_height) {
-				$resized_url = $this->get_resized_url($id, $image_path, $image_url, $width, $height, $crop);
-
-				if ($resized_url) {
-					$source1x    = $resized_url;
-					$source2x    = null;
-
-					// we can also resize for @2x
-					if ($width * 2 < $original_width && $height * 2 < $original_height) {
-						$resized_2x_url = $this->get_resized_url($id, $image_path, $image_url, $width, $height, $crop, 2);
-						$source2x       = $resized_2x_url ? $resized_2x_url : null;
-					}
-
-					$breakpoint = $rule['breakpoint'];
-
-					if ($breakpoint < $min_breakpoint || !isset($min_breakpoint)) {
-						$min_breakpoint = $breakpoint;
-					}
-
-					$sources[] = [
-						'breakpoint' => $breakpoint,
-						'source1x'   => $source1x,
-						'source2x'   => $source2x,
-						'width'      => $width,
-						'height'     => $height,
-						'ratio'      => $width / $height
-					];
-
-					$addedSource = true;
-				}
-
-			// use original image to resize and crop
-			} else {
+			// preserve aspect ratio when cropping
+			if ($crop && $width > $original_width && $height > $original_height) {
 				$org_ratio   = $original_width / $original_height;
 				$rule_factor = $height / $width;
 
 				// apply ratio on original width
-				$max_height = $original_width * ($factor ? $factor : $rule_factor);
-				$max_width  = $original_width;
+				$height = $original_width * ($factor ? $factor : $rule_factor);
+				$width  = $original_width;
 
 				// check if original height is large enough for new factor height
-				if ($max_height > $original_height) {
-					$max_height = $original_height;
-					$max_width  = $original_height / ($factor ? $factor : $rule_factor);
+				if ($height > $original_height) {
+					$height = $original_height;
+					$width  = $original_height / ($factor ? $factor : $rule_factor);
+				}
+			}
+
+			// get resized url
+			$resized_url = $this->get_resized_url($id, $image_path, $image_url, $width, $height, $crop);
+			if ($resized_url) {
+				$source1x = $resized_url;
+				$source2x = null;
+
+				// we can also resize for @2x
+				if ($width * 2 < $original_width && $height * 2 < $original_height) {
+					$resized_2x_url = $this->get_resized_url($id, $image_path, $image_url, $width, $height, $crop, 2);
+					$source2x       = $resized_2x_url ? $resized_2x_url : null;
 				}
 
-				$resized_url = $this->get_resized_url($id, $image_path, $image_url, $max_width, $max_height, $crop);
-				$source1x    = isset($resized_url) ? $resized_url : $image_url;
-				$source2x    = null;
-				$breakpoint  = $rule['breakpoint'];
-
+				$breakpoint = $rule['breakpoint'];
 				if ($breakpoint < $min_breakpoint || !isset($min_breakpoint)) {
 					$min_breakpoint = $breakpoint;
 				}
@@ -84,9 +61,9 @@ class RP_Sources extends ResponsivePics {
 					'breakpoint' => $breakpoint,
 					'source1x'   => $source1x,
 					'source2x'   => $source2x,
-					'width'      => (int) $max_width,
-					'height'     => (int) $max_height,
-					'ratio'      => (float) $max_width / $max_height
+					'width'      => $width,
+					'height'     => $height,
+					'ratio'      => $width / $height
 				];
 
 				$addedSource = true;
