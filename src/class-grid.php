@@ -61,7 +61,7 @@ class RP_Grid extends ResponsivePics {
 				// get next grid width if available
 				$grid_width = self::$grid_widths[$next_breakpoint];
 				if (!isset($grid_width)) {
-					$grid_width = self::$grid_widths[$key];
+					$grid_width = end(self::$grid_widths);
 				}
 			} else {
 				$grid_width = -1;
