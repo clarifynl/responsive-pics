@@ -47,6 +47,7 @@ class ResponsivePics {
 	// only resizes images with the following mime types
 	public static $supported_mime_types = [
 		'image/jpeg',
+		'image/webp',
 		'image/png',
 		'image/gif'
 	];
