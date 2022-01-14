@@ -6,6 +6,7 @@ class ResponsivePics {
 	public static $gutter = null;
 	public static $grid_widths = null;
 	public static $breakpoints = null;
+	public static $supported_mime_types = [];
 	public static $max_width_factor = null;
 	public static $lazyload_class = null;
 	public static $lqip_width = null;
@@ -44,14 +45,6 @@ class ResponsivePics {
 		'left'   => 0
 	];
 
-	// only resizes images with the following mime types
-	public static $supported_mime_types = [
-		'image/jpeg',
-		'image/webp',
-		'image/png',
-		'image/gif'
-	];
-
 	// keeps track of added image IDs
 	public static $id_map = [];
 
@@ -83,6 +76,7 @@ class ResponsivePics {
 		self::setGutter();
 		self::setGridWidths();
 		self::setBreakpoints();
+		self::setSupportedMimeTypes();
 		self::setMaxWidthFactor();
 		self::setLazyLoadClass();
 		self::setLqipWidth();
@@ -144,6 +138,19 @@ class ResponsivePics {
 		'xxl' => 1320
 	]) {
 		self::$grid_widths = $value;
+	}
+
+	// set supported mime types
+	public static function setSupportedMimeTypes($mime_types = [
+		'image/jpeg',
+		'image/png',
+		'image/gif'
+	]) {
+		global $wp_version;
+		if (version_compare($wp_version, '5.8', '>=' )) {
+			$mime_types[] = 'image/webp';
+		}
+		self::$supported_mime_types = $mime_types;
 	}
 
 	// set max width factor
