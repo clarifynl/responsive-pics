@@ -7,12 +7,14 @@
 * Adds retina support to your theme images
 * Supports art-directed responsive images
 * Supports image srcset & sizes attributes
+* Supports focal point based crops
 * Supports aspect ratio based crops
-* Supports lazyloading
+* Supports WebP images (requires Wordpress 5.8 or higher)
 * Supports LQIP (low quality image placeholder)
+* Supports lazyloading
 * Supports intrinsic ratio boxes
-* With full REST API support
-* Uses background processing for resizing and cropping images
+* Full REST API support
+* Uses background processing for resize- and crop tasks
 
 <sub><sup>*ReponsivePics does not handle images in the WordPress wysiwig editor, it’s only useful for theme authors that use images or photos in their themes. It automatically handles retina or hdpi images via media queries.</sup></sub>
 
@@ -25,8 +27,9 @@ For full documentation and examples visit: [responsive.pics](https://responsive.
 3. [Configuration](#configuration)
 4. [Usage](#usage)
 5. [Sizes](#sizes)
-6. [Process](#process)
-7. [Features](#features)
+6. [Cropping](#cropping)
+7. [Process](#process)
+8. [Features](#features)
 
 ## Requirements <a name="requirements"></a>
 <table>
@@ -236,14 +239,14 @@ GET /wp-json/responsive-pics/v1/get-image/<id>?sizes=<sizes>&crop=<crop>&classes
 
 #### Image Parameters
 
-| Parameter  | Type        | Required | Default  | Definition
-| ---------- | ----------- | -------- | -------- | --------------------------------
-| id         | number      | yes      |          | The WordPress image id (e.g. 1).
-| sizes      | string      | yes      |          | A comma-separated string of preferred image sizes (e.g. `'xs-12, sm-6, md-4, lg-3'`). See the [Sizes section](#sizes) for more information.
-| crop       | string      | optional | `false`  | A crop-factor of the width for the desired height within the default range of `0-2` (e.g. `0.75`) with (optional) crop positions (e.g. <code>0.75&#124;c t</code>). See the [Crop position section](#crop-position) for more information.
-| classes    | string      | optional | `null`   | A comma-separated string of additional CSS classes you want to add to the img element (e.g. `'my_img_class'` or `'my_img_class, my_second_img_class'`).
-| lazyload   | boolean     | optional | `false`  | When `true` enables `lazyload` classes and data-srcset attributes. See the [Lazyloading section](#lazyloading) for more information.
-| lqip       | boolean     | optional | `false`  | When `true` enables `LQIP` classes and src attribute. See the [LQIP section](#lqip) for more information.
+| Parameter  | Type             | Required | Default  | Definition
+| ---------- | ---------------- | -------- | -------- | --------------------------------
+| id         | number           | yes      |          | The WordPress image id (e.g. 1).
+| sizes      | string           | yes      |          | A comma-separated string of preferred image sizes (e.g. `'xs-12, sm-6, md-4, lg-3'`). See the [Sizes section](#sizes) for more information.
+| crop       | number or string | optional | `false`  | A crop-factor of the width for the desired height within the default range of `0-2` (e.g. `0.75`) with (optional) crop positions (e.g. <code>0.75&#124;c t</code>). See the [Cropping section](#cropping) for more information.
+| classes    | string           | optional | `null`   | A comma-separated string of additional CSS classes you want to add to the img element (e.g. `'my_img_class'` or `'my_img_class, my_second_img_class'`).
+| lazyload   | boolean          | optional | `false`  | When `true` enables `lazyload` classes and data-srcset attributes. See the [Lazyloading section](#lazyloading) for more information.
+| lqip       | boolean          | optional | `false`  | When `true` enables `LQIP` classes and src attribute. See the [LQIP section](#lqip) for more information.
 
 
 ### Background Image
@@ -274,6 +277,7 @@ The following image file formats are supported:
 | File format | MIME Type  | Properties
 | ----------- | ---------- | ---------------------------------
 | jp(e)g      | image/jpeg |
+| webp        | image/webp | Requires [Wordpress version 5.8] or higher(https://make.wordpress.org/core/2021/06/07/wordpress-5-8-adds-webp-support/).
 | png         | image/png  | When the png contains an **alpha channel**, an extra `'has-alpha'` class will be added to the picture image element for additional styling.
 | gif         | image/gif  | When the gif is **animated** (it will check for multiple header frames), no image resizing or cropping will be done to prevent discarding the animation.
 
@@ -305,22 +309,23 @@ The following parameters are available in the sizes syntax:
 | Parameter  | Type             | Required | Default | Definition
 | ---------- | ---------------- | -------- | ------- | --------------------------------
 | breakpoint | number or string | yes      |         | If undefined, and `width` is a number, breakpoint will be the same as the width. If undefined, and `width` is a column definition, breakpoint will be the corresponding breakpoint (e.g. if width is `'xs-8'`, breakpoint will be `'xs'`).
-| width      | number or string | yes      |         | The desired (max) width of the image. A column definition is a key in `$grid_widths` plus a dash and a column span number (e.g. `'xs-8'`).<br>If the column span number is suffixed with `-full` (e.g. `'xs-8-full'`), the column width is calculated as a percentage of the `$grid_width`, but as the next matching `$breakpoint` width (like in a `.container-fluid`).<br>You can also use `full` as span number (e.g. `'xs-full'`) for full width size based upon next matching `$breakpoint` width.
+| width      | number or string | yes      |         | The desired (max) width of the image (e.g. `800`). A column definition is a key in `$grid_widths` plus a dash and a column span number (e.g. `'xs-8'`).<br>If the column span number is suffixed with `-full` (e.g. `'xs-8-full'`), the column width is calculated as a percentage of the `$grid_width`, but as the next matching `$breakpoint` width (like in a `.container-fluid`).<br>You can also use `full` as span number (e.g. `'xs-full'`) for full width size based upon next matching `$breakpoint` width.
 | height     | number           | optional |         | The desired (max) height of the image (e.g. `500`).
 | factor     | number           | optional |         | A crop-factor of the width for the desired height within the default range of `0-2` (e.g. `0.75`).
-| crop_x     | string           | optional | c       | Crop position in horizontal direction (e.g. `c`). See the [Crop position section](#crop-position) for more information.
-| crop_y     | string           | optional | c       | Crop position in vertical direction  (e.g. `b`). See the [Crop position section](#crop-position) for more information.
+| crop_x     | number or string | optional | c       | Crop position in horizontal direction (e.g. `c`). See the [Cropping section](#cropping) for more information.
+| crop_y     | number or string | optional | c       | Crop position in vertical direction  (e.g. `b`). See the [Cropping section](#cropping) for more information.
 
 
-## Crop position <a name="crop-position"></a>
-The following options are available as valid crop position syntax:
+## Cropping <a name="cropping"></a>
+
+The following options are available as valid crop positions:
 
 ### Crop position shorthands
 You can use the following crop position shorthands in horizontal direction (x):
 * `l`: left
 * `c`: center
 * `r`: right
-* `f`: focal (See the [Focal Point section](#focal-point) for more information)
+* `f`: focal point (See the [Focal Point section](#focal-point) for more information)
 
 And in vertical direction (y):
 * `t`: top
@@ -329,15 +334,52 @@ And in vertical direction (y):
 
 If the vertical direction is not set, the horizontal direction `x` will be treated as a shortcut:
 * `c`: center center
-* `f`: focal point
 * `t`: top center
 * `r`: right center
 * `b`: center bottom
 * `l`: left center
+* `f`: focal point (See the [Focal Point section](#focal-point) for more information)
 
 ### Crop position percentages
-You can also use percentages as valid crop position syntax: `75 50`.
+You can also use percentages as valid crop position syntax:
+* `75 10`: 75% from left, 10% from top
+* `25 80`: 25% from left, 80% from top
+* `50 100`: 50% from left, 100% from top (equals `center bottom`)
+
 In this case both the coordinates `x` and `y` need to be passed.
+
+### Focal Point <a name="focal-point"></a>
+When you want to crop an image but keep a certain area of the image in view, you can use the `f(ocal)` shorthand feature. In order to set this focal area of an image, we added a **focal point picker** interface to several views of the Wordpress media framework.
+
+#### Attachment Details
+When clicking on a thumbnail from the Wordpress Media Library grid view, you will see the `Attachment details` modal. This will be the most accurate view to select your focal point:
+![Attachment Details Focal Point Picker](/assets/images/attachment-details-focal-point-picker.jpg "Attachment Details Two Columns Focal Point Picker")
+
+#### Featured Image
+When setting or replacing an featured image in a page or post, you will see the `Featured image` modal. In this view you can select your focal point in the thumbnail at the top of the right sidebar:
+![Featured Image Focal Point Picker](/assets/images/featured-image-focal-point-picker.jpg "Featured Image Focal Point Picker")
+
+#### Edit Image
+When uploading or editing an image in the WYSIWYG editor or meta field in a page or post, you will see the `Edit image` modal. In this view you can select your focal point in the thumbnail at the top left:
+![Edit Image Focal Point Picker](/assets/images/edit-image-focal-point-picker.jpg "Edit Image Focal Point Picker")
+
+There are 3 ways you can set the focal point of an image with the interface:
+
+* By directly clicking on the desired focal point in the image.
+* By dragging and dropping the focal point circle element on the image.
+* By entering the Focal Point X & Y-axis values as percentages directly in the attachment input fields.
+
+By using one of these options a post meta key named `responsive_pics_focal_point` will be added or updated to the attachment with an array value containing the x & y coordinates as percentages:
+```php
+[
+  'x' => '86',
+  'y' => '39'
+]
+```
+To use this value elsewhere in your theme, you can retrieve it by calling:
+```php
+$focal_point = get_post_meta($attachment_id, 'responsive_pics_focal_point', true);
+```
 
 ## Process <a name="process"></a>
 
@@ -419,39 +461,6 @@ If an error occurs during the resizing process or if there's invalid syntax, Res
 
 ## Features <a name="features"></a>
 
-### Focal Point <a name="focal-point"></a>
-When you want to crop an image but keep a certain area of the image in view, you can use the `f(ocal)` shorthand feature. In order to set this focal area of an image, we added a **focal point picker** interface to several views of the Wordpress media framework.
-
-#### Attachment Details
-When clicking on a thumbnail from the Wordpress Media Library grid view, you will see the `Attachment details` modal. This will be the most accurate view to select your focal point:
-![Attachment Details Focal Point Picker](/assets/images/attachment-details-focal-point-picker.jpg "Attachment Details Two Columns Focal Point Picker")
-
-#### Featured Image
-When setting or replacing an featured image in a page or post, you will see the `Featured image` modal. In this view you can select your focal point in the thumbnail at the top of the right sidebar:
-![Featured Image Focal Point Picker](/assets/images/featured-image-focal-point-picker.jpg "Featured Image Focal Point Picker")
-
-#### Edit Image
-When uploading or editing an image in the WYSIWYG editor or meta field in a page or post, you will see the `Edit image` modal. In this view you can select your focal point in the thumbnail at the top left:
-![Edit Image Focal Point Picker](/assets/images/edit-image-focal-point-picker.jpg "Edit Image Focal Point Picker")
-
-There are 3 ways you can set the focal point of an image with the interface:
-
-* By directly clicking on the desired focal point in the image.
-* By dragging and dropping the focal point circle element on the image.
-* By entering the Focal Point X & Y-axis values as percentages directly in the attachment input fields.
-
-By using one of these options a post meta key named `responsive_pics_focal_point` will be added or updated to the attachment with an array value containing the x & y coordinates as percentages:
-```php
-[
-  'x' => '86',
-  'y' => '39'
-]
-```
-To use this value elsewhere in your theme, you can retrieve it by calling:
-```php
-$focal_point = get_post_meta($attachment_id, 'responsive_pics_focal_point', true);
-```
-
 ### Lazyloading <a name="lazyloading"></a>
 When enabling the `lazyload` option in the `get_picture` or `get_image` functions or API endpoints, this library automatically:
 
@@ -511,7 +520,6 @@ Please submit any issues you experience with the **ResponsivePics** library over
 ## Todo's
 * Add Gutenberg Blocks support.
 * Add WPML (Media) support for focal point.
-* Limit api usage with sizes presets to prevent abuse.
 * Add functions `get_picture_data`, `get_image_data` and `get_background_data` to retrieve available sources and sizes as data instead of html markup.
 * Add **bulk delete** functionality for all resized/cropped images.
 * Add **multiple background images** syntax support.
