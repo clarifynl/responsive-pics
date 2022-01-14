@@ -141,7 +141,7 @@ class ResponsivePics {
 	}
 
 	// set supported mime types
-	public static function setSupportedMimeTypes($mime_types = [
+	private static function setSupportedMimeTypes($mime_types = [
 		'image/jpeg',
 		'image/png',
 		'image/gif'
