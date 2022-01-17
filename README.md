@@ -277,7 +277,7 @@ The following image file formats are supported:
 | File format | MIME Type  | Properties
 | ----------- | ---------- | ---------------------------------
 | jp(e)g      | image/jpeg |
-| webp        | image/webp | Requires [Wordpress version 5.8] or higher(https://make.wordpress.org/core/2021/06/07/wordpress-5-8-adds-webp-support/).
+| webp        | image/webp | [Requires Wordpress version 5.8 or higher](https://make.wordpress.org/core/2021/06/07/wordpress-5-8-adds-webp-support/).
 | png         | image/png  | When the png contains an **alpha channel**, an extra `'has-alpha'` class will be added to the picture image element for additional styling.
 | gif         | image/gif  | When the gif is **animated** (it will check for multiple header frames), no image resizing or cropping will be done to prevent discarding the animation.
 
