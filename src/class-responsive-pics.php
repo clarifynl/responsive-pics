@@ -103,6 +103,7 @@ class ResponsivePics {
 
 		// Init Upload if compatible plugin is installed
 		if (class_exists('WP_Offload_Media_Autoloader')) {
+			syslog(LOG_DEBUG, 'WP_Offload_Media_Autoloader class exists: '. class_exists('WP_Offload_Media_Autoloader'));
 			ResponsivePics()->s3offload = new RP_S3_Offload();
 		}
 
