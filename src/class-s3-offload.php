@@ -2,11 +2,18 @@
 
 class RP_S3_Offload extends ResponsivePics {
 	/**
+	 * @var $as3cf
+	 */
+	public $as3cf;
+
+	/**
 	 * Construct S3 Offload
 	 */
 	public function __construct() {
-		$this->as3cf = new Amazon_S3_And_CloudFront();
-		syslog(LOG_DEBUG, 'RP_S3_Offload construct: ' . json_encode($this->as3cf));
+		if (class_exists( 'Amazon_S3_And_CloudFront')) {
+			$this->as3cf = new \Amazon_S3_And_CloudFront();
+			syslog(LOG_DEBUG, 'RP_S3_Offload construct: ' . json_encode($this->as3cf));
+		}
 	}
 
 	/**
