@@ -5,6 +5,7 @@ class RP_S3_Offload extends ResponsivePics {
 	 * Construct S3 Offload
 	 */
 	public function __construct() {
+		global $as3cf;
 		syslog(LOG_DEBUG, 'RP_S3_Offload construct' . json_encode($as3cf));
 	}
 
