@@ -101,9 +101,9 @@ class ResponsivePics {
 			ResponsivePics()->focalpoint = new RP_Focal_Point();
 		}
 
-		// Init Upload if compatible plugin is installed
-		if (class_exists('WP_Offload_Media_Autoloader')) {
-			syslog(LOG_DEBUG, 'WP_Offload_Media_Autoloader class exists: '. class_exists('WP_Offload_Media_Autoloader'));
+		// Init Upload if compatible S3 plugin is installed
+		global $as3cf_compat_check;
+		if (isset($as3cf_compat_check) && $as3cf_compat_check->is_compatible()) {
 			ResponsivePics()->s3offload = new RP_S3_Offload();
 		}
 
