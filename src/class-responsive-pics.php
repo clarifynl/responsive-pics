@@ -64,7 +64,8 @@ class ResponsivePics {
 			'class-breakpoints',
 			'class-grid',
 			'class-sources',
-			'class-focal-point'
+			'class-focal-point',
+			'class-s3-offload'
 		];
 
 		foreach ($includes as $inc) {
@@ -98,6 +99,11 @@ class ResponsivePics {
 		// Init Focal Point if user is allowed to upload media
 		if (current_user_can('upload_files') === true) {
 			ResponsivePics()->focalpoint = new RP_Focal_Point();
+		}
+
+		// Init Upload if compatible plugin is installed
+		if (class_exists('WP_Offload_Media_Autoloader')) {
+			ResponsivePics()->s3offload = new RP_S3_Offload();
 		}
 
 		// Hooks
