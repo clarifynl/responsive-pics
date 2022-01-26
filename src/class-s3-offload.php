@@ -10,8 +10,9 @@ class RP_S3_Offload extends ResponsivePics {
 	 * Construct S3 Offload
 	 */
 	public function __construct() {
-		if (class_exists( 'Amazon_S3_And_CloudFront')) {
-			$this->as3cf = new \Amazon_S3_And_CloudFront();
+		syslog(LOG_DEBUG, 'class_exists: '. class_exists('DeliciousBrains\WP_Offload_Media\Amazon_S3_And_CloudFront'));
+		if (class_exists('DeliciousBrains\WP_Offload_Media\Amazon_S3_And_CloudFront')) {
+			$this->as3cf = new DeliciousBrains\WP_Offload_Media\Amazon_S3_And_CloudFront();
 			syslog(LOG_DEBUG, 'RP_S3_Offload construct: ' . json_encode($this->as3cf));
 		}
 	}
