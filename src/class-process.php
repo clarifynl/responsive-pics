@@ -481,8 +481,8 @@ class RP_Process extends ResponsivePics {
 				}
 				// Save resized/cropped file
 				$saved_file = $wp_editor->save($resize_path);
-				if (!is_wp_error($saved_file) && ResponsivePics()->s3offload->upload_image($id, $saved_file)) {
-					// check for S3 upload
+				if (!is_wp_error($saved_file) && ResponsivePics()->s3offload) {
+					ResponsivePics()->s3offload->upload_image($id, $saved_file);
 				}
 			} else {
 				syslog(LOG_ERR, sprintf('error resizing image "%s"', $resize_path));
