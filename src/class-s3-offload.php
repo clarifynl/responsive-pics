@@ -28,7 +28,7 @@ class RP_S3_Offload extends ResponsivePics {
 		global $as3cf;
 
 		$as3cf_item        = Media_Library_Item::get_by_source_id($id);
-		$objects_to_remove = array();
+		$objects_to_remove = [];
 		$paths_to_remove   = array_unique($paths);
 
 		foreach ($paths_to_remove as $size => $path) {
@@ -37,7 +37,14 @@ class RP_S3_Offload extends ResponsivePics {
 			);
 		}
 
-		syslog(LOG_DEBUG, 'delete_image $objects_to_remove: ' . json_encode($objects_to_remove));
-		// $s3_delete = $as3cf->delete_objects($as3cf_item->region(), $as3cf_item->bucket(), $objects_to_remove, true, true, false);
+		$s3_delete = $as3cf->delete_objects($as3cf_item->region(), $as3cf_item->bucket(), $objects_to_remove, true, true, false);
+
+		// Check for errors
+		if (is_wp_error($s3_delete) || empty($s3_delete)) {
+			$error_message = $s3_delete->get_error_message();
+			$error_data    = $s3_delete->get_error_data();
+
+			ResponsivePics()->error->add_error('error', $error_message, $error_data);
+		}
 	}
 }
