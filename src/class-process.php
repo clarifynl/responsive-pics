@@ -493,17 +493,18 @@ class RP_Process extends ResponsivePics {
 
 	// process deleting all resized images
 	public static function process_delete_attachment($post_id, $post) {
-		$file          = get_attached_file($post_id);
-		$meta          = wp_get_attachment_metadata($post_id);
-		$meta_sizes    = isset($meta['sizes']) ? $meta['sizes'] : [];
-		$meta_files    = array_column($meta_sizes, 'file');
-		$upload_path   = wp_get_upload_dir();
-		$upload_dir    = path_join($upload_path['basedir'], dirname($file));
-		$file_parts    = pathinfo($file);
-		$file_dir      = $file_parts['dirname'];
-		$file_ext      = $file_parts['extension'];
-		$file_name     = $file_parts['filename'];
-		$resized_files = glob($file_dir .'/'. $file_name .'-*.'. $file_ext);
+		$file            = get_attached_file($post_id);
+		$meta            = wp_get_attachment_metadata($post_id);
+		$meta_sizes      = isset($meta['sizes']) ? $meta['sizes'] : [];
+		$meta_files      = array_column($meta_sizes, 'file');
+		$upload_path     = wp_get_upload_dir();
+		$upload_dir      = path_join($upload_path['basedir'], dirname($file));
+		$file_parts      = pathinfo($file);
+		$file_dir        = $file_parts['dirname'];
+		$file_ext        = $file_parts['extension'];
+		$file_name       = $file_parts['filename'];
+		$resized_files   = glob($file_dir .'/'. $file_name .'-*.'. $file_ext);
+		$files_to_delete = [];
 
 		// Check if file has resize syntax and is not a wp image size
 		if ($resized_files && is_array($resized_files)) {
@@ -518,11 +519,13 @@ class RP_Process extends ResponsivePics {
 
 					// Not an wp image size file
 					if (!in_array($resized_file_name, $meta_files)) {
-						syslog(LOG_DEBUG, 'file match:' . $resized_file);
+						$files_to_delete[] = $resized_file;
 						$deleted = wp_delete_file_from_directory($resized_file, $upload_dir);
 
 						if (!$deleted) {
 							syslog(LOG_DEBUG, 'not deleted?');
+						} elseif (class_exists('Amazon_S3_And_CloudFront')) {
+							ResponsivePics()->s3offload->delete_image($post_id, $files_to_delete);
 						}
 					}
 				}
