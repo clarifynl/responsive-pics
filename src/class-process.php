@@ -498,20 +498,22 @@ class RP_Process extends ResponsivePics {
 		$uploadpath   = wp_get_upload_dir();
 		$resized_dir  = path_join($uploadpath['basedir'], dirname($file));
 
-		if (isset($meta['sizes']) && is_array($meta['sizes'])) {
-			foreach ($meta['sizes'] as $size => $sizeinfo) {
-				$resized_file = str_replace(wp_basename($file), $sizeinfo['file'], $file);
-				syslog(LOG_DEBUG, '$size: '. $size . ' $sizeinfo: ' . json_encode($sizeinfo) . ' $resized_file: ' . $resized_file);
+		syslog(LOG_DEBUG, 'basename file: '. wp_basename($file) . ' file: ' . $file . ' resized dir: ' . $resized_dir);
 
-				if (!empty($resized_file)) {
-					$resized_file = path_join($uploadpath['basedir'], $resized_file);
-					syslog(LOG_DEBUG, '$resized_file: ' . $resized_file);
+		// if (isset($meta['sizes']) && is_array($meta['sizes'])) {
+		// 	foreach ($meta['sizes'] as $size => $sizeinfo) {
+		// 		$resized_file = str_replace(wp_basename($file), $sizeinfo['file'], $file);
+		// 		syslog(LOG_DEBUG, '$size: '. $size . ' $sizeinfo: ' . json_encode($sizeinfo) . ' $resized_file: ' . $resized_file);
 
-					if (!wp_delete_file_from_directory($resized_file, $resized_dir)) {
-						//
-					}
-				}
-			}
-		}
+		// 		if (!empty($resized_file)) {
+		// 			$resized_file = path_join($uploadpath['basedir'], $resized_file);
+		// 			syslog(LOG_DEBUG, '$resized_file: ' . $resized_file);
+
+		// 			if (!wp_delete_file_from_directory($resized_file, $resized_dir)) {
+		// 				//
+		// 			}
+		// 		}
+		// 	}
+		// }
 	}
 }
