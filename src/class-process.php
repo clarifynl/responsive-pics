@@ -514,10 +514,9 @@ class RP_Process extends ResponsivePics {
 				// Matches syntax
 				if (preg_match($pattern, $resized_file)) {
 					$resized_file_parts = pathinfo($resized_file);
-					$resized_file_name  = $resized_file_parts['filename'];
+					$resized_file_name  = $resized_file_parts['basename'];
 
 					// Not an wp image size file
-					syslog(LOG_DEBUG, '$resized_file_name: '. $resized_file_name . ' $meta_files: ' . json_encode($meta_files) . ' in array:' . in_array($resized_file_name, $meta_files));
 					if (!in_array($resized_file_name, $meta_files)) {
 						syslog(LOG_DEBUG, 'file match:' . $resized_file);
 						$deleted = wp_delete_file_from_directory($resized_file, $upload_dir);
