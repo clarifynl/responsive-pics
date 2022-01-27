@@ -524,10 +524,13 @@ class RP_Process extends ResponsivePics {
 
 						if (!$deleted) {
 							syslog(LOG_DEBUG, 'not deleted?');
-						} elseif (class_exists('Amazon_S3_And_CloudFront')) {
-							ResponsivePics()->s3offload->delete_image($post_id, $files_to_delete);
 						}
 					}
+				}
+
+				// Delete offloaded images
+				if (class_exists('Amazon_S3_And_CloudFront')) {
+					ResponsivePics()->s3offload->delete_image($post_id, $files_to_delete);
 				}
 			}
 		}
