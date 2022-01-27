@@ -112,8 +112,8 @@ class ResponsivePics {
 		include (RESPONSIVE_PICS_DIR . '/src/class-s3-offload.php');
 
 		// Init S3_Offload if compatible S3 plugin is installed
-		global $as3cf_compat_check;
-		if (isset($as3cf_compat_check) && $as3cf_compat_check->is_compatible()) {
+		syslog(LOG_DEBUG, 'class_exists: '. class_exists('Amazon_S3_And_CloudFront'));
+		if (class_exists('Amazon_S3_And_CloudFront')) {
 			ResponsivePics()->s3offload = new RP_S3_Offload();
 		}
 	}
