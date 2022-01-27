@@ -479,14 +479,38 @@ class RP_Process extends ResponsivePics {
 				} else {
 					$wp_editor->resize($width * $ratio, $height * $ratio, false);
 				}
-				// Save resized/cropped file
+
+				// Save & offload resized/cropped file
 				$saved_file = $wp_editor->save($resize_path);
 				if (!is_wp_error($saved_file) && class_exists('Amazon_S3_And_CloudFront')) {
-					syslog(LOG_DEBUG, '$saved_file: '. json_encode($saved_file));
 					ResponsivePics()->s3offload->upload_image($id, $saved_file['path']);
 				}
 			} else {
 				syslog(LOG_ERR, sprintf('error resizing image "%s"', $resize_path));
+			}
+		}
+	}
+
+	// process deleting all resized images
+	public static function process_delete_attachment($post_id, $post) {
+		$file         = get_attached_file($post_id);
+		$meta         = wp_get_attachment_metadata($post_id);
+		$uploadpath   = wp_get_upload_dir();
+		$resized_dir  = path_join($uploadpath['basedir'], dirname($file));
+
+		if (isset($meta['sizes']) && is_array($meta['sizes'])) {
+			foreach ($meta['sizes'] as $size => $sizeinfo) {
+				$resized_file = str_replace(wp_basename($file), $sizeinfo['file'], $file);
+				syslog(LOG_DEBUG, '$size: '. $size . ' $sizeinfo: ' . json_encode($sizeinfo) . ' $resized_file: ' . $resized_file);
+
+				if (!empty($resized_file)) {
+					$resized_file = path_join($uploadpath['basedir'], $resized_file);
+					syslog(LOG_DEBUG, '$resized_file: ' . $resized_file);
+
+					if (!wp_delete_file_from_directory($resized_file, $resized_dir)) {
+						//
+					}
+				}
 			}
 		}
 	}
