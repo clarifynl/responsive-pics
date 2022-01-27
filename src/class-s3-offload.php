@@ -21,7 +21,7 @@ class RP_S3_Offload extends ResponsivePics {
 	 * Upload to S3 storage
 	 */
 	public static function upload_image($id, $file = null) {
-		syslog(LOG_DEBUG, '$this->as3cf: ' . $this->as3cf);
+		syslog(LOG_DEBUG, '$this->as3cf: ' . json_encode($this->as3cf));
 		$uploaded = $this->as3cf->upload_attachment($id);
 
 		if (is_wp_error($uploaded) || empty($uploaded) || !is_array($uploaded)) {
