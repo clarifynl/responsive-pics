@@ -51,7 +51,6 @@ class ResponsivePics {
 	// construct
 	public function __construct() {
 		add_action('plugins_loaded', ['ResponsivePics', 'init']);
-		add_action('as3cf_init',     ['ResponsivePics', 'as3cf_init']);
 	}
 
 	// init
@@ -102,6 +101,7 @@ class ResponsivePics {
 		}
 
 		// Hooks
+		add_action('as3cf_init',               ['ResponsivePics', 'as3cf_init']);
 		add_action('process_resize_request',   ['RP_Process', 'process_resize_request'], 10, 7);
 		add_action('rest_api_init',            ['RP_Rest_Api', 'register_api_routes']);
 		add_filter('big_image_size_threshold', '__return_false');
@@ -109,10 +109,9 @@ class ResponsivePics {
 
 	// as3cf init
 	public static function as3cf_init() {
-		syslog(LOG_DEBUG, 'as3cf_init');
 		include (RESPONSIVE_PICS_DIR . '/src/class-s3-offload.php');
 
-		// Init Upload if compatible S3 plugin is installed
+		// Init S3_Offload if compatible S3 plugin is installed
 		global $as3cf_compat_check;
 		if (isset($as3cf_compat_check) && $as3cf_compat_check->is_compatible()) {
 			ResponsivePics()->s3offload = new RP_S3_Offload();
