@@ -502,10 +502,9 @@ class RP_Process extends ResponsivePics {
 		$file_dir      = $file_parts['dirname'];
 		$file_ext      = $file_parts['extension'];
 		$file_name     = $file_parts['filename'];
-		$pattern       = '/^'. $file_name .'(.*).'. $file_ext .'$/';
-		$resized_files = glob($file_dir . '/' . $pattern);
+		$resized_files = glob($file_dir .'/*'. $file_name .'-*.'. $file_ext);
 
-		syslog(LOG_DEBUG, '$file_dir: '. $file_dir . '$resized_files: ' . json_encode($resized_files));
+		syslog(LOG_DEBUG, '$resized_files: ' . json_encode($resized_files));
 
 		// if (isset($meta['sizes']) && is_array($meta['sizes'])) {
 		// 	foreach ($meta['sizes'] as $size => $sizeinfo) {
