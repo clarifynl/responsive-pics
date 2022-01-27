@@ -11,7 +11,8 @@ class RP_S3_Offload extends ResponsivePics {
 	 */
 	public function __construct() {
 		global $as3cf;
-		if (!empty($as3cf_compat_check)) {
+
+		if (!empty($as3cf)) {
 			$this->as3cf = $as3cf;
 		}
 	}
@@ -20,6 +21,7 @@ class RP_S3_Offload extends ResponsivePics {
 	 * Upload to S3 storage
 	 */
 	public static function upload_image($id, $file = null) {
+		syslog(LOG_DEBUG, '$this->as3cf: ' . $this->as3cf);
 		$uploaded = $this->as3cf->upload_attachment($id);
 
 		if (is_wp_error($uploaded) || empty($uploaded) || !is_array($uploaded)) {
