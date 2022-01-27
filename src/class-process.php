@@ -495,6 +495,7 @@ class RP_Process extends ResponsivePics {
 	public static function process_delete_attachment($post_id, $post) {
 		$file          = get_attached_file($post_id);
 		$meta          = wp_get_attachment_metadata($post_id);
+		$meta_sizes    = isset($meta['sizes']) ? $meta['sizes'] : [];
 		$upload_path   = wp_get_upload_dir();
 		$upload_dir    = path_join($upload_path['basedir'], dirname($file));
 		$file_parts    = pathinfo($file);
@@ -503,7 +504,7 @@ class RP_Process extends ResponsivePics {
 		$file_name     = $file_parts['filename'];
 		$resized_files = glob($file_dir .'/'. $file_name .'-*.'. $file_ext);
 
-		syslog(LOG_DEBUG, '$resized_files: ' . json_encode($resized_files));
+		syslog(LOG_DEBUG, '$resized_files: ' . json_encode($resized_files) . ' $meta_sizes: ' . json_encode($meta_sizes));
 
 		if ($resized_files && is_array($resized_files)) {
 			foreach ($resized_files as $resized_file) {
