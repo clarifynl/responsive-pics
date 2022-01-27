@@ -496,6 +496,7 @@ class RP_Process extends ResponsivePics {
 		$file          = get_attached_file($post_id);
 		$meta          = wp_get_attachment_metadata($post_id);
 		$meta_sizes    = isset($meta['sizes']) ? $meta['sizes'] : [];
+		$meta_files    = array_column($meta_sizes, 'file');
 		$upload_path   = wp_get_upload_dir();
 		$upload_dir    = path_join($upload_path['basedir'], dirname($file));
 		$file_parts    = pathinfo($file);
@@ -504,15 +505,16 @@ class RP_Process extends ResponsivePics {
 		$file_name     = $file_parts['filename'];
 		$resized_files = glob($file_dir .'/'. $file_name .'-*.'. $file_ext);
 
-		syslog(LOG_DEBUG, '$resized_files: ' . json_encode($resized_files) . ' $meta_sizes: ' . json_encode($meta_sizes));
-
+		// Check if file has resize syntax and is not a wp image size
 		if ($resized_files && is_array($resized_files)) {
 			foreach ($resized_files as $resized_file) {
-				syslog(LOG_DEBUG, 'resized_file: ' . $resized_file);
 				$pattern = '/-([0-9]{1,5}x[0-9]{1,5})(-(([a-z]{3,6})-([a-z]{3,6})|(crop-([0-9]{1,3})-([0-9]{1,3}))))?(@2x)?.(jpe?g|png|gif|webp)$/i';
 
+				// Matches syntax
 				if (preg_match($pattern, $resized_file)) {
-					syslog(LOG_DEBUG, 'file match:' . $resized_file);
+					$resized_file_parts = pathinfo($resized_file);
+					$resized_file_name  = $resized_file_parts['filename'];
+					syslog(LOG_DEBUG, 'file match:' . $resized_file . ' $resized_file_name: ' . $resized_file_name . ' $meta_files: ' . json_encode($meta_files));
 					// $deleted = wp_delete_file_from_directory($resized_file, $upload_dir);
 					// if (!$deleted) {
 					// 	syslog(LOG_DEBUG, 'not deleted?');
