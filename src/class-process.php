@@ -493,12 +493,19 @@ class RP_Process extends ResponsivePics {
 
 	// process deleting all resized images
 	public static function process_delete_attachment($post_id, $post) {
-		$file         = get_attached_file($post_id);
-		$meta         = wp_get_attachment_metadata($post_id);
-		$uploadpath   = wp_get_upload_dir();
-		$resized_dir  = path_join($uploadpath['basedir'], dirname($file));
+		$file          = get_attached_file($post_id);
+		$meta          = wp_get_attachment_metadata($post_id);
 
-		syslog(LOG_DEBUG, 'basename file: '. wp_basename($file) . ' file: ' . $file . ' resized dir: ' . $resized_dir);
+		$upload_path   = wp_get_upload_dir();
+		$upload_dir    = path_join($upload_path['basedir'], dirname($file));
+		$file_parts    = pathinfo($file);
+		$file_dir      = $file_parts['dirname'];
+		$file_ext      = $file_parts['extension'];
+		$file_name     = $file_parts['filename'];
+		$pattern       = '/^'. $file_name .'(.*).'. $file_ext .'$/';
+		$resized_files = glob($file_dir . '/' . $pattern);
+
+		syslog(LOG_DEBUG, '$file_dir: '. $file_dir . '$resized_files: ' . json_encode($resized_files));
 
 		// if (isset($meta['sizes']) && is_array($meta['sizes'])) {
 		// 	foreach ($meta['sizes'] as $size => $sizeinfo) {
