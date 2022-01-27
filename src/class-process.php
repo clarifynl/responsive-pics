@@ -517,6 +517,7 @@ class RP_Process extends ResponsivePics {
 					$resized_file_name  = $resized_file_parts['filename'];
 
 					// Not an wp image size file
+					syslog(LOG_DEBUG, '$resized_file_name: '. $resized_file_name . ' $meta_files: ' . json_encode($meta_files) . ' in array:' . in_array($resized_file_name, $meta_files));
 					if (!in_array($resized_file_name, $meta_files)) {
 						syslog(LOG_DEBUG, 'file match:' . $resized_file);
 						$deleted = wp_delete_file_from_directory($resized_file, $upload_dir);
@@ -525,11 +526,7 @@ class RP_Process extends ResponsivePics {
 							syslog(LOG_DEBUG, 'not deleted?');
 						}
 					}
-
-					continue;
 				}
-
-				continue;
 			}
 		}
 	}
