@@ -509,7 +509,7 @@ class RP_Process extends ResponsivePics {
 		// Check if file has resize syntax and is not a wp image size
 		if ($resized_files && is_array($resized_files)) {
 			foreach ($resized_files as $resized_file) {
-				// Test: https://regex101.com/r/5wioN9/1
+				// Test: https://regex101.com/r/pJFi7h/1
 				$pattern = '/-([0-9]{1,}x[0-9]{1,})(-((left|center|right)-(top|center|bottom)|(crop-([0-9]{1,3})-([0-9]{1,3}))))?(@2x)?.(jpe?g|png|gif|webp)$/i';
 
 				// Matches syntax
