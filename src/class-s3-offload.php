@@ -27,24 +27,28 @@ class RP_S3_Offload extends ResponsivePics {
 	public static function delete_image($id, $paths = []) {
 		global $as3cf;
 
-		$as3cf_item        = Media_Library_Item::get_by_source_id($id);
 		$objects_to_remove = [];
 		$paths_to_remove   = array_unique($paths);
+		$as3cf_item        = Media_Library_Item::get_by_source_id($id);
 
-		foreach ($paths_to_remove as $size => $path) {
-			$objects_to_remove[] = array(
-				'Key' => $as3cf_item->key(wp_basename($path))
-			);
-		}
+		// Check if file exists on storage
+		if ($as3cf_item) {
+			foreach ($paths_to_remove as $size => $path) {
+				$objects_to_remove[] = array(
+					'Key' => $as3cf_item->key(wp_basename($path))
+				);
+			}
 
-		$s3_delete = $as3cf->delete_objects($as3cf_item->region(), $as3cf_item->bucket(), $objects_to_remove, true, true, false);
+			// Delete files on storage
+			$s3_delete = $as3cf->delete_objects($as3cf_item->region(), $as3cf_item->bucket(), $objects_to_remove, true, true, false);
 
-		// Check for errors
-		if (is_wp_error($s3_delete)) {
-			$error_message = $s3_delete->get_error_message();
-			$error_data    = $s3_delete->get_error_data();
+			// Check for errors
+			if (is_wp_error($s3_delete)) {
+				$error_message = $s3_delete->get_error_message();
+				$error_data    = $s3_delete->get_error_data();
 
-			ResponsivePics()->error->add_error('error', $error_message, $error_data);
+				ResponsivePics()->error->add_error('error', $error_message, $error_data);
+			}
 		}
 	}
 }
