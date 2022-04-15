@@ -1,7 +1,9 @@
 <?php
 
 class RP_Focal_Point extends ResponsivePics {
-
+	/**
+	 * Construct Focal Point
+	 */
 	public function __construct() {
 		add_action('admin_enqueue_scripts',        ['RP_Focal_Point', 'load_scripts']);
 		add_action('print_media_templates',        ['RP_Focal_Point', 'print_media_templates'], 10, 1);

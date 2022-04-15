@@ -479,10 +479,61 @@ class RP_Process extends ResponsivePics {
 				} else {
 					$wp_editor->resize($width * $ratio, $height * $ratio, false);
 				}
-				// Save resized/cropped file
-				$wp_editor->save($resize_path);
+
+				// Save & offload resized/cropped file
+				$saved_file = $wp_editor->save($resize_path);
+				if (!is_wp_error($saved_file) && class_exists('Amazon_S3_And_CloudFront')) {
+					ResponsivePics()->s3offload->upload_image($id, $saved_file['path']);
+				}
+
+				do_action('responsive_pics_request_processed', $id, $quality, $width, $height, $crop, $ratio, $resize_path);
 			} else {
 				syslog(LOG_ERR, sprintf('error resizing image "%s"', $resize_path));
+			}
+		}
+	}
+
+	// process deleting all resized images
+	public static function process_delete_attachment($post_id, $post) {
+		$file            = get_attached_file($post_id);
+		$meta            = wp_get_attachment_metadata($post_id);
+		$meta_sizes      = isset($meta['sizes']) ? $meta['sizes'] : [];
+		$meta_files      = array_column($meta_sizes, 'file');
+		$upload_path     = wp_get_upload_dir();
+		$upload_dir      = path_join($upload_path['basedir'], dirname($file));
+		$file_parts      = pathinfo($file);
+		$file_dir        = $file_parts['dirname'];
+		$file_ext        = $file_parts['extension'];
+		$file_name       = $file_parts['filename'];
+		$resized_files   = glob($file_dir .'/'. $file_name .'-*.'. $file_ext);
+		$files_to_delete = [];
+
+		// Check if file has resize syntax and is not a wp image size
+		if ($resized_files && is_array($resized_files)) {
+			foreach ($resized_files as $resized_file) {
+				// Test: https://regex101.com/r/pJFi7h/1
+				$pattern = '/-([0-9]{1,}x[0-9]{1,})(-((left|center|right)-(top|center|bottom)|(crop-([0-9]{1,3})-([0-9]{1,3}))))?(@2x)?.(jpe?g|png|gif|webp)$/i';
+
+				// Matches syntax
+				if (preg_match($pattern, $resized_file)) {
+					$resized_file_parts = pathinfo($resized_file);
+					$resized_file_name  = $resized_file_parts['basename'];
+
+					// Not an wp image size file
+					if (!in_array($resized_file_name, $meta_files)) {
+						$files_to_delete[] = $resized_file;
+						$deleted = wp_delete_file_from_directory($resized_file, $upload_dir);
+
+						if (!$deleted) {
+							syslog(LOG_DEBUG, 'not deleted?');
+						}
+					}
+				}
+			}
+
+			// Delete offloaded images
+			if (class_exists('Amazon_S3_And_CloudFront')) {
+				ResponsivePics()->s3offload->delete_image($post_id, $files_to_delete);
 			}
 		}
 	}

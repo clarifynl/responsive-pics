@@ -101,9 +101,21 @@ class ResponsivePics {
 		}
 
 		// Hooks
+		add_action('as3cf_init',               ['ResponsivePics', 'as3cf_init']);
+		add_action('delete_attachment',        ['RP_Process', 'process_delete_attachment'], 10, 2);
 		add_action('process_resize_request',   ['RP_Process', 'process_resize_request'], 10, 7);
 		add_action('rest_api_init',            ['RP_Rest_Api', 'register_api_routes']);
 		add_filter('big_image_size_threshold', '__return_false');
+	}
+
+	// as3cf init
+	public static function as3cf_init() {
+		include (RESPONSIVE_PICS_DIR . '/src/class-s3-offload.php');
+
+		// Init S3_Offload if compatible S3 plugin is installed
+		if (class_exists('Amazon_S3_And_CloudFront')) {
+			ResponsivePics()->s3offload = new RP_S3_Offload();
+		}
 	}
 
 	// set number of grid columns
