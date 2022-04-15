@@ -485,6 +485,8 @@ class RP_Process extends ResponsivePics {
 				if (!is_wp_error($saved_file) && class_exists('Amazon_S3_And_CloudFront')) {
 					ResponsivePics()->s3offload->upload_image($id, $saved_file['path']);
 				}
+
+				do_action('responsive_pics_request_processed', $id, $quality, $width, $height, $crop, $ratio, $resize_path);
 			} else {
 				syslog(LOG_ERR, sprintf('error resizing image "%s"', $resize_path));
 			}
