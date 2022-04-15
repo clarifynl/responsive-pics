@@ -4,7 +4,7 @@
 	Plugin URI: https://responsive.pics
 	Description: Responsive Pics is a Wordpress tool for resizing images on the fly.
 	Author: Booreiland
-	Version: 1.5.1
+	Version: 1.5.0
 	Author URI: https://booreiland.amsterdam
 	Copyright: Wimer Hazenberg, Toine Kamps
 */
