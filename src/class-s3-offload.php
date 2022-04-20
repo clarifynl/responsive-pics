@@ -12,7 +12,6 @@ class RP_S3_Offload extends ResponsivePics {
 
 		// Plugin version check
 		if (version_compare(WP_OFFLOAD_MEDIA_VERSION, '2.5', '>')) {
-			$as3cf_item     = Media_Library_Item::create_from_source_id($id);
 			$offloaded_file = [
 				$file['file'] => [
 					'is_private'  =>  false,
@@ -21,9 +20,10 @@ class RP_S3_Offload extends ResponsivePics {
 				]
 			];
 
+			$as3cf_item = Media_Library_Item::create_from_source_id($id);
 			if ($as3cf_item) {
 				$upload_handler = $as3cf->get_item_handler(Upload_Handler::get_item_handler_key_name());
-				$s3_upload      = $upload_handler->handle($as3cf_item, ['offloaded_files' => $offloaded_file]);
+				$s3_upload      = $upload_handler->handle($as3cf_item, ['offloaded_files' => $offloaded_file]); // manifest doesn't contain custom image sizes
 			}
 		} else {
 			$s3_upload = $as3cf->upload_attachment($id, null, $file['path']);
