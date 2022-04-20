@@ -114,6 +114,10 @@ class ResponsivePics {
 
 		// Init S3_Offload if compatible S3 plugin is installed
 		if (class_exists('Amazon_S3_And_CloudFront')) {
+			if (isset($GLOBALS['aws_meta']['amazon-s3-and-cloudfront']['version'])) {
+				define('WP_OFFLOAD_MEDIA_VERSION', $GLOBALS['aws_meta']['amazon-s3-and-cloudfront']['version']);
+			}
+
 			ResponsivePics()->s3offload = new RP_S3_Offload();
 		}
 	}
