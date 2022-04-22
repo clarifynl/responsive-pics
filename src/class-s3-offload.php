@@ -12,18 +12,19 @@ class RP_S3_Offload extends ResponsivePics {
 
 		// Plugin version check
 		if (version_compare(WP_OFFLOAD_MEDIA_VERSION, '2.5.5', '>')) {
-			$offloaded_file = [
-				$file['file'] => [
-					'is_private'  =>  false,
-					'object_keys' => [$file['width'] .'x'. $file['height']],
-					'source_file' => $file['file']
-				]
-			];
-
 			$as3cf_item = Media_Library_Item::create_from_source_id($id);
+			$objects    = $as3cf_item->objects();
+			$size       = $file['width'] .'x'. $file['height'];
+
+			$objects[$size] = [
+				'source_file' => $file['path'],
+				'is_private'  => false
+			];
+			$as3cf_item->set_objects($objects);
+
 			if ($as3cf_item) {
 				$upload_handler = $as3cf->get_item_handler(Upload_Handler::get_item_handler_key_name());
-				$s3_upload      = $upload_handler->handle($as3cf_item, ['offloaded_files' => $offloaded_file]); // manifest doesn't contain custom image sizes
+				$s3_upload      = $upload_handler->handle($as3cf_item);
 			}
 		} else {
 			$s3_upload = $as3cf->upload_attachment($id, null, $file['path']);
