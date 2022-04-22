@@ -11,7 +11,7 @@ class RP_S3_Offload extends ResponsivePics {
 		$s3_upload = null;
 
 		// Plugin version check
-		if (version_compare(WP_OFFLOAD_MEDIA_VERSION, '2.5', '>')) {
+		if (version_compare(WP_OFFLOAD_MEDIA_VERSION, '2.5.5', '>')) {
 			$offloaded_file = [
 				$file['file'] => [
 					'is_private'  =>  false,
@@ -53,7 +53,7 @@ class RP_S3_Offload extends ResponsivePics {
 		}
 
 		// Plugin version check
-		if (version_compare(WP_OFFLOAD_MEDIA_VERSION, '2.5', '>')) {
+		if (version_compare(WP_OFFLOAD_MEDIA_VERSION, '2.5.5', '>')) {
 			$chunks = array_chunk($manifest->objects, 1000);
 			$region = $as3cf_item->region();
 			$bucket = $as3cf_item->bucket();
