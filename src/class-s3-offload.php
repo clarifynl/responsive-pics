@@ -1,6 +1,7 @@
 <?php
 
 use DeliciousBrains\WP_Offload_Media\Items\Media_Library_Item;
+use DeliciousBrains\WP_Offload_Media\Items\Upload_Handler;
 
 class RP_S3_Offload extends ResponsivePics {
 	/**
@@ -17,7 +18,7 @@ class RP_S3_Offload extends ResponsivePics {
 			$size       = $file['width'] .'x'. $file['height'];
 
 			$objects[$size] = [
-				'source_file' => $file['path'],
+				'source_file' => $file['file'],
 				'is_private'  => false
 			];
 			$as3cf_item->set_objects($objects);
