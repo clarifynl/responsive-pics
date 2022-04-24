@@ -17,6 +17,7 @@ class RP_S3_Offload extends ResponsivePics {
 			$objects    = $as3cf_item->objects();
 			$size       = $file['width'] .'x'. $file['height'];
 
+			// This will offload ALL default wordpress sizes on each custom image in a new s3 folder
 			$objects[$size] = [
 				'source_file' => $file['file'],
 				'is_private'  => false
