@@ -17,7 +17,7 @@ class RP_S3_Offload extends ResponsivePics {
 			$objects    = $as3cf_item->objects();
 			$size       = $file['width'] .'x'. $file['height'];
 
-			// This will offload ALL default wordpress sizes on each custom image in a new s3 folder
+			/* This will offload ALL default wordpress sizes on each custom image in a new s3 folder
 			$objects[$size] = [
 				'source_file' => $file['file'],
 				'is_private'  => false
@@ -27,7 +27,7 @@ class RP_S3_Offload extends ResponsivePics {
 			if ($as3cf_item) {
 				$upload_handler = $as3cf->get_item_handler(Upload_Handler::get_item_handler_key_name());
 				$s3_upload      = $upload_handler->handle($as3cf_item);
-			}
+			}*/
 		} else {
 			$s3_upload = $as3cf->upload_attachment($id, null, $file['path']);
 		}
@@ -43,7 +43,7 @@ class RP_S3_Offload extends ResponsivePics {
 		return $s3_upload;
 	}
 
-/**
+	/**
 	 * Delete image in S3 storage
 	 */
 	public static function delete_image($id, $paths = []) {
@@ -57,6 +57,7 @@ class RP_S3_Offload extends ResponsivePics {
 
 		// Plugin version check
 		if (version_compare(WP_OFFLOAD_MEDIA_VERSION, '2.5.5', '>')) {
+			/* Needs refractoring
 			$chunks = array_chunk($manifest->objects, 1000);
 			$region = $as3cf_item->region();
 			$bucket = $as3cf_item->bucket();
@@ -71,7 +72,7 @@ class RP_S3_Offload extends ResponsivePics {
 			} catch (Exception $e) {
 				$error_msg = sprintf(__('Error removing files from bucket: %s', 'amazon-s3-and-cloudfront' ), $e->getMessage());
 				$s3_delete = $this->return_handler_error($error_msg);
-			}
+			}*/
 
 		} else {
 			$objects_to_remove = [];
