@@ -45,12 +45,13 @@ class RP_Sources extends ResponsivePics {
 			if ($resized_url) {
 				$size_2x_available = $width * 2 < $original_width && $height * 2 < $original_height;
 
+				// check if retina url is possible
 				$source1x = $resized_url;
 				$source2x = $size_2x_available
 					? $this->get_resized_url($id, $image_path, $image_url, $width, $height, $crop, 2)
 					: null;
 
-				// Use the original image url when it is larger than the current source being generated
+				// use the original image url when it is larger than the current source being generated
 				if (!$source2x && $width < $original_width) {
 					$source2x = $image_url;
 				}
