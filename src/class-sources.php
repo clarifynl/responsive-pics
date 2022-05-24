@@ -43,7 +43,7 @@ class RP_Sources extends ResponsivePics {
 			// get resized url
 			$resized_url = $this->get_resized_url($id, $image_path, $image_url, $width, $height, $crop);
 			if ($resized_url) {
-				$size_2x_available = $width * 2 < $original_width && $height * 2 < $original_height;
+				$size_2x_available = ($width * 2) < $original_width && ($height * 2) < $original_height;
 
 				// check if retina url is possible
 				$source1x = $resized_url;
@@ -51,11 +51,12 @@ class RP_Sources extends ResponsivePics {
 					? $this->get_resized_url($id, $image_path, $image_url, $width, $height, $crop, 2)
 					: null;
 
-				// use the original image url when it is larger than the current source being generated
+				// use the maximum possible image url when the retina width is too large for the current source being generated
 				if (!$source2x && $width < $original_width) {
 					$ratio_max = round(($original_width / ($width * 2)), 1);
-					syslog(LOG_DEBUG, 'width: '. $width . ' original width: ' . $original_width . ' ratio_max: ' . $ratio_max);
-					$source2x  = $this->get_resized_url($id, $image_path, $image_url, $width, $height, $crop, $ratio_max);
+					if ($ratio_max > 1) {
+						$source2x  = $this->get_resized_url($id, $image_path, $image_url, $width, $height, $crop, $ratio_max);
+					}
 				}
 
 				$breakpoint = $rule['breakpoint'];
