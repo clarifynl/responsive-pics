@@ -53,7 +53,7 @@ class RP_Sources extends ResponsivePics {
 
 				// use the original image url when it is larger than the current source being generated
 				if (!$source2x && $width < $original_width) {
-					$ratio_max = round(($original_width / $width * 2), 1);
+					$ratio_max = round(($original_width / ($width * 2)), 1);
 					syslog(LOG_DEBUG, 'width: '. $width . ' original width: ' . $original_width . ' ratio_max: ' . $ratio_max);
 					$source2x  = $this->get_resized_url($id, $image_path, $image_url, $width, $height, $crop, $ratio_max);
 				}
