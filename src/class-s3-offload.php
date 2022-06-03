@@ -2,6 +2,7 @@
 
 use DeliciousBrains\WP_Offload_Media\Items\Media_Library_Item;
 use DeliciousBrains\WP_Offload_Media\Items\Upload_Handler;
+use DeliciousBrains\WP_Offload_Media\Items\Remove_Provider_Handler;
 
 class RP_S3_Offload extends ResponsivePics {
 	/**
@@ -49,7 +50,7 @@ class RP_S3_Offload extends ResponsivePics {
 	 */
 	public static function delete_image($id, $paths = []) {
 		global $as3cf;
-		$s3_delete  = null;
+		$s3_remove  = null;
 		$as3cf_item = Media_Library_Item::get_by_source_id($id);
 
 		if (!$as3cf_item) {
@@ -58,22 +59,28 @@ class RP_S3_Offload extends ResponsivePics {
 
 		// Plugin version check
 		if (version_compare(WP_OFFLOAD_MEDIA_VERSION, '2.5.5', '>')) {
-			/* Needs refractoring
-			$chunks = array_chunk($manifest->objects, 1000);
-			$region = $as3cf_item->region();
-			$bucket = $as3cf_item->bucket();
+			// $objects_to_remove = [];
+			// $paths_to_remove   = array_unique($paths);
+			// $objects           = $as3cf_item->objects();
 
-			try {
-				foreach ($chunks as $chunk) {
-					$as3cf->get_provider_client($region)->delete_objects(array(
-						'Bucket'  => $bucket,
-						'Objects' => $chunk,
-					));
-				}
-			} catch (Exception $e) {
-				$error_msg = sprintf(__('Error removing files from bucket: %s', 'amazon-s3-and-cloudfront' ), $e->getMessage());
-				$s3_delete = $this->return_handler_error($error_msg);
-			}*/
+			// $file_path = get_attached_file($id);
+			// $wp_editor = wp_get_image_editor($file_path);
+
+			// foreach ($paths_to_remove as $path) {
+			// 	$file_size   = $wp_editor->get_size($path);
+			// 	$size        = $file_size['width'] .'x'. $file_size['height'];
+			// 	$source_file = wp_basename($path);
+			// 	syslog(LOG_DEBUG, 'size: ' . $size . ' file: ' . $source_file);
+
+			// 	$objects[$size] = [
+			// 		'source_file' => $source_file,
+			// 		'is_private'  => false
+			// 	];
+			// }
+
+			// $as3cf_item->set_objects($objects);
+			$remove_handler = $as3cf->get_item_handler(Remove_Provider_Handler::get_item_handler_key_name());
+			$s3_remove      = $remove_handler->handle($as3cf_item);
 
 		} else {
 			$objects_to_remove = [];
@@ -85,13 +92,13 @@ class RP_S3_Offload extends ResponsivePics {
 				);
 			}
 
-			$s3_delete = $as3cf->delete_objects($as3cf_item->region(), $as3cf_item->bucket(), $objects_to_remove, true, true, false);
+			$s3_remove = $as3cf->delete_objects($as3cf_item->region(), $as3cf_item->bucket(), $objects_to_remove, true, true, false);
 		}
 
 		// Check for errors
-		if (is_wp_error($s3_delete)) {
-			$error_message = $s3_delete->get_error_message();
-			$error_data    = $s3_delete->get_error_data();
+		if (is_wp_error($s3_remove)) {
+			$error_message = $s3_remove->get_error_message();
+			$error_data    = $s3_remove->get_error_data();
 
 			ResponsivePics()->error->add_error('error', $error_message, $error_data);
 		}
