@@ -13,22 +13,22 @@ class RP_S3_Offload extends ResponsivePics {
 
 		// Plugin version check
 		if (version_compare(WP_OFFLOAD_MEDIA_VERSION, '2.5.5', '>')) {
-			$as3cf_item = Media_Library_Item::get_by_source_id($id);
-			$objects    = $as3cf_item->objects();
-			$size       = $file['width'] .'x'. $file['height'];
-
-			syslog(LOG_DEBUG, json_encode($as3cf_item));
-			/* This will offload ALL default wordpress sizes on each custom image in a new s3 folder
-			$objects[$size] = [
-				'source_file' => $file['file'],
-				'is_private'  => false
-			];
-			$as3cf_item->set_objects($objects);
+			$as3cf_item  = Media_Library_Item::get_by_source_id($id);
+			$size        = $file['width'] .'x'. $file['height'];
+			$source_file = $file['file'];
 
 			if ($as3cf_item) {
+				$objects        = $as3cf_item->objects();
+				$objects[$size] = [
+					'source_file' => $source_file,
+					'is_private'  => false
+				];
+				$as3cf_item->set_objects($objects);
+
+				// Upload item
 				$upload_handler = $as3cf->get_item_handler(Upload_Handler::get_item_handler_key_name());
 				$s3_upload      = $upload_handler->handle($as3cf_item);
-			}*/
+			}
 		} else {
 			$s3_upload = $as3cf->upload_attachment($id, null, $file['path']);
 		}
