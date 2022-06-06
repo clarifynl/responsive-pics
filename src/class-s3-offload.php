@@ -69,7 +69,7 @@ class RP_S3_Offload extends ResponsivePics {
 				$size             = $file_size['width'] .'x'. $file_size['height'];
 				$keys_to_remove[] = $size;
 
-				syslog(LOG_DEBUG, 'file_size: ' . $file_size);
+				syslog(LOG_DEBUG, 'file_size: ' . json_encode($file_size));
 			}
 
 			syslog(LOG_DEBUG, 'keys_to_remove: ' . json_encode($keys_to_remove));
