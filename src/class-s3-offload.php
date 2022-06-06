@@ -65,6 +65,8 @@ class RP_S3_Offload extends ResponsivePics {
 			$file_path       = get_attached_file($id);
 			$wp_editor       = wp_get_image_editor($file_path);
 
+			syslog(LOG_DEBUG, 'objects: ' . json_encode($as3cf_item->objects());
+
 			foreach ($paths_to_remove as $path) {
 				$file_size        = $wp_editor->get_size($path);
 				$size             = $file_size['width'] .'x'. $file_size['height'];
