@@ -28,11 +28,7 @@ class RP_S3_Offload extends ResponsivePics {
 				];
 				syslog(LOG_DEBUG, 'item_objects: ' . json_encode($item_objects));
 				$as3cf_item->set_objects($item_objects);
-
-				// Only save if we have the primary file uploaded.
-				if (isset($item_objects[$as3cf_item::primary_object_key()])) {
-					$as3cf_item->save();
-				}
+				$as3cf_item->save();
 
 				// Upload item
 				$upload_handler = $as3cf->get_item_handler(Upload_Handler::get_item_handler_key_name());
