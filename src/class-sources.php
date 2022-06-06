@@ -54,10 +54,6 @@ class RP_Sources extends ResponsivePics {
 				// use the maximum possible image url when the retina width is too large for the current source being generated
 				if (!$size_2x_available && $width < $original_width) {
 					$ratio_max = round(($original_width / ($width * 2)), 1);
-					syslog(LOG_DEBUG, 'size_2x_available: ' . $size_2x_available);
-					syslog(LOG_DEBUG, 'source2x: ' . $source2x);
-					syslog(LOG_DEBUG, 'width: ' . $width . ' original_width: ' . $original_width);
-					syslog(LOG_DEBUG, 'ratio_max: ' . $ratio_max);
 
 					if ($ratio_max > 1) {
 						$source2x  = $this->get_resized_url($id, $image_path, $image_url, $width, $height, $crop, $ratio_max);
@@ -131,8 +127,6 @@ class RP_Sources extends ResponsivePics {
 		$suffix_legacy            = ResponsivePics()->helpers->get_resized_suffix_legacy($width, $height, $ratio, $crop);
 		$resized_file_path_legacy = join(DIRECTORY_SEPARATOR, [$path_parts['dirname'], $path_parts['filename'] . '-' . $suffix_legacy . '.' . $path_parts['extension']]);
 		$resized_url_legacy       = join(DIRECTORY_SEPARATOR, [dirname($original_url), basename($resized_file_path_legacy)]);
-
-		syslog(LOG_DEBUG, 'ratio: ' . $ratio . 'resized_file_path: ' . $resized_file_path . ' file_exists resized_file_path: ' . file_exists($resized_file_path));
 
 		// if image size does not exist yet as filename (or as legacy filename)
 		if (!file_exists($resized_file_path) &&
