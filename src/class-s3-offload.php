@@ -65,13 +65,14 @@ class RP_S3_Offload extends ResponsivePics {
 			$wp_editor       = wp_get_image_editor($file_path);
 
 			foreach ($paths_to_remove as $path) {
-				$file_size   = $wp_editor->get_size($path);
-				$size        = $file_size['width'] .'x'. $file_size['height'];
-				$source_file = wp_basename($path);
+				$file_size        = $wp_editor->get_size($path);
+				$size             = $file_size['width'] .'x'. $file_size['height'];
 				$keys_to_remove[] = $size;
+
+				syslog(LOG_DEBUG, 'file_size: ' . $file_size);
 			}
 
-			syslog(LOG_DEBUG, 'size: ' . $size . ' keys_to_remove: ' . json_encode($keys_to_remove));
+			syslog(LOG_DEBUG, 'keys_to_remove: ' . json_encode($keys_to_remove));
 			$remove_handler = $as3cf->get_item_handler(Remove_Provider_Handler::get_item_handler_key_name());
 			$s3_remove      = $remove_handler->handle($as3cf_item, array('object_keys' => $keys_to_remove));
 
