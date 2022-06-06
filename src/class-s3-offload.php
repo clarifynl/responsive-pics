@@ -20,14 +20,13 @@ class RP_S3_Offload extends ResponsivePics {
 
 			if ($as3cf_item) {
 				syslog(LOG_DEBUG, 'upload size: ' . $size);
-				$objects        = $as3cf_item->objects();
-				$objects[$size] = [
+				$item_objects        = $as3cf_item->objects();
+				$item_objects[$size] = [
 					'source_file' => $source_file,
 					'is_private'  => false
 				];
-				syslog(LOG_DEBUG, 'objects: ' . json_encode($objects));
-				syslog(LOG_DEBUG, 'primary_object_key: '. $as3cf_item::primary_object_key());
-				$as3cf_item->set_objects($objects);
+				syslog(LOG_DEBUG, 'item_objects: ' . json_encode($item_objects));
+				$as3cf_item->set_objects($item_objects);
 
 				// Only save if we have the primary file uploaded.
 				if (isset($item_objects[$as3cf_item::primary_object_key()])) {
