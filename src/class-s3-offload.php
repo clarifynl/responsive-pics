@@ -59,27 +59,19 @@ class RP_S3_Offload extends ResponsivePics {
 
 		// Plugin version check
 		if (version_compare(WP_OFFLOAD_MEDIA_VERSION, '2.5.5', '>')) {
-			// $objects_to_remove = [];
-			// $paths_to_remove   = array_unique($paths);
-			// $objects           = $as3cf_item->objects();
+			$keys_to_remove  = [];
+			$paths_to_remove = array_unique($paths);
+			$file_path       = get_attached_file($id);
+			$wp_editor       = wp_get_image_editor($file_path);
 
-			// $file_path = get_attached_file($id);
-			// $wp_editor = wp_get_image_editor($file_path);
+			foreach ($paths_to_remove as $path) {
+				$file_size   = $wp_editor->get_size($path);
+				$size        = $file_size['width'] .'x'. $file_size['height'];
+				$source_file = wp_basename($path);
+				$keys_to_remove[] = $size;
+			}
 
-			// foreach ($paths_to_remove as $path) {
-			// 	$file_size   = $wp_editor->get_size($path);
-			// 	$size        = $file_size['width'] .'x'. $file_size['height'];
-			// 	$source_file = wp_basename($path);
-			// 	syslog(LOG_DEBUG, 'size: ' . $size . ' file: ' . $source_file);
-
-			// 	$objects[$size] = [
-			// 		'source_file' => $source_file,
-			// 		'is_private'  => false
-			// 	];
-			// }
-
-			// $as3cf_item->set_objects($objects);
-			$keys_to_remove = [];
+			syslog(LOG_DEBUG, 'size: ' . $size . ' keys_to_remove: ' . json_encode($keys_to_remove));
 			$remove_handler = $as3cf->get_item_handler(Remove_Provider_Handler::get_item_handler_key_name());
 			$s3_remove      = $remove_handler->handle($as3cf_item, array('object_keys' => $keys_to_remove));
 
