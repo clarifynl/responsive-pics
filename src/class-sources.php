@@ -133,7 +133,7 @@ class RP_Sources extends ResponsivePics {
 		$resized_file_path_legacy = join(DIRECTORY_SEPARATOR, [$path_parts['dirname'], $path_parts['filename'] . '-' . $suffix_legacy . '.' . $path_parts['extension']]);
 		$resized_url_legacy       = join(DIRECTORY_SEPARATOR, [dirname($original_url), basename($resized_file_path_legacy)]);
 
-		syslog(LOG_DEBUG, 'resized_file_path: ' . $resized_file_path . ' file_exists resized_file_path: ' . file_exists($resized_file_path));
+		syslog(LOG_DEBUG, 'ratio: ' . $ratio . 'resized_file_path: ' . $resized_file_path . ' file_exists resized_file_path: ' . file_exists($resized_file_path));
 
 		// if image size does not exist yet as filename (or as legacy filename)
 		if (!file_exists($resized_file_path) &&
