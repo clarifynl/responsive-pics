@@ -51,9 +51,15 @@ class RP_Sources extends ResponsivePics {
 					? $this->get_resized_url($id, $image_path, $image_url, $width, $height, $crop, 2)
 					: null;
 
+				syslog(LOG_DEBUG, 'size_2x_available: ' . $size_2x_available);
+				syslog(LOG_DEBUG, 'source2x: ' . $source2x);
+
 				// use the maximum possible image url when the retina width is too large for the current source being generated
 				if (!$source2x && $width < $original_width) {
 					$ratio_max = round(($original_width / ($width * 2)), 1);
+					syslog(LOG_DEBUG, 'width: ' . $width . ' original_width: ' . $original_width);
+					syslog(LOG_DEBUG, 'ratio_max: ' . $ratio_max);
+
 					if ($ratio_max > 1) {
 						$source2x  = $this->get_resized_url($id, $image_path, $image_url, $width, $height, $crop, $ratio_max);
 					}
