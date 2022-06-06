@@ -79,6 +79,7 @@ class RP_S3_Offload extends ResponsivePics {
 			// }
 
 			// $as3cf_item->set_objects($objects);
+			$keys_to_remove = [];
 			$remove_handler = $as3cf->get_item_handler(Remove_Provider_Handler::get_item_handler_key_name());
 			$s3_remove      = $remove_handler->handle($as3cf_item, array('object_keys' => $keys_to_remove));
 
