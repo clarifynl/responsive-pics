@@ -19,7 +19,6 @@ class RP_S3_Offload extends ResponsivePics {
 			$source_file = $file['file'];
 
 			if ($as3cf_item) {
-				syslog(LOG_DEBUG, 'upload size: ' . $size);
 				$item_objects        = $as3cf_item->objects();
 				$item_objects[$size] = [
 					'source_file' => $source_file,
@@ -27,7 +26,6 @@ class RP_S3_Offload extends ResponsivePics {
 				];
 				syslog(LOG_DEBUG, 'item_objects: ' . json_encode($item_objects));
 				$as3cf_item->set_objects($item_objects);
-				$as3cf_item->save();
 
 				// Upload item
 				$upload_handler = $as3cf->get_item_handler(Upload_Handler::get_item_handler_key_name());
