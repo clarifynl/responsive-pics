@@ -20,13 +20,12 @@ class RP_S3_Offload extends ResponsivePics {
 			$source_file = $file['file'];
 
 			if ($as3cf_item) {
-				$item_objects        = $as3cf_item->objects();
+				$item_objects        = $as3cf_item->objects(); // sometimes this doesn't contain existing objects from database
 				$item_objects[$size] = [
 					'source_file' => $source_file,
 					'is_private'  => false
 				];
 
-				// Objects is sometimes empty
 				syslog(LOG_DEBUG, 'item_objects: ' . json_encode($item_objects));
 				$as3cf_item->set_objects($item_objects);
 
@@ -67,24 +66,7 @@ class RP_S3_Offload extends ResponsivePics {
 		}
 
 		// Plugin version check
-		if (version_compare(WP_OFFLOAD_MEDIA_VERSION, '2.5.5', '>')) {
-			$keys_to_remove  = [];
-			$paths_to_remove = array_unique($paths);
-			$file_path       = get_attached_file($id);
-			$wp_editor       = wp_get_image_editor($file_path);
-
-			syslog(LOG_DEBUG, 'objects: ' . json_encode($as3cf_item->objects()));
-
-			foreach ($paths_to_remove as $path) {
-				$file_size        = $wp_editor->get_size($path);
-				$size             = $file_size['width'] .'x'. $file_size['height'];
-				$keys_to_remove[] = $size;
-			}
-
-			$remove_handler = $as3cf->get_item_handler(Remove_Provider_Handler::get_item_handler_key_name());
-			$s3_remove      = $remove_handler->handle($as3cf_item, array('object_keys' => $keys_to_remove));
-
-		} else {
+		if (version_compare(WP_OFFLOAD_MEDIA_VERSION, '2.5.5', '<=')) {
 			$objects_to_remove = [];
 			$paths_to_remove   = array_unique($paths);
 
