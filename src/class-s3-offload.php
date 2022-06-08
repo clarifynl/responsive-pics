@@ -15,6 +15,7 @@ class RP_S3_Offload extends ResponsivePics {
 
 		// Plugin version check
 		if (version_compare(WP_OFFLOAD_MEDIA_VERSION, '2.5.5', '>')) {
+			Media_Library_Item::init_cache();
 			$as3cf_item  = Media_Library_Item::get_by_source_id($id);
 			$size        = $file['width'] .'x'. $file['height'];
 			$source_file = $file['file'];
