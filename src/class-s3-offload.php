@@ -15,19 +15,20 @@ class RP_S3_Offload extends ResponsivePics {
 
 		// Plugin version check
 		if (version_compare(WP_OFFLOAD_MEDIA_VERSION, '2.5.5', '>')) {
+			// Re-init item cache for making sure item contains recently added objects
 			Media_Library_Item::init_cache();
 			$as3cf_item  = Media_Library_Item::get_by_source_id($id);
+
 			$size        = $file['width'] .'x'. $file['height'];
 			$source_file = $file['file'];
 
 			if ($as3cf_item) {
-				$item_objects        = $as3cf_item->objects(); // sometimes this doesn't contain existing objects from database
+				$item_objects        = $as3cf_item->objects();
 				$item_objects[$size] = [
 					'source_file' => $source_file,
 					'is_private'  => false
 				];
 
-				syslog(LOG_DEBUG, 'item_objects: ' . json_encode($item_objects));
 				$as3cf_item->set_objects($item_objects);
 
 				// Only save if we have the primary file uploaded.
@@ -38,9 +39,13 @@ class RP_S3_Offload extends ResponsivePics {
 				// Upload item
 				$upload_handler = $as3cf->get_item_handler(Upload_Handler::get_item_handler_key_name());
 				$s3_upload      = $upload_handler->handle($as3cf_item);
+
+				do_action('responsive_pics_file_s3_uploaded', $id, $as3cf_item);
 			}
 		} else {
 			$s3_upload = $as3cf->upload_attachment($id, null, $file['path']);
+
+			do_action('responsive_pics_file_s3_uploaded', $id, null, $file);
 		}
 
 		// Check for errors
@@ -86,6 +91,8 @@ class RP_S3_Offload extends ResponsivePics {
 			$error_data    = $s3_remove->get_error_data();
 
 			ResponsivePics()->error->add_error('error', $error_message, $error_data);
+		} else {
+			do_action('responsive_pics_file_s3_deleted', $id, $as3cf_item);
 		}
 	}
 }

@@ -527,6 +527,8 @@ class RP_Process extends ResponsivePics {
 						if (!$deleted) {
 							syslog(LOG_DEBUG, 'not deleted?');
 						}
+
+						do_action('responsive_pics_file_deleted_local', $post_id, $resized_file);
 					}
 				}
 			}

@@ -30,7 +30,8 @@ For full documentation and examples visit: [responsive.pics](https://responsive.
 5. [Sizes](#sizes)
 6. [Cropping](#cropping)
 7. [Process](#process)
-8. [Features](#features)
+8. [Hooks](#hooks)
+9. [Features](#features)
 
 ## Requirements <a name="requirements"></a>
 <table>
@@ -460,6 +461,15 @@ If an error occurs during the resizing process or if there's invalid syntax, Res
   }
 }
 ```
+
+## Hooks <a name="hooks"></a>
+
+* `do_action('responsive_pics_request_scheduled', $post_id, $resize_request);`
+* `do_action('responsive_pics_request_processed', $post_id, $quality, $width, $height, $crop, $ratio, $resize_path);`
+* `do_action('responsive_pics_file_s3_uploaded', $post_id, $as3cf_item, $file);`
+* `do_action('responsive_pics_file_deleted_local', $post_id, $resized_file);`
+* `do_action('responsive_pics_file_s3_deleted', $post_id, $as3cf_item);`
+
 
 ## Features <a name="features"></a>
 

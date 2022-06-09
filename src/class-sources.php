@@ -136,6 +136,7 @@ class RP_Sources extends ResponsivePics {
 			// if image size is not a pending request
 			if (!$is_pending) {
 				as_schedule_single_action(time(), 'process_resize_request', $resize_request, 'process_resize_request_' . $id);
+				do_action('responsive_pics_request_scheduled', $id, $resize_request);
 			}
 
 			return;
