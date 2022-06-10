@@ -489,6 +489,7 @@ do_action('responsive_pics_request_scheduled', (int) $post_id, (array) $resize_r
 ]
 ```
 
+
 ### `responsive_pics_request_processed`
 ```php
 do_action('responsive_pics_request_processed', (int) $post_id, (int) $quality, (int) $width, (int) $height, (array) $crop, (float) $ratio, (string) $resize_path);
@@ -521,6 +522,7 @@ do_action('responsive_pics_request_processed', (int) $post_id, (int) $quality, (
 
 - **$resize_path**  
 (string) The requested image file path
+
 
 ### `responsive_pics_file_s3_uploaded`
 ```php
