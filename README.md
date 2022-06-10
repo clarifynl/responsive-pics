@@ -509,7 +509,12 @@ do_action('responsive_pics_request_processed', (int) $post_id, (int) $quality, (
 
 - **$crop**  
 (array) The requested image crop positions in percentages:
-`['x' => 50, 'y' => 50]`
+```php
+  [
+    'x' => (int) The horizontal crop position as percentage,
+    'y' => (int) The vertical crop position as percentage
+  ]
+```
 
 - **$ratio**  
 (float) The requested image ratio
