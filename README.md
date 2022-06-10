@@ -33,6 +33,8 @@ For full documentation and examples visit: [responsive.pics](https://responsive.
 8. [Hooks](#hooks)
 9. [Features](#features)
 
+---
+
 ## Requirements <a name="requirements"></a>
 <table>
   <thead>
@@ -93,6 +95,8 @@ To install **Picturefill** in your wordpress theme as a node module, run the fol
 
 And import the package in your theme’s global javascript file:
 `import 'picturefill';`
+
+---
 
 ## Configuration <a name="configuration"></a>
 ResponsivePics uses the following default variables:
@@ -199,32 +203,9 @@ ResponsivePics::getRestApiCache();         // Will return $wp_rest_cache
 ResponsivePics::getRestApiCacheDuration(); // Will return $wp_rest_cache_duration
 ```
 
+---
+
 ## Usage <a name="usage"></a>
-
-### Picture Element
-
-For inserting a responsive `<picture>` element in your template, use the `get_picture` function or the `get-picture` API endpoint with the available parameters.
-
-#### PHP
-```php
-ResponsivePics::get_picture(id, sizes, classes, lazyload, intrinsic);
-```
-
-#### REST API
-```curl
-GET /wp-json/responsive-pics/v1/get-picture/<id>?sizes=<sizes>&classes=<classes>&lazyload=<lazyload>&intrinsic=<intrinsic>
-```
-
-#### Picture Parameters
-
-| Parameter  | Type        | Required | Default  | Definition
-| ---------- | ----------- | -------- | -------- | --------------------------------
-| id         | number      | yes      |          | The WordPress image id (e.g. 1).
-| sizes      | string      | yes      |          | A comma-separated string of preferred image sizes (e.g. `'xs-12, sm-6, md-4, lg-3'`). See the [Sizes section](#sizes) for more information.
-| classes    | string      | optional | `null`   | A comma-separated string of additional CSS classes you want to add to the picture element (e.g. `'my_picture_class'` or `'my_picture_class, my_second_picture_class'`).
-| lazyload   | boolean     | optional | `false`  | When `true` enables `lazyload` classes and data-srcset attributes. See the [Lazyloading section](#lazyloading) for more information.
-| intrinsic  | boolean     | optional | `false`  | When `true` enables `intrinsic` classes and data-aspectratio attributes. See the [Intrinsic Aspectratio section](#intrinsic) for more information.
-
 
 ### Image Element
 For inserting a responsive `<img>` element in your template, use the `get_image` function or the `get-image` API endpoint with the available parameters.
@@ -250,6 +231,29 @@ GET /wp-json/responsive-pics/v1/get-image/<id>?sizes=<sizes>&crop=<crop>&classes
 | lazyload   | boolean          | optional | `false`  | When `true` enables `lazyload` classes and data-srcset attributes. See the [Lazyloading section](#lazyloading) for more information.
 | lqip       | boolean          | optional | `false`  | When `true` enables `LQIP` classes and src attribute. See the [LQIP section](#lqip) for more information.
 
+### Picture Element
+
+For inserting a responsive `<picture>` element in your template, use the `get_picture` function or the `get-picture` API endpoint with the available parameters.
+
+#### PHP
+```php
+ResponsivePics::get_picture(id, sizes, classes, lazyload, intrinsic);
+```
+
+#### REST API
+```curl
+GET /wp-json/responsive-pics/v1/get-picture/<id>?sizes=<sizes>&classes=<classes>&lazyload=<lazyload>&intrinsic=<intrinsic>
+```
+
+#### Picture Parameters
+
+| Parameter  | Type        | Required | Default  | Definition
+| ---------- | ----------- | -------- | -------- | --------------------------------
+| id         | number      | yes      |          | The WordPress image id (e.g. 1).
+| sizes      | string      | yes      |          | A comma-separated string of preferred image sizes (e.g. `'xs-12, sm-6, md-4, lg-3'`). See the [Sizes section](#sizes) for more information.
+| classes    | string      | optional | `null`   | A comma-separated string of additional CSS classes you want to add to the picture element (e.g. `'my_picture_class'` or `'my_picture_class, my_second_picture_class'`).
+| lazyload   | boolean     | optional | `false`  | When `true` enables `lazyload` classes and data-srcset attributes. See the [Lazyloading section](#lazyloading) for more information.
+| intrinsic  | boolean     | optional | `false`  | When `true` enables `intrinsic` classes and data-aspectratio attributes. See the [Intrinsic Aspectratio section](#intrinsic) for more information.
 
 ### Background Image
 For inserting a responsive background image in your template, use the `get_background` function or the `get-background` API endpoint with the available parameters.
@@ -285,6 +289,8 @@ The following image file formats are supported:
 
 Any other image formats, will not be resizes or cropped.
 
+---
+
 ## Sizes <a name="sizes"></a>
 
 ### Image sizes
@@ -317,6 +323,7 @@ The following parameters are available in the sizes syntax:
 | crop_x     | number or string | optional | c       | Crop position in horizontal direction (e.g. `c`). See the [Cropping section](#cropping) for more information.
 | crop_y     | number or string | optional | c       | Crop position in vertical direction  (e.g. `b`). See the [Cropping section](#cropping) for more information.
 
+---
 
 ## Cropping <a name="cropping"></a>
 
@@ -382,6 +389,8 @@ To use this value elsewhere in your theme, you can retrieve it by calling:
 ```php
 $focal_point = get_post_meta($attachment_id, 'responsive_pics_focal_point', true);
 ```
+
+---
 
 ## Process <a name="process"></a>
 
@@ -461,6 +470,8 @@ If an error occurs during the resizing process or if there's invalid syntax, Res
   }
 }
 ```
+
+---
 
 ## Hooks <a name="hooks"></a>
 The following actions allow you to hook into the image resizing process timeline. You can place them in your theme's functions.php file.
@@ -576,6 +587,7 @@ do_action('responsive_pics_file_s3_deleted', (int) $post_id, (object) $as3cf_ite
 - **$as3cf_item**  
 *(object)* The deleted WP Offload Media `Media_Library_Item` object in yout S3 storage.
 
+---
 
 ## Features <a name="features"></a>
 
@@ -640,6 +652,8 @@ To use the **Lazysizes aspectratio extension** in your wordpress theme, first in
 ```javascript
 import 'lazysizes/plugins/aspectratio/ls.aspectratio.js';
 ```
+
+---
 
 ## Issues
 Please submit any issues you experience with the **ResponsivePics** library over at [Github](https://github.com/booreiland/responsive-pics/issues).
