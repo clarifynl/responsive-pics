@@ -464,7 +464,28 @@ If an error occurs during the resizing process or if there's invalid syntax, Res
 
 ## Hooks <a name="hooks"></a>
 
-* `do_action('responsive_pics_request_scheduled', $post_id, $resize_request);`
+### responsive_pics_request_scheduled
+
+```php
+do_action('responsive_pics_request_scheduled', *int* $post_id, *array* $resize_request);
+
+```
+#### Parameters
+
+| Parameter       | Type      | Description
+| --------------- | ----------| -----------------------------------
+| $post_id        | integer   | The attachment ID
+| $resize_request | array     | The resize request parameters:
+|                 |           | `[`
+|                 |           |   `'id'      => *int* $id,`
+|                 |           |   `'quality' => *int* self::$image_quality,`
+|                 |           |   `'width'   => *int* $width,`
+|                 |           |   `'height'  => *int* $height,`
+|                 |           |   `'crop'    => *array* $crop,`
+|                 |           |   `'ratio'   => *int|float* $ratio,`
+|                 |           |   `'path'    => *string* $resized_file_path`
+|                 |           | `]`
+
 * `do_action('responsive_pics_request_processed', $post_id, $quality, $width, $height, $crop, $ratio, $resize_path);`
 * `do_action('responsive_pics_file_s3_uploaded', $post_id, $as3cf_item, $file);`
 * `do_action('responsive_pics_file_deleted_local', $post_id, $resized_file);`
