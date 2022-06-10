@@ -465,7 +465,7 @@ If an error occurs during the resizing process or if there's invalid syntax, Res
 ## Hooks <a name="hooks"></a>
 The following actions allow you to hook into the image resizing process timeline. You can place them in your theme's functions.php file.
 
-### responsive_pics_request_scheduled
+### `responsive_pics_request_scheduled`
 
 ```php
 do_action('responsive_pics_request_scheduled', (int) $post_id, (array) $resize_request);
