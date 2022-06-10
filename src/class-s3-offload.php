@@ -40,12 +40,12 @@ class RP_S3_Offload extends ResponsivePics {
 				$upload_handler = $as3cf->get_item_handler(Upload_Handler::get_item_handler_key_name());
 				$s3_upload      = $upload_handler->handle($as3cf_item);
 
-				do_action('responsive_pics_file_s3_uploaded', $id, $as3cf_item);
+				do_action('responsive_pics_file_s3_uploaded', $id, $file);
 			}
 		} else {
 			$s3_upload = $as3cf->upload_attachment($id, null, $file['path']);
 
-			do_action('responsive_pics_file_s3_uploaded', $id, null, $file);
+			do_action('responsive_pics_file_s3_uploaded', $id, $file);
 		}
 
 		// Check for errors
@@ -64,8 +64,10 @@ class RP_S3_Offload extends ResponsivePics {
 	 */
 	public static function delete_image($id, $paths = []) {
 		global $as3cf;
-		$s3_remove  = null;
-		$as3cf_item = Media_Library_Item::get_by_source_id($id);
+
+		$s3_remove       = null;
+		$as3cf_item      = Media_Library_Item::get_by_source_id($id);
+		$paths_to_remove = array_unique($paths);
 
 		if (!$as3cf_item) {
 			return;
@@ -74,7 +76,6 @@ class RP_S3_Offload extends ResponsivePics {
 		// Plugin version check
 		if (version_compare(WP_OFFLOAD_MEDIA_VERSION, '2.5.5', '<=')) {
 			$objects_to_remove = [];
-			$paths_to_remove   = array_unique($paths);
 
 			foreach ($paths_to_remove as $size => $path) {
 				$objects_to_remove[] = array(
@@ -92,7 +93,7 @@ class RP_S3_Offload extends ResponsivePics {
 
 			ResponsivePics()->error->add_error('error', $error_message, $error_data);
 		} else {
-			do_action('responsive_pics_file_s3_deleted', $id, $as3cf_item);
+			do_action('responsive_pics_file_s3_deleted', $id, $paths_to_remove);
 		}
 	}
 }

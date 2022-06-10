@@ -554,30 +554,38 @@ do_action('responsive_pics_file_saved_local', (int) $post_id, (array) $file);
 *(array)* The saved file containing:
 ```php
   [
-    'path'      => (string) The saved image file path,
-    'file'      => (string) The saved image file file,
+    'path'      => (string) The saved image filepath,
+    'file'      => (string) The saved image filename,
     'width'     => (int) The saved image file width,
     'height'    => (int) The saved image file height,
     'mime-type' => (string) The saved image file mime-type,
   ]
 ```
 
+---
+
 ### `responsive_pics_file_s3_uploaded`
 This action fires when WP Offload Media has uploaded the resized image file to your S3 storage.
 
 ```php
-do_action('responsive_pics_file_s3_uploaded', (int) $post_id, (object) $as3cf_item, (string) $file);
+do_action('responsive_pics_file_s3_uploaded', (int) $post_id, (array) $file);
 ```
 #### Parameters
 
 - **$post_id**  
 *(int)* The attachment ID
 
-- **$as3cf_item**  
-*(object|null)* The uploaded WP Offload Media `Media_Library_Item` object (WP Offload Media versions 2.6 >=)
-
 - **$file**  
-*(string|null)* The uploaded image file path (WP Offload Media versions < 2.6)
+*(array)* The S3 uploaded file containing:
+```php
+  [
+    'path'      => (string) The saved image filepath,
+    'file'      => (string) The saved image filename,
+    'width'     => (int) The saved image file width,
+    'height'    => (int) The saved image file height,
+    'mime-type' => (string) The saved image file mime-type,
+  ]
+```
 
 ---
 
@@ -599,15 +607,15 @@ do_action('responsive_pics_file_deleted_local', (int) $post_id, (string) $file);
 
 ### `responsive_pics_file_s3_deleted`
 ```php
-do_action('responsive_pics_file_s3_deleted', (int) $post_id, (object) $as3cf_item);
+do_action('responsive_pics_file_s3_deleted', (int) $post_id, (array) $file_paths);
 ```
 #### Parameters
 
 - **$post_id**  
 *(int)* The attachment ID
 
-- **$as3cf_item**  
-*(object)* The deleted WP Offload Media `Media_Library_Item` object in yout S3 storage.
+- **$file_paths**  
+*(array)* The deleted resized file paths in your S3 storage.
 
 ---
 
