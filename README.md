@@ -559,6 +559,7 @@ do_action('responsive_pics_file_saved_local', (int) $post_id, (array) $file);
     'width'     => (int) The saved image file width,
     'height'    => (int) The saved image file height,
     'mime-type' => (string) The saved image file mime-type,
+    'filesize'  => (int) The saved image filesize
   ]
 ```
 
@@ -579,11 +580,12 @@ do_action('responsive_pics_file_s3_uploaded', (int) $post_id, (array) $file);
 *(array)* The S3 uploaded file containing:
 ```php
   [
-    'path'      => (string) The saved image filepath,
-    'file'      => (string) The saved image filename,
-    'width'     => (int) The saved image file width,
-    'height'    => (int) The saved image file height,
-    'mime-type' => (string) The saved image file mime-type,
+    'path'      => (string) The uploaded image filepath,
+    'file'      => (string) The uploaded image filename,
+    'width'     => (int) The uploaded image file width,
+    'height'    => (int) The uploaded image file height,
+    'mime-type' => (string) The uploaded image file mime-type,
+    'filesize'  => (int) The uploaded image filesize
   ]
 ```
 
