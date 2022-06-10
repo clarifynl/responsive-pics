@@ -466,6 +466,8 @@ If an error occurs during the resizing process or if there's invalid syntax, Res
 The following actions allow you to hook into the image resizing process timeline. You can place them in your theme's functions.php file.
 
 ### `responsive_pics_request_scheduled`
+This action fires when ResponsivePics has scheduled a new image resize request to the ActionScheduler queue.
+
 ```php
 do_action('responsive_pics_request_scheduled', (int) $post_id, (array) $resize_request);
 
@@ -488,10 +490,11 @@ do_action('responsive_pics_request_scheduled', (int) $post_id, (array) $resize_r
   'path'    => (string) The requested image file path
 ]
 ```
-
 ---
 
 ### `responsive_pics_request_processed`
+This action fires when ResponsivePics has processed an image resize request from the ActionScheduler queue and has saved the file locally.
+
 ```php
 do_action('responsive_pics_request_processed', (int) $post_id, (int) $quality, (int) $width, (int) $height, (array) $crop, (float) $ratio, (string) $resize_path);
 ```
@@ -524,10 +527,13 @@ do_action('responsive_pics_request_processed', (int) $post_id, (int) $quality, (
 - **$resize_path**  
 (string) The requested image file path
 
+---
 
 ### `responsive_pics_file_s3_uploaded`
+This action fires when WP Offload Media has uploaded the resized image file to your S3 storage.
+
 ```php
-do_action('responsive_pics_file_s3_uploaded', $post_id, $as3cf_item, $file);
+do_action('responsive_pics_file_s3_uploaded', (int) $post_id, (object) $as3cf_item, (string) $file);
 ```
 #### Parameters
 
@@ -538,17 +544,37 @@ do_action('responsive_pics_file_s3_uploaded', $post_id, $as3cf_item, $file);
 *(object|null)* The uploaded WP Offload Media `Media_Library_Item` object (WP Offload Media versions 2.6 >=)
 
 - **$file**  
-(string|null) The uploaded image file path (WP Offload Media versions < 2.6)
+*(string|null)* The uploaded image file path (WP Offload Media versions < 2.6)
+
+---
 
 ### `responsive_pics_file_deleted_local`
+This action fires when ResponsivePics has deleted a resized image file locally.
+
 ```php
-do_action('responsive_pics_file_deleted_local', $post_id, $resized_file);
+do_action('responsive_pics_file_deleted_local', (int) $post_id, (string) $file);
 ```
+#### Parameters
+
+- **$post_id**  
+*(int)* The attachment ID
+
+- **$file**  
+*(string)* The deleted image file path
+
+---
 
 ### `responsive_pics_file_s3_deleted`
 ```php
-do_action('responsive_pics_file_s3_deleted', $post_id, $as3cf_item);
+do_action('responsive_pics_file_s3_deleted', (int) $post_id, (object) $as3cf_item);
 ```
+#### Parameters
+
+- **$post_id**  
+*(int)* The attachment ID
+
+- **$as3cf_item**  
+*(object)* The deleted WP Offload Media `Media_Library_Item` object in yout S3 storage.
 
 
 ## Features <a name="features"></a>
