@@ -472,11 +472,13 @@ do_action('responsive_pics_request_scheduled', *int* $post_id, *array* $resize_r
 ```
 #### Parameters
 
-| Parameter       | Type      | Description
-| --------------- | ----------| -----------------------------------
-| $post_id        | integer   | The attachment ID
-| $resize_request | array     | The resize request parameters:
-|                 |           | <code>[
+**$post_id**
+*(integer)* The attachment ID
+
+**$resize_request**
+*(array)* The resize request parameters:
+```php
+[
 	'id'      => *int* $id,
 	'quality' => *int* self::$image_quality,
 	'width'   => *int* $width,
@@ -484,7 +486,8 @@ do_action('responsive_pics_request_scheduled', *int* $post_id, *array* $resize_r
 	'crop'    => *array* $crop,
 	'ratio'   => *int|float* $ratio,
 	'path'    => *string* $resized_file_path
-]</code>
+]
+```
 
 * `do_action('responsive_pics_request_processed', $post_id, $quality, $width, $height, $crop, $ratio, $resize_path);`
 * `do_action('responsive_pics_file_s3_uploaded', $post_id, $as3cf_item, $file);`
