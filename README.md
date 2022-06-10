@@ -13,7 +13,7 @@
 * Supports LQIP (low quality image placeholder)
 * Supports lazyloading
 * Supports intrinsic ratio boxes
-* Supports offloading media to S3 storage with [WP Offload Media (Lite)](https://nl.wordpress.org/plugins/amazon-s3-and-cloudfront/) (currently only versions 2.5.5 or lower are supported)
+* Supports offloading media to S3 storage with [WP Offload Media (Lite)](https://nl.wordpress.org/plugins/amazon-s3-and-cloudfront/)
 * Supports WP REST API
 * Uses background processing for resize- and crop tasks
 
