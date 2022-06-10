@@ -472,20 +472,21 @@ do_action('responsive_pics_request_scheduled', *int* $post_id, *array* $resize_r
 ```
 #### Parameters
 
-**$post_id**
+**$post_id**  
 *(integer)* The attachment ID
 
-**$resize_request**
+**$resize_request**  
 *(array)* The resize request parameters:
+
 ```php
 [
-	'id'      => *int* $id,
-	'quality' => *int* self::$image_quality,
-	'width'   => *int* $width,
-	'height'  => *int* $height,
-	'crop'    => *array* $crop,
-	'ratio'   => *int|float* $ratio,
-	'path'    => *string* $resized_file_path
+  'id'      => (int) $id,
+  'quality' => (int) self::$image_quality,
+  'width'   => (int) $width,
+  'height'  => (int) $height,
+  'crop'    => (array) $crop,
+  'ratio'   => (float) $ratio,
+  'path'    => (string) $resized_file_path
 ]
 ```
 
