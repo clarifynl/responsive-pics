@@ -472,21 +472,20 @@ do_action('responsive_pics_request_scheduled', (int) $post_id, (array) $resize_r
 ```
 #### Parameters
 
-**$post_id**  
+- **$post_id**  
 *(integer)* The attachment ID
 
-**$resize_request**  
+- **$resize_request**  
 *(array)* The resize request parameters:
-
 ```php
 [
-  'id'      => (int) $id,
-  'quality' => (int) self::$image_quality,
-  'width'   => (int) $width,
-  'height'  => (int) $height,
-  'crop'    => (array) $crop,
-  'ratio'   => (float) $ratio,
-  'path'    => (string) $resized_file_path
+  'id'      => (int) The attachment ID,
+  'quality' => (int) The requested image quality,
+  'width'   => (int) The requested image width,
+  'height'  => (int) The requested image height,
+  'crop'    => (array) The requested image crop positions,
+  'ratio'   => (float) The requested image ratio,
+  'path'    => (string) The requested image file path
 ]
 ```
 
@@ -509,7 +508,8 @@ do_action('responsive_pics_request_processed', (int) $post_id, (int) $quality, (
 (int) The requested image height
 
 - **$crop**  
-(array) The requested image crop positions in percentages `['x' => 50, 'y' => 50]`
+(array) The requested image crop positions in percentages:
+`['x' => 50, 'y' => 50]`
 
 - **$ratio**  
 (float) The requested image ratio
