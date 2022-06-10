@@ -466,7 +466,6 @@ If an error occurs during the resizing process or if there's invalid syntax, Res
 The following actions allow you to hook into the image resizing process timeline. You can place them in your theme's functions.php file.
 
 ### `responsive_pics_request_scheduled`
-
 ```php
 do_action('responsive_pics_request_scheduled', (int) $post_id, (array) $resize_request);
 
@@ -491,10 +490,26 @@ do_action('responsive_pics_request_scheduled', (int) $post_id, (array) $resize_r
 ]
 ```
 
-* `do_action('responsive_pics_request_processed', $post_id, $quality, $width, $height, $crop, $ratio, $resize_path);`
-* `do_action('responsive_pics_file_s3_uploaded', $post_id, $as3cf_item, $file);`
-* `do_action('responsive_pics_file_deleted_local', $post_id, $resized_file);`
-* `do_action('responsive_pics_file_s3_deleted', $post_id, $as3cf_item);`
+
+### `responsive_pics_request_processed`
+```php
+do_action('responsive_pics_request_processed', $post_id, $quality, $width, $height, $crop, $ratio, $resize_path);
+```
+
+### `responsive_pics_file_s3_uploaded`
+```php
+do_action('responsive_pics_file_s3_uploaded', $post_id, $as3cf_item, $file);
+```
+
+### `responsive_pics_file_deleted_local`
+```php
+do_action('responsive_pics_file_deleted_local', $post_id, $resized_file);
+```
+
+### `responsive_pics_file_s3_deleted`
+```php
+do_action('responsive_pics_file_s3_deleted', $post_id, $as3cf_item);
+```
 
 
 ## Features <a name="features"></a>
