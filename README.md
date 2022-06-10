@@ -496,25 +496,25 @@ do_action('responsive_pics_request_processed', (int) $post_id, (int) $quality, (
 ```
 #### Parameters
 
-**$post_id**  
+- **$post_id**  
 *(int)* The attachment ID
 
-**$quality**  
+- **$quality**  
 *(int)* The requested image quality
 
-**$width**  
+- **$width**  
 (int) The requested image width
 
-**$height**  
+- **$height**  
 (int) The requested image height
 
-**$crop**  
+- **$crop**  
 (array) The requested image crop positions in percentages `['x' => 50, 'y' => 50]`
 
-**$ratio**  
+- **$ratio**  
 (float) The requested image ratio
 
-**$resize_path**  
+- **$resize_path**  
 (string) The requested image file path
 
 ### `responsive_pics_file_s3_uploaded`
