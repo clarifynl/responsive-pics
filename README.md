@@ -504,7 +504,7 @@ do_action('responsive_pics_request_scheduled', (int) $post_id, (array) $resize_r
 ---
 
 ### `responsive_pics_request_processed`
-This action fires when ResponsivePics has processed an image resize request from the ActionScheduler queue.
+This action fires when the **ActionScheduler** has processed an image resize request in the queue.
 
 ```php
 do_action('responsive_pics_request_processed', (int) $post_id, (int) $quality, (int) $width, (int) $height, (array) $crop, (float) $ratio, (string) $resize_path);
@@ -541,7 +541,7 @@ do_action('responsive_pics_request_processed', (int) $post_id, (int) $quality, (
 ---
 
 ### `responsive_pics_file_saved_local`
-This action fires when ResponsivePics has succesfully saved a resized image file locally.
+This action fires when **ResponsivePics** has successfully saved a resized image file locally.
 ```php
 do_action('responsive_pics_file_saved_local', (int) $post_id, (array) $file);
 ```
@@ -566,7 +566,7 @@ do_action('responsive_pics_file_saved_local', (int) $post_id, (array) $file);
 ---
 
 ### `responsive_pics_file_s3_uploaded`
-This action fires when WP Offload Media has uploaded the resized image file to your S3 storage.
+This action fires when **WP Offload Media** has uploaded the resized image file to your S3 storage.
 
 ```php
 do_action('responsive_pics_file_s3_uploaded', (int) $post_id, (array) $file);
@@ -592,7 +592,7 @@ do_action('responsive_pics_file_s3_uploaded', (int) $post_id, (array) $file);
 ---
 
 ### `responsive_pics_file_deleted_local`
-This action fires when ResponsivePics has deleted a resized image file locally.
+This action fires when **ResponsivePics** has successfully deleted a resized image file locally.
 
 ```php
 do_action('responsive_pics_file_deleted_local', (int) $post_id, (string) $file);
@@ -608,6 +608,7 @@ do_action('responsive_pics_file_deleted_local', (int) $post_id, (string) $file);
 ---
 
 ### `responsive_pics_file_s3_deleted`
+This action fires when **WP Offload Media** has deleted a resized image file in your S3 storage.
 ```php
 do_action('responsive_pics_file_s3_deleted', (int) $post_id, (array) $file_paths);
 ```
