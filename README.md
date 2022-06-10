@@ -504,7 +504,7 @@ do_action('responsive_pics_request_scheduled', (int) $post_id, (array) $resize_r
 ---
 
 ### `responsive_pics_request_processed`
-This action fires when ResponsivePics has processed an image resize request from the ActionScheduler queue and has saved the file locally.
+This action fires when ResponsivePics has processed an image resize request from the ActionScheduler queue.
 
 ```php
 do_action('responsive_pics_request_processed', (int) $post_id, (int) $quality, (int) $width, (int) $height, (array) $crop, (float) $ratio, (string) $resize_path);
@@ -539,6 +539,28 @@ do_action('responsive_pics_request_processed', (int) $post_id, (int) $quality, (
 (string) The requested image file path
 
 ---
+
+### `responsive_pics_file_saved_local`
+This action fires when ResponsivePics has succesfully saved a resized image file locally.
+```php
+do_action('responsive_pics_file_saved_local', (int) $post_id, (array) $file);
+```
+#### Parameters
+
+- **$post_id**  
+*(int)* The attachment ID
+
+- **$file**  
+*(array)* The saved file containing:
+```php
+  [
+    'path'      => (string) The saved image file path,
+    'file'      => (string) The saved image file file,
+    'width'     => (int) The saved image file width,
+    'height'    => (int) The saved image file height,
+    'mime-type' => (string) The saved image file mime-type,
+  ]
+```
 
 ### `responsive_pics_file_s3_uploaded`
 This action fires when WP Offload Media has uploaded the resized image file to your S3 storage.
