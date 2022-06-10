@@ -489,6 +489,7 @@ do_action('responsive_pics_request_scheduled', (int) $post_id, (array) $resize_r
 ]
 ```
 
+---
 
 ### `responsive_pics_request_processed`
 ```php
@@ -528,6 +529,16 @@ do_action('responsive_pics_request_processed', (int) $post_id, (int) $quality, (
 ```php
 do_action('responsive_pics_file_s3_uploaded', $post_id, $as3cf_item, $file);
 ```
+#### Parameters
+
+- **$post_id**  
+*(int)* The attachment ID
+
+- **$as3cf_item**  
+*(object|null)* The uploaded WP Offload Media `Media_Library_Item` object (WP Offload Media versions 2.6 >=)
+
+- **$file**  
+(string|null) The uploaded image file path (WP Offload Media versions < 2.6)
 
 ### `responsive_pics_file_deleted_local`
 ```php
