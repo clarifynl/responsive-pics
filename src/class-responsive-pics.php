@@ -453,6 +453,62 @@ class ResponsivePics {
 	}
 
 	/*
+	 * Construct a responsive image element
+	 * returns image sources as data
+	 */
+	public static function get_image_sources($id = null, $sizes = null, $crop = false) {
+		// init WP_Error
+		self::$wp_error = new WP_Error();
+
+		// check for valid image id
+		$image = ResponsivePics()->process->process_image($id);
+
+		// check for valid sizes value
+		$definition = [];
+		if ($image) {
+			$definition = ResponsivePics()->process->process_sizes($image, $sizes, 'desc', false, $crop);
+		}
+
+		// check for errors
+		if (count(self::$wp_error->get_error_messages()) > 0) {
+			return ResponsivePics()->error->get_error(self::$wp_error);
+		}
+
+		// return normal image if unsupported mime type
+		if (!in_array($definition['mimetype'], self::$supported_mime_types)) {
+			$original_src = wp_get_attachment_image_src($image);
+			return $original_src;
+		}
+
+		// add all sources & sizes
+		$srcsets  = [];
+		$sizes    = [];
+
+		// start constructing <img> element
+		$sources = isset($definition['sources']) ? $definition['sources'] : [];
+		foreach ($sources as $source) {
+			$srcsets[] = $source['source1x'] . ' ' . $source['width'] . 'w';
+			if (isset($source['source2x'])) {
+				$srcsets[] = $source['source2x'] . ' ' . ($source['width'] * 2) . 'w';
+			}
+
+			if (isset($source['breakpoint'])) {
+				$sizes[] = '(min-width: '. $source['breakpoint'] .'px) '. $source['width'] . 'px';
+			} else {
+				$sizes[] = $source['width'] . 'px';
+			}
+		}
+
+		// add fallback size
+		$sizes[] = '100vw';
+
+		return [
+			'sizes'  => $sizes,
+			'srcset' => $srcsets
+		];
+	}
+
+	/*
 	 * Construct a background image element and a matching responsive inline style element
 	 *
 	 * Returns an inline <style> element with a dedicated image class with media-queries for all the different image sizes
