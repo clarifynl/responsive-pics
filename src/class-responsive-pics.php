@@ -480,6 +480,8 @@ class ResponsivePics {
 			return $original_src;
 		}
 
+		return $definition;
+
 		// add all sources & sizes
 		$srcsets  = [];
 		$sizes    = [];
