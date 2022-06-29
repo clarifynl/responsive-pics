@@ -481,33 +481,6 @@ class ResponsivePics {
 		}
 
 		return $definition;
-
-		// add all sources & sizes
-		$srcsets  = [];
-		$sizes    = [];
-
-		// start constructing <img> element
-		$sources = isset($definition['sources']) ? $definition['sources'] : [];
-		foreach ($sources as $source) {
-			$srcsets[] = $source['source1x'] . ' ' . $source['width'] . 'w';
-			if (isset($source['source2x'])) {
-				$srcsets[] = $source['source2x'] . ' ' . ($source['width'] * 2) . 'w';
-			}
-
-			if (isset($source['breakpoint'])) {
-				$sizes[] = '(min-width: '. $source['breakpoint'] .'px) '. $source['width'] . 'px';
-			} else {
-				$sizes[] = $source['width'] . 'px';
-			}
-		}
-
-		// add fallback size
-		$sizes[] = '100vw';
-
-		return [
-			'sizes'  => $sizes,
-			'srcset' => $srcsets
-		];
 	}
 
 	/*
