@@ -1,6 +1,6 @@
 {
   "name": "responsive-pics",
-  "version": "1.6.2",
+  "version": "1.6.0",
   "private": true,
   "devDependencies": {
     "@wpackio/scripts": "^5.0.0",
