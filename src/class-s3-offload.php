@@ -51,9 +51,7 @@ class RP_S3_Offload extends ResponsivePics {
 		// Check for errors
 		if (is_wp_error($s3_upload)) {
 			$error_message = $s3_upload->get_error_message();
-			$error_data    = $s3_upload->get_error_data();
-
-			ResponsivePics()->error->add_error('error', $error_message, $error_data);
+			error_log($error_message);
 		}
 
 		return $s3_upload;
