@@ -267,101 +267,6 @@ class ResponsivePics {
 	}
 
 	/*
-	 * Construct a responsive picture element
-	 * returns <picture> element as html markup
-	 */
-	public static function get_picture($id = null, $sizes = null, $picture_classes = null, $lazyload = false, $intrinsic = false) {
-		// init WP_Error
-		self::$wp_error = new WP_Error();
-
-		// check for valid image id
-		$image = ResponsivePics()->process->process_image($id);
-
-		// check for valid sizes
-		$definition = [];
-		if ($image) {
-			$definition = ResponsivePics()->process->process_sizes($image, $sizes);
-		}
-
-		// check for valid classes value
-		if ($picture_classes) {
-			$picture_classes = ResponsivePics()->process->process_classes($picture_classes);
-		} else {
-			$picture_classes = [];
-		}
-
-		// check for valid lazyload value
-		if (isset($lazyload)) {
-			$lazyload = ResponsivePics()->process->process_boolean($lazyload, 'lazyload');
-		}
-
-		// check for valid intrinsic value
-		if (isset($intrinsic)) {
-			$intrinsic = ResponsivePics()->process->process_boolean($intrinsic, 'intrinsic');
-		}
-
-		// check for errors
-		if (count(self::$wp_error->get_error_messages()) > 0) {
-			return ResponsivePics()->error->get_error(self::$wp_error);
-		}
-
-		// set img classes
-		$img_classes = [];
-		if ($lazyload) {
-			$img_classes[] = self::$lazyload_class;
-		}
-
-		// exclude unsupported mime types from intrinsic
-		if ($intrinsic && !in_array($definition['mimetype'], self::$supported_mime_types)) {
-			$intrinsic = false;
-		}
-
-		// set intrinsic classes
-		if ($intrinsic) {
-			$picture_classes[] = 'intrinsic';
-			$img_classes[]     = 'intrinsic__item';
-
-			if ($definition['alpha']) {
-				$img_classes[] = 'has-alpha';
-			}
-		}
-
-		// start constructing <picture> element
-		$picture = [];
-		$picture[] = sprintf('<picture%s>', $picture_classes ? ' class="' . implode(' ', $picture_classes) . '"' : '');
-
-		$src_attribute = $lazyload ? 'data-srcset' : 'srcset';
-		$classes = $img_classes ? ' class="' . implode(' ', $img_classes) . '"' : '';
-
-		// add all sources
-		$sources = isset($definition['sources']) ? $definition['sources'] : [];
-		foreach ($sources as $source) {
-			$data_aspectratio = $intrinsic ? ' data-aspectratio="' . $source['ratio'] . '"' : '';
-
-			if (isset($source['breakpoint'])) {
-				$urls = $source['source1x'];
-
-				if (isset($source['source2x'])) {
-					$urls .= ' 1x, ' . $source['source2x'] . ' 2x';
-				}
-
-				$picture[] = sprintf('  <source media="(min-width: %spx)" %s="%s"%s />', $source['breakpoint'], $src_attribute, $urls, $data_aspectratio);
-			} else {
-				$picture[] = sprintf('  <source %s="%s"%s />', $src_attribute, $source['source1x'], $data_aspectratio);
-			}
-		}
-
-		// transparent gif
-		$style     = $intrinsic ? ' style="width:100%;"' : '';
-		$ratio     = $intrinsic ? ' data-aspectratio=""' : '';
-		$picture[] = sprintf('  <img src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="%s alt="%s"%s%s />', $ratio, $definition['alt'], $classes, $style);
-		$picture[] = '</picture>';
-
-		return implode("\n", $picture) . "\n";
-	}
-
-
-	/*
 	 * Construct a responsive image element
 	 * returns <img> element as html markup
 	 */
@@ -474,13 +379,101 @@ class ResponsivePics {
 			return ResponsivePics()->error->get_error(self::$wp_error);
 		}
 
-		// return normal image if unsupported mime type
-		if (!in_array($definition['mimetype'], self::$supported_mime_types)) {
-			$original_src = wp_get_attachment_image_src($image);
-			return $original_src;
+		return $definition;
+	}
+
+	/*
+	 * Construct a responsive picture element
+	 * returns <picture> element as html markup
+	 */
+	public static function get_picture($id = null, $sizes = null, $picture_classes = null, $lazyload = false, $intrinsic = false) {
+		// init WP_Error
+		self::$wp_error = new WP_Error();
+
+		// check for valid image id
+		$image = ResponsivePics()->process->process_image($id);
+
+		// check for valid sizes
+		$definition = [];
+		if ($image) {
+			$definition = ResponsivePics()->process->process_sizes($image, $sizes);
 		}
 
-		return $definition;
+		// check for valid classes value
+		if ($picture_classes) {
+			$picture_classes = ResponsivePics()->process->process_classes($picture_classes);
+		} else {
+			$picture_classes = [];
+		}
+
+		// check for valid lazyload value
+		if (isset($lazyload)) {
+			$lazyload = ResponsivePics()->process->process_boolean($lazyload, 'lazyload');
+		}
+
+		// check for valid intrinsic value
+		if (isset($intrinsic)) {
+			$intrinsic = ResponsivePics()->process->process_boolean($intrinsic, 'intrinsic');
+		}
+
+		// check for errors
+		if (count(self::$wp_error->get_error_messages()) > 0) {
+			return ResponsivePics()->error->get_error(self::$wp_error);
+		}
+
+		// set img classes
+		$img_classes = [];
+		if ($lazyload) {
+			$img_classes[] = self::$lazyload_class;
+		}
+
+		// exclude unsupported mime types from intrinsic
+		if ($intrinsic && !in_array($definition['mimetype'], self::$supported_mime_types)) {
+			$intrinsic = false;
+		}
+
+		// set intrinsic classes
+		if ($intrinsic) {
+			$picture_classes[] = 'intrinsic';
+			$img_classes[]     = 'intrinsic__item';
+
+			if ($definition['alpha']) {
+				$img_classes[] = 'has-alpha';
+			}
+		}
+
+		// start constructing <picture> element
+		$picture = [];
+		$picture[] = sprintf('<picture%s>', $picture_classes ? ' class="' . implode(' ', $picture_classes) . '"' : '');
+
+		$src_attribute = $lazyload ? 'data-srcset' : 'srcset';
+		$classes = $img_classes ? ' class="' . implode(' ', $img_classes) . '"' : '';
+
+		// add all sources
+		$sources = isset($definition['sources']) ? $definition['sources'] : [];
+		foreach ($sources as $source) {
+			$data_aspectratio = $intrinsic ? ' data-aspectratio="' . $source['ratio'] . '"' : '';
+
+			if (isset($source['breakpoint'])) {
+				$urls = $source['source1x'];
+
+				if (isset($source['source2x'])) {
+					$urls .= ' 1x, ' . $source['source2x'] . ' 2x';
+				}
+
+				$picture[] = sprintf('  <source media="(min-width: %spx)" %s="%s"%s />', $source['breakpoint'], $src_attribute, $urls, $data_aspectratio);
+			} else {
+				$picture[] = sprintf('  <source %s="%s"%s />', $src_attribute, $source['source1x'], $data_aspectratio);
+			}
+		}
+
+		// transparent gif
+		$style     = $intrinsic ? ' style="width:100%;"' : '';
+		$ratio     = $intrinsic ? ' data-aspectratio=""' : '';
+		$picture[] = sprintf('  <img src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="%s alt="%s"%s%s />', $ratio, $definition['alt'], $classes, $style);
+		$picture[] = '</picture>';
+
+		return implode("\n", $picture) . "\n";
 	}
 
 	/*
