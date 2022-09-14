@@ -305,7 +305,7 @@ class ResponsivePics {
 		$lqip_img = null;
 		if ($lqip) {
 			$img_classes[] = self::$lqip_class;
-			$lqip_sizes    = ResponsivePics()->process->process_sizes($image, '0:' . self::$lqip_width, 'desc', false, $crop, $rest_route);
+			$lqip_sizes    = ResponsivePics()->process->process_sizes($id, '0:' . self::$lqip_width, 'desc', false, $crop, $rest_route);
 			$lqip_sources  = isset($lqip_sizes['sources']) ? $lqip_sizes['sources'] : [];
 			$lqip_img      = isset($lqip_sources[0]['source1x']) ? $lqip_sources[0]['source1x'] : null;
 		}
@@ -315,7 +315,7 @@ class ResponsivePics {
 
 		// return normal image if unsupported mime type
 		if (!in_array($definition['mimetype'], self::$supported_mime_types)) {
-			$original_src = wp_get_attachment_image_src($image);
+			$original_src = wp_get_attachment_image_src($id);
 			$image_html   = sprintf('<img%s %s="%s" alt="%s"/>', $classes, $src_attribute, $original_src[0], $definition['alt']);
 			return $image_html;
 		}
