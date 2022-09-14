@@ -29,7 +29,7 @@ class RP_Rest_Api extends ResponsivePics
 		/**
 		 * Register get-picture api route
 		 */
-		register_rest_route('responsive-pics/v1', '/(get-)?(-picture)?/(?P<id>\d+)', [
+		register_rest_route('responsive-pics/v1', '/(get-)?picture/(?P<id>\d+)', [
 			'methods'             => 'GET',
 			'callback'            => ['RP_Rest_Api', 'rest_get_picture'],
 			'permission_callback' => '__return_true',

@@ -208,7 +208,7 @@ ResponsivePics::getRestApiCacheDuration(); // Will return $wp_rest_cache_duratio
 ## Usage <a name="usage"></a>
 
 ### Image Element
-For inserting a responsive `<img>` element in your template, use the `get_image` function or the `get-image` API endpoint with the available parameters.
+For inserting a responsive `<img>` element in your template, use the `get_image` function or the `responsive-pics/v1/image` API endpoint with the available parameters.
 
 #### PHP
 ```php
@@ -217,7 +217,7 @@ ResponsivePics::get_image(id, sizes, crop, classes, lazyload, lqip);
 
 #### REST API
 ```curl
-GET /wp-json/responsive-pics/v1/get-image/<id>?sizes=<sizes>&crop=<crop>&classes=<classes>&lazyload=<lazyload>&lqip=<lqip>
+GET /wp-json/responsive-pics/v1/image/<id>?sizes=<sizes>&crop=<crop>&classes=<classes>&lazyload=<lazyload>&lqip=<lqip>
 ```
 
 #### Image Parameters
@@ -233,7 +233,7 @@ GET /wp-json/responsive-pics/v1/get-image/<id>?sizes=<sizes>&crop=<crop>&classes
 
 ### Picture Element
 
-For inserting a responsive `<picture>` element in your template, use the `get_picture` function or the `get-picture` API endpoint with the available parameters.
+For inserting a responsive `<picture>` element in your template, use the `get_picture` function or the `responsive-pics/v1/picture` API endpoint with the available parameters.
 
 #### PHP
 ```php
@@ -242,7 +242,7 @@ ResponsivePics::get_picture(id, sizes, classes, lazyload, intrinsic);
 
 #### REST API
 ```curl
-GET /wp-json/responsive-pics/v1/get-picture/<id>?sizes=<sizes>&classes=<classes>&lazyload=<lazyload>&intrinsic=<intrinsic>
+GET /wp-json/responsive-pics/v1/picture/<id>?sizes=<sizes>&classes=<classes>&lazyload=<lazyload>&intrinsic=<intrinsic>
 ```
 
 #### Picture Parameters
@@ -256,7 +256,7 @@ GET /wp-json/responsive-pics/v1/get-picture/<id>?sizes=<sizes>&classes=<classes>
 | intrinsic  | boolean     | optional | `false`  | When `true` enables `intrinsic` classes and data-aspectratio attributes. See the [Intrinsic Aspectratio section](#intrinsic) for more information.
 
 ### Background Image
-For inserting a responsive background image in your template, use the `get_background` function or the `get-background` API endpoint with the available parameters.
+For inserting a responsive background image in your template, use the `get_background` function or the `responsive-pics/v1/background` API endpoint with the available parameters.
 
 #### PHP
 ```php
@@ -265,7 +265,7 @@ ResponsivePics::get_background(id, sizes, classes);
 
 #### REST API
 ```curl
-GET /wp-json/responsive-pics/v1/get-background/<id>?sizes=<sizes>&classes=<classes>
+GET /wp-json/responsive-pics/v1/background/<id>?sizes=<sizes>&classes=<classes>
 ```
 
 #### Background Parameters
@@ -660,7 +660,7 @@ import 'lazysizes';
 ```
 
 ### LQIP (Low Quality Image Placeholder) <a name="lqip"></a>
-When enabling the `lqip` option in the `get_image` function or `/responsive-pics/v1/get-image` API endpoint, this library automatically:
+When enabling the `lqip` option in the `get_image` function or `/responsive-pics/v1/image` API endpoint, this library automatically:
 
 * adds a `blur-up` class to the `<img>` element.
 * adds a fallback `src` attribute on the `<img>` element with a low quality placeholder image with a default width of 100px.
@@ -675,7 +675,7 @@ if (class_exists('ResponsivePics')) {
 ```
 
 ### Intrinsic Aspectratio <a name="intrinsic"></a>
-When enabling the `intrinsic` option in the `get_picture` function or `/responsive-pics/v1/get-picture` API endpoint, this library automatically:
+When enabling the `intrinsic` option in the `get_picture` function or `/responsive-pics/v1/picture` API endpoint, this library automatically:
 
 * adds a intrinsic class to the `<picture>` element and a `intrinsic__item` class to the picture `<img>` element.
 * adds `data-aspectratio` attributes on the picture `<source>` and `<img>` elements with the calculated source image ratio.
