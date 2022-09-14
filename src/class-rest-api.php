@@ -57,7 +57,9 @@ class RP_Rest_Api extends ResponsivePics {
 
 	// get image
 	public static function rest_get_image($request) {
-		$referer   = $request->get_header('referer');
+		$headers   = $request->get_headers();
+		syslog(LOG_DEBUG, 'rest_get_image headers: ' . json_encode($headers));
+
 		$params    = $request->get_params();
 		$id        = isset($request['id']) ? $request['id'] : null;
 		$sizes     = isset($params['sizes']) ? urldecode($params['sizes']) : null;
@@ -68,7 +70,7 @@ class RP_Rest_Api extends ResponsivePics {
 
 		if (class_exists('ResponsivePics')) {
 			if ($sizes) {
-				$image  = ResponsivePics::get_image($id, $sizes, $crop, $classes, $lazyload, $lqip, $referer);
+				$image  = ResponsivePics::get_image($id, $sizes, $crop, $classes, $lazyload, $lqip);
 
 				// Check for errors
 				if (is_wp_error($image)) {

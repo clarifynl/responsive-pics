@@ -270,10 +270,9 @@ class ResponsivePics {
 	 * Construct a responsive image element
 	 * returns <img> element as html markup
 	 */
-	public static function get_image($id = null, $sizes = null, $crop = false, $img_classes = null, $lazyload = false, $lqip = false, $referer = null) {
+	public static function get_image($id = null, $sizes = null, $crop = false, $img_classes = null, $lazyload = false, $lqip = false) {
 		// get image sources
 		$definition = self::get_image_sources($id, $sizes, $crop);
-		syslog(LOG_DEBUG, 'get_image referer: '. $referer);
 
 		// convert $picture_classes to array if it is a string
 		if ($img_classes) {
