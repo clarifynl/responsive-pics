@@ -10,7 +10,7 @@ class RP_Rest_Api extends ResponsivePics
 		/**
 		 * Register get-image api route
 		 */
-		register_rest_route('responsive-pics/v1', '/get-image/(?P<id>\d+)', [
+		register_rest_route('responsive-pics/v1', '/(get-)?image/(?P<id>\d+)', [
 			'methods'             => 'GET',
 			'callback'            => ['RP_Rest_Api', 'rest_get_image'],
 			'permission_callback' => '__return_true',
@@ -29,7 +29,7 @@ class RP_Rest_Api extends ResponsivePics
 		/**
 		 * Register get-picture api route
 		 */
-		register_rest_route('responsive-pics/v1', '/get(-picture)?/(?P<id>\d+)', [
+		register_rest_route('responsive-pics/v1', '/(get-)?(-picture)?/(?P<id>\d+)', [
 			'methods'             => 'GET',
 			'callback'            => ['RP_Rest_Api', 'rest_get_picture'],
 			'permission_callback' => '__return_true',
@@ -48,7 +48,7 @@ class RP_Rest_Api extends ResponsivePics
 		/**
 		 * Register get-background api route
 		 */
-		register_rest_route('responsive-pics/v1', '/get-background/(?P<id>\d+)', [
+		register_rest_route('responsive-pics/v1', '/(get-)?background/(?P<id>\d+)', [
 			'methods'             => 'GET',
 			'callback'            => ['RP_Rest_Api', 'rest_get_background'],
 			'permission_callback' => '__return_true',
