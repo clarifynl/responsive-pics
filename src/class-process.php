@@ -34,7 +34,7 @@ class RP_Process extends ResponsivePics {
 	}
 
 	// validates sizes
-	public function process_sizes($id, $sizes, $order = 'desc', $art_direction = true, $img_crop = null) {
+	public function process_sizes($id, $sizes, $order = 'desc', $art_direction = true, $img_crop = null, $rest_route = null) {
 		$file_path   = get_attached_file($id);
 		$url         = wp_get_attachment_url($id);
 		$meta_data   = wp_get_attachment_metadata($id);
@@ -88,7 +88,7 @@ class RP_Process extends ResponsivePics {
 		// get resize sources
 		$sources = [];
 		if ($rules) {
-			$sources = ResponsivePics()->sources->get_resize_sources($id, $rules, $order);
+			$sources = ResponsivePics()->sources->get_resize_sources($id, $rules, $order, $rest_route);
 		}
 
 		return [

@@ -3,7 +3,7 @@
 class RP_Sources extends ResponsivePics {
 
 	// returns a normalized array of available sources
-	public function get_resize_sources($id, $rules = null, $order = 'desc') {
+	public function get_resize_sources($id, $rules = null, $order = 'desc', $rest_route = null) {
 		$image_url       = wp_get_attachment_url($id);
 		$image_path      = get_attached_file($id);
 		$meta_data       = wp_get_attachment_metadata($id);
@@ -41,14 +41,14 @@ class RP_Sources extends ResponsivePics {
 			}
 
 			// get resized url
-			$resized_url = $this->get_resized_url($id, $image_path, $image_url, $width, $height, $crop);
+			$resized_url = $this->get_resized_url($id, $image_path, $image_url, $width, $height, $crop, 1, $rest_route);
 			if ($resized_url) {
 				$size_2x_available = ($width * 2) < $original_width && ($height * 2) < $original_height;
 
 				// check if retina url is possible
 				$source1x = $resized_url;
 				$source2x = $size_2x_available
-					? $this->get_resized_url($id, $image_path, $image_url, $width, $height, $crop, 2)
+					? $this->get_resized_url($id, $image_path, $image_url, $width, $height, $crop, 2, $rest_route)
 					: null;
 
 				// use the maximum possible image url when the retina width is too large for the current source being generated
@@ -56,7 +56,7 @@ class RP_Sources extends ResponsivePics {
 					$ratio_max = round(($original_width / ($width * 2)), 1);
 
 					if ($ratio_max > 1) {
-						$source2x  = $this->get_resized_url($id, $image_path, $image_url, $width, $height, $crop, $ratio_max);
+						$source2x  = $this->get_resized_url($id, $image_path, $image_url, $width, $height, $crop, $ratio_max, $rest_route);
 					}
 				}
 
@@ -108,7 +108,7 @@ class RP_Sources extends ResponsivePics {
 	}
 
 	// creates a resized file if it doesn't exist and returns the final image url
-	public function get_resized_url($id, $file_path, $original_url, $width, $height, $crop, $ratio = 1) {
+	public function get_resized_url($id, $file_path, $original_url, $width, $height, $crop, $ratio = 1, $rest_route = null) {
 		$path_parts        = pathinfo($file_path);
 		$suffix            = ResponsivePics()->helpers->get_resized_suffix($width, $height, $ratio, $crop);
 		$resized_file_path = join(DIRECTORY_SEPARATOR, [$path_parts['dirname'], $path_parts['filename'] . '-' . $suffix . '.' . $path_parts['extension']]);
@@ -122,6 +122,11 @@ class RP_Sources extends ResponsivePics {
 			'ratio'   => (int) $ratio,
 			'path'    => (string) $resized_file_path
 		];
+
+		// If rest api request, add original route
+		if ($rest_route) {
+			$resize_request['rest_route'] = (string) $rest_route;
+		}
 
 		// Get legacy file path
 		$suffix_legacy            = ResponsivePics()->helpers->get_resized_suffix_legacy($width, $height, $ratio, $crop);

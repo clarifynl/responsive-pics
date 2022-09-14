@@ -270,9 +270,9 @@ class ResponsivePics {
 	 * Construct a responsive image element
 	 * returns <img> element as html markup
 	 */
-	public static function get_image($id = null, $sizes = null, $crop = false, $img_classes = null, $lazyload = false, $lqip = false) {
+	public static function get_image($id = null, $sizes = null, $crop = false, $img_classes = null, $lazyload = false, $lqip = false, $rest_route = null) {
 		// get image sources
-		$definition = self::get_image_sources($id, $sizes, $crop);
+		$definition = self::get_image_sources($id, $sizes, $crop, $rest_route);
 
 		// convert $picture_classes to array if it is a string
 		if ($img_classes) {
@@ -305,7 +305,7 @@ class ResponsivePics {
 		$lqip_img = null;
 		if ($lqip) {
 			$img_classes[] = self::$lqip_class;
-			$lqip_sizes    = ResponsivePics()->process->process_sizes($image, '0:' . self::$lqip_width, 'desc', false, $crop);
+			$lqip_sizes    = ResponsivePics()->process->process_sizes($image, '0:' . self::$lqip_width, 'desc', false, $crop, $rest_route);
 			$lqip_sources  = isset($lqip_sizes['sources']) ? $lqip_sizes['sources'] : [];
 			$lqip_img      = isset($lqip_sources[0]['source1x']) ? $lqip_sources[0]['source1x'] : null;
 		}
@@ -352,7 +352,7 @@ class ResponsivePics {
 	 * Construct a responsive image element
 	 * returns image sources as data
 	 */
-	public static function get_image_sources($id = null, $sizes = null, $crop = false) {
+	public static function get_image_sources($id = null, $sizes = null, $crop = false, $rest_route = null) {
 		// init WP_Error
 		self::$wp_error = new WP_Error();
 
@@ -362,7 +362,7 @@ class ResponsivePics {
 		// check for valid sizes value
 		$definition = [];
 		if ($image) {
-			$definition = ResponsivePics()->process->process_sizes($image, $sizes, 'desc', false, $crop);
+			$definition = ResponsivePics()->process->process_sizes($image, $sizes, 'desc', false, $crop, $rest_route);
 		}
 
 		// check for errors
@@ -377,7 +377,7 @@ class ResponsivePics {
 	 * Construct a responsive picture element
 	 * returns <picture> element as html markup
 	 */
-	public static function get_picture($id = null, $sizes = null, $picture_classes = null, $lazyload = false, $intrinsic = false) {
+	public static function get_picture($id = null, $sizes = null, $picture_classes = null, $lazyload = false, $intrinsic = false, $rest_route = null) {
 		// init WP_Error
 		self::$wp_error = new WP_Error();
 
@@ -387,7 +387,7 @@ class ResponsivePics {
 		// check for valid sizes
 		$definition = [];
 		if ($image) {
-			$definition = ResponsivePics()->process->process_sizes($image, $sizes);
+			$definition = ResponsivePics()->process->process_sizes($image, $sizes, 'desc', true, null, $rest_route);
 		}
 
 		// check for valid classes value
@@ -473,7 +473,7 @@ class ResponsivePics {
 	 * Returns an inline <style> element with a dedicated image class with media-queries for all the different image sizes
 	 * and an div with the same dedicated image class
 	 */
-	public static function get_background($id = null, $sizes = null, $bg_classes = null) {
+	public static function get_background($id = null, $sizes = null, $bg_classes = null, $rest_route = null) {
 		// init WP_Error
 		self::$wp_error = new WP_Error();
 
@@ -483,7 +483,7 @@ class ResponsivePics {
 		// check for valid sizes
 		$definition = [];
 		if ($image) {
-			$definition = ResponsivePics()->process->process_sizes($image, $sizes, 'asc');
+			$definition = ResponsivePics()->process->process_sizes($image, $sizes, 'asc', true, null, $rest_route);
 		}
 
 		// convert $classes to array if it is a string

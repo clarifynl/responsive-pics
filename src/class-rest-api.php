@@ -1,9 +1,15 @@
 <?php
 
-class RP_Rest_Api extends ResponsivePics {
+class RP_Rest_Api extends ResponsivePics
+{
 
+	/**
+	 * Register api routes
+	 */
 	public static function register_api_routes() {
-		// image
+		/**
+		 * Register get-image api route
+		 */
 		register_rest_route('responsive-pics/v1', '/get-image/(?P<id>\d+)', [
 			'methods'             => 'GET',
 			'callback'            => ['RP_Rest_Api', 'rest_get_image'],
@@ -20,7 +26,9 @@ class RP_Rest_Api extends ResponsivePics {
 			]
 		]);
 
-		// picture
+		/**
+		 * Register get-picture api route
+		 */
 		register_rest_route('responsive-pics/v1', '/get(-picture)?/(?P<id>\d+)', [
 			'methods'             => 'GET',
 			'callback'            => ['RP_Rest_Api', 'rest_get_picture'],
@@ -37,7 +45,9 @@ class RP_Rest_Api extends ResponsivePics {
 			]
 		]);
 
-		// background
+		/**
+		 * Register get-background api route
+		 */
 		register_rest_route('responsive-pics/v1', '/get-background/(?P<id>\d+)', [
 			'methods'             => 'GET',
 			'callback'            => ['RP_Rest_Api', 'rest_get_background'],
@@ -55,12 +65,17 @@ class RP_Rest_Api extends ResponsivePics {
 		]);
 	}
 
-	// get image
+	/**
+	 * REST API get image
+	 *
+	 * @param   (object) WP_REST_Request
+	 * @return  (string) html
+	 */
 	public static function rest_get_image($request) {
-		$headers   = $request->get_headers();
-		syslog(LOG_DEBUG, 'rest_get_image headers: ' . json_encode($headers));
-
+		$route     = $request->get_route();
 		$params    = $request->get_params();
+		$route_url = add_query_arg($params, $route);
+
 		$id        = isset($request['id']) ? $request['id'] : null;
 		$sizes     = isset($params['sizes']) ? urldecode($params['sizes']) : null;
 		$classes   = isset($params['classes']) ? urldecode($params['classes']) : null;
@@ -70,7 +85,7 @@ class RP_Rest_Api extends ResponsivePics {
 
 		if (class_exists('ResponsivePics')) {
 			if ($sizes) {
-				$image  = ResponsivePics::get_image($id, $sizes, $crop, $classes, $lazyload, $lqip);
+				$image  = ResponsivePics::get_image($id, $sizes, $crop, $classes, $lazyload, $lqip, $route_url);
 
 				// Check for errors
 				if (is_wp_error($image)) {
@@ -96,9 +111,17 @@ class RP_Rest_Api extends ResponsivePics {
 		}
 	}
 
-	// get picture
+	/**
+	 * REST API get picture
+	 *
+	 * @param   (object) WP_REST_Request
+	 * @return  (string) html
+	 */
 	public static function rest_get_picture($request) {
+		$route     = $request->get_route();
 		$params    = $request->get_params();
+		$route_url = add_query_arg($params, $route);
+
 		$id        = isset($request['id']) ? $request['id'] : null;
 		$sizes     = isset($params['sizes']) ? urldecode($params['sizes']) : null;
 		$classes   = isset($params['classes']) ? urldecode($params['classes']) : null;
@@ -107,7 +130,7 @@ class RP_Rest_Api extends ResponsivePics {
 
 		if (class_exists('ResponsivePics')) {
 			if ($sizes) {
-				$picture = ResponsivePics::get_picture($id, $sizes, $classes, $lazyload, $intrinsic);
+				$picture = ResponsivePics::get_picture($id, $sizes, $classes, $lazyload, $intrinsic, $route_url);
 
 				// Check for errors
 				if (is_wp_error($picture)) {
@@ -133,16 +156,24 @@ class RP_Rest_Api extends ResponsivePics {
 		}
 	}
 
-	// get background
+	/**
+	 * REST API get background
+	 *
+	 * @param   (object) WP_REST_Request
+	 * @return  (string) html
+	 */
 	public static function rest_get_background($request) {
-		$params  = $request->get_params();
+		$route     = $request->get_route();
+		$params    = $request->get_params();
+		$route_url = add_query_arg($params, $route);
+
 		$id      = isset($request['id']) ? $request['id'] : null;
 		$sizes   = isset($params['sizes']) ? urldecode($params['sizes']) : null;
 		$classes = isset($params['classes']) ? urldecode($params['classes']) : null;
 
 		if (class_exists('ResponsivePics')) {
 			if ($sizes) {
-				$background = ResponsivePics::get_background($id, $sizes, $classes);
+				$background = ResponsivePics::get_background($id, $sizes, $classes, $route_url);
 
 				// Check for errors
 				if (is_wp_error($background)) {
