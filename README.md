@@ -492,13 +492,14 @@ do_action('responsive_pics_request_scheduled', (int) $post_id, (array) $resize_r
 *(array)* The resize request parameters:
 ```php
 [
-  'id'      => (int) The attachment ID,
-  'quality' => (int) The requested image quality,
-  'width'   => (int) The requested image width,
-  'height'  => (int) The requested image height,
-  'crop'    => (array) The requested image crop positions,
-  'ratio'   => (float) The requested image ratio,
-  'path'    => (string) The requested image file path
+  'id'         => (int) The attachment ID,
+  'quality'    => (int) The requested image quality,
+  'width'      => (int) The requested image width,
+  'height'     => (int) The requested image height,
+  'crop'       => (array) The requested image crop positions,
+  'ratio'      => (float) The requested image ratio,
+  'path'       => (string) The requested image file path,
+  'rest_route' => (string) The requested rest api route
 ]
 ```
 ---
@@ -507,7 +508,7 @@ do_action('responsive_pics_request_scheduled', (int) $post_id, (array) $resize_r
 This action fires when the **ActionScheduler** has processed an image resize request in the queue.
 
 ```php
-do_action('responsive_pics_request_processed', (int) $post_id, (int) $quality, (int) $width, (int) $height, (array) $crop, (float) $ratio, (string) $resize_path);
+do_action('responsive_pics_request_processed', (int) $post_id, (int) $quality, (int) $width, (int) $height, (array) $crop, (float) $ratio, (string) $resize_path, (string) $rest_route);
 ```
 #### Parameters
 

@@ -114,19 +114,15 @@ class RP_Sources extends ResponsivePics {
 		$resized_file_path = join(DIRECTORY_SEPARATOR, [$path_parts['dirname'], $path_parts['filename'] . '-' . $suffix . '.' . $path_parts['extension']]);
 		$resized_url       = join(DIRECTORY_SEPARATOR, [dirname($original_url), basename($resized_file_path)]);
 		$resize_request    = [
-			'id'      => (int) $id,
-			'quality' => (int) self::$image_quality,
-			'width'   => (int) $width,
-			'height'  => (int) $height,
-			'crop'    => $crop,
-			'ratio'   => (int) $ratio,
-			'path'    => (string) $resized_file_path
+			'id'         => (int) $id,
+			'quality'    => (int) self::$image_quality,
+			'width'      => (int) $width,
+			'height'     => (int) $height,
+			'crop'       => $crop,
+			'ratio'      => (int) $ratio,
+			'path'       => (string) $resized_file_path,
+			'rest_route' => (string) $rest_route
 		];
-
-		// If rest api request, add original route
-		if ($rest_route) {
-			$resize_request['rest_route'] = (string) $rest_route;
-		}
 
 		// Get legacy file path
 		$suffix_legacy            = ResponsivePics()->helpers->get_resized_suffix_legacy($width, $height, $ratio, $crop);
