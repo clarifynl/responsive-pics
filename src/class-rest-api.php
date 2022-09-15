@@ -72,8 +72,9 @@ class RP_Rest_Api extends ResponsivePics
 	 * @return  (string) html
 	 */
 	public static function rest_get_image($request) {
-		$route     = $request->get_route();
-		$params    = $request->get_params();
+		$route  = $request->get_route();
+		$params = $request->get_params();
+		unset($params['id']);
 		$route_url = add_query_arg($params, $route);
 
 		$id        = isset($request['id']) ? $request['id'] : null;
@@ -118,8 +119,9 @@ class RP_Rest_Api extends ResponsivePics
 	 * @return  (string) html
 	 */
 	public static function rest_get_picture($request) {
-		$route     = $request->get_route();
-		$params    = $request->get_params();
+		$route  = $request->get_route();
+		$params = $request->get_params();
+		unset($params['id']);
 		$route_url = add_query_arg($params, $route);
 
 		$id        = isset($request['id']) ? $request['id'] : null;
@@ -163,8 +165,9 @@ class RP_Rest_Api extends ResponsivePics
 	 * @return  (string) html
 	 */
 	public static function rest_get_background($request) {
-		$route     = $request->get_route();
-		$params    = $request->get_params();
+		$route  = $request->get_route();
+		$params = $request->get_params();
+		unset($params['id']);
 		$route_url = add_query_arg($params, $route);
 
 		$id      = isset($request['id']) ? $request['id'] : null;
