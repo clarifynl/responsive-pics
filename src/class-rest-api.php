@@ -2,49 +2,6 @@
 
 class RP_Rest_Api extends ResponsivePics
 {
-	/*
-	 * Takes a URL with unescaped query parameters and builds it up again with encoded parameters.
-	 */
-
-	private static function query_param_encode($url) {
-		$url = parse_url($url);
-		$url_str = "";
-
-		if (isset($url['scheme'])) {
-			$url_str .= $url['scheme'].'://';
-		}
-
-		if (isset($url['host'])) {
-			$url_str .= $url['host'];
-		}
-
-		if (isset($url['path'])) {
-			$url_str .= $url['path'];
-		}
-
-		if (isset($url['query'])) {
-			$query = explode('&', $url['query']);
-
-			foreach ($query as $j=>$value) {
-				$value = explode('=', $value, 2);
-
-				if (count($value) == 2) {
-					$query[$j] = urlencode($value[0]) . '=' . urlencode($value[1]);
-				} else {
-					$query[$j] = urlencode($value[0]);
-				}
-			}
-
-			$url_str .= '?' . implode('&', $query);
-		}
-
-		if (isset($url['fragment'])) {
-			$url_str .= '#' . $url['fragment'];
-		}
-
-		return $url_str;
-	}
-
 	/**
 	 * Register api routes
 	 */
@@ -114,10 +71,10 @@ class RP_Rest_Api extends ResponsivePics
 	 * @return  (string) html
 	 */
 	public static function rest_get_image($request) {
-		$route  = $request->get_route();
-		$params = $request->get_params();
-		unset($params['id']);
-		$route_url = self::query_param_encode(add_query_arg($params, $route));
+		$route        = $request->get_route();
+		$params       = $request->get_params();
+		$query_string = isset($_SERVER['QUERY_STRING']) ? $_SERVER['QUERY_STRING'] : null;
+		$route_url    = $query_string ? $route .'?'. $query_string : $route;
 
 		$id        = isset($request['id']) ? $request['id'] : null;
 		$sizes     = isset($params['sizes']) ? urldecode($params['sizes']) : null;
@@ -161,10 +118,10 @@ class RP_Rest_Api extends ResponsivePics
 	 * @return  (string) html
 	 */
 	public static function rest_get_picture($request) {
-		$route  = $request->get_route();
-		$params = $request->get_params();
-		unset($params['id']);
-		$route_url = add_query_arg($params, $route);
+		$route        = $request->get_route();
+		$params       = $request->get_params();
+		$query_string = isset($_SERVER['QUERY_STRING']) ? $_SERVER['QUERY_STRING'] : null;
+		$route_url    = $query_string ? $route .'?'. $query_string : $route;
 
 		$id        = isset($request['id']) ? $request['id'] : null;
 		$sizes     = isset($params['sizes']) ? urldecode($params['sizes']) : null;
@@ -207,10 +164,10 @@ class RP_Rest_Api extends ResponsivePics
 	 * @return  (string) html
 	 */
 	public static function rest_get_background($request) {
-		$route  = $request->get_route();
-		$params = $request->get_params();
-		unset($params['id']);
-		$route_url = add_query_arg($params, $route);
+		$route        = $request->get_route();
+		$params       = $request->get_params();
+		$query_string = isset($_SERVER['QUERY_STRING']) ? $_SERVER['QUERY_STRING'] : null;
+		$route_url    = $query_string ? $route .'?'. $query_string : $route;
 
 		$id      = isset($request['id']) ? $request['id'] : null;
 		$sizes   = isset($params['sizes']) ? urldecode($params['sizes']) : null;
