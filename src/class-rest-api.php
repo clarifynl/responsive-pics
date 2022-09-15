@@ -75,7 +75,7 @@ class RP_Rest_Api extends ResponsivePics
 		$route  = $request->get_route();
 		$params = $request->get_params();
 		unset($params['id']);
-		$route_url = add_query_arg(urlencode($params), $route);
+		$route_url = add_query_arg($params, $route);
 
 		$id        = isset($request['id']) ? $request['id'] : null;
 		$sizes     = isset($params['sizes']) ? urldecode($params['sizes']) : null;
@@ -122,7 +122,7 @@ class RP_Rest_Api extends ResponsivePics
 		$route  = $request->get_route();
 		$params = $request->get_params();
 		unset($params['id']);
-		$route_url = add_query_arg(urlencode($params), $route);
+		$route_url = add_query_arg($params, $route);
 
 		$id        = isset($request['id']) ? $request['id'] : null;
 		$sizes     = isset($params['sizes']) ? urldecode($params['sizes']) : null;
@@ -168,7 +168,7 @@ class RP_Rest_Api extends ResponsivePics
 		$route  = $request->get_route();
 		$params = $request->get_params();
 		unset($params['id']);
-		$route_url = add_query_arg(urlencode($params), $route);
+		$route_url = add_query_arg($params, $route);
 
 		$id      = isset($request['id']) ? $request['id'] : null;
 		$sizes   = isset($params['sizes']) ? urldecode($params['sizes']) : null;
