@@ -63,7 +63,7 @@ $enqueue = new MyPluginEnqueue( 'appName', 'outputPath', '1.0.0', 'plugin', __FI
 Which ever way, you choose to install, you have to make sure to instantiate the
 class early during the entry-point of your plugin or theme.
 
-This ensures that we hava necessary javascript in our website frontend and adminend
+This ensures that we hava necessary javascript in our website frontend and admin end
 to make webpack code-splitting and dynamic import work.
 
 A common pattern may look like this.
@@ -102,5 +102,36 @@ class MyPluginInit {
 new MyPluginInit();
 ```
 
+## Default configuration when calling `enqueue`
+
+```php
+[
+	'js' => true,
+	'css' => true,
+	'js_dep' => [],
+	'css_dep' => [],
+	'in_footer' => true,
+	'media' => 'all',
+	'main_js_handle' => null,
+	'runtime_js_handle' => null,
+];
+```
+
+`main_js_handle` is added in 3.3 and can predictably set the handle of primary
+JavaScript file. Useful for translations etc.
+
+`runtime_js_handle` is added in 3.4 and can predictably set the handle of the
+common runtime JavaScript. This is useful to localize/translate dependent script
+handles in the same files entry. By calling `wp_set_script_translations` on the
+runtime you can collectively enqueue translate json for all the dependencies on
+the entries.
+
 For information on usage and API, please visit official documentation site
 [wpack.io](https://wpack.io).
+
+## Avoid conflict in multiple WordPress Plugins
+
+Always require the latest version of `Wpackio\Enqueue`. The autoloader is set
+to load only one instance and will not conflict with existing class.
+
+However, if you want to load conflict free, kindly use [Strauss](https://github.com/BrianHenryIE/strauss).

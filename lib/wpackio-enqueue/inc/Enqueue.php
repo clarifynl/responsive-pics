@@ -168,13 +168,14 @@ class Enqueue {
 		$config = $this->normalizeAssetConfig( $config );
 		// Get asset urls
 		$assets = $this->getAssets( $name, $entryPoint, $config );
+
 		// Enqueue all js
 		$jses = $assets['js'];
 		$csses = $assets['css'];
 
 		// Hold a flag to calculate dependencies
-		$js_deps = [];
-		$css_deps = [];
+		$jsDeps = $this->getJsBuildDependencies( $name, $entryPoint );
+		$cssDeps = [];
 
 		// Register javascript files
 		if ( $config['js'] ) {
@@ -182,12 +183,12 @@ class Enqueue {
 				\wp_register_script(
 					$js['handle'],
 					$js['url'],
-					array_merge( $config['js_dep'], $js_deps ),
+					array_merge( $config['js_dep'], $jsDeps ),
 					$this->version,
 					$config['in_footer']
 				);
 				// The next one depends on this one
-				$js_deps[] = $js['handle'];
+				$jsDeps[] = $js['handle'];
 			}
 		}
 
@@ -197,12 +198,12 @@ class Enqueue {
 				\wp_register_style(
 					$css['handle'],
 					$css['url'],
-					array_merge( $config['css_dep'], $css_deps ),
+					array_merge( $config['css_dep'], $cssDeps ),
 					$this->version,
 					$config['media']
 				);
 				// The next one depends on this one
-				$css_deps[] = $css['handle'];
+				$cssDeps[] = $css['handle'];
 			}
 		}
 
@@ -261,13 +262,14 @@ class Enqueue {
 		if ( ! \in_array( $type, [ 'script', 'style' ], true ) ) {
 			throw new \LogicException( 'Type has to be either script or style.' );
 		}
-		return 'wpackio_'
+		$handle = 'wpackio_'
 			. $this->appName
 			. $name
 			. '_'
 			. $path
 			. '_'
 			. $type;
+		return \preg_replace( '/[^a-z0-9]/i', '_', $handle );
 	}
 
 	/**
@@ -294,21 +296,43 @@ class Enqueue {
 		if ( ! isset( $manifest['wpackioEp'][ $entryPoint ] ) ) {
 			throw new \LogicException( 'No entry point found in the manifest' );
 		}
-		$enqueue = $manifest['wpackioEp'][ $entryPoint ];
+		$enqueue =
+			isset( $manifest['wpackioEp'][ $entryPoint ]['assets'] )
+				? $manifest['wpackioEp'][ $entryPoint ]['assets']
+				: false;
+
+		if ( $enqueue === false ) {
+			throw new \LogicException( 'No assets found in the entry point. Make sure you are using @wpackio/scripts version 6+.' );
+		}
 
 		$js_handles = [];
 		$css_handles = [];
 
 		// Figure out all javascript assets
-		if ( $config['js'] && isset( $enqueue['js'] ) && count( (array) $enqueue['js'] ) ) {
+		$total_js_assets = count( (array) $enqueue['js'] );
+		if ( $config['js'] && isset( $enqueue['js'] ) && $total_js_assets ) {
 			foreach ( $enqueue['js'] as $index => $js ) {
 				$handle = $this->getHandle( $name, $js, 'script' );
-				// If the js is runtime, then use an unique handle
-				// if ( $js === $dir . '/runtime.js' ) {
-				// $handle = 'wpackio_' . $this->appName . $dir . '_runtime';
-				// By making it unique, we rely on WordPress to only
-				// enqueue it once.
-				// }
+				// override the runtime handle if needed
+				if (
+					! empty( $config['runtime_js_handle'] )
+					// runtime is always the first dependency
+					&& $index === 0
+					// and it must have the name "runtime" in it, per wpackio config
+					&& \strpos( $handle, 'runtime' ) !== false
+				) {
+					$handle = $config['runtime_js_handle'];
+				}
+
+				// override the last one's handle if needed
+				if (
+					! empty( $config['main_js_handle'] )
+					// the last item in the dependency is the main handle
+					&& $index === $total_js_assets - 1
+				) {
+					$handle = $config['main_js_handle'];
+				}
+
 				$js_handles[] = [
 					'handle' => $handle,
 					'url' => $this->getUrl( $js ),
@@ -359,6 +383,8 @@ class Enqueue {
 				'css_dep' => [],
 				'in_footer' => true,
 				'media' => 'all',
+				'main_js_handle' => null,
+				'runtime_js_handle' => null,
 			]
 		);
 	}
@@ -371,6 +397,30 @@ class Enqueue {
 	 */
 	public function getUrl( $asset ) {
 		return $this->rootUrl . $asset;
+	}
+
+	/**
+	 * Given an entry name and a entrypoint, get back its JavaScript dependencies
+	 * as generated from wpackio scripts.
+	 *
+	 * @param string $name The name of the files entry.
+	 * @param string $entryPoint Which entrypoint would you like to get for.
+	 * @return array array of registered handles.
+	 */
+	public function getJsBuildDependencies( $name, $entryPoint ) {
+		$filepath = $this->rootPath
+			. $name
+			. '/'
+			. $entryPoint
+			. '.dependencies.wp.json';
+		if ( ! \file_exists( $filepath ) ) {
+			return [];
+		}
+		$deps = json_decode( file_get_contents( $filepath ), true );
+		if ( $deps !== null && isset( $deps['dependencies'] ) ) {
+			return $deps['dependencies'];
+		}
+		return [];
 	}
 
 	/**
@@ -402,5 +452,119 @@ class Enqueue {
 		}
 		$this->manifestCache[ $this->outputPath ][ $dir ] = $manifest;
 		return $this->manifestCache[ $this->outputPath ][ $dir ];
+	}
+
+	/**
+	 * Get primary handle from enqueued/registered assets.
+	 *
+	 * @param array  $assets Assets array as returned from enqueue or register.
+	 * @param string $type Type of asset, either `js` or `css`.
+	 * @return string|false string if handle was found, false otherwise.
+	 */
+	public function getPrimaryHandle( $assets, $type = 'js' ) {
+		if (
+			! \is_array( $assets )
+			|| ! isset( $assets[ $type ] )
+			|| ! \is_array( $assets[ $type ] )
+		) {
+			return false;
+		}
+		$lastJsAsset = array_pop( $assets[ $type ] );
+		if ( ! $lastJsAsset || ! isset( $lastJsAsset['handle'] ) ) {
+			return false;
+		}
+		return $lastJsAsset['handle'];
+	}
+
+	/**
+	 * Get primary js handle from enqueued/registered assets.
+	 *
+	 * This is useful to localize/translate the script handle.
+	 *
+	 * @param mixed $assets Assets array as returned from enqueue or register.
+	 * @return string|false string if handle was found, false otherwise.
+	 */
+	public function getPrimaryJsHandle( $assets ) {
+		return $this->getPrimaryHandle( $assets, 'js' );
+	}
+
+	/**
+	 * Get runtime js handle from enqueued/registered assets.
+	 *
+	 * This is useful to localize/translate dependent script handles in the
+	 * same files entry. By calling `wp_set_script_translations` on the runtime
+	 * you can collectively enqueue translate json for all the dependencies on
+	 * the entries.
+	 *
+	 * @param mixed $assets Assets array as returned from enqueue or register.
+	 * @return string|false string if handle was found, false otherwise.
+	 */
+	public function getRuntimeJsHandle( $assets ) {
+		if (
+			! \is_array( $assets )
+			|| ! isset( $assets[ 'js' ] )
+			|| ! \is_array( $assets[ 'js' ] )
+		) {
+			return false;
+		}
+		// runtime asset is the first one in the assets list
+		$runtimeAsset = $assets['js'][0];
+		if ( ! $runtimeAsset || ! isset( $runtimeAsset['handle'] ) ) {
+			return false;
+		}
+		return $runtimeAsset['handle'];
+	}
+
+	/**
+	 * Get primary css handle from enqueued/registered assets.
+	 *
+	 * This is useful to localize/translate the script handle.
+	 *
+	 * @param mixed $assets Assets array as returned from enqueue or register.
+	 * @return string|false string if handle was found, false otherwise.
+	 */
+	public function getPrimaryCssHandle( $assets ) {
+		return $this->getPrimaryHandle( $assets, 'css' );
+	}
+
+	/**
+	 * Get handles of a particular type from enqueued/registered assets.
+	 *
+	 * @param mixed  $assets Assets array as returned from enqueue or register.
+	 * @param string $type Type of asset, either `js` or `css`.
+	 * @return array Array of handles. Would return an empty handle if not found.
+	 */
+	public function getHandles( $assets, $type = 'js' ) {
+		$handles = [];
+		if (
+			\is_array( $assets )
+			&& isset( $assets[ $type ] )
+			&& \count( $assets[ $type ] )
+		) {
+			foreach ( $assets[ $type ] as $asset ) {
+				$handles[] = $asset['handle'];
+			}
+		}
+		return $handles;
+	}
+
+	/**
+	 * Get all css handles from enqueued/registered assets.
+	 *
+	 * @param mixed $assets Assets array as returned from enqueue or register.
+	 * @return array Array of css handles. Would return an empty handle if not found.
+	 */
+	public function getCssHandles( $assets ) {
+		return $this->getHandles( $assets, 'css' );
+	}
+
+	/**
+	 * Get all js handles from enqueued/registered assets.
+	 *
+	 * @param mixed $assets Assets array as returned from enqueue or register.
+	 * @return array Array of js handles. Would return an empty handle if not found.
+	 */
+	public function getJsHandles( $assets ) {
+		return $this->getHandles( $assets, 'js' );
 	}
 }
