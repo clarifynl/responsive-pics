@@ -25,7 +25,7 @@ class RP_Rest_Api extends ResponsivePics
 			]
 		]);
 
-		register_rest_route('responsive-pics/v1', '/image-data/(?P<id>\d+)', [
+		register_rest_route('responsive-pics/v1', '/(get-)?image-data/(?P<id>\d+)', [
 			'methods'             => 'GET',
 			'callback'            => ['RP_Rest_Api', 'rest_get_image_data'],
 			'permission_callback' => '__return_true',
@@ -60,12 +60,44 @@ class RP_Rest_Api extends ResponsivePics
 			]
 		]);
 
+		register_rest_route('responsive-pics/v1', '/(get-)?picture-data/(?P<id>\d+)', [
+			'methods'             => 'GET',
+			'callback'            => ['RP_Rest_Api', 'rest_get_picture_data'],
+			'permission_callback' => '__return_true',
+			'args'                => [
+				'id' => [
+					'validate_callback' => function($id, $request, $key) {
+						return is_numeric($id);
+					},
+					'sanitize_callback' => function($id, $request, $key) {
+						return (int) $id;
+					}
+				]
+			]
+		]);
+
 		/**
 		 * Register get-background api route
 		 */
 		register_rest_route('responsive-pics/v1', '/(get-)?background/(?P<id>\d+)', [
 			'methods'             => 'GET',
 			'callback'            => ['RP_Rest_Api', 'rest_get_background'],
+			'permission_callback' => '__return_true',
+			'args'                => [
+				'id' => [
+					'validate_callback' => function($id, $request, $key) {
+						return is_numeric($id);
+					},
+					'sanitize_callback' => function($id, $request, $key) {
+						return (int) $id;
+					}
+				]
+			]
+		]);
+
+		register_rest_route('responsive-pics/v1', '/(get-)?background-data/(?P<id>\d+)', [
+			'methods'             => 'GET',
+			'callback'            => ['RP_Rest_Api', 'rest_get_background_data'],
 			'permission_callback' => '__return_true',
 			'args'                => [
 				'id' => [
@@ -222,6 +254,50 @@ class RP_Rest_Api extends ResponsivePics
 	}
 
 	/**
+	 * REST API get picture data
+	 *
+	 * @param   (object) WP_REST_Request
+	 * @return  (object) picture data
+	 */
+	public static function rest_get_picture_data($request) {
+		$route        = $request->get_route();
+		$params       = $request->get_params();
+		$query_string = isset($_SERVER['QUERY_STRING']) ? $_SERVER['QUERY_STRING'] : null;
+		$route_url    = $query_string ? $route .'?'. $query_string : $route;
+
+		// Decode Parameters
+		$id           = isset($request['id']) ? $request['id'] : null;
+		$sizes        = isset($params['sizes']) ? urldecode($params['sizes']) : null;
+
+		if (class_exists('ResponsivePics')) {
+			if ($sizes) {
+				$data = ResponsivePics::get_picture_data($id, $sizes, $route_url);
+
+				// Check for errors
+				if (is_wp_error($data)) {
+					return $data;
+				} else {
+					$result = new WP_REST_Response($data, 200);
+
+					// Set cache duration
+					if (self::$wp_rest_cache) {
+						$cache_duration = self::$wp_rest_cache_duration;
+					} else {
+						$cache_duration = 0;
+					}
+
+					$result->set_headers(array('Cache-Control' => 'max-age=' . $cache_duration));
+					return $result;
+				}
+			} else {
+				return new WP_Error('responsive_pics_invalid',  __('the request is missing the required sizes parameter', 'responsive-pics'), $params);
+			}
+		} else {
+			return new WP_Error('responsive_pics_missing', __('the responsive pics plugin was not found', 'responsive-pics'));
+		}
+	}
+
+	/**
 	 * REST API get background
 	 *
 	 * @param   (object) WP_REST_Request
@@ -247,6 +323,50 @@ class RP_Rest_Api extends ResponsivePics
 					return $background;
 				} else {
 					$result = new WP_REST_Response($background, 200);
+
+					// Set cache duration
+					if (self::$wp_rest_cache) {
+						$cache_duration = self::$wp_rest_cache_duration;
+					} else {
+						$cache_duration = 0;
+					}
+
+					$result->set_headers(array('Cache-Control' => 'max-age=' . $cache_duration));
+					return $result;
+				}
+			} else {
+				return new WP_Error('responsive_pics_invalid',  __('the request is missing the required sizes parameter', 'responsive-pics'), $params);
+			}
+		} else {
+			return new WP_Error('responsive_pics_missing', __('the responsive pics plugin was not found', 'responsive-pics'));
+		}
+	}
+
+	/**
+	 * REST API get background data
+	 *
+	 * @param   (object) WP_REST_Request
+	 * @return  (object) background data
+	 */
+	public static function rest_get_background_data($request) {
+		$route        = $request->get_route();
+		$params       = $request->get_params();
+		$query_string = isset($_SERVER['QUERY_STRING']) ? $_SERVER['QUERY_STRING'] : null;
+		$route_url    = $query_string ? $route .'?'. $query_string : $route;
+
+		// Decode Parameters
+		$id           = isset($request['id']) ? $request['id'] : null;
+		$sizes        = isset($params['sizes']) ? urldecode($params['sizes']) : null;
+
+		if (class_exists('ResponsivePics')) {
+			if ($sizes) {
+				$data = ResponsivePics::get_background_data($id, $sizes, $route_url);
+
+				// Check for errors
+				if (is_wp_error($data)) {
+					return $data;
+				} else {
+					$result = new WP_REST_Response($data, 200);
 
 					// Set cache duration
 					if (self::$wp_rest_cache) {
