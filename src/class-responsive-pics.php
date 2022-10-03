@@ -378,17 +378,8 @@ class ResponsivePics {
 	 * returns <picture> element as html markup
 	 */
 	public static function get_picture($id = null, $sizes = null, $picture_classes = null, $lazyload = false, $intrinsic = false, $rest_route = null) {
-		// init WP_Error
-		self::$wp_error = new WP_Error();
-
-		// check for valid image id
-		$image = ResponsivePics()->process->process_image($id);
-
-		// check for valid sizes
-		$definition = [];
-		if ($image) {
-			$definition = ResponsivePics()->process->process_sizes($image, $sizes, 'desc', true, null, $rest_route);
-		}
+		// get picture sources
+		$definition = self::get_picture_sources($id, $sizes, $rest_route);
 
 		// check for valid classes value
 		if ($picture_classes) {
@@ -465,6 +456,31 @@ class ResponsivePics {
 		$picture[] = '</picture>';
 
 		return implode("\n", $picture) . "\n";
+	}
+
+	/*
+	 * Construct a responsive picture element
+	 * returns picture sources as data
+	 */
+	public static function get_picture_sources($id = null, $sizes = null, $rest_route = null) {
+		// init WP_Error
+		self::$wp_error = new WP_Error();
+
+		// check for valid image id
+		$image = ResponsivePics()->process->process_image($id);
+
+		// check for valid sizes value
+		$definition = [];
+		if ($image) {
+			$definition = ResponsivePics()->process->process_sizes($id, $sizes, 'desc', true, null, $rest_route);
+		}
+
+		// check for errors
+		if (count(self::$wp_error->get_error_messages()) > 0) {
+			return ResponsivePics()->error->get_error(self::$wp_error);
+		}
+
+		return $definition;
 	}
 
 	/*
