@@ -1,0 +1,217 @@
+{
+    "_readme": [
+        "This file locks the dependencies of your project to a known state",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
+        "This file is @generated automatically"
+    ],
+    "content-hash": "cdce2aa4d1f62f7924c1a7bb97d21f90",
+    "packages": [
+        {
+            "name": "composer/installers",
+            "version": "v2.2.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/composer/installers.git",
+                "reference": "c29dc4b93137acb82734f672c37e029dfbd95b35"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/composer/installers/zipball/c29dc4b93137acb82734f672c37e029dfbd95b35",
+                "reference": "c29dc4b93137acb82734f672c37e029dfbd95b35",
+                "shasum": ""
+            },
+            "require": {
+                "composer-plugin-api": "^1.0 || ^2.0",
+                "php": "^7.2 || ^8.0"
+            },
+            "require-dev": {
+                "composer/composer": "1.6.* || ^2.0",
+                "composer/semver": "^1 || ^3",
+                "phpstan/phpstan": "^0.12.55",
+                "phpstan/phpstan-phpunit": "^0.12.16",
+                "symfony/phpunit-bridge": "^5.3",
+                "symfony/process": "^5"
+            },
+            "type": "composer-plugin",
+            "extra": {
+                "class": "Composer\\Installers\\Plugin",
+                "branch-alias": {
+                    "dev-main": "2.x-dev"
+                },
+                "plugin-modifies-install-path": true
+            },
+            "autoload": {
+                "psr-4": {
+                    "Composer\\Installers\\": "src/Composer/Installers"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Kyle Robinson Young",
+                    "email": "kyle@dontkry.com",
+                    "homepage": "https://github.com/shama"
+                }
+            ],
+            "description": "A multi-framework Composer library installer",
+            "homepage": "https://composer.github.io/installers/",
+            "keywords": [
+                "Dolibarr",
+                "Eliasis",
+                "Hurad",
+                "ImageCMS",
+                "Kanboard",
+                "Lan Management System",
+                "MODX Evo",
+                "MantisBT",
+                "Mautic",
+                "Maya",
+                "OXID",
+                "Plentymarkets",
+                "Porto",
+                "RadPHP",
+                "SMF",
+                "Starbug",
+                "Thelia",
+                "Whmcs",
+                "WolfCMS",
+                "agl",
+                "annotatecms",
+                "attogram",
+                "bitrix",
+                "cakephp",
+                "chef",
+                "cockpit",
+                "codeigniter",
+                "concrete5",
+                "croogo",
+                "dokuwiki",
+                "drupal",
+                "eZ Platform",
+                "elgg",
+                "expressionengine",
+                "fuelphp",
+                "grav",
+                "installer",
+                "itop",
+                "known",
+                "kohana",
+                "laravel",
+                "lavalite",
+                "lithium",
+                "magento",
+                "majima",
+                "mako",
+                "matomo",
+                "mediawiki",
+                "miaoxing",
+                "modulework",
+                "modx",
+                "moodle",
+                "osclass",
+                "pantheon",
+                "phpbb",
+                "piwik",
+                "ppi",
+                "processwire",
+                "puppet",
+                "pxcms",
+                "reindex",
+                "roundcube",
+                "shopware",
+                "silverstripe",
+                "sydes",
+                "sylius",
+                "tastyigniter",
+                "wordpress",
+                "yawik",
+                "zend",
+                "zikula"
+            ],
+            "support": {
+                "issues": "https://github.com/composer/installers/issues",
+                "source": "https://github.com/composer/installers/tree/v2.2.0"
+            },
+            "funding": [
+                {
+                    "url": "https://packagist.com",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/composer",
+                    "type": "github"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/composer/composer",
+                    "type": "tidelift"
+                }
+            ],
+            "time": "2022-08-20T06:45:11+00:00"
+        }
+    ],
+    "packages-dev": [
+        {
+            "name": "wpackio/enqueue",
+            "version": "3.4.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/swashata/wpackio-enqueue.git",
+                "reference": "8a5604f5ab3bd5f000e503dda02603e15e534d47"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/swashata/wpackio-enqueue/zipball/8a5604f5ab3bd5f000e503dda02603e15e534d47",
+                "reference": "8a5604f5ab3bd5f000e503dda02603e15e534d47",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.6"
+            },
+            "require-dev": {
+                "brain/monkey": "^2.2.0",
+                "dealerdirect/phpcodesniffer-composer-installer": "^0.5",
+                "giacocorsiglia/wordpress-stubs": "^4.9.5",
+                "pcov/clobber": "^2.0",
+                "phpcompatibility/phpcompatibility-wp": "^2.1.0",
+                "phpunit/phpunit": "^7.3.0",
+                "spatie/phpunit-snapshot-assertions": "^1.3.1",
+                "wp-coding-standards/wpcs": "^2.2"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "WPackio\\": "inc"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Swashata Ghosh",
+                    "email": "swashata4u@gmail.com"
+                }
+            ],
+            "description": "API to enqueue assets generated by @wpackio/scripts into your WordPress plugin or theme.",
+            "support": {
+                "issues": "https://github.com/swashata/wpackio-enqueue/issues",
+                "source": "https://github.com/swashata/wpackio-enqueue/tree/3.4.0"
+            },
+            "time": "2021-07-31T02:55:39+00:00"
+        }
+    ],
+    "aliases": [],
+    "minimum-stability": "stable",
+    "stability-flags": [],
+    "prefer-stable": false,
+    "prefer-lowest": false,
+    "platform": {
+        "php": ">=5.5.0"
+    },
+    "platform-dev": [],
+    "plugin-api-version": "2.3.0"
+}
