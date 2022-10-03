@@ -505,15 +505,13 @@ class ResponsivePics {
 			return ResponsivePics()->error->get_error(self::$wp_error);
 		}
 
-		$sources = isset($definition['sources']) ? $definition['sources'] : [];
-		$copy = $image;
-
 		// prevent same id, append copy number to existing
-		if (isset(self::$id_map[$image])) {
-			self::$id_map[$image]++;
-			$copy .= '-' . self::$id_map[$image];
+		$copy = $id;
+		if (isset(self::$id_map[$id])) {
+			self::$id_map[$id]++;
+			$copy .= '-' . self::$id_map[$id];
 		} else {
-			self::$id_map[$image] = 0;
+			self::$id_map[$id] = 0;
 		}
 
 		$id = sprintf('responsive-pics-background-%s', $copy);
@@ -522,6 +520,7 @@ class ResponsivePics {
 		$background[] = '<style scoped="scoped" type="text/css">';
 
 		// add all sources as background-images
+		$sources = isset($definition['sources']) ? $definition['sources'] : [];
 		foreach ($sources as $source) {
 			if (isset($source['breakpoint'])) {
 				$sources = $source['source1x'];

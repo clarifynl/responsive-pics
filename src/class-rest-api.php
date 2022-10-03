@@ -76,12 +76,13 @@ class RP_Rest_Api extends ResponsivePics
 		$query_string = isset($_SERVER['QUERY_STRING']) ? $_SERVER['QUERY_STRING'] : null;
 		$route_url    = $query_string ? $route .'?'. $query_string : $route;
 
-		$id        = isset($request['id']) ? $request['id'] : null;
-		$sizes     = isset($params['sizes']) ? urldecode($params['sizes']) : null;
-		$classes   = isset($params['classes']) ? urldecode($params['classes']) : null;
-		$crop      = isset($params['crop']) ? urldecode($params['crop']) : null;
-		$lazyload  = isset($params['lazyload']) ? ($params['lazyload'] === 'true') : null;
-		$lqip      = isset($params['lqip']) ? ($params['lqip'] === 'true') : null;
+		// Decode Parameters
+		$id           = isset($request['id']) ? $request['id'] : null;
+		$sizes        = isset($params['sizes']) ? urldecode($params['sizes']) : null;
+		$classes      = isset($params['classes']) ? urldecode($params['classes']) : null;
+		$crop         = isset($params['crop']) ? urldecode($params['crop']) : null;
+		$lazyload     = isset($params['lazyload']) ? ($params['lazyload'] === 'true') : null;
+		$lqip         = isset($params['lqip']) ? ($params['lqip'] === 'true') : null;
 
 		if (class_exists('ResponsivePics')) {
 			if ($sizes) {
@@ -123,11 +124,12 @@ class RP_Rest_Api extends ResponsivePics
 		$query_string = isset($_SERVER['QUERY_STRING']) ? $_SERVER['QUERY_STRING'] : null;
 		$route_url    = $query_string ? $route .'?'. $query_string : $route;
 
-		$id        = isset($request['id']) ? $request['id'] : null;
-		$sizes     = isset($params['sizes']) ? urldecode($params['sizes']) : null;
-		$classes   = isset($params['classes']) ? urldecode($params['classes']) : null;
-		$lazyload  = isset($params['lazyload']) ? ($params['lazyload'] === 'true') : null;
-		$intrinsic = isset($params['intrinsic']) ? ($params['intrinsic'] === 'true') : null;
+		// Decode Parameters
+		$id           = isset($request['id']) ? $request['id'] : null;
+		$sizes        = isset($params['sizes']) ? urldecode($params['sizes']) : null;
+		$classes      = isset($params['classes']) ? urldecode($params['classes']) : null;
+		$lazyload     = isset($params['lazyload']) ? ($params['lazyload'] === 'true') : null;
+		$intrinsic    = isset($params['intrinsic']) ? ($params['intrinsic'] === 'true') : null;
 
 		if (class_exists('ResponsivePics')) {
 			if ($sizes) {
@@ -169,9 +171,10 @@ class RP_Rest_Api extends ResponsivePics
 		$query_string = isset($_SERVER['QUERY_STRING']) ? $_SERVER['QUERY_STRING'] : null;
 		$route_url    = $query_string ? $route .'?'. $query_string : $route;
 
-		$id      = isset($request['id']) ? $request['id'] : null;
-		$sizes   = isset($params['sizes']) ? urldecode($params['sizes']) : null;
-		$classes = isset($params['classes']) ? urldecode($params['classes']) : null;
+		// Decode Parameters
+		$id           = isset($request['id']) ? $request['id'] : null;
+		$sizes        = isset($params['sizes']) ? urldecode($params['sizes']) : null;
+		$classes      = isset($params['classes']) ? urldecode($params['classes']) : null;
 
 		if (class_exists('ResponsivePics')) {
 			if ($sizes) {
