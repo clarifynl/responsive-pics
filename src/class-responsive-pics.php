@@ -272,7 +272,7 @@ class ResponsivePics {
 	 */
 	public static function get_image($id = null, $sizes = null, $crop = false, $img_classes = null, $lazyload = false, $lqip = false, $rest_route = null) {
 		// get image sources
-		$definition = self::get_image_sources($id, $sizes, $crop, $rest_route);
+		$definition = self::get_image_data($id, $sizes, $crop, $rest_route);
 
 		// convert $picture_classes to array if it is a string
 		if ($img_classes) {
@@ -350,9 +350,9 @@ class ResponsivePics {
 
 	/*
 	 * Construct a responsive image element
-	 * returns image sources as data
+	 * returns image as data
 	 */
-	public static function get_image_sources($id = null, $sizes = null, $crop = false, $rest_route = null) {
+	public static function get_image_data($id = null, $sizes = null, $crop = false, $rest_route = null) {
 		// init WP_Error
 		self::$wp_error = new WP_Error();
 
@@ -379,7 +379,7 @@ class ResponsivePics {
 	 */
 	public static function get_picture($id = null, $sizes = null, $picture_classes = null, $lazyload = false, $intrinsic = false, $rest_route = null) {
 		// get picture sources
-		$definition = self::get_picture_sources($id, $sizes, $rest_route);
+		$definition = self::get_picture_data($id, $sizes, $rest_route);
 
 		// check for valid classes value
 		if ($picture_classes) {
@@ -462,7 +462,7 @@ class ResponsivePics {
 	 * Construct a responsive picture element
 	 * returns picture sources as data
 	 */
-	public static function get_picture_sources($id = null, $sizes = null, $rest_route = null) {
+	public static function get_picture_data($id = null, $sizes = null, $rest_route = null) {
 		// init WP_Error
 		self::$wp_error = new WP_Error();
 
@@ -491,7 +491,7 @@ class ResponsivePics {
 	 */
 	public static function get_background($id = null, $sizes = null, $bg_classes = null, $rest_route = null) {
 		// get background sources
-		$definition = self::get_background_sources($id, $sizes, $rest_route);
+		$definition = self::get_background_data($id, $sizes, $rest_route);
 
 		// convert $classes to array if it is a string
 		if ($bg_classes) {
@@ -548,9 +548,9 @@ class ResponsivePics {
 
 	/*
 	 * Construct a responsive background image element
-	 * returns picture sources as data
+	 * returns background sources as data
 	 */
-	public static function get_background_sources($id = null, $sizes = null, $rest_route = null) {
+	public static function get_background_data($id = null, $sizes = null, $rest_route = null) {
 		// init WP_Error
 		self::$wp_error = new WP_Error();
 

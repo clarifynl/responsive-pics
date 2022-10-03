@@ -25,9 +25,9 @@ class RP_Rest_Api extends ResponsivePics
 			]
 		]);
 
-		register_rest_route('responsive-pics/v1', '/image-sources/(?P<id>\d+)', [
+		register_rest_route('responsive-pics/v1', '/image-data/(?P<id>\d+)', [
 			'methods'             => 'GET',
-			'callback'            => ['RP_Rest_Api', 'rest_get_image_sources'],
+			'callback'            => ['RP_Rest_Api', 'rest_get_image_data'],
 			'permission_callback' => '__return_true',
 			'args'                => [
 				'id' => [
@@ -130,12 +130,12 @@ class RP_Rest_Api extends ResponsivePics
 
 
 	/**
-	 * REST API get image sources
+	 * REST API get image data
 	 *
 	 * @param   (object) WP_REST_Request
-	 * @return  (object) image sources
+	 * @return  (object) image data
 	 */
-	public static function rest_get_image_sources($request) {
+	public static function rest_get_image_data($request) {
 		$route        = $request->get_route();
 		$params       = $request->get_params();
 		$query_string = isset($_SERVER['QUERY_STRING']) ? $_SERVER['QUERY_STRING'] : null;
@@ -148,13 +148,13 @@ class RP_Rest_Api extends ResponsivePics
 
 		if (class_exists('ResponsivePics')) {
 			if ($sizes) {
-				$image  = ResponsivePics::get_image_sources($id, $sizes, $crop, $route_url);
+				$data = ResponsivePics::get_image_data($id, $sizes, $crop, $route_url);
 
 				// Check for errors
-				if (is_wp_error($image)) {
-					return $image;
+				if (is_wp_error($data)) {
+					return $data;
 				} else {
-					$result = new WP_REST_Response($image, 200);
+					$result = new WP_REST_Response($data, 200);
 
 					// Set cache duration
 					if (self::$wp_rest_cache) {
