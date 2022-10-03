@@ -2,19 +2,22 @@
   "name": "responsive-pics",
   "version": "1.6.2",
   "private": true,
-  "devDependencies": {
-    "@wpackio/scripts": "^5.0.0",
-    "cssnano": "^4.1.11",
-    "node-sass": "^4.14.1",
-    "sass": "^1.32.11"
-  },
   "scripts": {
-    "bootstrap": "wpackio-scripts bootstrap -p ./assets/build/wpackio.project.js -s ./assets/build/wpackio.server.js",
-    "build": "wpackio-scripts build -p ./assets/build/wpackio.project.js -s ./assets/build/wpackio.server.js",
-    "start": "wpackio-scripts start -p ./assets/build/wpackio.project.js -s ./assets/build/wpackio.server.js",
-    "archive": "wpackio-scripts pack -p ./assets/build/wpackio.project.js -s ./assets/build/wpackio.server.js"
+    "bootstrap": "wpackio-scripts bootstrap",
+    "build": "wpackio-scripts build",
+    "start": "wpackio-scripts start",
+    "archive": "wpackio-scripts pack",
+    "build-backup": "wpackio-scripts build -p ./assets/build/wpackio.project.js -s ./assets/build/wpackio.server.js",
+    "start-backup": "wpackio-scripts start -p ./assets/build/wpackio.project.js -s ./assets/build/wpackio.server.js",
+    "archive-backup": "wpackio-scripts pack -p ./assets/build/wpackio.project.js -s ./assets/build/wpackio.server.js"
+  },
+  "devDependencies": {
+    "@wpackio/scripts": "^6.4.0",
+    "cssnano": "^5.1.13",
+    "postcss": "^8.4.17",
+    "sass": "^1.55.0"
   },
   "dependencies": {
-    "@wpackio/entrypoint": "^5.0.0"
+    "@wpackio/entrypoint": "^6.4.0"
   }
 }
