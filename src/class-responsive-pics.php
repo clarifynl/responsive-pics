@@ -472,7 +472,7 @@ class ResponsivePics {
 		// check for valid sizes value
 		$definition = [];
 		if ($image) {
-			$definition = ResponsivePics()->process->process_sizes($id, $sizes, 'desc', true, null, $rest_route);
+			$definition = ResponsivePics()->process->process_sizes($image, $sizes, 'desc', true, null, $rest_route);
 		}
 
 		// check for errors
@@ -490,17 +490,8 @@ class ResponsivePics {
 	 * and an div with the same dedicated image class
 	 */
 	public static function get_background($id = null, $sizes = null, $bg_classes = null, $rest_route = null) {
-		// init WP_Error
-		self::$wp_error = new WP_Error();
-
-		// check for valid image id
-		$image = ResponsivePics()->process->process_image($id);
-
-		// check for valid sizes
-		$definition = [];
-		if ($image) {
-			$definition = ResponsivePics()->process->process_sizes($image, $sizes, 'asc', true, null, $rest_route);
-		}
+		// get background sources
+		$definition = self::get_background_sources($id, $sizes, $rest_route);
 
 		// convert $classes to array if it is a string
 		if ($bg_classes) {
@@ -554,6 +545,31 @@ class ResponsivePics {
 		$background[] = sprintf('<div%s id="%s"></div>', $bg_classes ? ' class="' . implode(' ', $bg_classes) . '"' : '', $id);
 
 		return implode("\n", $background) . "\n";
+	}
+
+	/*
+	 * Construct a responsive background image element
+	 * returns picture sources as data
+	 */
+	public static function get_background_sources($id = null, $sizes = null, $rest_route = null) {
+		// init WP_Error
+		self::$wp_error = new WP_Error();
+
+		// check for valid image id
+		$image = ResponsivePics()->process->process_image($id);
+
+		// check for valid sizes
+		$definition = [];
+		if ($image) {
+			$definition = ResponsivePics()->process->process_sizes($image, $sizes, 'asc', true, null, $rest_route);
+		}
+
+		// check for errors
+		if (count(self::$wp_error->get_error_messages()) > 0) {
+			return ResponsivePics()->error->get_error(self::$wp_error);
+		}
+
+		return $definition;
 	}
 }
 
