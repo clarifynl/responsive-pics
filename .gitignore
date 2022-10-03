@@ -1,5 +1,6 @@
+/node_modules
+/package
+/vendor
 *.sublime-project
 *.sublime-workspace
 *.DS_Store
-/node_modules
-/package
