@@ -12,7 +12,8 @@
 defined('ABSPATH') or exit;
 
 
-class ResponsivePicsWP {
+class ResponsivePicsWP
+{
 
 	private static $instance;
 	public static $enqueue;
@@ -35,7 +36,7 @@ class ResponsivePicsWP {
 		// Init
 		if (!class_exists('ResponsivePics')) {
 			require_once(RESPONSIVE_PICS_DIR . '/lib/action-scheduler/action-scheduler.php');
-			require_once(RESPONSIVE_PICS_DIR . '/lib/wpackio-enqueue/inc/Enqueue.php');
+			require_once(RESPONSIVE_PICS_DIR . '/lib/wpackio/enqueue/inc/Enqueue.php');
 			require_once(RESPONSIVE_PICS_DIR . '/src/class-responsive-pics.php');
 
 			self::$enqueue = new \WPackio\Enqueue('responsivePics', 'dist', RESPONSIVE_PICS_VERSION, 'plugin', __FILE__);
