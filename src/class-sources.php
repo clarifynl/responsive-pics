@@ -1,6 +1,7 @@
 <?php
 
-class RP_Sources extends ResponsivePics {
+class RP_Sources extends ResponsivePics
+{
 
 	// returns a normalized array of available sources
 	public function get_resize_sources($id, $rules = null, $order = 'desc', $rest_route = null) {

@@ -1,6 +1,7 @@
 <?php
 
-class RP_Breakpoints extends ResponsivePics {
+class RP_Breakpoints extends ResponsivePics
+{
 
 	// add missing breakpoints
 	public function add_missing_breakpoints($variants) {

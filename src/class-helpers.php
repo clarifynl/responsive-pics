@@ -1,6 +1,7 @@
 <?php
 
-class RP_Helpers extends ResponsivePics {
+class RP_Helpers extends ResponsivePics
+{
 
 	// get suffix for resized image
 	public function get_resized_suffix($width, $height, $ratio, $crop) {

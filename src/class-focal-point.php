@@ -1,6 +1,7 @@
 <?php
 
-class RP_Focal_Point extends ResponsivePics {
+class RP_Focal_Point extends ResponsivePics
+{
 	/**
 	 * Construct Focal Point
 	 */

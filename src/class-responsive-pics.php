@@ -1,7 +1,8 @@
 <?php
 
 
-class ResponsivePics {
+class ResponsivePics
+{
 	public static $columns = null;
 	public static $gutter = null;
 	public static $grid_widths = null;

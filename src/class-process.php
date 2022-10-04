@@ -1,6 +1,7 @@
 <?php
 
-class RP_Process extends ResponsivePics {
+class RP_Process extends ResponsivePics
+{
 
 	// validates and returns image id
 	public function process_image($id = null) {

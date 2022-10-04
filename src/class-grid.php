@@ -1,6 +1,7 @@
 <?php
 
-class RP_Grid extends ResponsivePics {
+class RP_Grid extends ResponsivePics
+{
 
 	// calculates column shortcut (e.g. "xs-5") to actual pixels
 	public function columns_to_pixels($input) {

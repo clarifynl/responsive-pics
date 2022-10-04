@@ -5,7 +5,8 @@ use DeliciousBrains\WP_Offload_Media\Items\Media_Library_Item;
 use DeliciousBrains\WP_Offload_Media\Items\Upload_Handler;
 use DeliciousBrains\WP_Offload_Media\Items\Remove_Provider_Handler;
 
-class RP_S3_Offload extends ResponsivePics {
+class RP_S3_Offload extends ResponsivePics
+{
 	/**
 	 * Upload to S3 storage
 	 */
