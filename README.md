@@ -123,23 +123,23 @@ The **grid breakpoints** in pixels:
 
 ```scss
 $grid-breakpoints: (
- xs: 0,
- sm: 576px,
- md: 768px,
- lg: 992px,
- xl: 1200px,
- xxl: 1400px
+  xs: 0,
+  sm: 576px,
+  md: 768px,
+  lg: 992px,
+  xl: 1200px,
+  xxl: 1400px
 );
 ```
 And the **maximum widths of the containers** in pixels:
 
 ```scss
 $container-max-widths: (
- sm: 540px,
- md: 720px,
- lg: 960px,
- xl: 1140px,
- xxl: 1320px
+  sm: 540px,
+  md: 720px,
+  lg: 960px,
+  xl: 1140px,
+  xxl: 1320px
 );
 ```
 
@@ -154,34 +154,34 @@ Add these lines to your theme’s **functions.php** and make sure to check if th
  * Set ResponsivePics variables
  */
 if (class_exists('ResponsivePics')) {
-	ResponsivePics::setColumns(12);
-	ResponsivePics::setGutter(30);
-	ResponsivePics::setBreakPoints([
-		'xs'    => 0,
-		'sm'    => 576,
-		'md'    => 768,
-		'lg'    => 992,
-		'xl'    => 1200,
-		'xxl'   => 1400,
-		'xxxl'  => 1600,
-		'xxxxl' => 1920
-	]);
-	ResponsivePics::setGridWidths([
-		'xs'    => 576,
-		'sm'    => 768,
-		'md'    => 992,
-		'lg'    => 1200,
-		'xl'    => 1400,
-		'xxl'   => 1600,
-		'xxxl'  => 1920
-	]);
-	ResponsivePics::setMaxWidthFactor(4);
-	ResponsivePics::setLazyLoadClass('lozad');
-	ResponsivePics::setLqipWidth(200);
-	ResponsivePics::setLqipClass('blurred');
-	ResponsivePics::setImageQuality(85);
-	ResponsivePics::setRestApiCache(true);
-	ResponsivePics::setRestApiCacheDuration(86400);
+  ResponsivePics::setColumns(12);
+  ResponsivePics::setGutter(30);
+  ResponsivePics::setBreakPoints([
+    'xs'    => 0,
+    'sm'    => 576,
+    'md'    => 768,
+    'lg'    => 992,
+    'xl'    => 1200,
+    'xxl'   => 1400,
+    'xxxl'  => 1600,
+    'xxxxl' => 1920
+  ]);
+  ResponsivePics::setGridWidths([
+    'xs'    => 576,
+    'sm'    => 768,
+    'md'    => 992,
+    'lg'    => 1200,
+    'xl'    => 1400,
+    'xxl'   => 1600,
+    'xxxl'  => 1920
+  ]);
+  ResponsivePics::setMaxWidthFactor(4);
+  ResponsivePics::setLazyLoadClass('lozad');
+  ResponsivePics::setLqipWidth(200);
+  ResponsivePics::setLqipClass('blurred');
+  ResponsivePics::setImageQuality(85);
+  ResponsivePics::setRestApiCache(true);
+  ResponsivePics::setRestApiCacheDuration(86400);
 }
 ```
 
@@ -248,10 +248,10 @@ This will return an array containing the available image sources per breakpoint,
 
 ```php
 [
-	'sources'  => (array) $sources,
-	'alt'      => (string) $alt,
-	'mimetype' => (string) $mime_type,
-	'alpha'    => (bool) $alpha
+  'sources'  => (array) $sources,
+  'alt'      => (string) $alt,
+  'mimetype' => (string) $mime_type,
+  'alpha'    => (bool) $alpha
 ];
 ```
 
@@ -296,10 +296,10 @@ This will return an array containing the available picture sources per breakpoin
 
 ```php
 [
-	'sources'  => (array) $sources,
-	'alt'      => (string) $alt,
-	'mimetype' => (string) $mime_type,
-	'alpha'    => (bool) $alpha
+  'sources'  => (array) $sources,
+  'alt'      => (string) $alt,
+  'mimetype' => (string) $mime_type,
+  'alpha'    => (bool) $alpha
 ];
 ```
 
@@ -341,10 +341,10 @@ This will return an array containing the available background image sources per 
 
 ```php
 [
-	'sources'  => (array) $sources,
-	'alt'      => (string) $alt,
-	'mimetype' => (string) $mime_type,
-	'alpha'    => (bool) $alpha
+  'sources'  => (array) $sources,
+  'alt'      => (string) $alt,
+  'mimetype' => (string) $mime_type,
+  'alpha'    => (bool) $alpha
 ];
 ```
 
