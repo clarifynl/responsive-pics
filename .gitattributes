@@ -1,6 +1,7 @@
+.browserslistrc export-ignore
 .gitattributes export-ignore
 .gitignore export-ignore
-.browserslistrc export-ignore
+.nvmrc export-ignore
 assets export-ignore
 package*.json export-ignore
 postcss.config.js export-ignore
