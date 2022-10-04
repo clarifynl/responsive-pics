@@ -3,3 +3,5 @@
 .browserslistrc export-ignore
 assets export-ignore
 package*.json export-ignore
+postcss.config.js export-ignore
+wpackio.*.js export-ignore
