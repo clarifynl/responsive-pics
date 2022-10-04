@@ -231,6 +231,30 @@ GET /wp-json/responsive-pics/v1/image/<id>?sizes=<sizes>&crop=<crop>&classes=<cl
 | lazyload   | boolean          | optional | `false`  | When `true` enables `lazyload` classes and data-srcset attributes. See the [Lazyloading section](#lazyloading) for more information.
 | lqip       | boolean          | optional | `false`  | When `true` enables `LQIP` classes and src attribute. See the [LQIP section](#lqip) for more information.
 
+### Image Data
+For retrieving the responsive `<img>` data in your theme, you can use the `get_image_data` function or the `responsive-pics/v1/image-data` API endpoint with the available parameters `id`, `sizes` and `crop`.
+
+#### PHP
+```php
+ResponsivePics::get_image_data(id, sizes, crop);
+```
+
+#### REST API
+```curl
+GET /wp-json/responsive-pics/v1/image-data/<id>?sizes=<sizes>&crop=<crop>
+```
+
+This will return an array containing the available image sources per breakpoint, alt text, mime type and a boolean value if the image has an alpha channel.
+
+```php
+[
+		'sources'  => (array) $sources,
+		'alt'      => (string) $alt,
+		'mimetype' => (string) $mime_type,
+		'alpha'    => (bool) $alpha
+];
+```
+
 ### Picture Element
 
 For inserting a responsive `<picture>` element in your template, use the `get_picture` function or the `responsive-pics/v1/picture` API endpoint with the available parameters.
@@ -255,6 +279,30 @@ GET /wp-json/responsive-pics/v1/picture/<id>?sizes=<sizes>&classes=<classes>&laz
 | lazyload   | boolean     | optional | `false`  | When `true` enables `lazyload` classes and data-srcset attributes. See the [Lazyloading section](#lazyloading) for more information.
 | intrinsic  | boolean     | optional | `false`  | When `true` enables `intrinsic` classes and data-aspectratio attributes. See the [Intrinsic Aspectratio section](#intrinsic) for more information.
 
+### Picture Data
+For retrieving the responsive `<picture>` data in your theme, you can use the `get_picture_data` function or the `responsive-pics/v1/picture-data` API endpoint with the available parameters `id` and `sizes`.
+
+#### PHP
+```php
+ResponsivePics::get_picture_data(id, sizes);
+```
+
+#### REST API
+```curl
+GET /wp-json/responsive-pics/v1/picture-data/<id>?sizes=<sizes>
+```
+
+This will return an array containing the available picture sources per breakpoint, alt text, mime type and a boolean value if the image has an alpha channel.
+
+```php
+[
+		'sources'  => (array) $sources,
+		'alt'      => (string) $alt,
+		'mimetype' => (string) $mime_type,
+		'alpha'    => (bool) $alpha
+];
+```
+
 ### Background Image
 For inserting a responsive background image in your template, use the `get_background` function or the `responsive-pics/v1/background` API endpoint with the available parameters.
 
@@ -275,6 +323,30 @@ GET /wp-json/responsive-pics/v1/background/<id>?sizes=<sizes>&classes=<classes>
 | id         | number      | yes      |          | The WordPress image id (e.g. 1).
 | sizes      | string      | yes      |          | A comma-separated string of preferred image sizes (e.g. `'xs-12, sm-6, md-4, lg-3'`). See the [Sizes section](#sizes) for more information.
 | classes    | string      | optional | `null`   | A comma-separated string of additional CSS classes you want to add to the background element (e.g. `'my_bg_class'` or `'my_bg_class, my_second_bg_class'`).
+
+### Background Data
+For retrieving the responsive background image data in your theme, you can use the `get_background_data` function or the `responsive-pics/v1/background-data` API endpoint with the available parameters `id` and `sizes`.
+
+#### PHP
+```php
+ResponsivePics::get_background_data(id, sizes);
+```
+
+#### REST API
+```curl
+GET /wp-json/responsive-pics/v1/background-data/<id>?sizes=<sizes>
+```
+
+This will return an array containing the available background image sources per breakpoint, alt text, mime type and a boolean value if the image has an alpha channel.
+
+```php
+[
+		'sources'  => (array) $sources,
+		'alt'      => (string) $alt,
+		'mimetype' => (string) $mime_type,
+		'alpha'    => (bool) $alpha
+];
+```
 
 
 ### Supported image formats
