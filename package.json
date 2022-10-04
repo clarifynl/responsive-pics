@@ -6,10 +6,7 @@
     "bootstrap": "wpackio-scripts bootstrap",
     "build": "wpackio-scripts build",
     "start": "wpackio-scripts start",
-    "archive": "wpackio-scripts pack",
-    "build-backup": "wpackio-scripts build -p ./assets/build/wpackio.project.js -s ./assets/build/wpackio.server.js",
-    "start-backup": "wpackio-scripts start -p ./assets/build/wpackio.project.js -s ./assets/build/wpackio.server.js",
-    "archive-backup": "wpackio-scripts pack -p ./assets/build/wpackio.project.js -s ./assets/build/wpackio.server.js"
+    "archive": "wpackio-scripts pack"
   },
   "devDependencies": {
     "@wpackio/scripts": "^6.4.0",
