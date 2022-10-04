@@ -248,10 +248,10 @@ This will return an array containing the available image sources per breakpoint,
 
 ```php
 [
-		'sources'  => (array) $sources,
-		'alt'      => (string) $alt,
-		'mimetype' => (string) $mime_type,
-		'alpha'    => (bool) $alpha
+	'sources'  => (array) $sources,
+	'alt'      => (string) $alt,
+	'mimetype' => (string) $mime_type,
+	'alpha'    => (bool) $alpha
 ];
 ```
 
@@ -296,10 +296,10 @@ This will return an array containing the available picture sources per breakpoin
 
 ```php
 [
-		'sources'  => (array) $sources,
-		'alt'      => (string) $alt,
-		'mimetype' => (string) $mime_type,
-		'alpha'    => (bool) $alpha
+	'sources'  => (array) $sources,
+	'alt'      => (string) $alt,
+	'mimetype' => (string) $mime_type,
+	'alpha'    => (bool) $alpha
 ];
 ```
 
@@ -341,10 +341,10 @@ This will return an array containing the available background image sources per 
 
 ```php
 [
-		'sources'  => (array) $sources,
-		'alt'      => (string) $alt,
-		'mimetype' => (string) $mime_type,
-		'alpha'    => (bool) $alpha
+	'sources'  => (array) $sources,
+	'alt'      => (string) $alt,
+	'mimetype' => (string) $mime_type,
+	'alpha'    => (bool) $alpha
 ];
 ```
 
