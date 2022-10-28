@@ -101,24 +101,24 @@ And import the package in your theme’s global javascript file:
 ## Configuration <a name="configuration"></a>
 ResponsivePics uses the following default variables:
 
-| Variable                  | Type    | Default    | Definition
-| ------------------------- | ------- | ---------- | ----------
-| `$columns`                | number  | `12`       | The amount of columns your grid layout uses
-| `$gutter`                 | number  | `30`       | The gutter width in pixels (space between grid columns)
-| `$breakpoints`            | array   | `['xs' => 0, 'sm' => 576, 'md' => 768, 'lg' => 992, 'xl' => 1200, 'xxl' => 1400]` | The media query breakpoints ResponsivePics will use for creating and serving your image sources
-| `$grid_widths`            | array   | `['xs' => 576, 'sm' => 540, 'md' => 720, 'lg' => 960, 'xl' => 1140, 'xxl' => 1320]` | The maximum widths of your layout in pixels ResponsivePics will use for resizing your images
-| `$max_width_factor`       | number  | `2`        | The maximum factor of the width to use for resizing and cropping the height of an image source
-| `$lazyload_class`         | string  | `lazyload` | The css class to be added on the `img` tag when `lazyload` is enabled
-| `$lqip_width`             | number  | `100`      | The image width to be used for the `LQIP` (low quality image placeholder)
-| `$lqip_class`             | string  | `blur-up`  | The css class to be added on the `img` tag when `LQIP` (low quality image placeholder) is enabled
-| `$image_quality`          | number  | `90`       | The image compression quality in percentage used in the `WP_Image_Editor` when resizing images
-| `$wp_rest_cache`          | boolean | `false`    | Wether to enable cache in the WP Rest API response headers
-| `$wp_rest_cache_duration` | number  | `3600`     | The cache duration (max-age) in seconds of the WP Rest API Cache-Control header
+| Variable                  | Type    | Default                                                                             | Definition                                                                                        |
+| ------------------------- | ------- | ----------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------- |
+| `$columns`                | number  | `12`                                                                                | The amount of columns your grid layout uses                                                       |
+| `$gutter`                 | number  | `30`                                                                                | The gutter width in pixels (space between grid columns)                                           |
+| `$breakpoints`            | array   | `['xs' => 0, 'sm' => 576, 'md' => 768, 'lg' => 992, 'xl' => 1200, 'xxl' => 1400]`   | The media query breakpoints ResponsivePics will use for creating and serving your image sources   |
+| `$grid_widths`            | array   | `['xs' => 576, 'sm' => 540, 'md' => 720, 'lg' => 960, 'xl' => 1140, 'xxl' => 1320]` | The maximum widths of your layout in pixels ResponsivePics will use for resizing your images      |
+| `$max_width_factor`       | number  | `2`                                                                                 | The maximum factor of the width to use for resizing and cropping the height of an image source    |
+| `$lazyload_class`         | string  | `lazyload`                                                                          | The css class to be added on the `img` tag when `lazyload` is enabled                             |
+| `$lqip_width`             | number  | `100`                                                                               | The image width to be used for the `LQIP` (low quality image placeholder)                         |
+| `$lqip_class`             | string  | `blur-up`                                                                           | The css class to be added on the `img` tag when `LQIP` (low quality image placeholder) is enabled |
+| `$image_quality`          | number  | `90`                                                                                | The image compression quality in percentage used in the `WP_Image_Editor` when resizing images    |
+| `$wp_rest_cache`          | boolean | `false`                                                                             | Wether to enable cache in the WP Rest API response headers                                        |
+| `$wp_rest_cache_duration` | number  | `3600`                                                                              | The cache duration (max-age) in seconds of the WP Rest API Cache-Control header                   |
 
 By default, ResponsivePics will use the [Bootstrap 4 SCSS variables](https://github.com/twbs/bootstrap/blob/main/scss/_variables.scss#L285/) for defining:
 
-The amount of **grid columns**: `$grid-columns: 12;`  
-The **grid gutter width** in pixels: `$grid-gutter-width: 30px;`  
+The amount of **grid columns**: `$grid-columns: 12;`
+The **grid gutter width** in pixels: `$grid-gutter-width: 30px;`
 The **grid breakpoints** in pixels:
 
 ```scss
@@ -212,7 +212,7 @@ For inserting a responsive `<img>` element in your template, use the `get_image`
 
 #### PHP
 ```php
-ResponsivePics::get_image(id, sizes, crop, classes, lazyload, lqip);
+ResponsivePics::get_image(id, sizes, crop, classes, lazyload, lqip, rest, native_lazyload);
 ```
 
 #### REST API
@@ -222,14 +222,15 @@ GET /wp-json/responsive-pics/v1/image/<id>?sizes=<sizes>&crop=<crop>&classes=<cl
 
 #### Image Parameters
 
-| Parameter  | Type             | Required | Default  | Definition
-| ---------- | ---------------- | -------- | -------- | --------------------------------
-| id         | number           | yes      |          | The WordPress image id (e.g. 1).
-| sizes      | string           | yes      |          | A comma-separated string of preferred image sizes (e.g. `'xs-12, sm-6, md-4, lg-3'`). See the [Sizes section](#sizes) for more information.
-| crop       | number or string | optional | `false`  | A crop-factor of the width for the desired height within the default range of `0-2` (e.g. `0.75`) with (optional) crop positions (e.g. <code>0.75&#124;c t</code>). See the [Cropping section](#cropping) for more information.
-| classes    | string           | optional | `null`   | A comma-separated string of additional CSS classes you want to add to the img element (e.g. `'my_img_class'` or `'my_img_class, my_second_img_class'`).
-| lazyload   | boolean          | optional | `false`  | When `true` enables `lazyload` classes and data-srcset attributes. See the [Lazyloading section](#lazyloading) for more information.
-| lqip       | boolean          | optional | `false`  | When `true` enables `LQIP` classes and src attribute. See the [LQIP section](#lqip) for more information.
+| Parameter       | Type             | Required | Default | Definition                                                                                                                                                                                                                      |
+| --------------- | ---------------- | -------- | ------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| id              | number           | yes      |         | The WordPress image id (e.g. 1).                                                                                                                                                                                                |
+| sizes           | string           | yes      |         | A comma-separated string of preferred image sizes (e.g. `'xs-12, sm-6, md-4, lg-3'`). See the [Sizes section](#sizes) for more information.                                                                                     |
+| crop            | number or string | optional | `false` | A crop-factor of the width for the desired height within the default range of `0-2` (e.g. `0.75`) with (optional) crop positions (e.g. <code>0.75&#124;c t</code>). See the [Cropping section](#cropping) for more information. |
+| classes         | string           | optional | `null`  | A comma-separated string of additional CSS classes you want to add to the img element (e.g. `'my_img_class'` or `'my_img_class, my_second_img_class'`).                                                                         |
+| lazyload        | boolean          | optional | `false` | When `true` enables `lazyload` classes and data-srcset attributes. See the [Lazyloading section](#lazyloading) for more information.                                                                                            |
+| lqip            | boolean          | optional | `false` | When `true` enables `LQIP` classes and src attribute. See the [LQIP section](#lqip) for more information.                                                                                                                       |
+| native_lazyload | boolean          | optional | `false` | When `true` enables `loading="lazy"` attribute.                                                                                                                                                                                 |
 
 ### Image Data
 For retrieving the responsive `<img>` data in your theme, you can use the `get_image_data` function or the `responsive-pics/v1/image-data` API endpoint with the available parameters `id`, `sizes` and `crop`.
@@ -271,13 +272,14 @@ GET /wp-json/responsive-pics/v1/picture/<id>?sizes=<sizes>&classes=<classes>&laz
 
 #### Picture Parameters
 
-| Parameter  | Type        | Required | Default  | Definition
-| ---------- | ----------- | -------- | -------- | --------------------------------
-| id         | number      | yes      |          | The WordPress image id (e.g. 1).
-| sizes      | string      | yes      |          | A comma-separated string of preferred image sizes (e.g. `'xs-12, sm-6, md-4, lg-3'`). See the [Sizes section](#sizes) for more information.
-| classes    | string      | optional | `null`   | A comma-separated string of additional CSS classes you want to add to the picture element (e.g. `'my_picture_class'` or `'my_picture_class, my_second_picture_class'`).
-| lazyload   | boolean     | optional | `false`  | When `true` enables `lazyload` classes and data-srcset attributes. See the [Lazyloading section](#lazyloading) for more information.
-| intrinsic  | boolean     | optional | `false`  | When `true` enables `intrinsic` classes and data-aspectratio attributes. See the [Intrinsic Aspectratio section](#intrinsic) for more information.
+| Parameter       | Type    | Required | Default | Definition                                                                                                                                                              |
+| --------------- | ------- | -------- | ------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| id              | number  | yes      |         | The WordPress image id (e.g. 1).                                                                                                                                        |
+| sizes           | string  | yes      |         | A comma-separated string of preferred image sizes (e.g. `'xs-12, sm-6, md-4, lg-3'`). See the [Sizes section](#sizes) for more information.                             |
+| classes         | string  | optional | `null`  | A comma-separated string of additional CSS classes you want to add to the picture element (e.g. `'my_picture_class'` or `'my_picture_class, my_second_picture_class'`). |
+| lazyload        | boolean | optional | `false` | When `true` enables `lazyload` classes and data-srcset attributes. See the [Lazyloading section](#lazyloading) for more information.                                    |
+| intrinsic       | boolean | optional | `false` | When `true` enables `intrinsic` classes and data-aspectratio attributes. See the [Intrinsic Aspectratio section](#intrinsic) for more information.                      |
+| native_lazyload | boolean | optional | `false` | When `true` enables `loading="lazy"` attribute.                                                                                                                         |
 
 ### Picture Data
 For retrieving the responsive `<picture>` data in your theme, you can use the `get_picture_data` function or the `responsive-pics/v1/picture-data` API endpoint with the available parameters `id` and `sizes`.
@@ -318,11 +320,11 @@ GET /wp-json/responsive-pics/v1/background/<id>?sizes=<sizes>&classes=<classes>
 
 #### Background Parameters
 
-| Parameter  | Type        | Required | Default  | Definition
-| -----------| ----------- | -------- | -------- | --------------------------------
-| id         | number      | yes      |          | The WordPress image id (e.g. 1).
-| sizes      | string      | yes      |          | A comma-separated string of preferred image sizes (e.g. `'xs-12, sm-6, md-4, lg-3'`). See the [Sizes section](#sizes) for more information.
-| classes    | string      | optional | `null`   | A comma-separated string of additional CSS classes you want to add to the background element (e.g. `'my_bg_class'` or `'my_bg_class, my_second_bg_class'`).
+| Parameter | Type   | Required | Default | Definition                                                                                                                                                  |
+| --------- | ------ | -------- | ------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| id        | number | yes      |         | The WordPress image id (e.g. 1).                                                                                                                            |
+| sizes     | string | yes      |         | A comma-separated string of preferred image sizes (e.g. `'xs-12, sm-6, md-4, lg-3'`). See the [Sizes section](#sizes) for more information.                 |
+| classes   | string | optional | `null`  | A comma-separated string of additional CSS classes you want to add to the background element (e.g. `'my_bg_class'` or `'my_bg_class, my_second_bg_class'`). |
 
 ### Background Data
 For retrieving the responsive background image data in your theme, you can use the `get_background_data` function or the `responsive-pics/v1/background-data` API endpoint with the available parameters `id` and `sizes`.
@@ -352,12 +354,12 @@ This will return an array containing the available background image sources per 
 ### Supported image formats
 The following image file formats are supported:
 
-| File format | MIME Type  | Properties
-| ----------- | ---------- | ---------------------------------
+| File format | MIME Type  | Properties                                                                                                                                               |
+| ----------- | ---------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | jp(e)g      | image/jpeg |
-| webp        | image/webp | [Requires Wordpress version 5.8 or higher](https://make.wordpress.org/core/2021/06/07/wordpress-5-8-adds-webp-support/).
-| png         | image/png  | When the png contains an **alpha channel**, an extra `'has-alpha'` class will be added to the picture image element for additional styling.
-| gif         | image/gif  | When the gif is **animated** (it will check for multiple header frames), no image resizing or cropping will be done to prevent discarding the animation.
+| webp        | image/webp | [Requires Wordpress version 5.8 or higher](https://make.wordpress.org/core/2021/06/07/wordpress-5-8-adds-webp-support/).                                 |
+| png         | image/png  | When the png contains an **alpha channel**, an extra `'has-alpha'` class will be added to the picture image element for additional styling.              |
+| gif         | image/gif  | When the gif is **animated** (it will check for multiple header frames), no image resizing or cropping will be done to prevent discarding the animation. |
 
 Any other image formats, will not be resizes or cropped.
 
@@ -372,10 +374,10 @@ The following syntax is available for each image size in the `sizes` parameter:
 breakpoint:width
 ```
 
-| Parameter  | Type             | Required | Default | Definition
-| ---------- | ---------------- | -------- | ------- | --------------------------------
-| breakpoint | number or string | yes      |         | If undefined, and `width` is a number, breakpoint will be the same as the width. If undefined, and `width` is a column definition, breakpoint will be the corresponding breakpoint (e.g. if width is `'xs-8'`, breakpoint will be `'xs'`).
-| width      | number or string | yes      |         | A column definition is a key in `$grid_widths` plus a dash and a column span number (e.g. `'xs-8'`).<br>If the column span number is suffixed with `-full` (e.g. `'xs-8-full'`), the column width is calculated as a percentage of the `$grid_width`, but as the next matching `$breakpoint` width (like in a `.container-fluid`).<br>You can also use `full` as span number (e.g. `'xs-full'`) for full width size based upon next matching `$breakpoint` width.
+| Parameter  | Type             | Required | Default | Definition                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
+| ---------- | ---------------- | -------- | ------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| breakpoint | number or string | yes      |         | If undefined, and `width` is a number, breakpoint will be the same as the width. If undefined, and `width` is a column definition, breakpoint will be the corresponding breakpoint (e.g. if width is `'xs-8'`, breakpoint will be `'xs'`).                                                                                                                                                                                                                        |
+| width      | number or string | yes      |         | A column definition is a key in `$grid_widths` plus a dash and a column span number (e.g. `'xs-8'`).<br>If the column span number is suffixed with `-full` (e.g. `'xs-8-full'`), the column width is calculated as a percentage of the `$grid_width`, but as the next matching `$breakpoint` width (like in a `.container-fluid`).<br>You can also use `full` as span number (e.g. `'xs-full'`) for full width size based upon next matching `$breakpoint` width. |
 
 ### Picture & background sizes
 Since the `<picture>` element and background images support art directed images, the following full syntax is available for each image size in the `sizes` parameter:
@@ -386,14 +388,14 @@ breakpoint:width [/factor|height]|crop_x crop_y
 
 The following parameters are available in the sizes syntax:
 
-| Parameter  | Type             | Required | Default | Definition
-| ---------- | ---------------- | -------- | ------- | --------------------------------
-| breakpoint | number or string | yes      |         | If undefined, and `width` is a number, breakpoint will be the same as the width. If undefined, and `width` is a column definition, breakpoint will be the corresponding breakpoint (e.g. if width is `'xs-8'`, breakpoint will be `'xs'`).
-| width      | number or string | yes      |         | The desired (max) width of the image (e.g. `800`). A column definition is a key in `$grid_widths` plus a dash and a column span number (e.g. `'xs-8'`).<br>If the column span number is suffixed with `-full` (e.g. `'xs-8-full'`), the column width is calculated as a percentage of the `$grid_width`, but as the next matching `$breakpoint` width (like in a `.container-fluid`).<br>You can also use `full` as span number (e.g. `'xs-full'`) for full width size based upon next matching `$breakpoint` width.
-| height     | number           | optional |         | The desired (max) height of the image (e.g. `500`).
-| factor     | number           | optional |         | A crop-factor of the width for the desired height within the default range of `0-2` (e.g. `0.75`).
-| crop_x     | number or string | optional | c       | Crop position in horizontal direction (e.g. `c`). See the [Cropping section](#cropping) for more information.
-| crop_y     | number or string | optional | c       | Crop position in vertical direction  (e.g. `b`). See the [Cropping section](#cropping) for more information.
+| Parameter  | Type             | Required | Default | Definition                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
+| ---------- | ---------------- | -------- | ------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| breakpoint | number or string | yes      |         | If undefined, and `width` is a number, breakpoint will be the same as the width. If undefined, and `width` is a column definition, breakpoint will be the corresponding breakpoint (e.g. if width is `'xs-8'`, breakpoint will be `'xs'`).                                                                                                                                                                                                                                                                           |
+| width      | number or string | yes      |         | The desired (max) width of the image (e.g. `800`). A column definition is a key in `$grid_widths` plus a dash and a column span number (e.g. `'xs-8'`).<br>If the column span number is suffixed with `-full` (e.g. `'xs-8-full'`), the column width is calculated as a percentage of the `$grid_width`, but as the next matching `$breakpoint` width (like in a `.container-fluid`).<br>You can also use `full` as span number (e.g. `'xs-full'`) for full width size based upon next matching `$breakpoint` width. |
+| height     | number           | optional |         | The desired (max) height of the image (e.g. `500`).                                                                                                                                                                                                                                                                                                                                                                                                                                                                  |
+| factor     | number           | optional |         | A crop-factor of the width for the desired height within the default range of `0-2` (e.g. `0.75`).                                                                                                                                                                                                                                                                                                                                                                                                                   |
+| crop_x     | number or string | optional | c       | Crop position in horizontal direction (e.g. `c`). See the [Cropping section](#cropping) for more information.                                                                                                                                                                                                                                                                                                                                                                                                        |
+| crop_y     | number or string | optional | c       | Crop position in vertical direction  (e.g. `b`). See the [Cropping section](#cropping) for more information.                                                                                                                                                                                                                                                                                                                                                                                                         |
 
 ---
 
@@ -484,14 +486,14 @@ Tools > Scheduled Actions
 Every resize job will be grouped by it's wordpress image id
 
 ### Cron <a name="cron"></a>
-When you are using the built-in [WP-Cron](https://developer.wordpress.org/plugins/cron/), the background process queue will only process any tasks on every page load.  
+When you are using the built-in [WP-Cron](https://developer.wordpress.org/plugins/cron/), the background process queue will only process any tasks on every page load.
 If you have disabled `WP-Cron` in your setup and you are using your own cron job on your server, Action Scheduler will use the interval set in that cron job to process the next batch of jobs.
 
 ```php
 define('DISABLE_WP_CRON', true);
 ```
 
-If you're using [Trellis](https://roots.io/trellis/) like us ❤️, the default cron interval is set to every [15 mins](https://github.com/roots/trellis/blob/master/roles/wordpress-setup/tasks/main.yml#L49).  
+If you're using [Trellis](https://roots.io/trellis/) like us ❤️, the default cron interval is set to every [15 mins](https://github.com/roots/trellis/blob/master/roles/wordpress-setup/tasks/main.yml#L49).
 You can override this to for example 1 mins with setting the `cron_interval` (or `cron_interval_multisite` for multisite) variable per wordpress site to `*/1`:
 
 In for example **trellis/group_vars/development/wordpress_sites.yml**:
@@ -557,10 +559,10 @@ do_action('responsive_pics_request_scheduled', (int) $post_id, (array) $resize_r
 ```
 #### Parameters
 
-- **$post_id**  
+- **$post_id**
 *(integer)* The attachment ID
 
-- **$resize_request**  
+- **$resize_request**
 *(array)* The resize request parameters:
 ```php
 [
@@ -584,19 +586,19 @@ do_action('responsive_pics_request_processed', (int) $post_id, (int) $quality, (
 ```
 #### Parameters
 
-- **$post_id**  
+- **$post_id**
 *(int)* The attachment ID
 
-- **$quality**  
+- **$quality**
 *(int)* The requested image quality
 
-- **$width**  
+- **$width**
 (int) The requested image width
 
-- **$height**  
+- **$height**
 (int) The requested image height
 
-- **$crop**  
+- **$crop**
 (array) The requested image crop positions in percentages:
 ```php
   [
@@ -605,10 +607,10 @@ do_action('responsive_pics_request_processed', (int) $post_id, (int) $quality, (
   ]
 ```
 
-- **$ratio**  
+- **$ratio**
 (float) The requested image ratio
 
-- **$resize_path**  
+- **$resize_path**
 (string) The requested image file path
 
 ---
@@ -620,10 +622,10 @@ do_action('responsive_pics_file_saved_local', (int) $post_id, (array) $file);
 ```
 #### Parameters
 
-- **$post_id**  
+- **$post_id**
 *(int)* The attachment ID
 
-- **$file**  
+- **$file**
 *(array)* The saved file containing:
 ```php
   [
@@ -646,10 +648,10 @@ do_action('responsive_pics_file_s3_uploaded', (int) $post_id, (array) $file);
 ```
 #### Parameters
 
-- **$post_id**  
+- **$post_id**
 *(int)* The attachment ID
 
-- **$file**  
+- **$file**
 *(array)* The S3 uploaded file containing:
 ```php
   [
@@ -672,10 +674,10 @@ do_action('responsive_pics_file_deleted_local', (int) $post_id, (string) $file);
 ```
 #### Parameters
 
-- **$post_id**  
+- **$post_id**
 *(int)* The attachment ID
 
-- **$file**  
+- **$file**
 *(string)* The deleted image file path
 
 ---
@@ -687,10 +689,10 @@ do_action('responsive_pics_file_s3_deleted', (int) $post_id, (array) $file_paths
 ```
 #### Parameters
 
-- **$post_id**  
+- **$post_id**
 *(int)* The attachment ID
 
-- **$file_paths**  
+- **$file_paths**
 *(array)* The deleted resized file paths in your S3 storage.
 
 ---
@@ -773,10 +775,10 @@ Please submit any issues you experience with the **ResponsivePics** library over
 ## Maintainers
 **ResponsivePics** is developed and maintained by:
 
-[@monokai](https://github.com/monokai) (creator)  
+[@monokai](https://github.com/monokai) (creator)
 [@twansparant](https://github.com/Twansparant) (creator)
 
 ## Copyright
-Code and documentation copyright 2017-2020 by [Booreiland](https://booreiland.amsterdam).  
-Code released under the [MIT License](https://github.com/booreiland/responsive-pics/blob/master/LICENSE).  
+Code and documentation copyright 2017-2020 by [Booreiland](https://booreiland.amsterdam).
+Code released under the [MIT License](https://github.com/booreiland/responsive-pics/blob/master/LICENSE).
 Docs released under Creative Commons.
