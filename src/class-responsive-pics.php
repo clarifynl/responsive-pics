@@ -271,7 +271,7 @@ class ResponsivePics
 	 * Construct a responsive image element
 	 * returns <img> element as html markup
 	 */
-	public static function get_image($id = null, $sizes = null, $crop = false, $img_classes = null, $lazyload = false, $lqip = false, $rest_route = null) {
+	public static function get_image($id = null, $sizes = null, $crop = false, $img_classes = null, $lazyload = false, $lqip = false, $rest_route = null, $native_lazyload = false) {
 		// get image sources
 		$definition = self::get_image_data($id, $sizes, $crop, $rest_route);
 
@@ -285,6 +285,11 @@ class ResponsivePics
 		// check for valid lazyload value
 		if (isset($lazyload)) {
 			$lazyload = ResponsivePics()->process->process_boolean($lazyload, 'lazyload');
+		}
+
+		// check for valid native_lazyload value
+		if (isset($native_lazyload)) {
+			$native_lazyload = ResponsivePics()->process->process_boolean($native_lazyload, 'native_lazyload');
 		}
 
 		// check for valid lqip value
@@ -313,11 +318,12 @@ class ResponsivePics
 
 		$src_attribute = $lazyload ? 'data-srcset' : 'srcset';
 		$classes = $img_classes ? ' class="' . implode(' ', $img_classes) . '"' : '';
+		$loading_attribute = $native_lazyload ? ' loading="lazy"': '';
 
 		// return normal image if unsupported mime type
 		if (!in_array($definition['mimetype'], self::$supported_mime_types)) {
 			$original_src = wp_get_attachment_image_src($id);
-			$image_html   = sprintf('<img%s %s="%s" alt="%s"/>', $classes, $src_attribute, $original_src[0], $definition['alt']);
+			$image_html   = sprintf('<img%s %s="%s" alt="%s" %s/>', $classes, $src_attribute, $original_src[0], $definition['alt'], $loading_attribute);
 			return $image_html;
 		}
 
@@ -345,7 +351,7 @@ class ResponsivePics
 		$sizes[] = '100vw';
 
 		// construct image
-		$image_html = sprintf('<img%s %s="%s" sizes="%s"%s alt="%s"/>', $classes, $src_attribute, implode(', ', $srcsets), implode(', ', $sizes), $src, $definition['alt']);
+		$image_html = sprintf('<img%s %s="%s" sizes="%s"%s alt="%s" %s/>', $classes, $src_attribute, implode(', ', $srcsets), implode(', ', $sizes), $src, $definition['alt'], $loading_attribute);
 		return $image_html;
 	}
 
@@ -378,7 +384,7 @@ class ResponsivePics
 	 * Construct a responsive picture element
 	 * returns <picture> element as html markup
 	 */
-	public static function get_picture($id = null, $sizes = null, $picture_classes = null, $lazyload = false, $intrinsic = false, $rest_route = null) {
+	public static function get_picture($id = null, $sizes = null, $picture_classes = null, $lazyload = false, $intrinsic = false, $rest_route = null, $native_lazyload = false) {
 		// get picture sources
 		$definition = self::get_picture_data($id, $sizes, $rest_route);
 
@@ -392,6 +398,11 @@ class ResponsivePics
 		// check for valid lazyload value
 		if (isset($lazyload)) {
 			$lazyload = ResponsivePics()->process->process_boolean($lazyload, 'lazyload');
+		}
+
+		// check for valid native_lazyload value
+		if (isset($native_lazyload)) {
+			$native_lazyload = ResponsivePics()->process->process_boolean($native_lazyload, 'native_lazyload');
 		}
 
 		// check for valid intrinsic value
@@ -431,6 +442,7 @@ class ResponsivePics
 
 		$src_attribute = $lazyload ? 'data-srcset' : 'srcset';
 		$classes = $img_classes ? ' class="' . implode(' ', $img_classes) . '"' : '';
+		$loading_attribute = $native_lazyload ? ' loading="lazy"': '';
 
 		// add all sources
 		$sources = isset($definition['sources']) ? $definition['sources'] : [];
@@ -453,7 +465,7 @@ class ResponsivePics
 		// transparent gif
 		$style     = $intrinsic ? ' style="width:100%;"' : '';
 		$ratio     = $intrinsic ? ' data-aspectratio=""' : '';
-		$picture[] = sprintf('  <img src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="%s alt="%s"%s%s />', $ratio, $definition['alt'], $classes, $style);
+		$picture[] = sprintf('  <img src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="%s alt="%s"%s%s %s />', $ratio, $definition['alt'], $classes, $style, $loading_attribute);
 		$picture[] = '</picture>';
 
 		return implode("\n", $picture) . "\n";
