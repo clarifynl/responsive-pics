@@ -455,7 +455,7 @@ class RP_Process extends ResponsivePics
 	}
 
 	// process the scheduled resize action
-	public static function process_resize_request($id, $quality, $width, $height, $crop, $ratio, $resize_path, $rest_route) {
+	public static function process_resize_request($id, $quality, $width, $height, $crop, $ratio, $resize_path, $rest_route = '') {
 		$file_path = get_attached_file($id);
 		$meta_data = wp_get_attachment_metadata($id);
 		$wp_editor = wp_get_image_editor($file_path);
