@@ -314,7 +314,7 @@ class ResponsivePics
 
 		$src_attr     = ($lazyload && !$lazy_native) ? 'data-srcset' : 'srcset';
 		$classes      = $img_classes ? ' class="' . implode(' ', $img_classes) . '"' : '';
-		$loading_attr = (!$lazyload && $lazy_native) ? ' loading="lazy"': '';
+		$loading_attr = $lazy_native ? ' loading="lazy"': '';
 
 		// return normal image if unsupported mime type
 		if (!in_array($definition['mimetype'], self::$supported_mime_types)) {
@@ -351,9 +351,10 @@ class ResponsivePics
 		return $image_html;
 	}
 
-	/*
+	/**
 	 * Construct a responsive image element
-	 * returns image as data
+	 *
+	 * @return image as data
 	 */
 	public static function get_image_data($id = null, $sizes = null, $crop = false, $rest_route = null) {
 		// init WP_Error
@@ -376,9 +377,10 @@ class ResponsivePics
 		return $definition;
 	}
 
-	/*
+	/**
 	 * Construct a responsive picture element
-	 * returns <picture> element as html markup
+	 *
+	 * @return <picture> element as html markup
 	 */
 	public static function get_picture($id = null, $sizes = null, $picture_classes = null, $lazyload = false, $intrinsic = false, $rest_route = null) {
 		// get picture sources
@@ -393,7 +395,8 @@ class ResponsivePics
 
 		// check for valid lazyload value
 		if (isset($lazyload)) {
-			$lazyload = ResponsivePics()->process->process_boolean($lazyload, 'lazyload');
+			$lazyload    = ResponsivePics()->process->process_lazyload($lazyload, 'lazyload');
+			$lazy_native = $lazyload === 'native';
 		}
 
 		// check for valid intrinsic value
@@ -408,7 +411,7 @@ class ResponsivePics
 
 		// set img classes
 		$img_classes = [];
-		if ($lazyload) {
+		if ($lazyload && !$lazy_native) {
 			$img_classes[] = self::$lazyload_class;
 		}
 
@@ -428,11 +431,12 @@ class ResponsivePics
 		}
 
 		// start constructing <picture> element
-		$picture = [];
-		$picture[] = sprintf('<picture%s>', $picture_classes ? ' class="' . implode(' ', $picture_classes) . '"' : '');
+		$picture      = [];
+		$picture[]    = sprintf('<picture%s>', $picture_classes ? ' class="' . implode(' ', $picture_classes) . '"' : '');
 
-		$src_attribute = $lazyload ? 'data-srcset' : 'srcset';
-		$classes = $img_classes ? ' class="' . implode(' ', $img_classes) . '"' : '';
+		$src_attr     = ($lazyload && !$lazy_native) ? 'data-srcset' : 'srcset';
+		$classes      = $img_classes ? ' class="' . implode(' ', $img_classes) . '"' : '';
+		$loading_attr = $lazy_native ? ' loading="lazy"': '';
 
 		// add all sources
 		$sources = isset($definition['sources']) ? $definition['sources'] : [];
@@ -446,24 +450,25 @@ class ResponsivePics
 					$urls .= ' 1x, ' . $source['source2x'] . ' 2x';
 				}
 
-				$picture[] = sprintf('  <source media="(min-width: %spx)" %s="%s"%s />', $source['breakpoint'], $src_attribute, $urls, $data_aspectratio);
+				$picture[] = sprintf('  <source media="(min-width: %spx)" %s="%s"%s />', $source['breakpoint'], $src_attr, $urls, $data_aspectratio);
 			} else {
-				$picture[] = sprintf('  <source %s="%s"%s />', $src_attribute, $source['source1x'], $data_aspectratio);
+				$picture[] = sprintf('  <source %s="%s"%s />', $src_attr, $source['source1x'], $data_aspectratio);
 			}
 		}
 
 		// transparent gif
 		$style     = $intrinsic ? ' style="width:100%;"' : '';
 		$ratio     = $intrinsic ? ' data-aspectratio=""' : '';
-		$picture[] = sprintf('  <img src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="%s alt="%s"%s%s />', $ratio, $definition['alt'], $classes, $style);
+		$picture[] = sprintf('  <img src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="%s alt="%s"%s%s%s />', $ratio, $definition['alt'], $loading_attr, $classes, $style);
 		$picture[] = '</picture>';
 
 		return implode("\n", $picture) . "\n";
 	}
 
-	/*
+	/**
 	 * Construct a responsive picture element
-	 * returns picture sources as data
+	 *
+	 * @return picture sources as data
 	 */
 	public static function get_picture_data($id = null, $sizes = null, $rest_route = null) {
 		// init WP_Error
@@ -486,11 +491,10 @@ class ResponsivePics
 		return $definition;
 	}
 
-	/*
+	/**
 	 * Construct a background image element and a matching responsive inline style element
 	 *
-	 * Returns an inline <style> element with a dedicated image class with media-queries for all the different image sizes
-	 * and an div with the same dedicated image class
+	 * @return an inline <style> element with a dedicated image class with media-queries for all the different image sizes and an div with the same dedicated image class
 	 */
 	public static function get_background($id = null, $sizes = null, $bg_classes = null, $rest_route = null) {
 		// get background sources
@@ -549,9 +553,10 @@ class ResponsivePics
 		return implode("\n", $background) . "\n";
 	}
 
-	/*
+	/**
 	 * Construct a responsive background image element
-	 * returns background sources as data
+	 *
+	 * @return background sources as data
 	 */
 	public static function get_background_data($id = null, $sizes = null, $rest_route = null) {
 		// init WP_Error
