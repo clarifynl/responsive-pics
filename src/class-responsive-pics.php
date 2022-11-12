@@ -284,7 +284,8 @@ class ResponsivePics
 
 		// check for valid lazyload value
 		if (isset($lazyload)) {
-			$lazyload = ResponsivePics()->process->process_boolean($lazyload, 'lazyload');
+			$lazyload    = ResponsivePics()->process->process_lazyload($lazyload, 'lazyload');
+			$lazy_native = $lazyload === 'native';
 		}
 
 		// check for valid lqip value
@@ -298,7 +299,7 @@ class ResponsivePics
 		}
 
 		// lazyload option
-		if ($lazyload) {
+		if ($lazyload && !$lazy_native) {
 			$img_classes[] = self::$lazyload_class;
 		}
 
@@ -311,13 +312,14 @@ class ResponsivePics
 			$lqip_img      = isset($lqip_sources[0]['source1x']) ? $lqip_sources[0]['source1x'] : null;
 		}
 
-		$src_attribute = $lazyload ? 'data-srcset' : 'srcset';
-		$classes = $img_classes ? ' class="' . implode(' ', $img_classes) . '"' : '';
+		$src_attr     = ($lazyload && !$lazy_native) ? 'data-srcset' : 'srcset';
+		$classes      = $img_classes ? ' class="' . implode(' ', $img_classes) . '"' : '';
+		$loading_attr = (!$lazyload && $lazy_native) ? ' loading="lazy"': '';
 
 		// return normal image if unsupported mime type
 		if (!in_array($definition['mimetype'], self::$supported_mime_types)) {
 			$original_src = wp_get_attachment_image_src($id);
-			$image_html   = sprintf('<img%s %s="%s" alt="%s"/>', $classes, $src_attribute, $original_src[0], $definition['alt']);
+			$image_html   = sprintf('<img%s %s="%s"%s alt="%s"/>', $classes, $src_attr, $original_src[0], $loading_attr, $definition['alt']);
 			return $image_html;
 		}
 
@@ -345,7 +347,7 @@ class ResponsivePics
 		$sizes[] = '100vw';
 
 		// construct image
-		$image_html = sprintf('<img%s %s="%s" sizes="%s"%s alt="%s"/>', $classes, $src_attribute, implode(', ', $srcsets), implode(', ', $sizes), $src, $definition['alt']);
+		$image_html = sprintf('<img%s %s="%s" sizes="%s"%s%s alt="%s"/>', $classes, $src_attr, implode(', ', $srcsets), implode(', ', $sizes), $src, $loading_attr, $definition['alt']);
 		return $image_html;
 	}
 
