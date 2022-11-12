@@ -3,7 +3,9 @@
 class RP_Process extends ResponsivePics
 {
 
-	// validates and returns image id
+	/**
+	 * Validates and returns the image id
+	 */
 	public function process_image($id = null) {
 		if (!$id) {
 			ResponsivePics()->error->add_error('invalid', 'image id is undefined');
@@ -34,7 +36,9 @@ class RP_Process extends ResponsivePics
 		return $id;
 	}
 
-	// validates sizes
+	/**
+	 * Validate image sizes
+	 */
 	public function process_sizes($id, $sizes, $order = 'desc', $art_direction = true, $img_crop = null, $rest_route = null) {
 		$file_path   = get_attached_file($id);
 		$url         = wp_get_attachment_url($id);
@@ -100,7 +104,9 @@ class RP_Process extends ResponsivePics
 		];
 	}
 
-	// validates and returns classes as an array
+	/**
+	 * Validates and returns classes as an array
+	 */
 	public function process_classes($classes = null) {
 		if (!is_array($classes) && !is_string($classes)) {
 			ResponsivePics()->error->add_error('invalid', 'classes parameter is neither a (comma separated) string nor an array', $classes);
@@ -117,7 +123,9 @@ class RP_Process extends ResponsivePics
 		return $classes;
 	}
 
-	// validates boolean value
+	/**
+	 * Validates boolean values
+	 */
 	public function process_boolean($boolean = false, $type = 'boolean') {
 		if (is_bool($boolean)) {
 			return $boolean;
@@ -130,7 +138,26 @@ class RP_Process extends ResponsivePics
 		return false;
 	}
 
-	// breakpoint can be shortcut (e.g. "xs") or number
+	/**
+	 * Validates lazyload value, this can be a boolean or string 'native'
+	 */
+	public function process_lazyload($lazyload = false, $type = 'lazyload') {
+		if (is_bool($lazyload)) {
+			return $lazyload;
+		} elseif ($lazyload === 'native') {
+			return 'native';
+		} elseif (is_string($lazyload)) {
+			return $lazyload === 'true';
+		} else {
+			ResponsivePics()->error->add_error('invalid', sprintf('%s parameter is not a valid lazyload value', $type), $lazyload);
+		}
+
+		return false;
+	}
+
+	/**
+	 * Validates breakpoints, these can be shortcut (e.g. "xs") or number
+	 */
 	public function process_breakpoint($input) {
 		$input = trim($input);
 
@@ -146,8 +173,9 @@ class RP_Process extends ResponsivePics
 		return $input;
 	}
 
-	/*
-	 * dimensions can be:
+	/**
+	 * Validates dimensions, these can be:
+	 *
 	 * - shortcut (e.g. "xs-5")
 	 * - shortcut with height (e.g. "xs-5 400")
 	 * - shortcut with ratio (e.g. "xs-5/0.75")
@@ -232,7 +260,11 @@ class RP_Process extends ResponsivePics
 		];
 	}
 
-	// returns factor & crop array if has valid /factor|crop syntax
+	/**
+	 * Validates crop factor
+	 *
+	 * @return factor & crop array if has valid /factor|crop syntax
+	 */
 	public function process_factor_crop($factor_crop = null, $focal_point = null) {
 		$factor_crop = preg_replace('/\//', '', $factor_crop); // remove any leading /
 		$factor      = null;
@@ -268,7 +300,11 @@ class RP_Process extends ResponsivePics
 		];
 	}
 
-	// returns true if factor is a number and between reasonable values 0-2
+	/**
+	 * Validates factor
+	 *
+	 * @return true if factor is a number and between reasonable values 0-2
+	 */
 	public function process_factor($factor) {
 		// replace comma's with dots
 		$factor = str_replace(',', '.', $factor);
@@ -281,7 +317,8 @@ class RP_Process extends ResponsivePics
 	}
 
 	/**
-	 * crop can be:
+	 * Validates crop, these can be:
+	 *
 	 * - single shortcut string value (e.g. "c")
 	 * - two dimensional string values (e.g. "l t")
 	 * - two dimensional numeric values (e.g. 75 25)
