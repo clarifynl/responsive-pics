@@ -770,8 +770,8 @@ Please submit any issues you experience with the **ResponsivePics** library over
 ## Todo's
 * Add Gutenberg Blocks support.
 * Add WPML (Media) support for focal point.
-* Add functions `get_picture_data`, `get_image_data` and `get_background_data` to retrieve available sources and sizes as data instead of html markup.
 * Add **multiple background images** syntax support.
+* Add **bulk image delete** functionality.
 
 ## Maintainers
 **ResponsivePics** is developed and maintained by:
