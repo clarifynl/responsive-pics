@@ -1,10 +1,6 @@
 {
   "name": "responsive-pics",
-<<<<<<< Updated upstream
-  "version": "1.6.3",
-=======
   "version": "1.6.5",
->>>>>>> Stashed changes
   "private": true,
   "scripts": {
     "bootstrap": "wpackio-scripts bootstrap",
