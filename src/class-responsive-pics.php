@@ -273,45 +273,19 @@ class ResponsivePics
 	 */
 	public static function get_image($id = null, $sizes = null, $crop = false, $img_classes = null, $lazyload = false, $lqip = false, $rest_route = null) {
 		// get image sources
-		$definition = self::get_image_data($id, $sizes, $crop, $rest_route);
-
-		// convert $picture_classes to array if it is a string
-		if ($img_classes) {
-			$img_classes = ResponsivePics()->process->process_classes($img_classes);
-		} else {
-			$img_classes = [];
-		}
-
-		// check for valid lazyload value
-		if (isset($lazyload)) {
-			$lazyload    = ResponsivePics()->process->process_lazyload($lazyload, 'lazyload');
-			$lazy_native = $lazyload === 'native';
-		}
-
-		// check for valid lqip value
-		if (isset($lqip)) {
-			$lqip = ResponsivePics()->process->process_boolean($lqip, 'lqip');
-		}
+		$definition = self::get_image_data($id, $sizes, $crop, $img_classes, $lazyload, $lqip, $rest_route);
 
 		// check for errors
 		if (count(self::$wp_error->get_error_messages()) > 0) {
 			return ResponsivePics()->error->get_error(self::$wp_error);
 		}
 
-		// lazyload option
-		if ($lazyload && !$lazy_native) {
-			$img_classes[] = self::$lazyload_class;
-		}
+		// get data
+		$lazyload     = isset($definition['lazyload']) ? $definition['lazyload'] : false;
+		$img_classes  = isset($definition['classes']) ? $definition['classes'] : null;
+		$lqip_img     = isset($definition['lqip']) ? $definition['lqip'] : null;
 
-		// low quality image placeholder option
-		$lqip_img = null;
-		if ($lqip) {
-			$img_classes[] = self::$lqip_class;
-			$lqip_sizes    = ResponsivePics()->process->process_sizes($id, '0:' . self::$lqip_width, 'desc', false, $crop, $rest_route);
-			$lqip_sources  = isset($lqip_sizes['sources']) ? $lqip_sizes['sources'] : [];
-			$lqip_img      = isset($lqip_sources[0]['source1x']) ? $lqip_sources[0]['source1x'] : null;
-		}
-
+		$lazy_native  = $lazyload === 'native';
 		$src_attr     = ($lazyload && !$lazy_native) ? 'data-srcset' : 'srcset';
 		$classes      = $img_classes ? ' class="' . implode(' ', $img_classes) . '"' : '';
 		$loading_attr = $lazy_native ? ' loading="lazy"': '';
@@ -320,13 +294,14 @@ class ResponsivePics
 		if (!in_array($definition['mimetype'], self::$supported_mime_types)) {
 			$original_src = wp_get_attachment_image_src($id);
 			$image_html   = sprintf('<img%s %s="%s"%s alt="%s"/>', $classes, $src_attr, $original_src[0], $loading_attr, $definition['alt']);
+
 			return $image_html;
 		}
 
 		// add all sources & sizes
 		$srcsets  = [];
 		$sizes    = [];
-		$src      = ($lqip && $lqip_img) ? ' src="'. $lqip_img . '"' : '';
+		$src      = $lqip_img ? ' src="'. $lqip_img . '"' : '';
 
 		// start constructing <img> element
 		$sources = isset($definition['sources']) ? $definition['sources'] : [];
@@ -356,7 +331,7 @@ class ResponsivePics
 	 *
 	 * @return image as data
 	 */
-	public static function get_image_data($id = null, $sizes = null, $crop = false, $rest_route = null) {
+	public static function get_image_data($id = null, $sizes = null, $crop = false, $img_classes = null, $lazyload = false, $lqip = false, $rest_route = null) {
 		// init WP_Error
 		self::$wp_error = new WP_Error();
 
@@ -368,6 +343,42 @@ class ResponsivePics
 		if ($image) {
 			$definition = ResponsivePics()->process->process_sizes($image, $sizes, 'desc', false, $crop, $rest_route);
 		}
+
+		// convert $picture_classes to array if it is a string
+		if ($img_classes) {
+			$img_classes = ResponsivePics()->process->process_classes($img_classes);
+		} else {
+			$img_classes = [];
+		}
+
+		// check for valid lazyload value
+		if (isset($lazyload)) {
+			$lazyload    = ResponsivePics()->process->process_lazyload($lazyload, 'lazyload');
+			$lazy_native = $lazyload === 'native';
+			$definition['lazyload'] = $lazyload;
+		}
+
+		// lazyload option
+		if ($lazyload && !$lazy_native) {
+			$img_classes[] = self::$lazyload_class;
+		}
+
+		// check for valid lqip value
+		if (isset($lqip)) {
+			$lqip = ResponsivePics()->process->process_boolean($lqip, 'lqip');
+		}
+
+		// low quality image placeholder option
+		$lqip_img = null;
+		if ($lqip) {
+			$img_classes[]      = self::$lqip_class;
+			$lqip_sizes         = ResponsivePics()->process->process_sizes($id, '0:' . self::$lqip_width, 'desc', false, $crop, $rest_route);
+			$lqip_sources       = isset($lqip_sizes['sources']) ? $lqip_sizes['sources'] : [];
+			$lqip_img           = isset($lqip_sources[0]['source1x']) ? $lqip_sources[0]['source1x'] : null;
+			$definition['lqip'] = $lqip_img;
+		}
+
+		$definition['classes'] = $img_classes;
 
 		// check for errors
 		if (count(self::$wp_error->get_error_messages()) > 0) {
