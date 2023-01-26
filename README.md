@@ -232,26 +232,29 @@ GET /wp-json/responsive-pics/v1/image/<id>?sizes=<sizes>&crop=<crop>&classes=<cl
 | lqip       | boolean          | optional | `false`  | When `true` enables `LQIP` classes and src attribute. See the [LQIP section](#lqip) for more information.
 
 ### Image Data
-For retrieving the responsive `<img>` data in your theme, you can use the `get_image_data` function or the `responsive-pics/v1/image-data` API endpoint with the available parameters `id`, `sizes` and `crop`.
+For retrieving the responsive `<img>` data in your theme, you can use the `get_image_data` function or the `responsive-pics/v1/image-data` API endpoint with the available parameters `id`, `sizes`, `crop`, `lazyload` and `lqip`.
 
 #### PHP
 ```php
-ResponsivePics::get_image_data(id, sizes, crop);
+ResponsivePics::get_image_data(id, sizes, crop, classes, lazyload, lqip);
 ```
 
 #### REST API
 ```curl
-GET /wp-json/responsive-pics/v1/image-data/<id>?sizes=<sizes>&crop=<crop>
+GET /wp-json/responsive-pics/v1/image-data/<id>?sizes=<sizes>&crop=<crop>&lazyload=<lazyload>&lqip=<lqip>
 ```
 
-This will return an array containing the available image sources per breakpoint, alt text, mime type and a boolean value if the image has an alpha channel.
+This will return an array containing the available image sources per breakpoint, alt text, mime type, boolean values for alpha channel and lazyload, an url for the lqip image and array for the css classes.
 
 ```php
 [
   'sources'  => (array) $sources,
   'alt'      => (string) $alt,
   'mimetype' => (string) $mime_type,
-  'alpha'    => (bool) $alpha
+  'alpha'    => (bool) $alpha,
+  'lazyload' => (bool) $lazyload,
+  'lqip'     => (string) $lqip,
+  'classes'  => (array) $classes
 ];
 ```
 

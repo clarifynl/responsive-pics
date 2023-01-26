@@ -174,13 +174,16 @@ class RP_Rest_Api extends ResponsivePics
 		$route_url    = $query_string ? $route .'?'. $query_string : $route;
 
 		// Decode Parameters
-		$id           = isset($request['id']) ? $request['id'] : null;
-		$sizes        = isset($params['sizes']) ? urldecode($params['sizes']) : null;
-		$crop         = isset($params['crop']) ? urldecode($params['crop']) : null;
+		$id       = isset($request['id']) ? $request['id'] : null;
+		$sizes    = isset($params['sizes']) ? urldecode($params['sizes']) : null;
+		$crop     = isset($params['crop']) ? urldecode($params['crop']) : null;
+		$classes  = isset($params['classes']) ? urldecode($params['classes']) : null;
+		$lazyload = isset($params['lazyload']) ? urldecode($params['lazyload']) : false;
+		$lqip     = isset($params['lqip']) ? urldecode($params['lqip']) : false;
 
 		if (class_exists('ResponsivePics')) {
 			if ($sizes) {
-				$data = ResponsivePics::get_image_data($id, $sizes, $crop, $route_url);
+				$data = ResponsivePics::get_image_data($id, $sizes, $crop, $classes, $lazyload, $lqip, $route_url);
 
 				// Check for errors
 				if (is_wp_error($data)) {
