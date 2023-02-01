@@ -56,7 +56,8 @@ class RP_Sources extends ResponsivePics
 				if (!$size_2x_available && $width < $original_width) {
 					$ratio_max = round(($original_width / ($width * 2)), 1);
 
-					if ($ratio_max > 1) {
+					// Only use retina version if ratio is at least 1,5 times as big as non-retina
+					if ($ratio_max > 1.5) {
 						$source2x  = $this->get_resized_url($id, $image_path, $image_url, $width, $height, $crop, $ratio_max, $rest_route);
 					}
 				}
