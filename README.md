@@ -332,26 +332,28 @@ GET /wp-json/responsive-pics/v1/background/<id>?sizes=<sizes>&classes=<classes>
 | classes    | string      | optional | `null`   | A comma-separated string of additional CSS classes you want to add to the background element (e.g. `'my_bg_class'` or `'my_bg_class, my_second_bg_class'`).
 
 ### Background Data
-For retrieving the responsive background image data in your theme, you can use the `get_background_data` function or the `responsive-pics/v1/background-data` API endpoint with the available parameters `id` and `sizes`.
+For retrieving the responsive background image data in your theme, you can use the `get_background_data` function or the `responsive-pics/v1/background-data` API endpoint with the available parameters `id`, `sizes` and `classes`.
 
 #### PHP
 ```php
-ResponsivePics::get_background_data(id, sizes);
+ResponsivePics::get_background_data(id, sizes, classes);
 ```
 
 #### REST API
 ```curl
-GET /wp-json/responsive-pics/v1/background-data/<id>?sizes=<sizes>
+GET /wp-json/responsive-pics/v1/background-data/<id>?sizes=<sizes>&classes=<classes>
 ```
 
-This will return an array containing the available background image sources per breakpoint, alt text, mime type and a boolean value if the image has an alpha channel.
+This will return an array containing the available background image sources per breakpoint, alt text, mime type, a boolean value if the image has an alpha channel, an id for the background and an array for the background css classes.
 
 ```php
 [
-  'sources'  => (array) $sources,
+  'sources'  => (array)  $sources,
   'alt'      => (string) $alt,
   'mimetype' => (string) $mime_type,
-  'alpha'    => (bool) $alpha
+  'alpha'    => (bool)   $alpha,
+  'id'       => (string) $id,
+  'classes'  => (array)  $classes
 ];
 ```
 
