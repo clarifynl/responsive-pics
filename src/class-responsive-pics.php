@@ -526,14 +526,7 @@ class ResponsivePics
 	 */
 	public static function get_background($id = null, $sizes = null, $bg_classes = null, $rest_route = null) {
 		// get background sources
-		$definition = self::get_background_data($id, $sizes, $rest_route);
-
-		// convert $classes to array if it is a string
-		if ($bg_classes) {
-			$bg_classes = ResponsivePics()->process->process_classes($bg_classes);
-		} else {
-			$bg_classes = [];
-		}
+		$definition = self::get_background_data($id, $sizes, $bg_classes, $rest_route);
 
 		// check for errors
 		if (count(self::$wp_error->get_error_messages()) > 0) {
@@ -549,9 +542,12 @@ class ResponsivePics
 			self::$id_map[$id] = 0;
 		}
 
-		$id = sprintf('responsive-pics-background-%s', $copy);
+		// construct vars
+		$bg_id        = sprintf('responsive-pics-background-%s', $copy);
+		$bg_classes   = isset($definition['classes']) ? $definition['classes'] : null;
+		$bg_class     = $bg_classes ? ' class="' . implode(' ', $bg_classes) . '"' : '';
 
-		$background = [];
+		$background   = [];
 		$background[] = '<style scoped="scoped" type="text/css">';
 
 		// add all sources as background-images
@@ -561,22 +557,22 @@ class ResponsivePics
 				$sources = $source['source1x'];
 
 				$background[] = sprintf('  @media (min-width: %spx) {', $source['breakpoint']);
-				$background[] = sprintf('  #%s {background-image: url("%s");}', $id, $source['source1x']);
+				$background[] = sprintf('  #%s {background-image: url("%s");}', $bg_id, $source['source1x']);
 				$background[] = '  }';
 
 				if (isset($source['source2x'])) {
 					$background[] = sprintf('  %s {', ResponsivePics()->helpers->get_media_query_2x($source['breakpoint']));
-					$background[] = sprintf('  #%s {background-image: url("%s");}', $id, $source['source2x']);
+					$background[] = sprintf('  #%s {background-image: url("%s");}', $bg_id, $source['source2x']);
 					$background[] = '  }';
 				}
 			} else {
-				$background[] = sprintf('  #%s {background-image: url("%s");}', $id, $source['source1x']);
+				$background[] = sprintf('  #%s {background-image: url("%s");}', $bg_id, $source['source1x']);
 			}
 		}
 
 		$background[] = '  }';
 		$background[] = '</style>';
-		$background[] = sprintf('<div%s id="%s"></div>', $bg_classes ? ' class="' . implode(' ', $bg_classes) . '"' : '', $id);
+		$background[] = sprintf('<div%s id="%s"></div>', $bg_class, $bg_id);
 
 		return implode("\n", $background) . "\n";
 	}
@@ -586,7 +582,7 @@ class ResponsivePics
 	 *
 	 * @return background sources as data
 	 */
-	public static function get_background_data($id = null, $sizes = null, $rest_route = null) {
+	public static function get_background_data($id = null, $sizes = null, $bg_classes = null, $rest_route = null) {
 		// init WP_Error
 		self::$wp_error = new WP_Error();
 
@@ -598,6 +594,15 @@ class ResponsivePics
 		if ($image) {
 			$definition = ResponsivePics()->process->process_sizes($image, $sizes, 'asc', true, null, $rest_route);
 		}
+
+		// convert $bg_classes to array if it is a string
+		if ($bg_classes) {
+			$bg_classes = ResponsivePics()->process->process_classes($bg_classes);
+		} else {
+			$bg_classes = [];
+		}
+
+		$definition['classes'] = $bg_classes;
 
 		// check for errors
 		if (count(self::$wp_error->get_error_messages()) > 0) {
