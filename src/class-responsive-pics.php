@@ -535,6 +535,7 @@ class ResponsivePics
 
 		// construct vars
 		$bg_id        = isset($definition['id']) ? $definition['id'] : $id;
+		var_dump($bg_id);
 		$bg_classes   = isset($definition['classes']) ? $definition['classes'] : null;
 		$bg_class     = $bg_classes ? ' class="' . implode(' ', $bg_classes) . '"' : '';
 
@@ -563,7 +564,7 @@ class ResponsivePics
 
 		$background[] = '  }';
 		$background[] = '</style>';
-		$background[] = sprintf('<div%s id="%s"></div>', $bg_class, $bg_id);
+		$background[] = sprintf('<div id="%s"%s></div>', $bg_id, $bg_class);
 
 		return implode("\n", $background) . "\n";
 	}
