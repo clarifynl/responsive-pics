@@ -482,8 +482,9 @@ class ResponsivePics
 		}
 
 		// lazyload option
+		$img_classes = [];
 		if ($lazyload && !$lazy_native) {
-			$picture_classes[] = self::$lazyload_class;
+			$img_classes[] = self::$lazyload_class;
 		}
 
 		// check for valid intrinsic value
@@ -498,7 +499,6 @@ class ResponsivePics
 		}
 
 		// set intrinsic classes
-		$img_classes = [];
 		if ($intrinsic) {
 			$picture_classes[] = 'intrinsic';
 			$img_classes[]     = 'intrinsic__item';
