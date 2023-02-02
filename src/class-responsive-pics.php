@@ -533,17 +533,8 @@ class ResponsivePics
 			return ResponsivePics()->error->get_error(self::$wp_error);
 		}
 
-		// prevent same id, append copy number to existing
-		$copy = $id;
-		if (isset(self::$id_map[$id])) {
-			self::$id_map[$id]++;
-			$copy .= '-' . self::$id_map[$id];
-		} else {
-			self::$id_map[$id] = 0;
-		}
-
 		// construct vars
-		$bg_id        = sprintf('responsive-pics-background-%s', $copy);
+		$bg_id        = isset($definition['id']) ? $definition['id'] : $id;
 		$bg_classes   = isset($definition['classes']) ? $definition['classes'] : null;
 		$bg_class     = $bg_classes ? ' class="' . implode(' ', $bg_classes) . '"' : '';
 
@@ -595,6 +586,15 @@ class ResponsivePics
 			$definition = ResponsivePics()->process->process_sizes($image, $sizes, 'asc', true, null, $rest_route);
 		}
 
+		// prevent same id, append copy number to existing
+		$copy = $id;
+		if (isset(self::$id_map[$id])) {
+			self::$id_map[$id]++;
+			$copy .= '-' . self::$id_map[$id];
+		} else {
+			self::$id_map[$id] = 0;
+		}
+
 		// convert $bg_classes to array if it is a string
 		if ($bg_classes) {
 			$bg_classes = ResponsivePics()->process->process_classes($bg_classes);
@@ -602,6 +602,7 @@ class ResponsivePics
 			$bg_classes = [];
 		}
 
+		$definition['id']      = sprintf('responsive-pics-background-%s', $copy);
 		$definition['classes'] = $bg_classes;
 
 		// check for errors
