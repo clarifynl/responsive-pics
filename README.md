@@ -232,7 +232,7 @@ GET /wp-json/responsive-pics/v1/image/<id>?sizes=<sizes>&crop=<crop>&classes=<cl
 | lqip       | boolean          | optional | `false`  | When `true` enables `LQIP` classes and src attribute. See the [LQIP section](#lqip) for more information.
 
 ### Image Data
-For retrieving the responsive `<img>` data in your theme, you can use the `get_image_data` function or the `responsive-pics/v1/image-data` API endpoint with the available parameters `id`, `sizes`, `crop`, `lazyload` and `lqip`.
+For retrieving the responsive `<img>` data in your theme, you can use the `get_image_data` function or the `responsive-pics/v1/image-data` API endpoint with the available parameters `id`, `sizes`, `crop`, `classes`, `lazyload` and `lqip`.
 
 #### PHP
 ```php
@@ -241,10 +241,10 @@ ResponsivePics::get_image_data(id, sizes, crop, classes, lazyload, lqip);
 
 #### REST API
 ```curl
-GET /wp-json/responsive-pics/v1/image-data/<id>?sizes=<sizes>&crop=<crop>&lazyload=<lazyload>&lqip=<lqip>
+GET /wp-json/responsive-pics/v1/image-data/<id>?sizes=<sizes>&crop=<crop>&classes=<classes>&lazyload=<lazyload>&lqip=<lqip>
 ```
 
-This will return an array containing the available image sources per breakpoint, alt text, mime type, boolean values for alpha channel and lazyload, an url for the lqip image and array for the css classes.
+This will return an array containing the available image sources per breakpoint, alt text, mime type, boolean values for alpha channel and lazyload, an url for the lqip image and an array for the css classes.
 
 ```php
 [
@@ -771,6 +771,7 @@ import 'lazysizes/plugins/aspectratio/ls.aspectratio.js';
 Please submit any issues you experience with the **ResponsivePics** library over at [Github](https://github.com/booreiland/responsive-pics/issues).
 
 ## Todo's
+* Add Application Password Authentication to REST API endpoints.
 * Add Gutenberg Blocks support.
 * Add WPML (Media) support for focal point.
 * Add **multiple background images** syntax support.
