@@ -260,58 +260,35 @@ class ResponsivePics
 		return self::$wp_rest_cache_duration;
 	}
 
-	/*
+	/**
 	 * Alias old `get` function to `get_picture`
+	 *
+	 * @return (string) <picture> element as html markup
 	 */
 	public static function get($id = null, $sizes = null, $picture_classes = null, $lazyload = false, $intrinsic = false) {
 		return self::get_picture($id, $sizes, $picture_classes, $lazyload, $intrinsic);
 	}
 
-	/*
+	/**
 	 * Construct a responsive image element
-	 * returns <img> element as html markup
+	 *
+	 * @return (string) <img> element as html markup
 	 */
 	public static function get_image($id = null, $sizes = null, $crop = false, $img_classes = null, $lazyload = false, $lqip = false, $rest_route = null) {
 		// get image sources
-		$definition = self::get_image_data($id, $sizes, $crop, $rest_route);
-
-		// convert $picture_classes to array if it is a string
-		if ($img_classes) {
-			$img_classes = ResponsivePics()->process->process_classes($img_classes);
-		} else {
-			$img_classes = [];
-		}
-
-		// check for valid lazyload value
-		if (isset($lazyload)) {
-			$lazyload    = ResponsivePics()->process->process_lazyload($lazyload, 'lazyload');
-			$lazy_native = $lazyload === 'native';
-		}
-
-		// check for valid lqip value
-		if (isset($lqip)) {
-			$lqip = ResponsivePics()->process->process_boolean($lqip, 'lqip');
-		}
+		$definition = self::get_image_data($id, $sizes, $crop, $img_classes, $lazyload, $lqip, $rest_route);
 
 		// check for errors
 		if (count(self::$wp_error->get_error_messages()) > 0) {
 			return ResponsivePics()->error->get_error(self::$wp_error);
 		}
 
-		// lazyload option
-		if ($lazyload && !$lazy_native) {
-			$img_classes[] = self::$lazyload_class;
-		}
+		// get data
+		$lazyload     = isset($definition['lazyload']) ? $definition['lazyload'] : false;
+		$img_classes  = isset($definition['classes']) ? $definition['classes'] : null;
+		$lqip_img     = isset($definition['lqip']) ? $definition['lqip'] : null;
 
-		// low quality image placeholder option
-		$lqip_img = null;
-		if ($lqip) {
-			$img_classes[] = self::$lqip_class;
-			$lqip_sizes    = ResponsivePics()->process->process_sizes($id, '0:' . self::$lqip_width, 'desc', false, $crop, $rest_route);
-			$lqip_sources  = isset($lqip_sizes['sources']) ? $lqip_sizes['sources'] : [];
-			$lqip_img      = isset($lqip_sources[0]['source1x']) ? $lqip_sources[0]['source1x'] : null;
-		}
-
+		$lazy_native  = $lazyload === 'native';
 		$src_attr     = ($lazyload && !$lazy_native) ? 'data-srcset' : 'srcset';
 		$classes      = $img_classes ? ' class="' . implode(' ', $img_classes) . '"' : '';
 		$loading_attr = $lazy_native ? ' loading="lazy"': '';
@@ -320,13 +297,14 @@ class ResponsivePics
 		if (!in_array($definition['mimetype'], self::$supported_mime_types)) {
 			$original_src = wp_get_attachment_image_src($id);
 			$image_html   = sprintf('<img%s %s="%s"%s alt="%s"/>', $classes, $src_attr, $original_src[0], $loading_attr, $definition['alt']);
+
 			return $image_html;
 		}
 
 		// add all sources & sizes
 		$srcsets  = [];
 		$sizes    = [];
-		$src      = ($lqip && $lqip_img) ? ' src="'. $lqip_img . '"' : '';
+		$src      = $lqip_img ? ' src="'. $lqip_img . '"' : '';
 
 		// start constructing <img> element
 		$sources = isset($definition['sources']) ? $definition['sources'] : [];
@@ -352,11 +330,11 @@ class ResponsivePics
 	}
 
 	/**
-	 * Construct a responsive image element
+	 * Construct responsive image data
 	 *
-	 * @return image as data
+	 * @return (array) responsive image data
 	 */
-	public static function get_image_data($id = null, $sizes = null, $crop = false, $rest_route = null) {
+	public static function get_image_data($id = null, $sizes = null, $crop = false, $img_classes = null, $lazyload = false, $lqip = false, $rest_route = null) {
 		// init WP_Error
 		self::$wp_error = new WP_Error();
 
@@ -369,6 +347,42 @@ class ResponsivePics
 			$definition = ResponsivePics()->process->process_sizes($image, $sizes, 'desc', false, $crop, $rest_route);
 		}
 
+		// convert $img_classes to array if it is a string
+		if ($img_classes) {
+			$img_classes = ResponsivePics()->process->process_classes($img_classes);
+		} else {
+			$img_classes = [];
+		}
+
+		// check for valid lazyload value
+		if (isset($lazyload)) {
+			$lazyload    = ResponsivePics()->process->process_lazyload($lazyload, 'lazyload');
+			$lazy_native = $lazyload === 'native';
+			$definition['lazyload'] = $lazyload;
+		}
+
+		// lazyload option
+		if ($lazyload && !$lazy_native) {
+			$img_classes[] = self::$lazyload_class;
+		}
+
+		// check for valid lqip value
+		if (isset($lqip)) {
+			$lqip = ResponsivePics()->process->process_boolean($lqip, 'lqip');
+		}
+
+		// low quality image placeholder option
+		$lqip_img = null;
+		if ($lqip) {
+			$img_classes[]      = self::$lqip_class;
+			$lqip_sizes         = ResponsivePics()->process->process_sizes($id, '0:' . self::$lqip_width, 'desc', false, $crop, $rest_route);
+			$lqip_sources       = isset($lqip_sizes['sources']) ? $lqip_sizes['sources'] : [];
+			$lqip_img           = isset($lqip_sources[0]['source1x']) ? $lqip_sources[0]['source1x'] : null;
+			$definition['lqip'] = $lqip_img;
+		}
+
+		$definition['classes'] = $img_classes;
+
 		// check for errors
 		if (count(self::$wp_error->get_error_messages()) > 0) {
 			return ResponsivePics()->error->get_error(self::$wp_error);
@@ -380,63 +394,33 @@ class ResponsivePics
 	/**
 	 * Construct a responsive picture element
 	 *
-	 * @return <picture> element as html markup
+	 * @return (string) <picture> element as html markup
 	 */
 	public static function get_picture($id = null, $sizes = null, $picture_classes = null, $lazyload = false, $intrinsic = false, $rest_route = null) {
 		// get picture sources
-		$definition = self::get_picture_data($id, $sizes, $rest_route);
-
-		// check for valid classes value
-		if ($picture_classes) {
-			$picture_classes = ResponsivePics()->process->process_classes($picture_classes);
-		} else {
-			$picture_classes = [];
-		}
-
-		// check for valid lazyload value
-		if (isset($lazyload)) {
-			$lazyload    = ResponsivePics()->process->process_lazyload($lazyload, 'lazyload');
-			$lazy_native = $lazyload === 'native';
-		}
-
-		// check for valid intrinsic value
-		if (isset($intrinsic)) {
-			$intrinsic = ResponsivePics()->process->process_boolean($intrinsic, 'intrinsic');
-		}
+		$definition = self::get_picture_data($id, $sizes, $picture_classes, $lazyload, $intrinsic, $rest_route);
 
 		// check for errors
 		if (count(self::$wp_error->get_error_messages()) > 0) {
 			return ResponsivePics()->error->get_error(self::$wp_error);
 		}
 
-		// set img classes
-		$img_classes = [];
-		if ($lazyload && !$lazy_native) {
-			$img_classes[] = self::$lazyload_class;
-		}
+		// get data
+		$lazyload        = isset($definition['lazyload']) ? $definition['lazyload'] : false;
+		$intrinsic       = isset($definition['intrinsic']) ? $definition['intrinsic'] : false;
+		$picture_classes = isset($definition['picture_classes']) ? $definition['picture_classes'] : null;
+		$image_classes   = isset($definition['image_classes']) ? $definition['image_classes'] : null;
 
-		// exclude unsupported mime types from intrinsic
-		if ($intrinsic && !in_array($definition['mimetype'], self::$supported_mime_types)) {
-			$intrinsic = false;
-		}
-
-		// set intrinsic classes
-		if ($intrinsic) {
-			$picture_classes[] = 'intrinsic';
-			$img_classes[]     = 'intrinsic__item';
-
-			if ($definition['alpha']) {
-				$img_classes[] = 'has-alpha';
-			}
-		}
+		// construct vars
+		$picture_class   = $picture_classes ? ' class="' . implode(' ', $picture_classes) . '"' : '';
+		$img_class       = $image_classes ? ' class="' . implode(' ', $image_classes) . '"' : '';
+		$lazy_native     = $lazyload === 'native';
+		$src_attr        = ($lazyload && !$lazy_native) ? 'data-srcset' : 'srcset';
+		$loading_attr    = $lazy_native ? ' loading="lazy"': '';
 
 		// start constructing <picture> element
-		$picture      = [];
-		$picture[]    = sprintf('<picture%s>', $picture_classes ? ' class="' . implode(' ', $picture_classes) . '"' : '');
-
-		$src_attr     = ($lazyload && !$lazy_native) ? 'data-srcset' : 'srcset';
-		$classes      = $img_classes ? ' class="' . implode(' ', $img_classes) . '"' : '';
-		$loading_attr = $lazy_native ? ' loading="lazy"': '';
+		$picture   = [];
+		$picture[] = sprintf('<picture%s>', $picture_class);
 
 		// add all sources
 		$sources = isset($definition['sources']) ? $definition['sources'] : [];
@@ -459,18 +443,18 @@ class ResponsivePics
 		// transparent gif
 		$style     = $intrinsic ? ' style="width:100%;"' : '';
 		$ratio     = $intrinsic ? ' data-aspectratio=""' : '';
-		$picture[] = sprintf('  <img src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="%s alt="%s"%s%s%s />', $ratio, $definition['alt'], $loading_attr, $classes, $style);
+		$picture[] = sprintf('  <img src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="%s alt="%s"%s%s%s />', $ratio, $definition['alt'], $loading_attr, $img_class, $style);
 		$picture[] = '</picture>';
 
 		return implode("\n", $picture) . "\n";
 	}
 
 	/**
-	 * Construct a responsive picture element
+	 * Construct responsive picture data
 	 *
-	 * @return picture sources as data
+	 * @return (array) responsive picture data
 	 */
-	public static function get_picture_data($id = null, $sizes = null, $rest_route = null) {
+	public static function get_picture_data($id = null, $sizes = null, $picture_classes = null, $lazyload = false, $intrinsic = false, $rest_route = null) {
 		// init WP_Error
 		self::$wp_error = new WP_Error();
 
@@ -482,6 +466,50 @@ class ResponsivePics
 		if ($image) {
 			$definition = ResponsivePics()->process->process_sizes($image, $sizes, 'desc', true, null, $rest_route);
 		}
+
+		// check for valid classes value
+		if ($picture_classes) {
+			$picture_classes = ResponsivePics()->process->process_classes($picture_classes);
+		} else {
+			$picture_classes = [];
+		}
+
+		// check for valid lazyload value
+		if (isset($lazyload)) {
+			$lazyload    = ResponsivePics()->process->process_lazyload($lazyload, 'lazyload');
+			$lazy_native = $lazyload === 'native';
+			$definition['lazyload'] = $lazyload;
+		}
+
+		// lazyload option
+		if ($lazyload && !$lazy_native) {
+			$picture_classes[] = self::$lazyload_class;
+		}
+
+		// check for valid intrinsic value
+		if (isset($intrinsic)) {
+			$intrinsic = ResponsivePics()->process->process_boolean($intrinsic, 'intrinsic');
+			$definition['intrinsic'] = $intrinsic;
+		}
+
+		// exclude unsupported mime types from intrinsic
+		if ($intrinsic && !in_array($definition['mimetype'], self::$supported_mime_types)) {
+			$intrinsic = false;
+		}
+
+		// set intrinsic classes
+		$img_classes = [];
+		if ($intrinsic) {
+			$picture_classes[] = 'intrinsic';
+			$img_classes[]     = 'intrinsic__item';
+
+			if ($definition['alpha']) {
+				$img_classes[] = 'has-alpha';
+			}
+		}
+
+		$definition['picture_classes'] = $picture_classes;
+		$definition['image_classes']   = $img_classes;
 
 		// check for errors
 		if (count(self::$wp_error->get_error_messages()) > 0) {
@@ -498,32 +526,19 @@ class ResponsivePics
 	 */
 	public static function get_background($id = null, $sizes = null, $bg_classes = null, $rest_route = null) {
 		// get background sources
-		$definition = self::get_background_data($id, $sizes, $rest_route);
-
-		// convert $classes to array if it is a string
-		if ($bg_classes) {
-			$bg_classes = ResponsivePics()->process->process_classes($bg_classes);
-		} else {
-			$bg_classes = [];
-		}
+		$definition = self::get_background_data($id, $sizes, $bg_classes, $rest_route);
 
 		// check for errors
 		if (count(self::$wp_error->get_error_messages()) > 0) {
 			return ResponsivePics()->error->get_error(self::$wp_error);
 		}
 
-		// prevent same id, append copy number to existing
-		$copy = $id;
-		if (isset(self::$id_map[$id])) {
-			self::$id_map[$id]++;
-			$copy .= '-' . self::$id_map[$id];
-		} else {
-			self::$id_map[$id] = 0;
-		}
+		// construct vars
+		$bg_id        = isset($definition['id']) ? $definition['id'] : $id;
+		$bg_classes   = isset($definition['classes']) ? $definition['classes'] : null;
+		$bg_class     = $bg_classes ? ' class="' . implode(' ', $bg_classes) . '"' : '';
 
-		$id = sprintf('responsive-pics-background-%s', $copy);
-
-		$background = [];
+		$background   = [];
 		$background[] = '<style scoped="scoped" type="text/css">';
 
 		// add all sources as background-images
@@ -533,22 +548,22 @@ class ResponsivePics
 				$sources = $source['source1x'];
 
 				$background[] = sprintf('  @media (min-width: %spx) {', $source['breakpoint']);
-				$background[] = sprintf('  #%s {background-image: url("%s");}', $id, $source['source1x']);
+				$background[] = sprintf('  #%s {background-image: url("%s");}', $bg_id, $source['source1x']);
 				$background[] = '  }';
 
 				if (isset($source['source2x'])) {
 					$background[] = sprintf('  %s {', ResponsivePics()->helpers->get_media_query_2x($source['breakpoint']));
-					$background[] = sprintf('  #%s {background-image: url("%s");}', $id, $source['source2x']);
+					$background[] = sprintf('  #%s {background-image: url("%s");}', $bg_id, $source['source2x']);
 					$background[] = '  }';
 				}
 			} else {
-				$background[] = sprintf('  #%s {background-image: url("%s");}', $id, $source['source1x']);
+				$background[] = sprintf('  #%s {background-image: url("%s");}', $bg_id, $source['source1x']);
 			}
 		}
 
 		$background[] = '  }';
 		$background[] = '</style>';
-		$background[] = sprintf('<div%s id="%s"></div>', $bg_classes ? ' class="' . implode(' ', $bg_classes) . '"' : '', $id);
+		$background[] = sprintf('<div id="%s"%s></div>', $bg_id, $bg_class);
 
 		return implode("\n", $background) . "\n";
 	}
@@ -558,7 +573,7 @@ class ResponsivePics
 	 *
 	 * @return background sources as data
 	 */
-	public static function get_background_data($id = null, $sizes = null, $rest_route = null) {
+	public static function get_background_data($id = null, $sizes = null, $bg_classes = null, $rest_route = null) {
 		// init WP_Error
 		self::$wp_error = new WP_Error();
 
@@ -570,6 +585,25 @@ class ResponsivePics
 		if ($image) {
 			$definition = ResponsivePics()->process->process_sizes($image, $sizes, 'asc', true, null, $rest_route);
 		}
+
+		// prevent same id, append copy number to existing
+		$copy = $image;
+		if (isset(self::$id_map[$image])) {
+			self::$id_map[$image]++;
+			$copy .= '-' . self::$id_map[$image];
+		} else {
+			self::$id_map[$image] = 0;
+		}
+
+		// convert $bg_classes to array if it is a string
+		if ($bg_classes) {
+			$bg_classes = ResponsivePics()->process->process_classes($bg_classes);
+		} else {
+			$bg_classes = [];
+		}
+
+		$definition['id']      = sprintf('responsive-pics-background-%s', $copy);
+		$definition['classes'] = $bg_classes;
 
 		// check for errors
 		if (count(self::$wp_error->get_error_messages()) > 0) {

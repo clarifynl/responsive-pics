@@ -232,26 +232,29 @@ GET /wp-json/responsive-pics/v1/image/<id>?sizes=<sizes>&crop=<crop>&classes=<cl
 | lqip       | boolean          | optional | `false`  | When `true` enables `LQIP` classes and src attribute. See the [LQIP section](#lqip) for more information.
 
 ### Image Data
-For retrieving the responsive `<img>` data in your theme, you can use the `get_image_data` function or the `responsive-pics/v1/image-data` API endpoint with the available parameters `id`, `sizes` and `crop`.
+For retrieving the responsive `<img>` data in your theme, you can use the `get_image_data` function or the `responsive-pics/v1/image-data` API endpoint with the available parameters `id`, `sizes`, `crop`, `classes`, `lazyload` and `lqip`.
 
 #### PHP
 ```php
-ResponsivePics::get_image_data(id, sizes, crop);
+ResponsivePics::get_image_data(id, sizes, crop, classes, lazyload, lqip);
 ```
 
 #### REST API
 ```curl
-GET /wp-json/responsive-pics/v1/image-data/<id>?sizes=<sizes>&crop=<crop>
+GET /wp-json/responsive-pics/v1/image-data/<id>?sizes=<sizes>&crop=<crop>&classes=<classes>&lazyload=<lazyload>&lqip=<lqip>
 ```
 
-This will return an array containing the available image sources per breakpoint, alt text, mime type and a boolean value if the image has an alpha channel.
+This will return an array containing the available image sources per breakpoint, alt text, mime type, boolean values for alpha channel and lazyload, an url for the lqip image and an array for the css classes.
 
 ```php
 [
-  'sources'  => (array) $sources,
+  'sources'  => (array)  $sources,
   'alt'      => (string) $alt,
   'mimetype' => (string) $mime_type,
-  'alpha'    => (bool) $alpha
+  'alpha'    => (bool)   $alpha,
+  'lazyload' => (bool)   $lazyload,
+  'lqip'     => (string) $lqip,
+  'classes'  => (array)  $classes
 ];
 ```
 
@@ -280,26 +283,30 @@ GET /wp-json/responsive-pics/v1/picture/<id>?sizes=<sizes>&classes=<classes>&laz
 | intrinsic  | boolean        | optional | `false`  | When `true` enables `intrinsic` classes and data-aspectratio attributes. See the [Intrinsic Aspectratio section](#intrinsic) for more information.
 
 ### Picture Data
-For retrieving the responsive `<picture>` data in your theme, you can use the `get_picture_data` function or the `responsive-pics/v1/picture-data` API endpoint with the available parameters `id` and `sizes`.
+For retrieving the responsive `<picture>` data in your theme, you can use the `get_picture_data` function or the `responsive-pics/v1/picture-data` API endpoint with the available parameters `id`, `sizes`, `classes`, `lazyload` and `intrinsic`.
 
 #### PHP
 ```php
-ResponsivePics::get_picture_data(id, sizes);
+ResponsivePics::get_picture_data(id, sizes, classes, lazyload, intrinsic);
 ```
 
 #### REST API
 ```curl
-GET /wp-json/responsive-pics/v1/picture-data/<id>?sizes=<sizes>
+GET /wp-json/responsive-pics/v1/picture-data/<id>?sizes=<sizes>&classes=<classes>&lazyload=<lazyload>&intrinsic=<intrinsic>
 ```
 
-This will return an array containing the available picture sources per breakpoint, alt text, mime type and a boolean value if the image has an alpha channel.
+This will return an array containing the available picture sources per breakpoint, alt text, mime type, boolean values for alpha channel and intrinsic, an array for the picture css classes and an array for the img css classes.
 
 ```php
 [
-  'sources'  => (array) $sources,
-  'alt'      => (string) $alt,
-  'mimetype' => (string) $mime_type,
-  'alpha'    => (bool) $alpha
+  'sources'         => (array)  $sources,
+  'alt'             => (string) $alt,
+  'mimetype'        => (string) $mime_type,
+  'alpha'           => (bool)   $alpha,
+  'lazyload'        => (bool)   $lazyload,
+  'intrinsic'       => (bool)   $intrinsic,
+  'picture_classes' => (array)  $picture_classes,
+  'image_classes'   => (array)  $image_classes
 ];
 ```
 
@@ -325,26 +332,28 @@ GET /wp-json/responsive-pics/v1/background/<id>?sizes=<sizes>&classes=<classes>
 | classes    | string      | optional | `null`   | A comma-separated string of additional CSS classes you want to add to the background element (e.g. `'my_bg_class'` or `'my_bg_class, my_second_bg_class'`).
 
 ### Background Data
-For retrieving the responsive background image data in your theme, you can use the `get_background_data` function or the `responsive-pics/v1/background-data` API endpoint with the available parameters `id` and `sizes`.
+For retrieving the responsive background image data in your theme, you can use the `get_background_data` function or the `responsive-pics/v1/background-data` API endpoint with the available parameters `id`, `sizes` and `classes`.
 
 #### PHP
 ```php
-ResponsivePics::get_background_data(id, sizes);
+ResponsivePics::get_background_data(id, sizes, classes);
 ```
 
 #### REST API
 ```curl
-GET /wp-json/responsive-pics/v1/background-data/<id>?sizes=<sizes>
+GET /wp-json/responsive-pics/v1/background-data/<id>?sizes=<sizes>&classes=<classes>
 ```
 
-This will return an array containing the available background image sources per breakpoint, alt text, mime type and a boolean value if the image has an alpha channel.
+This will return an array containing the available background image sources per breakpoint, alt text, mime type, a boolean value if the image has an alpha channel, an id for the background and an array for the background css classes.
 
 ```php
 [
-  'sources'  => (array) $sources,
+  'sources'  => (array)  $sources,
   'alt'      => (string) $alt,
   'mimetype' => (string) $mime_type,
-  'alpha'    => (bool) $alpha
+  'alpha'    => (bool)   $alpha,
+  'id'       => (string) $id,
+  'classes'  => (array)  $classes
 ];
 ```
 
@@ -768,6 +777,7 @@ import 'lazysizes/plugins/aspectratio/ls.aspectratio.js';
 Please submit any issues you experience with the **ResponsivePics** library over at [Github](https://github.com/booreiland/responsive-pics/issues).
 
 ## Todo's
+* Add Application Password Authentication to REST API endpoints.
 * Add Gutenberg Blocks support.
 * Add WPML (Media) support for focal point.
 * Add **multiple background images** syntax support.
