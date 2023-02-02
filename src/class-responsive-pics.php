@@ -587,12 +587,12 @@ class ResponsivePics
 		}
 
 		// prevent same id, append copy number to existing
-		$copy = $id;
-		if (isset(self::$id_map[$id])) {
-			self::$id_map[$id]++;
-			$copy .= '-' . self::$id_map[$id];
+		$copy = $image;
+		if (isset(self::$id_map[$image])) {
+			self::$id_map[$image]++;
+			$copy .= '-' . self::$id_map[$$image];
 		} else {
-			self::$id_map[$id] = 0;
+			self::$id_map[$image] = 0;
 		}
 
 		// convert $bg_classes to array if it is a string
