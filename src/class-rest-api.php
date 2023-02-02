@@ -271,10 +271,13 @@ class RP_Rest_Api extends ResponsivePics
 		// Decode Parameters
 		$id           = isset($request['id']) ? $request['id'] : null;
 		$sizes        = isset($params['sizes']) ? urldecode($params['sizes']) : null;
+		$classes      = isset($params['classes']) ? urldecode($params['classes']) : null;
+		$lazyload     = isset($params['lazyload']) ? ($params['lazyload'] === 'true') : null;
+		$intrinsic    = isset($params['intrinsic']) ? ($params['intrinsic'] === 'true') : null;
 
 		if (class_exists('ResponsivePics')) {
 			if ($sizes) {
-				$data = ResponsivePics::get_picture_data($id, $sizes, $route_url);
+				$data = ResponsivePics::get_picture_data($id, $sizes, $classes, $lazyload, $intrinsic, $route_url);
 
 				// Check for errors
 				if (is_wp_error($data)) {

@@ -248,13 +248,13 @@ This will return an array containing the available image sources per breakpoint,
 
 ```php
 [
-  'sources'  => (array) $sources,
+  'sources'  => (array)  $sources,
   'alt'      => (string) $alt,
   'mimetype' => (string) $mime_type,
-  'alpha'    => (bool) $alpha,
-  'lazyload' => (bool) $lazyload,
+  'alpha'    => (bool)   $alpha,
+  'lazyload' => (bool)   $lazyload,
   'lqip'     => (string) $lqip,
-  'classes'  => (array) $classes
+  'classes'  => (array)  $classes
 ];
 ```
 
@@ -283,26 +283,30 @@ GET /wp-json/responsive-pics/v1/picture/<id>?sizes=<sizes>&classes=<classes>&laz
 | intrinsic  | boolean        | optional | `false`  | When `true` enables `intrinsic` classes and data-aspectratio attributes. See the [Intrinsic Aspectratio section](#intrinsic) for more information.
 
 ### Picture Data
-For retrieving the responsive `<picture>` data in your theme, you can use the `get_picture_data` function or the `responsive-pics/v1/picture-data` API endpoint with the available parameters `id` and `sizes`.
+For retrieving the responsive `<picture>` data in your theme, you can use the `get_picture_data` function or the `responsive-pics/v1/picture-data` API endpoint with the available parameters `id`, `sizes`, `classes`, `lazyload` and `intrinsic`.
 
 #### PHP
 ```php
-ResponsivePics::get_picture_data(id, sizes);
+ResponsivePics::get_picture_data(id, sizes, classes, lazyload, intrinsic);
 ```
 
 #### REST API
 ```curl
-GET /wp-json/responsive-pics/v1/picture-data/<id>?sizes=<sizes>
+GET /wp-json/responsive-pics/v1/picture-data/<id>?sizes=<sizes>&classes=<classes>&lazyload=<lazyload>&intrinsic=<intrinsic>
 ```
 
-This will return an array containing the available picture sources per breakpoint, alt text, mime type and a boolean value if the image has an alpha channel.
+This will return an array containing the available picture sources per breakpoint, alt text, mime type, boolean values for alpha channel and intrinsic, an array for the picture css classes and an array for the img css classes.
 
 ```php
 [
-  'sources'  => (array) $sources,
-  'alt'      => (string) $alt,
-  'mimetype' => (string) $mime_type,
-  'alpha'    => (bool) $alpha
+  'sources'         => (array)  $sources,
+  'alt'             => (string) $alt,
+  'mimetype'        => (string) $mime_type,
+  'alpha'           => (bool)   $alpha,
+  'lazyload'        => (bool)   $lazyload,
+  'intrinsic'       => (bool)   $intrinsic,
+  'picture_classes' => (array)  $picture_classes,
+  'image_classes'   => (array)  $image_classes
 ];
 ```
 
