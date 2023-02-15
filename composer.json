@@ -1,5 +1,5 @@
 {
-  "name": "booreiland/responsive-pics",
+  "name": "clarifynl/responsive-pics",
   "type": "wordpress-plugin",
   "description": "Responsive Pics is a Wordpress tool for resizing images on the fly.",
   "keywords": [
@@ -16,24 +16,24 @@
   "authors": [
     {
       "name": "Wimer Hazenberg",
-      "email": "wimer@booreiland.amsterdam",
-      "homepage": "https://booreiland.amsterdam"
+      "email": "wimer@clarify.nl",
+      "homepage": "https://clarify.nl"
     },
     {
       "name": "Toine Kamps",
-      "email" : "toine@booreiland.amsterdam",
-      "homepage": "https://booreiland.amsterdam"
+      "email" : "toine.kamps@clarify.nl",
+      "homepage": "https://clarify.nl"
     }
   ],
   "support": {
-    "issues": "https://github.com/Booreiland/responsive-pics/issues",
-    "source": "https://github.com/Booreiland/responsive-pics",
+    "issues": "https://github.com/clarifynl/responsive-pics/issues",
+    "source": "https://github.com/clarifynl/responsive-pics",
     "docs": "https://responsive.pics"
   },
   "repositories": [
     {
       "type": "vcs",
-      "url": "git@github.com:Booreiland/responsive-pics.git"
+      "url": "git@github.com:clarifynl/responsive-pics.git"
     }
   ],
   "require": {
