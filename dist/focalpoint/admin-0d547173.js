@@ -2,12 +2,12 @@
  * 
  * ResponsivePics
  * 
- * @author Booreiland
- * @version 1.6.2
+ * @author Clarify
+ * @version 1.7.1
  * @link https://responsive.pics
  * @license UNLICENSED
  * 
- * Copyright (c) 2022 Booreiland
+ * Copyright (c) 2023 Clarify
  * 
  * This software is released under the UNLICENSED License
  * https://opensource.org/licenses/UNLICENSED
