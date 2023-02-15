@@ -66,7 +66,7 @@ You can install this plugin via the command-line or the WordPress admin panel.
 If you're [using Composer to manage WordPress](https://roots.io/using-composer-with-wordpress/), add **ResponsivePics** to your project's dependencies.
 
 ```sh
-composer require booreiland/responsive-pics
+composer require clarifynl/responsive-pics
 ```
 Then activate the plugin via [wp-cli](http://wp-cli.org/commands/plugin/activate/).
 
@@ -75,7 +75,7 @@ wp plugin activate responsive-pics
 ```
 
 ### via WordPress Admin Panel
-1. Download the [latest zip](https://github.com/booreiland/responsive-pics/releases/latest) of this repo.
+1. Download the [latest zip](https://github.com/clarifynl/responsive-pics/releases/latest) of this repo.
 2. In your WordPress admin panel, navigate to **Plugins->Add New**
 3. Click **Upload Plugin**
 4. Upload the zip file that you downloaded.
@@ -774,7 +774,7 @@ import 'lazysizes/plugins/aspectratio/ls.aspectratio.js';
 ---
 
 ## Issues
-Please submit any issues you experience with the **ResponsivePics** library over at [Github](https://github.com/booreiland/responsive-pics/issues).
+Please submit any issues you experience with the **ResponsivePics** library over at [Github](https://github.com/clarifynl/responsive-pics/issues).
 
 ## Todo's
 * Add Application Password Authentication to REST API endpoints.
@@ -790,6 +790,6 @@ Please submit any issues you experience with the **ResponsivePics** library over
 [@twansparant](https://github.com/Twansparant) (creator)
 
 ## Copyright
-Code and documentation copyright 2017-2020 by [Booreiland](https://booreiland.amsterdam).  
-Code released under the [MIT License](https://github.com/booreiland/responsive-pics/blob/master/LICENSE).  
+Code and documentation copyright 2017-2023 by [Clarify](https://clarify.nl).  
+Code released under the [MIT License](https://github.com/clarifynl/responsive-pics/blob/master/LICENSE).  
 Docs released under Creative Commons.
