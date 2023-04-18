@@ -109,7 +109,19 @@ class RP_Sources extends ResponsivePics
 		return $sources;
 	}
 
-	// creates a resized file if it doesn't exist and returns the final image url
+	/**
+	 * Creates a resized file if it doesn't exist yet
+	 *
+	 * @param int     $id           The wordpress attachment id
+	 * @param string  $file_path    The wordpress attachment file path
+	 * @param uri     $original_url The wordpress attachment original url
+	 * @param int     $width        The requested image width
+	 * @param int     $height       The requested image height
+	 * @param array   $crop         The requested image crop positions
+	 * @param float   $ratio        The requested image ratio
+	 *
+	 * @return uri final resized image url
+	 */
 	public function get_resized_url($id, $file_path, $original_url, $width, $height, $crop, $ratio = 1, $rest_route = null) {
 		$path_parts        = pathinfo($file_path);
 		$suffix            = ResponsivePics()->helpers->get_resized_suffix($width, $height, $ratio, $crop);
@@ -145,10 +157,10 @@ class RP_Sources extends ResponsivePics
 			return;
 		// new crop suffix
 		} elseif (file_exists($resized_file_path)) {
-			return $resized_url;
+			return esc_url($resized_url);
 		// legacy crop suffix
 		} elseif (file_exists($resized_file_path_legacy)) {
-			return $resized_url_legacy;
+			return esc_url($resized_url_legacy);
 		}
 	}
 }
