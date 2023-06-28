@@ -340,12 +340,12 @@ class ResponsivePics
 
 		// check for valid image id
 		$image = ResponsivePics()->process->process_image($id);
+		if (!$image) {
+			return;
+		}
 
 		// check for valid sizes value
-		$definition = [];
-		if ($image) {
-			$definition = ResponsivePics()->process->process_sizes($image, $sizes, 'desc', false, $crop, $rest_route);
-		}
+		$definition = ResponsivePics()->process->process_sizes($image, $sizes, 'desc', false, $crop, $rest_route);
 
 		// convert $img_classes to array if it is a string
 		if ($img_classes) {
@@ -460,12 +460,12 @@ class ResponsivePics
 
 		// check for valid image id
 		$image = ResponsivePics()->process->process_image($id);
+		if (!$image) {
+			return;
+		}
 
 		// check for valid sizes value
-		$definition = [];
-		if ($image) {
-			$definition = ResponsivePics()->process->process_sizes($image, $sizes, 'desc', true, null, $rest_route);
-		}
+		$definition = ResponsivePics()->process->process_sizes($image, $sizes, 'desc', true, null, $rest_route);
 
 		// check for valid classes value
 		if ($picture_classes) {
@@ -579,12 +579,12 @@ class ResponsivePics
 
 		// check for valid image id
 		$image = ResponsivePics()->process->process_image($id);
+		if (!$image) {
+			return;
+		}
 
 		// check for valid sizes
-		$definition = [];
-		if ($image) {
-			$definition = ResponsivePics()->process->process_sizes($image, $sizes, 'asc', true, null, $rest_route);
-		}
+		$definition = ResponsivePics()->process->process_sizes($image, $sizes, 'asc', true, null, $rest_route);
 
 		// prevent same id, append copy number to existing
 		$copy = $image;
