@@ -311,7 +311,7 @@ class ResponsivePics
 		if (!in_array($definition['mimetype'], self::$supported_mime_types) ||
 			$definition['animated'])
 		{
-			$original_src = wp_get_attachment_image_src($id);
+			$original_src = wp_get_attachment_image_src($id, 'original');
 			$image_html   = sprintf('<img%s %s="%s"%s alt="%s"/>', $classes, $src_attr, $original_src[0], $loading_attr, $definition['alt']);
 
 			return $image_html;
