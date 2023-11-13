@@ -1,6 +1,6 @@
 {
   "name": "responsive-pics",
-  "version": "1.7.3",
+  "version": "1.7.4",
   "private": true,
   "scripts": {
     "bootstrap": "wpackio-scripts bootstrap",

@@ -124,17 +124,17 @@ class ResponsivePics
 	}
 
 	// set number of grid columns
-	public static function setColumns($value = 12) {
+	public static function setColumns(int $value = 12) {
 		self::$columns = $value;
 	}
 
 	// set grid gutter width, in pixels
-	public static function setGutter($value = 30) {
+	public static function setGutter(int $value = 30) {
 		self::$gutter = $value;
 	}
 
 	// breakpoints used for "media(min-width: x)" in picture element, in pixels
-	public static function setBreakpoints($value = [
+	public static function setBreakpoints(array $value = [
 		'xs'  => 0,
 		'sm'  => 576,
 		'md'  => 768,
@@ -146,7 +146,7 @@ class ResponsivePics
 	}
 
 	// grid system should match the container widths in css
-	public static function setGridWidths($value = [
+	public static function setGridWidths(array $value = [
 		'xs'  => 576, // self::$breakpoints['sm']
 		'sm'  => 540,
 		'md'  => 720,
@@ -158,7 +158,7 @@ class ResponsivePics
 	}
 
 	// set supported mime types
-	private static function setSupportedMimeTypes($mime_types = [
+	private static function setSupportedMimeTypes(array $mime_types = [
 		'image/jpeg',
 		'image/png',
 		'image/gif'
@@ -171,37 +171,37 @@ class ResponsivePics
 	}
 
 	// set max width factor
-	public static function setMaxWidthFactor($factor = 2) {
+	public static function setMaxWidthFactor(int $factor = 2) {
 		self::$max_width_factor = $factor;
 	}
 
 	// set lazyload classname
-	public static function setLazyLoadClass($value = 'lazyload') {
+	public static function setLazyLoadClass(string $value = 'lazyload') {
 		self::$lazyload_class = $value;
 	}
 
 	// set lqip (low quality image placeholder) image width
-	public static function setLqipWidth($width = 100) {
+	public static function setLqipWidth(int $width = 100) {
 		self::$lqip_width = $width;
 	}
 
 	// set lqip (low quality image placeholder) classname
-	public static function setLqipClass($value = 'blur-up') {
+	public static function setLqipClass(string $value = 'blur-up') {
 		self::$lqip_class = $value;
 	}
 
 	// set image quality
-	public static function setImageQuality($value = 90) {
+	public static function setImageQuality(int $value = 90) {
 		self::$image_quality = $value;
 	}
 
 	// set rest api cache
-	public static function setRestApiCache($boolean = false) {
+	public static function setRestApiCache(bool $boolean = false) {
 		self::$wp_rest_cache = $boolean;
 	}
 
 	// set rest api cache duration (max-age)
-	public static function setRestApiCacheDuration($value = 3600) {
+	public static function setRestApiCacheDuration(int $value = 3600) {
 		self::$wp_rest_cache_duration = $value;
 	}
 
@@ -263,6 +263,12 @@ class ResponsivePics
 	/**
 	 * Alias old `get` function to `get_picture`
 	 *
+	 * @param (int) $id - attachment id
+	 * @param (string) $sizes - requested picture sizes
+	 * @param (string|array) $picture_classes - requested picture classes
+	 * @param (bool) $lazyload - lazyload option
+	 * @param (bool) $intrinsic - intrinsic option
+	 *
 	 * @return (string) <picture> element as html markup
 	 */
 	public static function get($id = null, $sizes = null, $picture_classes = null, $lazyload = false, $intrinsic = false) {
@@ -271,6 +277,14 @@ class ResponsivePics
 
 	/**
 	 * Construct a responsive image element
+	 *
+	 * @param (int) $id - attachment id
+	 * @param (string) $sizes - requested image sizes
+	 * @param (string) $crop - requested image crop
+	 * @param (string|array) $img_classes - requested image classes
+	 * @param (bool) $lazyload - lazyload option
+	 * @param (bool) $lqip - lqip option
+	 * @param (string) $rest_route - rest route
 	 *
 	 * @return (string) <img> element as html markup
 	 */
@@ -294,8 +308,10 @@ class ResponsivePics
 		$loading_attr = $lazy_native ? ' loading="lazy"': '';
 
 		// return normal image if unsupported mime type
-		if (!in_array($definition['mimetype'], self::$supported_mime_types)) {
-			$original_src = wp_get_attachment_image_src($id);
+		if (!in_array($definition['mimetype'], self::$supported_mime_types) ||
+			$definition['animated'])
+		{
+			$original_src = wp_get_attachment_image_src($id, 'original');
 			$image_html   = sprintf('<img%s %s="%s"%s alt="%s"/>', $classes, $src_attr, $original_src[0], $loading_attr, $definition['alt']);
 
 			return $image_html;
@@ -308,6 +324,7 @@ class ResponsivePics
 
 		// start constructing <img> element
 		$sources = isset($definition['sources']) ? $definition['sources'] : [];
+
 		foreach ($sources as $source) {
 			$srcsets[] = $source['source1x'] . ' ' . $source['width'] . 'w';
 			if (isset($source['source2x'])) {
@@ -326,11 +343,20 @@ class ResponsivePics
 
 		// construct image
 		$image_html = sprintf('<img%s %s="%s" sizes="%s"%s%s alt="%s"/>', $classes, $src_attr, implode(', ', $srcsets), implode(', ', $sizes), $src, $loading_attr, $definition['alt']);
+
 		return $image_html;
 	}
 
 	/**
 	 * Construct responsive image data
+	 *
+	 * @param (int) $id - attachment id
+	 * @param (string) $sizes - requested image sizes
+	 * @param (string) $crop - requested image crop
+	 * @param (string|array) $img_classes - requested image classes
+	 * @param (bool) $lazyload - lazyload option
+	 * @param (bool) $lqip - lqip option
+	 * @param (string) $rest_route - rest route
 	 *
 	 * @return (array) responsive image data
 	 */
@@ -394,6 +420,13 @@ class ResponsivePics
 	/**
 	 * Construct a responsive picture element
 	 *
+	 * @param (int) $id - attachment id
+	 * @param (string) $sizes - requested picture sizes
+	 * @param (string|array) $picture_classes - requested picture classes
+	 * @param (bool) $lazyload - lazyload option
+	 * @param (bool) $intrinsic - intrinsic option
+	 * @param (string) $rest_route - rest route
+	 *
 	 * @return (string) <picture> element as html markup
 	 */
 	public static function get_picture($id = null, $sizes = null, $picture_classes = null, $lazyload = false, $intrinsic = false, $rest_route = null) {
@@ -451,6 +484,13 @@ class ResponsivePics
 
 	/**
 	 * Construct responsive picture data
+	 *
+	 * @param (int) $id - attachment id
+	 * @param (string) $sizes - requested picture sizes
+	 * @param (string|array) $picture_classes - requested picture classes
+	 * @param (bool) $lazyload - lazyload option
+	 * @param (bool) $intrinsic - intrinsic option
+	 * @param (string) $rest_route - rest route
 	 *
 	 * @return (array) responsive picture data
 	 */
@@ -522,6 +562,11 @@ class ResponsivePics
 	/**
 	 * Construct a background image element and a matching responsive inline style element
 	 *
+	 * @param (int) $id - attachment id
+	 * @param (string) $sizes - requested background sizes
+	 * @param (string|array) $bg_classes - requested background classes
+	 * @param (string) $rest_route - rest route
+	 *
 	 * @return an inline <style> element with a dedicated image class with media-queries for all the different image sizes and an div with the same dedicated image class
 	 */
 	public static function get_background($id = null, $sizes = null, $bg_classes = null, $rest_route = null) {
@@ -570,6 +615,11 @@ class ResponsivePics
 
 	/**
 	 * Construct a responsive background image element
+	 *
+	 * @param (int) $id - attachment id
+	 * @param (string) $sizes - requested background sizes
+	 * @param (string|array) $bg_classes - requested background classes
+	 * @param (string) $rest_route - rest route
 	 *
 	 * @return background sources as data
 	 */
