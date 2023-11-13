@@ -164,9 +164,11 @@ class ResponsivePics
 		'image/gif'
 	]) {
 		global $wp_version;
+
 		if (version_compare($wp_version, '5.8', '>=' )) {
 			$mime_types[] = 'image/webp';
 		}
+
 		self::$supported_mime_types = $mime_types;
 	}
 
@@ -327,6 +329,7 @@ class ResponsivePics
 
 		foreach ($sources as $source) {
 			$srcsets[] = $source['source1x'] . ' ' . $source['width'] . 'w';
+
 			if (isset($source['source2x'])) {
 				$srcsets[] = $source['source2x'] . ' ' . ($source['width'] * 2) . 'w';
 			}
@@ -366,6 +369,7 @@ class ResponsivePics
 
 		// check for valid image id
 		$image = ResponsivePics()->process->process_image($id);
+
 		if (!$image) {
 			return;
 		}
@@ -399,6 +403,7 @@ class ResponsivePics
 
 		// low quality image placeholder option
 		$lqip_img = null;
+
 		if ($lqip) {
 			$img_classes[]      = self::$lqip_class;
 			$lqip_sizes         = ResponsivePics()->process->process_sizes($id, '0:' . self::$lqip_width, 'desc', false, $crop, $rest_route);
@@ -457,6 +462,7 @@ class ResponsivePics
 
 		// add all sources
 		$sources = isset($definition['sources']) ? $definition['sources'] : [];
+
 		foreach ($sources as $source) {
 			$data_aspectratio = $intrinsic ? ' data-aspectratio="' . $source['ratio'] . '"' : '';
 
@@ -500,6 +506,7 @@ class ResponsivePics
 
 		// check for valid image id
 		$image = ResponsivePics()->process->process_image($id);
+
 		if (!$image) {
 			return;
 		}
@@ -588,6 +595,7 @@ class ResponsivePics
 
 		// add all sources as background-images
 		$sources = isset($definition['sources']) ? $definition['sources'] : [];
+
 		foreach ($sources as $source) {
 			if (isset($source['breakpoint'])) {
 				$sources = $source['source1x'];
