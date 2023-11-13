@@ -7,7 +7,7 @@ class RP_Process extends ResponsivePics
 	 * Validates and returns the image id
 	 */
 	public function process_image($id = null) {
-		if (!$id) {
+		if (!$id || $id === 0) {
 			ResponsivePics()->error->add_error('invalid', 'image id is undefined');
 			return false;
 
