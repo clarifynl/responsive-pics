@@ -49,6 +49,10 @@ class RP_Process extends ResponsivePics
 		$alpha       = false;
 		$animated    = false;
 
+		// check for image dimensions
+		$original_width  = $meta_data['width'];
+		$original_height = $meta_data['height'];
+
 		// check if png has alpha channel
 		if ($mime_type === 'image/png') {
 			$alpha = ResponsivePics()->helpers->is_alpha_png($file_path);
@@ -60,21 +64,24 @@ class RP_Process extends ResponsivePics
 		}
 
 		// check if mime-type is supported
-		if (!in_array($mime_type, self::$supported_mime_types) || $animated) {
+		if (!in_array($mime_type, self::$supported_mime_types) ||
+			$animated)
+		{
 			return [
-				'sources' => [[
-					'source1x' => $url,
-					'ratio'    => 1
-				]],
-				'mimetype' => $mime_type,
 				'alt'      => $alt,
-				'alpha'    => $alpha
+				'alpha'    => $alpha,
+				'animated' => $animated,
+				'mimetype' => $mime_type,
+				'sources'  => [[
+					'breakpoint' => 0,
+					'height'     => $original_height,
+					'ratio'      => $original_width / $original_height,
+					'source1x'   => $url,
+					'width'      => $original_width
+				]]
 			];
 		}
 
-		// check for image dimensions
-		$original_width  = $meta_data['width'];
-		$original_height = $meta_data['height'];
 		if (!$original_width || !$original_height) {
 			ResponsivePics()->error->add_error('missing', sprintf('no dimensions found in metadata for image %s', $id), $meta_data);
 		}
@@ -97,10 +104,11 @@ class RP_Process extends ResponsivePics
 		}
 
 		return [
-			'sources'  => $sources,
+			'alpha'    => $alpha,
 			'alt'      => $alt,
+			'animated' => $animated,
 			'mimetype' => $mime_type,
-			'alpha'    => $alpha
+			'sources'  => $sources
 		];
 	}
 
