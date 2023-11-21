@@ -22,9 +22,10 @@ Functions return similar values and accept similar arguments to their WP-Cron co
 
 As mentioned in the [Usage - Load Order](usage.md#load-order) section, Action Scheduler will initialize itself on the `'init'` hook with priority `1`. While API functions are loaded prior to this and can be called, they should not be called until after `'init'` with priority `1`, because each component, like the data store, has not yet been initialized.
 
-Do not use Action Scheduler API functions prior to `'init'` hook with priority `1`. Doing so could lead to unexpected results, like data being stored in the incorrect location.
+Do not use Action Scheduler API functions prior to `'init'` hook with priority `1`. Doing so could lead to unexpected results, like data being stored in the incorrect location. To make this easier:
 
-Action Scheduler provides `Action_Scheduler::is_initialized()` for use in hooks to confirm that the data stores have been initialized.
+- Action Scheduler provides `Action_Scheduler::is_initialized()` for use in hooks to confirm that the data stores have been initialized.
+- It also provides the `'action_scheduler_init'` action hook. It is safe to call API functions during or after this event has fired (tip: you can take advantage of WordPress's [did_action()](https://developer.wordpress.org/reference/functions/did_action/) function to check this).
 
 ## Function Reference / `as_enqueue_async_action()`
 
@@ -35,7 +36,7 @@ Enqueue an action to run one time, as soon as possible.
 ### Usage
 
 ```php
-as_enqueue_async_action( $hook, $args, $group );
+as_enqueue_async_action( $hook, $args, $group, $unique, $priority );
 ```
 
 ### Parameters
@@ -43,11 +44,12 @@ as_enqueue_async_action( $hook, $args, $group );
 - **$hook** (string)(required) Name of the action hook.
 - **$args** (array) Arguments to pass to callbacks when the hook triggers. Default: _`array()`_.
 - **$group** (string) The group to assign this job to. Default: _''_.
+- **$unique** (boolean) Whether the action should be unique. Default: _`false`_.
+- **$priority** (integer) Lower values take precedence over higher values. Defaults to 10, with acceptable values falling in the range 0-255.
 
 ### Return value
 
-(integer) the action's ID.
-
+`(integer)` the action's ID. Zero if there was an error scheduling the action. The error will be sent to `error_log`.
 
 ## Function Reference / `as_schedule_single_action()`
 
@@ -58,7 +60,7 @@ Schedule an action to run one time at some defined point in the future.
 ### Usage
 
 ```php
-as_schedule_single_action( $timestamp, $hook, $args, $group );
+as_schedule_single_action( $timestamp, $hook, $args, $group, $unique, $priority );
 ```
 
 ### Parameters
@@ -67,11 +69,12 @@ as_schedule_single_action( $timestamp, $hook, $args, $group );
 - **$hook** (string)(required) Name of the action hook.
 - **$args** (array) Arguments to pass to callbacks when the hook triggers. Default: _`array()`_.
 - **$group** (string) The group to assign this job to. Default: _''_.
+- **$unique** (boolean) Whether the action should be unique. Default: _`false`_.
+- **$priority** (integer) Lower values take precedence over higher values. Defaults to 10, with acceptable values falling in the range 0-255.)
 
 ### Return value
 
-(integer) the action's ID.
-
+`(integer)` the action's ID. Zero if there was an error scheduling the action. The error will be sent to `error_log`.
 
 ## Function Reference / `as_schedule_recurring_action()`
 
@@ -82,7 +85,7 @@ Schedule an action to run repeatedly with a specified interval in seconds.
 ### Usage
 
 ```php
-as_schedule_recurring_action( $timestamp, $interval_in_seconds, $hook, $args, $group );
+as_schedule_recurring_action( $timestamp, $interval_in_seconds, $hook, $args, $group, $unique, $priority );
 ```
 
 ### Parameters
@@ -92,11 +95,12 @@ as_schedule_recurring_action( $timestamp, $interval_in_seconds, $hook, $args, $g
 - **$hook** (string)(required) Name of the action hook.
 - **$args** (array) Arguments to pass to callbacks when the hook triggers. Default: _`array()`_.
 - **$group** (string) The group to assign this job to. Default: _''_.
+- **$unique** (boolean) Whether the action should be unique. Default: _`false`_.
+- **$priority** (integer) Lower values take precedence over higher values. Defaults to 10, with acceptable values falling in the range 0-255.
 
 ### Return value
 
-(integer) the action's ID.
-
+`(integer)` the action's ID. Zero if there was an error scheduling the action. The error will be sent to `error_log`.
 
 ## Function Reference / `as_schedule_cron_action()`
 
@@ -104,10 +108,12 @@ as_schedule_recurring_action( $timestamp, $interval_in_seconds, $hook, $args, $g
 
 Schedule an action that recurs on a cron-like schedule.
 
+If execution of a cron-like action is delayed, the next attempt will still be scheduled according to the provided cron expression.
+
 ### Usage
 
 ```php
-as_schedule_cron_action( $timestamp, $schedule, $hook, $args, $group );
+as_schedule_cron_action( $timestamp, $schedule, $hook, $args, $group, $unique, $priority );
 ```
 
 ### Parameters
@@ -117,11 +123,12 @@ as_schedule_cron_action( $timestamp, $schedule, $hook, $args, $group );
 - **$hook** (string)(required) Name of the action hook.
 - **$args** (array) Arguments to pass to callbacks when the hook triggers. Default: _`array()`_.
 - **$group** (string) The group to assign this job to. Default: _''_.
+- **$unique** (boolean) Whether the action should be unique. Default: _`false`_.
+- **$priority** (integer) Lower values take precedence over higher values. Defaults to 10, with acceptable values falling in the range 0-255.
 
 ### Return value
 
-(integer) the action's ID.
-
+`(integer)` the action's ID. Zero if there was an error scheduling the action. The error will be sent to `error_log`.
 
 ## Function Reference / `as_unschedule_action()`
 
@@ -143,7 +150,7 @@ as_unschedule_action( $hook, $args, $group );
 
 ### Return value
 
-(null)
+`(null)`
 
 ## Function Reference / `as_unschedule_all_actions()`
 
@@ -165,8 +172,7 @@ as_unschedule_all_actions( $hook, $args, $group )
 
 ### Return value
 
-(string|null) The scheduled action ID if a scheduled action was found, or null if no matching action found.
-
+`(string|null)` The scheduled action ID if a scheduled action was found, or null if no matching action found.
 
 ## Function Reference / `as_next_scheduled_action()`
 
@@ -188,8 +194,7 @@ as_next_scheduled_action( $hook, $args, $group );
 
 ### Return value
 
-(integer|boolean) The timestamp for the next occurrence, or false if nothing was found.
-
+`(integer|boolean)` The timestamp for the next occurrence of a pending scheduled action, true for an async or in-progress action or false if there is no matching action.
 
 ## Function Reference / `as_has_scheduled_action()`
 
@@ -211,8 +216,7 @@ as_has_scheduled_action( $hook, $args, $group );
 
 ### Return value
 
-(boolean) True if a matching action is pending or in-progress, false otherwise.
-
+`(boolean)` True if a matching action is pending or in-progress, false otherwise.
 
 ## Function Reference / `as_get_scheduled_actions()`
 
@@ -246,4 +250,4 @@ as_get_scheduled_actions( $args, $return_format );
 
 ### Return value
 
-(array) Array of action rows matching the criteria specified with `$args`.
+`(array)` Array of action rows matching the criteria specified with `$args`.

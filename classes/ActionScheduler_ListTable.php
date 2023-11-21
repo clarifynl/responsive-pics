@@ -252,7 +252,7 @@ class ActionScheduler_ListTable extends ActionScheduler_Abstract_ListTable {
 	 */
 	protected function get_recurrence( $action ) {
 		$schedule = $action->get_schedule();
-		if ( $schedule->is_recurring() ) {
+		if ( $schedule->is_recurring() && method_exists( $schedule, 'get_recurrence' ) ) {
 			$recurrence = $schedule->get_recurrence();
 
 			if ( is_numeric( $recurrence ) ) {
@@ -467,7 +467,11 @@ class ActionScheduler_ListTable extends ActionScheduler_Abstract_ListTable {
 
 		$schedule_display_string = '';
 
-		if ( ! $schedule->get_date() ) {
+		if ( is_a( $schedule, 'ActionScheduler_NullSchedule' ) ) {
+			return __( 'async', 'action-scheduler' );
+		}
+
+		if ( ! method_exists( $schedule, 'get_date' ) || ! $schedule->get_date() ) {
 			return '0000-00-00 00:00:00';
 		}
 
@@ -498,7 +502,20 @@ class ActionScheduler_ListTable extends ActionScheduler_Abstract_ListTable {
 	 */
 	protected function bulk_delete( array $ids, $ids_sql ) {
 		foreach ( $ids as $id ) {
-			$this->store->delete_action( $id );
+			try {
+				$this->store->delete_action( $id );
+			} catch ( Exception $e ) {
+				// A possible reason for an exception would include a scenario where the same action is deleted by a
+				// concurrent request.
+				error_log(
+					sprintf(
+						/* translators: 1: action ID 2: exception message. */
+						__( 'Action Scheduler was unable to delete action %1$d. Reason: %2$s', 'action-scheduler' ),
+						$id,
+						$e->getMessage()
+					)
+				);
+			}
 		}
 	}
 
@@ -583,6 +600,16 @@ class ActionScheduler_ListTable extends ActionScheduler_Abstract_ListTable {
 			'search'   => $this->get_request_search_query(),
 		);
 
+		/**
+		 * Change query arguments to query for past-due actions.
+		 * Past-due actions have the 'pending' status and are in the past.
+		 * This is needed because registering 'past-due' as a status is overkill.
+		 */
+		if ( 'past-due' === $this->get_request_status() ) {
+			$query['status'] = ActionScheduler_Store::STATUS_PENDING;
+			$query['date']   = as_get_datetime_object();
+		}
+
 		$this->items = array();
 
 		$total_items = $this->store->query_actions( $query, 'count' );
@@ -623,7 +650,7 @@ class ActionScheduler_ListTable extends ActionScheduler_Abstract_ListTable {
 	 * Prints the available statuses so the user can click to filter.
 	 */
 	protected function display_filter_by_status() {
-		$this->status_counts = $this->store->action_counts();
+		$this->status_counts = $this->store->action_counts() + $this->store->extra_action_counts();
 		parent::display_filter_by_status();
 	}
 
