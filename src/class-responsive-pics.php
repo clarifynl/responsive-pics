@@ -463,7 +463,7 @@ class ResponsivePics
 		$sources = isset($definition['sources']) ? $definition['sources'] : [];
 
 		foreach ($sources as $source) {
-			$data_aspectratio = $intrinsic ? ' data-aspectratio="' . $source['ratio'] . '"' : '';
+			$data_aspectratio = ($intrinsic && isset($source['ratio'])) ? ' data-aspectratio="' . $source['ratio'] . '"' : '';
 
 			if (isset($source['breakpoint'])) {
 				$urls = $source['source1x'];
