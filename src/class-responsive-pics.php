@@ -1,6 +1,5 @@
 <?php
 
-
 class ResponsivePics
 {
 	public static $columns = null;

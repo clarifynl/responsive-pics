@@ -11,12 +11,21 @@
 
 defined('ABSPATH') or exit;
 
-
 class ResponsivePicsWP
 {
-
 	private static $instance;
 	public static $enqueue;
+
+	public $api;
+	public $helpers;
+	public $error;
+	public $process;
+	public $rules;
+	public $breakpoints;
+	public $grid;
+	public $sources;
+	public $focalpoint;
+	public $s3offload;
 
 	/**
 	 * Construct
@@ -62,7 +71,6 @@ class ResponsivePicsWP
 		echo '<div class="error"><p>' . sprintf($message, '5.6') . '</p></div>';
 	}
 }
-
 
 function ResponsivePics() {
 	return ResponsivePicsWP::instance();
