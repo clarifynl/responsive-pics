@@ -30,7 +30,7 @@ class RP_Breakpoints extends ResponsivePics
 			return $variants;
 		}
 
-		uasort($defined_breakpoints, ['self', 'sort_by_breakpoint_index']);
+		uasort($defined_breakpoints, ['RP_Breakpoints', 'sort_by_breakpoint_index']);
 
 		// add missing smaller breakpoints with all columns
 		foreach (self::$breakpoints as $breakpoint_key => $breakpoint_value) {

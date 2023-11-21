@@ -4,19 +4,28 @@
 	Plugin URI: https://responsive.pics
 	Description: Responsive Pics is a Wordpress tool for resizing images on the fly.
 	Author: Clarify (previously Booreiland)
-	Version: 1.7.5
+	Version: 1.7.6
 	Author URI: https://clarify.nl
 	Copyright: Wimer Hazenberg, Toine Kamps
 */
 
 defined('ABSPATH') or exit;
 
-
 class ResponsivePicsWP
 {
-
 	private static $instance;
 	public static $enqueue;
+	public $api;
+	public $helpers;
+	public $error;
+	public $process;
+	public $rules;
+	public $breakpoints;
+	public $grid;
+	public $sources;
+	public $focalpoint;
+	public $s3offload;
+
 	public $api;
 	public $helpers;
 	public $error;
@@ -40,7 +49,7 @@ class ResponsivePicsWP
 
 		// Variables
 		define('RESPONSIVE_PICS_DIR', plugin_dir_path(__FILE__));
-		define('RESPONSIVE_PICS_VERSION', '1.7.5');
+		define('RESPONSIVE_PICS_VERSION', '1.7.6');
 		define('RESPONSIVE_PICS_TEXTDOMAIN', 'responsive-pics');
 
 		// Init
@@ -72,7 +81,6 @@ class ResponsivePicsWP
 		echo '<div class="error"><p>' . sprintf($message, '5.6') . '</p></div>';
 	}
 }
-
 
 function ResponsivePics() {
 	return ResponsivePicsWP::instance();
