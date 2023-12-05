@@ -145,7 +145,11 @@ class Enqueue {
 	public function printPublicPath() {
 		$publicPath = apply_filters( 'wpackio_print_public_path', $this->getUrl( '' ), $this->appName, $this->outputPath );
 		$jsCode = 'window.__wpackIo' . $this->sanitize_path( $this->appName . $this->outputPath ) . '=\'' . esc_js( $publicPath ) . '\';';
-		echo '<script type="text/javascript">/* wpack.io publicPath */' . $jsCode . '</script>';
+
+		// Enqueue an empty script so we can add an inline script that allows for filtering via `wp_inline_script_attributes`
+		\wp_register_script("{$this->appName}/publicPath", '', [], false, true);
+		\wp_enqueue_script("{$this->appName}/publicPath");
+		\wp_add_inline_script("{$this->appName}/publicPath", "/* wpack.io publicPath */ {$jsCode}");
 	}
 
 	/**

@@ -15,7 +15,6 @@ class ResponsivePicsWP
 {
 	private static $instance;
 	public static $enqueue;
-
 	public $api;
 	public $helpers;
 	public $error;
