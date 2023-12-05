@@ -43,7 +43,7 @@
   "require-dev": {
     "slowprog/composer-copy-file": "~0.3",
     "woocommerce/action-scheduler": "^3.5",
-    "wpackio/enqueue": "^3.4"
+    "wpackio/enqueue": "^3.5"
   },
   "config": {
     "allow-plugins": {

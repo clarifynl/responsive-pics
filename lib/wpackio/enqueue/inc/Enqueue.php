@@ -143,7 +143,7 @@ class Enqueue {
 	 * and dynamic imports possible.
 	 */
 	public function printPublicPath() {
-		$publicPath = $this->getUrl( '' );
+		$publicPath = apply_filters( 'wpackio_print_public_path', $this->getUrl( '' ), $this->appName, $this->outputPath );
 		$jsCode = 'window.__wpackIo' . $this->sanitize_path( $this->appName . $this->outputPath ) . '=\'' . esc_js( $publicPath ) . '\';';
 		echo '<script type="text/javascript">/* wpack.io publicPath */' . $jsCode . '</script>';
 	}
