@@ -113,7 +113,7 @@ class RP_S3_Offload extends ResponsivePics
 	 * @return bool
 	 */
 	public static function file_exists($id, $file) {
-		syslog(LOG_DEBUG, 'file_exists s3: ' . $file['path']);
+		syslog(LOG_DEBUG, 'file_exists s3: ' . json_encode($file));
 
 		// Not an s3 url so it won't exist on S3
 		if (strpos($file['path'], 's3') !== 0) {

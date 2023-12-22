@@ -162,16 +162,12 @@ class RP_Sources extends ResponsivePics
 			'height' => $resize_request['height']
 		]);
 
-		syslog(LOG_DEBUG, 'resized_file_name: ' . $resized_file_name . ' resized_file_path: ' . $resized_file_path  . ' resized_file_exists: ' . $resized_file_exists);
-
 		$resized_file_exists_legacy = apply_filters('responsive_pics_file_exists', $id, [
 			'path'   => $resized_file_path_legacy,
 			'file'   => $resized_file_name_legacy,
 			'width'  => $resize_request['width'],
 			'height' => $resize_request['height']
 		]);
-
-		syslog(LOG_DEBUG, 'resized_file_name_legacy: ' . $resized_file_name_legacy . ' resized_file_path_legacy: ' . $resized_file_path_legacy  . ' resized_file_exists_legacy: ' . $resized_file_exists_legacy);
 
 		if (!$resized_file_exists && !$resized_file_exists_legacy) {
 			$is_pending = ResponsivePics()->helpers->is_scheduled_action($resize_request, $id);
