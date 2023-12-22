@@ -533,6 +533,10 @@ class RP_Process extends ResponsivePics
 						false
 					);
 				} else {
+					/**
+					 * Sometimes the width in the result doesn't match the ($width * $ratio)
+					 * causing images to be re-scheduled on every load since they're not in the S3 storage object
+					 */
 					$wp_editor->resize($width * $ratio, $height * $ratio, false);
 				}
 
