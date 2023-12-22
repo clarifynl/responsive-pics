@@ -126,25 +126,19 @@ class RP_S3_Offload extends ResponsivePics
 			// Re-init item cache for making sure item contains recently added objects
 			Media_Library_Item::init_cache();
 			$as3cf_item    = Media_Library_Item::get_by_source_id($id);
-			$matches       = preg_match('/@([.][0-9]{3})x\.[a-zA-Z0-9]+$/', $file['file']);
 			$ratio         = 1;
 
+			// Check for @ retina suffix
+			preg_match('/@([.0-9]{1,3})x\.[a-zA-Z0-9]+$/', $file['file'], $matches);
 			if (!empty($matches) && isset($matches[1])) {
-				$ratio = $matches[1];
+				$ratio = (float) $matches[1];
 			}
 
-			syslog(LOG_DEBUG, 'ratio: ' . $ratio);
-
 			// Calculate size
-			$size          = $file['width'] .'x'. $file['height'];
+			$size          = ($file['width'] * $ratio) .'x'. ($file['height'] * $ratio);
 			$as3cf_objects = $as3cf_item ? $as3cf_item->objects() : null;
-
-			syslog(LOG_DEBUG, 's3 size: '. $size . ' file: ' . json_encode($file) . ' s3 object: ' . json_encode($as3cf_objects));
-
 			$size_exists   = $as3cf_objects ? array_key_exists($size, $as3cf_objects) : false;
 			$file_exists   = $size_exists ? ($file['file'] === $as3cf_objects[$size]['source_file']) : false;
-
-			syslog(LOG_DEBUG, 's3 size_exists: '. $size_exists . ' file_exists: ' . $file_exists);
 
 			return ($size_exists && $file_exists);
 		}
