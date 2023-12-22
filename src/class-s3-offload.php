@@ -126,16 +126,12 @@ class RP_S3_Offload extends ResponsivePics
 			// Re-init item cache for making sure item contains recently added objects
 			Media_Library_Item::init_cache();
 			$as3cf_item    = Media_Library_Item::get_by_source_id($id);
-			$ratio         = 1;
-
-			// Check for @ retina suffix
-			preg_match('/@([.0-9]{1,3})x\.[a-zA-Z0-9]+$/', $file['file'], $matches);
-			if (!empty($matches) && isset($matches[1])) {
-				$ratio = (float) $matches[1];
-			}
+			$ratio         = (int) $file['ratio'];
+			$width         = (int) $file['width'];
+			$height        = (int) $file['height'];
 
 			// Calculate size
-			$size          = ($file['width'] * $ratio) .'x'. ($file['height'] * $ratio);
+			$size          = ($width * $ratio) .'x'. ($height * $ratio);
 			$as3cf_objects = $as3cf_item ? $as3cf_item->objects() : null;
 			$size_exists   = $as3cf_objects ? array_key_exists($size, $as3cf_objects) : false;
 			$file_exists   = $size_exists ? ($file['file'] === $as3cf_objects[$size]['source_file']) : false;

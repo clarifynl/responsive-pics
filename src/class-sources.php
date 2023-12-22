@@ -159,14 +159,16 @@ class RP_Sources extends ResponsivePics
 			'path'   => $resized_file_path,
 			'file'   => $resized_file_name,
 			'width'  => $resize_request['width'],
-			'height' => $resize_request['height']
+			'height' => $resize_request['height'],
+			'ratio'  => $resize_request['ratio']
 		]);
 
 		$resized_file_exists_legacy = apply_filters('responsive_pics_file_exists', $id, [
 			'path'   => $resized_file_path_legacy,
 			'file'   => $resized_file_name_legacy,
 			'width'  => $resize_request['width'],
-			'height' => $resize_request['height']
+			'height' => $resize_request['height'],
+			'ratio'  => $resize_request['ratio']
 		]);
 
 		if (!$resized_file_exists && !$resized_file_exists_legacy) {
