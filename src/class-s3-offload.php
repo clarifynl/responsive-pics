@@ -113,7 +113,7 @@ class RP_S3_Offload extends ResponsivePics
 	 * @return bool
 	 */
 	public static function file_exists($id, $file) {
-		syslog(LOG_DEBUG, 'file_exists s3: ' . json_encode($file));
+		syslog(LOG_DEBUG, 'file_exists s3: ' . json_encode($file['path']);
 
 		// Not an s3 url so it won't exist on S3
 		if (strpos($file['path'], 's3') !== 0) {
@@ -127,10 +127,13 @@ class RP_S3_Offload extends ResponsivePics
 
 			// Re-init item cache for making sure item contains recently added objects
 			Media_Library_Item::init_cache();
-			$as3cf_item = Media_Library_Item::get_by_source_id($id);
-			$size = $file['width'] .'x'. $file['height'];
+			$as3cf_item    = Media_Library_Item::get_by_source_id($id);
+			$size          = $file['width'] .'x'. $file['height'];
+			$as3cf_objects = $as3cf_item ? $as3cf_item->objects() : null;
+			$size_exists   = $as3cf_objects ? array_key_exists($size, $as3cf_objects) : false;
+			$file_exists   = $size_exists ? ($file['file'] === $as3cf_objects[$size]['source_file']) : false;
 
-			syslog(LOG_DEBUG, 'file_exists s3 size: ' . $size . ' as3cf_item: ' . json_encode($as3cf_item));
+			syslog(LOG_DEBUG, 's3 size_exists: '. $size_exists . ' file_exists: ' . $file_exists);
 
 			return $as3cf_item && array_key_exists($size, $as3cf_item->objects());
 		}
