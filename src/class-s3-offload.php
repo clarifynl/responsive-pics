@@ -16,6 +16,7 @@ class RP_S3_Offload extends ResponsivePics
 	 */
 	public static function upload_image($id, $file = null) {
 		global $as3cf;
+
 		$s3_upload = null;
 
 		// Plugin version check
@@ -103,8 +104,8 @@ class RP_S3_Offload extends ResponsivePics
 	/**
 	 * Check if file exists in S3 storage
 	 *
-	 * @param int	$id		The attachment ID.
-	 * @param array	$file	The file array to check.
+	 * @param int    $id    The attachment ID.
+	 * @param array  $file  The file array to check.
 	 *
 	 * @return bool
 	 */
@@ -127,7 +128,7 @@ class RP_S3_Offload extends ResponsivePics
 			return $as3cf_item && array_key_exists($size, $as3cf_item->objects());
 		}
 
-        // Doesn't exist in the Offload Media cache, let the default file_exists filter handle it
+		// Doesn't exist in the Offload Media cache, let the default file_exists filter handle it
 		return false;
 	}
 }

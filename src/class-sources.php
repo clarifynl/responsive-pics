@@ -2,8 +2,16 @@
 
 class RP_Sources extends ResponsivePics
 {
-
-	// returns a normalized array of available sources
+	/**
+	 * Returns a normalized array of available sources
+	 *
+	 * @param int     $id           The wordpress attachment id
+	 * @param array   $rules        The requested image resize rules
+	 * @param string  $order        The order of the image sources
+	 * @param uri     $rest_route   The original WP REST API request
+	 *
+	 * @return array  The image sources to process
+	 */
 	public function get_resize_sources($id, $rules = null, $order = 'desc', $rest_route = null) {
 		$image_url       = wp_get_attachment_url($id);
 		$image_path      = get_attached_file($id);
@@ -147,17 +155,17 @@ class RP_Sources extends ResponsivePics
 
 		// if image size does not exist yet as filename (or as legacy filename)
 		$resized_file_exists = apply_filters('responsive_pics_file_exists', $id, [
-			'path'	  => $resized_file_path,
-			'file'	  => $resized_file_name,
-			'width'	 => $resize_request['width'],
-			'height'	=> $resize_request['height'],
+			'path'   => $resized_file_path,
+			'file'   => $resized_file_name,
+			'width'  => $resize_request['width'],
+			'height' => $resize_request['height']
 		]);
 
 		$resized_file_exists_legacy = apply_filters('responsive_pics_file_exists', $id, [
-			'path'	  => $resized_file_path_legacy,
-			'file'	  => $resized_file_name_legacy,
-			'width'	 => $resize_request['width'],
-			'height'	=> $resize_request['height'],
+			'path'   => $resized_file_path_legacy,
+			'file'   => $resized_file_name_legacy,
+			'width'  => $resize_request['width'],
+			'height' => $resize_request['height']
 		]);
 
 		if (!$resized_file_exists && !$resized_file_exists_legacy) {
@@ -170,9 +178,11 @@ class RP_Sources extends ResponsivePics
 			}
 
 			return;
+
 		// new crop suffix
 		} elseif ($resized_file_exists) {
 			return esc_url($resized_url);
+
 		// legacy crop suffix
 		} elseif ($resized_file_exists_legacy) {
 			return esc_url($resized_url_legacy);
@@ -182,12 +192,12 @@ class RP_Sources extends ResponsivePics
 	/**
 	 * Check if a file exists in the filesystem.
 	 *
-	 * @param int	$id		The attachment ID.
-	 * @param array	$file	The file array to check.
+	 * @param int    $id    The attachment ID.
+	 * @param array  $file  The file array to check.
 	 *
 	 * @return bool
 	 */
 	public static function file_exists($id, $file) {
-		return file_exists($file['path']);
+		return isset($file['path']) && file_exists($file['path']);
 	}
 }
