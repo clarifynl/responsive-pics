@@ -17,7 +17,7 @@ class RP_S3_Offload extends ResponsivePics
 	/**
 	 * Upload to S3 storage
 	 */
-	public static function upload_image($id, $file = null) {
+	public static function upload_image($id, $file = null, $width = null, $height = null) {
 		global $as3cf;
 
 		$s3_upload = null;
@@ -28,7 +28,7 @@ class RP_S3_Offload extends ResponsivePics
 			Media_Library_Item::init_cache();
 			$as3cf_item  = Media_Library_Item::get_by_source_id($id);
 
-			$size        = $file['width'] .'x'. $file['height'];
+			$size        = $width .'x'. $height;
 			$source_file = $file['file'];
 
 			if ($as3cf_item) {
@@ -131,7 +131,7 @@ class RP_S3_Offload extends ResponsivePics
 			$height        = (int) $file['height'];
 
 			// Calculate size
-			$size          = ($width * $ratio) .'x'. ($height * $ratio);
+			$size          = round($width * $ratio) .'x'. round($height * $ratio);
 			$as3cf_objects = $as3cf_item ? $as3cf_item->objects() : null;
 			$size_exists   = $as3cf_objects ? array_key_exists($size, $as3cf_objects) : false;
 			$file_exists   = $size_exists ? ($file['file'] === $as3cf_objects[$size]['source_file']) : false;

@@ -547,7 +547,7 @@ class RP_Process extends ResponsivePics
 					do_action('responsive_pics_file_saved_local', $id, $saved_file);
 
 					if (class_exists('Amazon_S3_And_CloudFront')) {
-						ResponsivePics()->s3offload->upload_image($id, $saved_file);
+						ResponsivePics()->s3offload->upload_image($id, $saved_file, round($width * $ratio), round($height * $ratio));
 					}
 				}
 			} else {
