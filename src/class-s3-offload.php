@@ -135,7 +135,7 @@ class RP_S3_Offload extends ResponsivePics
 
 			syslog(LOG_DEBUG, 's3 size_exists: '. $size_exists . ' file_exists: ' . $file_exists);
 
-			return $as3cf_item && array_key_exists($size, $as3cf_item->objects());
+			return ($size_exists && $file_exists);
 		}
 
 		// Doesn't exist in the Offload Media cache, let the default file_exists filter handle it
