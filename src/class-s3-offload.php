@@ -113,8 +113,6 @@ class RP_S3_Offload extends ResponsivePics
 	 * @return bool
 	 */
 	public static function file_exists($id, $file) {
-		syslog(LOG_DEBUG, 'file_exists s3: ' . $file['path']);
-
 		// Not an s3 url so it won't exist on S3
 		if (strpos($file['path'], 's3') !== 0) {
 			return false;
@@ -130,6 +128,9 @@ class RP_S3_Offload extends ResponsivePics
 			$as3cf_item    = Media_Library_Item::get_by_source_id($id);
 			$size          = $file['width'] .'x'. $file['height'];
 			$as3cf_objects = $as3cf_item ? $as3cf_item->objects() : null;
+
+			syslog(LOG_DEBUG, 's3 size: '. $size . ' file: ' . json_encode($file) . ' s3 object: ' . json_encode($as3cf_objects));
+
 			$size_exists   = $as3cf_objects ? array_key_exists($size, $as3cf_objects) : false;
 			$file_exists   = $size_exists ? ($file['file'] === $as3cf_objects[$size]['source_file']) : false;
 
