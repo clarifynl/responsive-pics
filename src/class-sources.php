@@ -127,6 +127,7 @@ class RP_Sources extends ResponsivePics
 	 * @param int     $height       The requested image height
 	 * @param array   $crop         The requested image crop positions
 	 * @param float   $ratio        The requested image ratio
+	 * @param uri     $rest_route   The original WP REST API request
 	 *
 	 * @return uri final resized image url
 	 */
