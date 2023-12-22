@@ -495,7 +495,19 @@ class RP_Process extends ResponsivePics
 		];
 	}
 
-	// process the scheduled resize action
+	/**
+	 * Process the scheduled resize action
+	 *
+	 * @param int        $id           The attachment ID.
+	 * @param int        $quality      The requested image quality
+	 * @param int        $width.       The requested image width
+	 * @param int        $height       The requested image height
+	 * @param bool|array $crop         The requested image crop
+	 * @param string     $resize_path  The requested image file path
+	 * @param uri        $rest_route   The original WP REST API request
+	 *
+	 * @return void
+	 */
 	public static function process_resize_request($id, $quality, $width, $height, $crop, $ratio, $resize_path, $rest_route = '') {
 		$file_path = get_attached_file($id);
 		$meta_data = wp_get_attachment_metadata($id);
@@ -526,6 +538,7 @@ class RP_Process extends ResponsivePics
 
 				// Save & offload resized/cropped file
 				$saved_file = $wp_editor->save($resize_path);
+
 				if (!is_wp_error($saved_file)) {
 					do_action('responsive_pics_file_saved_local', $id, $saved_file);
 
