@@ -7,6 +7,9 @@ use DeliciousBrains\WP_Offload_Media\Items\Remove_Provider_Handler;
 
 class RP_S3_Offload extends ResponsivePics
 {
+	/**
+	 * S3 Offload constructor
+	 */
 	public function __construct() {
 		add_filter('responsive_pics_file_exists', [$this, 'file_exists'], 5, 2);
 	}
@@ -110,8 +113,10 @@ class RP_S3_Offload extends ResponsivePics
 	 * @return bool
 	 */
 	public static function file_exists($id, $file) {
+		syslog(LOG_DEBUG, 'file_exists s3: ' . $file['path']);
+
 		// Not an s3 url so it won't exist on S3
-		if (strpos($file['path'], "s3") !== 0) {
+		if (strpos($file['path'], 's3') !== 0) {
 			return false;
 		}
 
@@ -124,6 +129,8 @@ class RP_S3_Offload extends ResponsivePics
 			Media_Library_Item::init_cache();
 			$as3cf_item = Media_Library_Item::get_by_source_id($id);
 			$size = $file['width'] .'x'. $file['height'];
+
+			syslog(LOG_DEBUG, 'file_exists s3 size: ' . $size . ' as3cf_item: ' . json_encode($as3cf_item));
 
 			return $as3cf_item && array_key_exists($size, $as3cf_item->objects());
 		}
