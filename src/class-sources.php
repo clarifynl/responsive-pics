@@ -199,8 +199,6 @@ class RP_Sources extends ResponsivePics
 	 * @return bool
 	 */
 	public static function file_exists($id, $file) {
-		syslog(LOG_DEBUG, 'file: ' . $file['path'] . ' exists: ' . file_exists($file['path']));
-
 		return isset($file['path']) && file_exists($file['path']);
 	}
 }
