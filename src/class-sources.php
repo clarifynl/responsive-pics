@@ -2,8 +2,16 @@
 
 class RP_Sources extends ResponsivePics
 {
-
-	// returns a normalized array of available sources
+	/**
+	 * Returns a normalized array of available sources
+	 *
+	 * @param int     $id           The wordpress attachment id
+	 * @param array   $rules        The requested image resize rules
+	 * @param string  $order        The order of the image sources
+	 * @param uri     $rest_route   The original WP REST API request
+	 *
+	 * @return array  The image sources to process
+	 */
 	public function get_resize_sources($id, $rules = null, $order = 'desc', $rest_route = null) {
 		$image_url       = wp_get_attachment_url($id);
 		$image_path      = get_attached_file($id);
@@ -125,7 +133,8 @@ class RP_Sources extends ResponsivePics
 	public function get_resized_url($id, $file_path, $original_url, $width, $height, $crop, $ratio = 1, $rest_route = null) {
 		$path_parts        = pathinfo($file_path);
 		$suffix            = ResponsivePics()->helpers->get_resized_suffix($width, $height, $ratio, $crop);
-		$resized_file_path = join(DIRECTORY_SEPARATOR, [$path_parts['dirname'], $path_parts['filename'] . '-' . $suffix . '.' . $path_parts['extension']]);
+		$resized_file_name = $path_parts['filename'] . '-' . $suffix . '.' . $path_parts['extension'];
+		$resized_file_path = join(DIRECTORY_SEPARATOR, [$path_parts['dirname'], $resized_file_name]);
 		$resized_url       = join(DIRECTORY_SEPARATOR, [dirname($original_url), basename($resized_file_path)]);
 		$resize_request    = [
 			'id'         => (int) $id,
@@ -140,12 +149,26 @@ class RP_Sources extends ResponsivePics
 
 		// Get legacy file path
 		$suffix_legacy            = ResponsivePics()->helpers->get_resized_suffix_legacy($width, $height, $ratio, $crop);
+		$resized_file_name_legacy = $path_parts['filename'] . '-' . $suffix_legacy . '.' . $path_parts['extension'];
 		$resized_file_path_legacy = join(DIRECTORY_SEPARATOR, [$path_parts['dirname'], $path_parts['filename'] . '-' . $suffix_legacy . '.' . $path_parts['extension']]);
 		$resized_url_legacy       = join(DIRECTORY_SEPARATOR, [dirname($original_url), basename($resized_file_path_legacy)]);
 
 		// if image size does not exist yet as filename (or as legacy filename)
-		if (!file_exists($resized_file_path) &&
-			!file_exists($resized_file_path_legacy)) {
+		$resized_file_exists = apply_filters('responsive_pics_file_exists', $id, [
+			'path'   => $resized_file_path,
+			'file'   => $resized_file_name,
+			'width'  => $resize_request['width'],
+			'height' => $resize_request['height']
+		]);
+
+		$resized_file_exists_legacy = apply_filters('responsive_pics_file_exists', $id, [
+			'path'   => $resized_file_path_legacy,
+			'file'   => $resized_file_name_legacy,
+			'width'  => $resize_request['width'],
+			'height' => $resize_request['height']
+		]);
+
+		if (!$resized_file_exists && !$resized_file_exists_legacy) {
 			$is_pending = ResponsivePics()->helpers->is_scheduled_action($resize_request, $id);
 
 			// if image size is not a pending request
@@ -155,12 +178,26 @@ class RP_Sources extends ResponsivePics
 			}
 
 			return;
+
 		// new crop suffix
-		} elseif (file_exists($resized_file_path)) {
+		} elseif ($resized_file_exists) {
 			return esc_url($resized_url);
+
 		// legacy crop suffix
-		} elseif (file_exists($resized_file_path_legacy)) {
+		} elseif ($resized_file_exists_legacy) {
 			return esc_url($resized_url_legacy);
 		}
+	}
+
+	/**
+	 * Check if a file exists in the filesystem.
+	 *
+	 * @param int    $id    The attachment ID.
+	 * @param array  $file  The file array to check.
+	 *
+	 * @return bool
+	 */
+	public static function file_exists($id, $file) {
+		return isset($file['path']) && file_exists($file['path']);
 	}
 }

@@ -101,11 +101,12 @@ class ResponsivePics
 		}
 
 		// Hooks
-		add_action('as3cf_init',               ['ResponsivePics', 'as3cf_init']);
-		add_action('delete_attachment',        ['RP_Process', 'process_delete_attachment'], 10, 2);
-		add_action('process_resize_request',   ['RP_Process', 'process_resize_request'], 10, 8);
-		add_action('rest_api_init',            ['RP_Rest_Api', 'register_api_routes']);
-		add_filter('big_image_size_threshold', '__return_false');
+		add_action('as3cf_init',                  ['ResponsivePics', 'as3cf_init']);
+		add_action('delete_attachment',           ['RP_Process',     'process_delete_attachment'], 10, 2);
+		add_action('process_resize_request',      ['RP_Process',     'process_resize_request'], 10, 8);
+		add_action('rest_api_init',               ['RP_Rest_Api',    'register_api_routes']);
+		add_filter('responsive_pics_file_exists', ['RP_Sources',     'file_exists'], 10, 3);
+		add_filter('big_image_size_threshold',    '__return_false');
 	}
 
 	// as3cf init

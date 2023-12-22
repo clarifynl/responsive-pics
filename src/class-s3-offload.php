@@ -7,11 +7,16 @@ use DeliciousBrains\WP_Offload_Media\Items\Remove_Provider_Handler;
 
 class RP_S3_Offload extends ResponsivePics
 {
+	public function __construct() {
+		add_filter('responsive_pics_file_exists', [$this, 'file_exists'], 5, 2);
+	}
+
 	/**
 	 * Upload to S3 storage
 	 */
 	public static function upload_image($id, $file = null) {
 		global $as3cf;
+
 		$s3_upload = null;
 
 		// Plugin version check
@@ -94,5 +99,36 @@ class RP_S3_Offload extends ResponsivePics
 		} else {
 			do_action('responsive_pics_file_s3_deleted', $id, $paths_to_remove);
 		}
+	}
+
+	/**
+	 * Check if file exists in S3 storage
+	 *
+	 * @param int    $id    The attachment ID.
+	 * @param array  $file  The file array to check.
+	 *
+	 * @return bool
+	 */
+	public static function file_exists($id, $file) {
+		// Not an s3 url so it won't exist on S3
+		if (strpos($file['path'], "s3") !== 0) {
+			return false;
+		}
+
+		// Check the Offload Media cache if the plugin version is greater than 2.5.5
+		if (version_compare(WP_OFFLOAD_MEDIA_VERSION, '2.5.5', '>')) {
+			// Stop default file_exists filter from running
+			remove_filter('responsive_pics_file_exists', ['RP_Sources', 'file_exists'], 10);
+
+			// Re-init item cache for making sure item contains recently added objects
+			Media_Library_Item::init_cache();
+			$as3cf_item = Media_Library_Item::get_by_source_id($id);
+			$size = $file['width'] .'x'. $file['height'];
+
+			return $as3cf_item && array_key_exists($size, $as3cf_item->objects());
+		}
+
+		// Doesn't exist in the Offload Media cache, let the default file_exists filter handle it
+		return false;
 	}
 }
