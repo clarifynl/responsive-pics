@@ -126,6 +126,16 @@ class RP_S3_Offload extends ResponsivePics
 			// Re-init item cache for making sure item contains recently added objects
 			Media_Library_Item::init_cache();
 			$as3cf_item    = Media_Library_Item::get_by_source_id($id);
+			$matches       = preg_match('/@([.][0-9]{3})x\.[a-zA-Z0-9]+$/', $file['file']);
+			$ratio         = 1;
+
+			if (!empty($matches) && isset($matches[1])) {
+				$ratio = $matches[1];
+			}
+
+			syslog(LOG_DEBUG, 'ratio: ' . $ratio);
+
+			// Calculate size
 			$size          = $file['width'] .'x'. $file['height'];
 			$as3cf_objects = $as3cf_item ? $as3cf_item->objects() : null;
 
