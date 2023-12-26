@@ -24,10 +24,7 @@ class RP_S3_Offload extends ResponsivePics
 
 		// Plugin version check
 		if (version_compare(WP_OFFLOAD_MEDIA_VERSION, '2.5.5', '>')) {
-			// Re-init item cache for making sure item contains recently added objects
-			Media_Library_Item::init_cache();
 			$as3cf_item  = Media_Library_Item::get_by_source_id($id);
-
 			$size        = $width .'x'. $height;
 			$source_file = $file['file'];
 
@@ -49,6 +46,8 @@ class RP_S3_Offload extends ResponsivePics
 				$upload_handler = $as3cf->get_item_handler(Upload_Handler::get_item_handler_key_name());
 				$s3_upload      = $upload_handler->handle($as3cf_item);
 
+				// Re-init item cache
+				Media_Library_Item::init_cache();
 				do_action('responsive_pics_file_s3_uploaded', $id, $file);
 			}
 		} else {
@@ -123,8 +122,7 @@ class RP_S3_Offload extends ResponsivePics
 			// Stop default file_exists filter from running
 			remove_filter('responsive_pics_file_exists', ['RP_Sources', 'file_exists'], 10);
 
-			// Re-init item cache for making sure item contains recently added objects
-			Media_Library_Item::init_cache();
+			// Get item object & file dimensions
 			$as3cf_item    = Media_Library_Item::get_by_source_id($id);
 			$ratio         = (int) $file['ratio'];
 			$width         = (int) $file['width'];
