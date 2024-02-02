@@ -516,7 +516,15 @@ class RP_Process extends ResponsivePics
 		do_action('responsive_pics_request_processed', $id, $quality, $width, $height, $crop, $ratio, $resize_path, $rest_route);
 
 		// Check if image exists
-		if (!file_exists($resize_path)) {
+		$resized_file_exists = apply_filters('responsive_pics_file_exists', $id, [
+			'path'   => $file_path,
+			'file'   => basename($resize_path),
+			'width'  => $width,
+			'height' => $height,
+			'ratio'  => $ratio,
+	        ]);
+
+		if (!$resized_file_exists) {
 			if (!is_wp_error($wp_editor)) {
 				$wp_editor->set_quality($quality);
 
