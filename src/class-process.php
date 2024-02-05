@@ -522,7 +522,7 @@ class RP_Process extends ResponsivePics
 			'width'  => $width,
 			'height' => $height,
 			'ratio'  => $ratio,
-	        ]);
+		]);
 
 		if (!$resized_file_exists) {
 			if (!is_wp_error($wp_editor)) {
