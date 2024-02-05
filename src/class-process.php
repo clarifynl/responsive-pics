@@ -498,7 +498,7 @@ class RP_Process extends ResponsivePics
 	/**
 	 * Process the scheduled resize action
 	 *
-	 * @param int        $id           The attachment ID.
+	 * @param int        $id           The attachment ID
 	 * @param int        $quality      The requested image quality
 	 * @param int        $width.       The requested image width
 	 * @param int        $height       The requested image height
@@ -556,7 +556,14 @@ class RP_Process extends ResponsivePics
 		}
 	}
 
-	// process deleting all resized images
+	/**
+	 * Process deleting all resized images
+	 *
+	 * @param int         $post_id     The attachment post ID
+	 * @param object      $post        The attachment post object
+	 *
+	 * @return void
+	 */
 	public static function process_delete_attachment($post_id, $post) {
 		$file            = get_attached_file($post_id);
 		$meta            = wp_get_attachment_metadata($post_id);
