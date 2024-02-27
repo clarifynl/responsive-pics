@@ -2,7 +2,6 @@
 
 class RP_Process extends ResponsivePics
 {
-
 	/**
 	 * Validates and returns the image id
 	 */
@@ -517,7 +516,7 @@ class RP_Process extends ResponsivePics
 
 		// Check if image exists
 		$resized_file_exists = apply_filters('responsive_pics_file_exists', $id, [
-			'path'   => $file_path,
+			'path'   => $resize_path,
 			'file'   => basename($resize_path),
 			'width'  => $width,
 			'height' => $height,
