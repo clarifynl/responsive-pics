@@ -115,7 +115,7 @@ class Enqueue {
 		$this->rootPath = $filepath;
 		$this->rootUrl = $url;
 		// wp_head is done before printing any script or style tag
-		\add_action( 'wp_head', [ $this, 'printPublicPath' ], -1000 );
+		// \add_action( 'wp_head', [ $this, 'printPublicPath' ], -1000 );
 		// in case of admin, styles and scripts are printed before admin_head
 		// so we use admin_print_scripts
 		\add_action( 'admin_print_scripts', [ $this, 'printPublicPath' ], -1000 );
