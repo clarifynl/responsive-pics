@@ -3,11 +3,11 @@
  * ResponsivePics
  * 
  * @author Clarify
- * @version 1.8.3
+ * @version 1.8.4
  * @link https://responsive.pics
  * @license UNLICENSED
  * 
- * Copyright (c) 2024 Clarify
+ * Copyright (c) 2025 Clarify
  * 
  * This software is released under the UNLICENSED License
  * https://opensource.org/licenses/UNLICENSED
