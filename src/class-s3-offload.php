@@ -114,7 +114,7 @@ class RP_S3_Offload extends ResponsivePics
 	public static function file_exists($id, $file) {
 		// Not an s3 url so it won't exist on S3
 		if (strpos($file['path'], 's3') !== 0) {
-			return false;
+			return ResponsivePics()->sources->file_exists($id, $file);
 		}
 
 		// Check the Offload Media cache if the plugin version is greater than 2.5.5
@@ -138,6 +138,6 @@ class RP_S3_Offload extends ResponsivePics
 		}
 
 		// Doesn't exist in the Offload Media cache, let the default file_exists filter handle it
-		return false;
+		return ResponsivePics()->sources->file_exists($id, $file);
 	}
 }

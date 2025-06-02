@@ -314,7 +314,7 @@ class ResponsivePics
 			$definition['animated'])
 		{
 			$original_src = wp_get_attachment_image_src($id, 'original');
-			$image_html   = sprintf('<img%s %s="%s"%s alt="%s"/>', $classes, $src_attr, $original_src[0], $loading_attr, $definition['alt']);
+			$image_html   = sprintf('<img%s %s="%s"%s width="%d" height="%d" alt="%s"/>', $classes, $src_attr, $original_src[0], $loading_attr, $original_src[1], $original_src[2], $definition['alt']);
 
 			return $image_html;
 		}
@@ -322,10 +322,19 @@ class ResponsivePics
 		// add all sources & sizes
 		$srcsets  = [];
 		$sizes    = [];
-		$src      = $lqip_img ? ' src="'. $lqip_img . '"' : '';
+		$src      = '';
 
 		// start constructing <img> element
 		$sources = isset($definition['sources']) ? $definition['sources'] : [];
+		$alt     = (isset($definition['alt']) && $definition['alt']) ? ' alt="'. $definition['alt'] .'"' : '';
+		$width   = isset($sources[0]['width']) ? ' width="'. $sources[0]['width'] .'"' : '';
+		$height  = isset($sources[0]['height']) ? ' height="'. $sources[0]['height'] .'"' : '';
+
+		if ($lqip_img) {
+			$src    = isset($lqip_img['source1x']) ? ' src="'. $lqip_img['source1x'] . '"' : '';
+			$width  = isset($lqip_img['width']) ? ' width="'. $lqip_img['width'] .'"' : '';
+			$height = isset($lqip_img['height']) ? ' height="'. $lqip_img['height'] .'"' : '';
+		}
 
 		foreach ($sources as $source) {
 			$srcsets[] = $source['source1x'] . ' ' . $source['width'] . 'w';
@@ -345,7 +354,7 @@ class ResponsivePics
 		$sizes[] = '100vw';
 
 		// construct image
-		$image_html = sprintf('<img%s %s="%s" sizes="%s"%s%s alt="%s"/>', $classes, $src_attr, implode(', ', $srcsets), implode(', ', $sizes), $src, $loading_attr, $definition['alt']);
+		$image_html = sprintf('<img%s %s="%s" sizes="%s"%s%s%s%s alt="%s"/>', $classes, $src_attr, implode(', ', $srcsets), implode(', ', $sizes), $src, $loading_attr, $width, $height, $definition['alt']);
 
 		return $image_html;
 	}
@@ -408,8 +417,7 @@ class ResponsivePics
 			$img_classes[]      = self::$lqip_class;
 			$lqip_sizes         = ResponsivePics()->process->process_sizes($id, '0:' . self::$lqip_width, 'desc', false, $crop, $rest_route);
 			$lqip_sources       = isset($lqip_sizes['sources']) ? $lqip_sizes['sources'] : [];
-			$lqip_img           = isset($lqip_sources[0]['source1x']) ? $lqip_sources[0]['source1x'] : null;
-			$definition['lqip'] = $lqip_img;
+			$definition['lqip'] = isset($lqip_sources[0]) ? $lqip_sources[0] : null;
 		}
 
 		$definition['classes'] = $img_classes;
