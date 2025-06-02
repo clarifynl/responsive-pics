@@ -473,18 +473,21 @@ class ResponsivePics
 		$sources = isset($definition['sources']) ? $definition['sources'] : [];
 
 		foreach ($sources as $source) {
+			$breakpoint       = isset($source['breakpoint']) ? $source['breakpoint'] : null;
 			$data_aspectratio = ($intrinsic && isset($source['ratio'])) ? ' data-aspectratio="' . $source['ratio'] . '"' : '';
+			$source_height    = isset($source['height']) ? ' height="' . $source['height'] . '"' : '';
+			$source_width     = isset($source['width']) ? ' width="' . $source['width'] . '"' : '';
 
-			if (isset($source['breakpoint'])) {
+			if ($breakpoint) {
 				$urls = $source['source1x'];
 
 				if (isset($source['source2x'])) {
 					$urls .= ' 1x, ' . $source['source2x'] . ' 2x';
 				}
 
-				$picture[] = sprintf('  <source media="(min-width: %spx)" %s="%s"%s />', $source['breakpoint'], $src_attr, $urls, $data_aspectratio);
+				$picture[] = sprintf('  <source media="(min-width: %spx)" %s="%s"%s%s%s />', $breakpoint, $src_attr, $urls, $source_height, $source_width, $data_aspectratio);
 			} else {
-				$picture[] = sprintf('  <source %s="%s"%s />', $src_attr, $source['source1x'], $data_aspectratio);
+				$picture[] = sprintf('  <source %s="%s"%s%s%s />', $src_attr, $source['source1x'], $source_height, $source_width, $data_aspectratio);
 			}
 		}
 
