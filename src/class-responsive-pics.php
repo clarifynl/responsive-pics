@@ -354,7 +354,7 @@ class ResponsivePics
 		$sizes[] = '100vw';
 
 		// construct image
-		$image_html = sprintf('<img%s %s="%s" sizes="%s"%s%s%s%s alt="%s"/>', $classes, $src_attr, implode(', ', $srcsets), implode(', ', $sizes), $src, $loading_attr, $width, $height, $definition['alt']);
+		$image_html = sprintf('<img%s %s="%s" sizes="%s"%s%s%s%s%s/>', $classes, $src_attr, implode(', ', $srcsets), implode(', ', $sizes), $src, $loading_attr, $width, $height, $alt);
 
 		return $image_html;
 	}
@@ -452,6 +452,7 @@ class ResponsivePics
 		}
 
 		// get data
+		$alt             = (isset($definition['alt']) && $definition['alt']) ? ' alt="'. $definition['alt'] .'"' : '';
 		$lazyload        = isset($definition['lazyload']) ? $definition['lazyload'] : false;
 		$intrinsic       = isset($definition['intrinsic']) ? $definition['intrinsic'] : false;
 		$picture_classes = isset($definition['picture_classes']) ? $definition['picture_classes'] : null;
@@ -490,7 +491,7 @@ class ResponsivePics
 		// transparent gif
 		$style     = $intrinsic ? ' style="width:100%;"' : '';
 		$ratio     = $intrinsic ? ' data-aspectratio=""' : '';
-		$picture[] = sprintf('  <img src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="%s alt="%s"%s%s%s />', $ratio, $definition['alt'], $loading_attr, $img_class, $style);
+		$picture[] = sprintf('  <img src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="%s%s%s%s%s />', $ratio, $alt, $loading_attr, $img_class, $style);
 		$picture[] = '</picture>';
 
 		return implode("\n", $picture) . "\n";
