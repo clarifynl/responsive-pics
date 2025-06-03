@@ -494,7 +494,7 @@ class ResponsivePics
 		// transparent gif
 		$style     = $intrinsic ? ' style="width:100%;"' : '';
 		$ratio     = $intrinsic ? ' data-aspectratio=""' : '';
-		$picture[] = sprintf('  <img src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" height="1" width="1"%s%s%s%s%s />', $ratio, $alt, $loading_attr, $img_class, $style);
+		$picture[] = sprintf('  <img src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="%s%s%s%s%s />', $ratio, $alt, $loading_attr, $img_class, $style);
 		$picture[] = '</picture>';
 
 		return implode("\n", $picture) . "\n";
