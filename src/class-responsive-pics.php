@@ -315,8 +315,8 @@ class ResponsivePics
 		{
 			$original_src = wp_get_attachment_image_src($id, 'original');
 			$alt          = (isset($definition['alt']) && $definition['alt']) ? ' alt="'. $definition['alt'] .'"' : '';
-			$width        = isset($original_src[1] && $original_src[1]) ? ' width="'. $original_src[1] .'"' : '';
-			$height       = isset($original_src[2] && $original_src[2]) ? ' height="'. $original_src[2] .'"' : '';
+			$width        = (isset($original_src[1]) && $original_src[1]) ? ' width="'. $original_src[1] .'"' : '';
+			$height       = (isset($original_src[2]) && $original_src[2]) ? ' height="'. $original_src[2] .'"' : '';
 			$image_html   = sprintf('<img%s %s="%s"%s%s%s%s/>', $classes, $src_attr, $original_src[0], $loading_attr, $width, $height, $alt);
 
 			return $image_html;
