@@ -445,9 +445,10 @@ class ResponsivePics
 	 *
 	 * @return (string) <picture> element as html markup
 	 */
-	public static function get_picture($id = null, $sizes = null, $picture_classes = null, $lazyload = false, $intrinsic = false, $rest_route = null) {
+	public static function get_picture($id = null, $sizes = null, $picture_classes = null, $lazyload = false, $intrinsic = false, $img_classes = null, $rest_route = null)
+	{
 		// get picture sources
-		$definition = self::get_picture_data($id, $sizes, $picture_classes, $lazyload, $intrinsic, $rest_route);
+		$definition = self::get_picture_data($id, $sizes, $picture_classes, $lazyload, $intrinsic, $img_classes, $rest_route);
 
 		// check for errors
 		if (count(self::$wp_error->get_error_messages()) > 0) {
@@ -515,7 +516,8 @@ class ResponsivePics
 	 *
 	 * @return (array) responsive picture data
 	 */
-	public static function get_picture_data($id = null, $sizes = null, $picture_classes = null, $lazyload = false, $intrinsic = false, $rest_route = null) {
+	public static function get_picture_data($id = null, $sizes = null, $picture_classes = null, $lazyload = false, $intrinsic = false, $img_classes = null, $rest_route = null)
+	{
 		// init WP_Error
 		self::$wp_error = new WP_Error();
 
@@ -543,8 +545,14 @@ class ResponsivePics
 			$definition['lazyload'] = $lazyload;
 		}
 
+		// check for valid classes value
+		if ($img_classes) {
+			$img_classes = ResponsivePics()->process->process_classes($img_classes);
+		} else {
+			$img_classes = [];
+		}
+
 		// lazyload option
-		$img_classes = [];
 		if ($lazyload && !$lazy_native) {
 			$img_classes[] = self::$lazyload_class;
 		}
