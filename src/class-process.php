@@ -109,6 +109,9 @@ class RP_Process extends ResponsivePics
 
 	/**
 	 * Validates and returns classes as an array
+	 *
+	 * @param array|string|null $classes
+	 * @return array
 	 */
 	public function process_classes($classes = null) {
 		if (!is_array($classes) && !is_string($classes)) {
@@ -128,6 +131,10 @@ class RP_Process extends ResponsivePics
 
 	/**
 	 * Validates boolean values
+	 *
+	 * @param bool|string $boolean
+	 * @param string $type
+	 * @return bool
 	 */
 	public function process_boolean($boolean = false, $type = 'boolean') {
 		if (is_bool($boolean)) {

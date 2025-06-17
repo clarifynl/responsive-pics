@@ -212,12 +212,12 @@ For inserting a responsive `<img>` element in your template, use the `get_image`
 
 #### PHP
 ```php
-ResponsivePics::get_image(id, sizes, crop, classes, lazyload, lqip);
+ResponsivePics::get_image(id, sizes, crop, classes, lazyload, lqip, decorative);
 ```
 
 #### REST API
 ```curl
-GET /wp-json/responsive-pics/v1/image/<id>?sizes=<sizes>&crop=<crop>&classes=<classes>&lazyload=<lazyload>&lqip=<lqip>
+GET /wp-json/responsive-pics/v1/image/<id>?sizes=<sizes>&crop=<crop>&classes=<classes>&lazyload=<lazyload>&lqip=<lqip>&decorative=<decorative>
 ```
 
 #### Image Parameters
@@ -228,33 +228,35 @@ GET /wp-json/responsive-pics/v1/image/<id>?sizes=<sizes>&crop=<crop>&classes=<cl
 | sizes      | string           | yes      |          | A comma-separated string of preferred image sizes (e.g. `'xs-12, sm-6, md-4, lg-3'`). See the [Sizes section](#sizes) for more information.
 | crop       | number/string    | optional | `false`  | A crop-factor of the width for the desired height within the default range of `0-2` (e.g. `0.75`) with (optional) crop positions (e.g. <code>0.75&#124;c t</code>). See the [Cropping section](#cropping) for more information.
 | classes    | string           | optional | `null`   | A comma-separated string of additional CSS classes you want to add to the img element (e.g. `'my_img_class'` or `'my_img_class, my_second_img_class'`).
-| lazyload   | boolean/string   | optional | `false`  | When `true` enables `lazyload` classes and data-srcset attributes.  When `native` enables native `loading="lazy"` attribute. See the [Lazyloading section](#lazyloading) for more information.
+| lazyload   | boolean/string   | optional | `false`  | When `true` enables `lazyload` classes and data-srcset attributes. When `native` enables native `loading="lazy"` attribute. See the [Lazyloading section](#lazyloading) for more information.
 | lqip       | boolean          | optional | `false`  | When `true` enables `LQIP` classes and src attribute. See the [LQIP section](#lqip) for more information.
+| decorative | boolean          | optional | `false`  | When `true` the image will be treated as a [decorative image](https://www.w3.org/WAI/tutorials/images/decorative/) and an empty `alt` attribute will be added.
 
 ### Image Data
-For retrieving the responsive `<img>` data in your theme, you can use the `get_image_data` function or the `responsive-pics/v1/image-data` API endpoint with the available parameters `id`, `sizes`, `crop`, `classes`, `lazyload` and `lqip`.
+For retrieving the responsive `<img>` data in your theme, you can use the `get_image_data` function or the `responsive-pics/v1/image-data` API endpoint with the available parameters `id`, `sizes`, `crop`, `classes`, `lazyload`, `lqip` and `decorative`.
 
 #### PHP
 ```php
-ResponsivePics::get_image_data(id, sizes, crop, classes, lazyload, lqip);
+ResponsivePics::get_image_data(id, sizes, crop, classes, lazyload, lqip, decorative);
 ```
 
 #### REST API
 ```curl
-GET /wp-json/responsive-pics/v1/image-data/<id>?sizes=<sizes>&crop=<crop>&classes=<classes>&lazyload=<lazyload>&lqip=<lqip>
+GET /wp-json/responsive-pics/v1/image-data/<id>?sizes=<sizes>&crop=<crop>&classes=<classes>&lazyload=<lazyload>&lqip=<lqip>&decorative=<decorative>
 ```
 
-This will return an array containing the available image sources per breakpoint, alt text, mime type, boolean values for alpha channel and lazyload, an url for the lqip image and an array for the css classes.
+This will return an array containing the available image sources per breakpoint, alt text, mime type, boolean values for alpha channel, lazyload and decorative, an url for the lqip image and an array for the css picture classes.
 
 ```php
 [
-  'sources'  => (array)  $sources,
-  'alt'      => (string) $alt,
-  'mimetype' => (string) $mime_type,
-  'alpha'    => (bool)   $alpha,
-  'lazyload' => (bool)   $lazyload,
-  'lqip'     => (string) $lqip,
-  'classes'  => (array)  $classes
+  'alpha'       => (bool)   $alpha,
+  'alt'         => (string) $alt,
+  'classes'     => (array)  $classes,
+  'decorative'  => (bool)   $decorative,
+  'lazyload'    => (bool)   $lazyload,
+  'lqip'        => (string) $lqip,
+  'mimetype'    => (string) $mime_type,
+  'sources'     => (array)  $sources
 ];
 ```
 
@@ -264,45 +266,47 @@ For inserting a responsive `<picture>` element in your template, use the `get_pi
 
 #### PHP
 ```php
-ResponsivePics::get_picture(id, sizes, classes, lazyload, intrinsic);
+ResponsivePics::get_picture(id, sizes, classes, lazyload, intrinsic, img_classes);
 ```
 
 #### REST API
 ```curl
-GET /wp-json/responsive-pics/v1/picture/<id>?sizes=<sizes>&classes=<classes>&lazyload=<lazyload>&intrinsic=<intrinsic>
+GET /wp-json/responsive-pics/v1/picture/<id>?sizes=<sizes>&classes=<classes>&lazyload=<lazyload>&intrinsic=<intrinsic>&img_classes=<img_classes>
 ```
 
 #### Picture Parameters
 
-| Parameter  | Type           | Required | Default  | Definition
-| ---------- | -------------- | -------- | -------- | --------------------------------
-| id         | number         | yes      |          | The WordPress image id (e.g. 1).
-| sizes      | string         | yes      |          | A comma-separated string of preferred image sizes (e.g. `'xs-12, sm-6, md-4, lg-3'`). See the [Sizes section](#sizes) for more information.
-| classes    | string         | optional | `null`   | A comma-separated string of additional CSS classes you want to add to the picture element (e.g. `'my_picture_class'` or `'my_picture_class, my_second_picture_class'`).
-| lazyload   | boolean/string | optional | `false`  | When `true` enables `lazyload` classes and data-srcset attributes. When `native` enables native `loading="lazy"` attribute. See the [Lazyloading section](#lazyloading) for more information.
-| intrinsic  | boolean        | optional | `false`  | When `true` enables `intrinsic` classes and data-aspectratio attributes. See the [Intrinsic Aspectratio section](#intrinsic) for more information.
+| Parameter   | Type           | Required | Default  | Definition
+| ----------- | -------------- | -------- | -------- | --------------------------------
+| id          | number         | yes      |          | The WordPress image id (e.g. 1).
+| sizes       | string         | yes      |          | A comma-separated string of preferred image sizes (e.g. `'xs-12, sm-6, md-4, lg-3'`). See the [Sizes section](#sizes) for more information.
+| classes     | string/array   | optional | `null`   | A comma-separated string or array of additional CSS classes you want to add to the picture element (e.g. `'my_picture_class'` or `'my_picture_class, my_second_picture_class'`).
+| lazyload    | boolean/string | optional | `false`  | When `true` enables `lazyload` classes and data-srcset attributes. When `native` enables native `loading="lazy"` attribute. See the [Lazyloading section](#lazyloading) for more information.
+| intrinsic   | boolean        | optional | `false`  | When `true` enables `intrinsic` classes and data-aspectratio attributes. See the [Intrinsic Aspectratio section](#intrinsic) for more information.
+| img_classes | string/array   | optional | `null`   | A comma-separated string or array of additional CSS classes you want to add to the picture's img element (e.g. `'my_image_class'` or `'my_image_class, my_second_image_class'`).
 
 ### Picture Data
-For retrieving the responsive `<picture>` data in your theme, you can use the `get_picture_data` function or the `responsive-pics/v1/picture-data` API endpoint with the available parameters `id`, `sizes`, `classes`, `lazyload` and `intrinsic`.
+For retrieving the responsive `<picture>` data in your theme, you can use the `get_picture_data` function or the `responsive-pics/v1/picture-data` API endpoint with the available parameters `id`, `sizes`, `classes`, `lazyload`, `intrinsic` and `img_classes`.
 
 #### PHP
 ```php
-ResponsivePics::get_picture_data(id, sizes, classes, lazyload, intrinsic);
+ResponsivePics::get_picture_data(id, sizes, classes, lazyload, intrinsic, img_classes);
 ```
 
 #### REST API
 ```curl
-GET /wp-json/responsive-pics/v1/picture-data/<id>?sizes=<sizes>&classes=<classes>&lazyload=<lazyload>&intrinsic=<intrinsic>
+GET /wp-json/responsive-pics/v1/picture-data/<id>?sizes=<sizes>&classes=<classes>&lazyload=<lazyload>&intrinsic=<intrinsic>&img_classes=<img_classes>
 ```
 
-This will return an array containing the available picture sources per breakpoint, alt text, mime type, boolean values for alpha channel and intrinsic, an array for the picture css classes and an array for the img css classes.
+This will return an array containing the available picture sources per breakpoint, alt text, mime type, boolean values for animated, alpha channel and intrinsic, an array for the picture css classes and an array for the img css classes.
 
 ```php
 [
-  'sources'         => (array)  $sources,
-  'alt'             => (string) $alt,
-  'mimetype'        => (string) $mime_type,
   'alpha'           => (bool)   $alpha,
+  'alt'             => (string) $alt,
+  'animated'        => (bool)   $animated,
+  'mimetype'        => (string) $mime_type,
+  'sources'         => (array)  $sources,
   'lazyload'        => (bool)   $lazyload,
   'intrinsic'       => (bool)   $intrinsic,
   'picture_classes' => (array)  $picture_classes,

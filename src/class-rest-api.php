@@ -131,10 +131,11 @@ class RP_Rest_Api extends ResponsivePics
 		$crop         = isset($params['crop']) ? urldecode($params['crop']) : null;
 		$lazyload     = isset($params['lazyload']) ? ($params['lazyload'] === 'true') : null;
 		$lqip         = isset($params['lqip']) ? ($params['lqip'] === 'true') : null;
+		$decorative   = isset($params['decorative']) ? ($params['decorative'] === 'true') : null;
 
 		if (class_exists('ResponsivePics')) {
 			if ($sizes) {
-				$image  = ResponsivePics::get_image($id, $sizes, $crop, $classes, $lazyload, $lqip, $route_url);
+				$image  = ResponsivePics::get_image($id, $sizes, $crop, $classes, $lazyload, $lqip, $decorative, $route_url);
 
 				// Check for errors
 				if (is_wp_error($image)) {
@@ -174,16 +175,17 @@ class RP_Rest_Api extends ResponsivePics
 		$route_url    = $query_string ? $route .'?'. $query_string : $route;
 
 		// Decode Parameters
-		$id       = isset($request['id']) ? $request['id'] : null;
-		$sizes    = isset($params['sizes']) ? urldecode($params['sizes']) : null;
-		$crop     = isset($params['crop']) ? urldecode($params['crop']) : null;
-		$classes  = isset($params['classes']) ? urldecode($params['classes']) : null;
-		$lazyload = isset($params['lazyload']) ? urldecode($params['lazyload']) : false;
-		$lqip     = isset($params['lqip']) ? urldecode($params['lqip']) : false;
+		$id         = isset($request['id']) ? $request['id'] : null;
+		$sizes      = isset($params['sizes']) ? urldecode($params['sizes']) : null;
+		$crop       = isset($params['crop']) ? urldecode($params['crop']) : null;
+		$classes    = isset($params['classes']) ? urldecode($params['classes']) : null;
+		$lazyload   = isset($params['lazyload']) ? ($params['lazyload'] === 'true') : null;
+		$lqip       = isset($params['lqip']) ? ($params['lqip'] === 'true') : null;
+		$decorative = isset($params['decorative']) ? ($params['decorative'] === 'true') : null;
 
 		if (class_exists('ResponsivePics')) {
 			if ($sizes) {
-				$data = ResponsivePics::get_image_data($id, $sizes, $crop, $classes, $lazyload, $lqip, $route_url);
+				$data = ResponsivePics::get_image_data($id, $sizes, $crop, $classes, $lazyload, $lqip, $decorative, $route_url);
 
 				// Check for errors
 				if (is_wp_error($data)) {
@@ -227,10 +229,11 @@ class RP_Rest_Api extends ResponsivePics
 		$classes      = isset($params['classes']) ? urldecode($params['classes']) : null;
 		$lazyload     = isset($params['lazyload']) ? ($params['lazyload'] === 'true') : null;
 		$intrinsic    = isset($params['intrinsic']) ? ($params['intrinsic'] === 'true') : null;
+		$img_classes  = isset($params['img_classes']) ? urldecode($params['img_classes']) : null;
 
 		if (class_exists('ResponsivePics')) {
 			if ($sizes) {
-				$picture = ResponsivePics::get_picture($id, $sizes, $classes, $lazyload, $intrinsic, $route_url);
+				$picture = ResponsivePics::get_picture($id, $sizes, $classes, $lazyload, $intrinsic, $img_classes, $route_url);
 
 				// Check for errors
 				if (is_wp_error($picture)) {
@@ -274,10 +277,11 @@ class RP_Rest_Api extends ResponsivePics
 		$classes      = isset($params['classes']) ? urldecode($params['classes']) : null;
 		$lazyload     = isset($params['lazyload']) ? ($params['lazyload'] === 'true') : null;
 		$intrinsic    = isset($params['intrinsic']) ? ($params['intrinsic'] === 'true') : null;
+		$img_classes  = isset($params['img_classes']) ? urldecode($params['img_classes']) : null;
 
 		if (class_exists('ResponsivePics')) {
 			if ($sizes) {
-				$data = ResponsivePics::get_picture_data($id, $sizes, $classes, $lazyload, $intrinsic, $route_url);
+				$data = ResponsivePics::get_picture_data($id, $sizes, $classes, $lazyload, $intrinsic, $img_classes, $route_url);
 
 				// Check for errors
 				if (is_wp_error($data)) {
