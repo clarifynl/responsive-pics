@@ -131,6 +131,10 @@ class RP_Process extends ResponsivePics
 
 	/**
 	 * Validates boolean values
+	 *
+	 * @param bool|string $boolean
+	 * @param string $type
+	 * @return bool
 	 */
 	public function process_boolean($boolean = false, $type = 'boolean') {
 		if (is_bool($boolean)) {
