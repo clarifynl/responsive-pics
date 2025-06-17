@@ -109,6 +109,9 @@ class RP_Process extends ResponsivePics
 
 	/**
 	 * Validates and returns classes as an array
+	 *
+	 * @param array|string|null $classes
+	 * @return array
 	 */
 	public function process_classes($classes = null) {
 		if (!is_array($classes) && !is_string($classes)) {
