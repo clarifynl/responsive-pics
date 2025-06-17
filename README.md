@@ -230,7 +230,7 @@ GET /wp-json/responsive-pics/v1/image/<id>?sizes=<sizes>&crop=<crop>&classes=<cl
 | classes    | string           | optional | `null`   | A comma-separated string of additional CSS classes you want to add to the img element (e.g. `'my_img_class'` or `'my_img_class, my_second_img_class'`).
 | lazyload   | boolean/string   | optional | `false`  | When `true` enables `lazyload` classes and data-srcset attributes. When `native` enables native `loading="lazy"` attribute. See the [Lazyloading section](#lazyloading) for more information.
 | lqip       | boolean          | optional | `false`  | When `true` enables `LQIP` classes and src attribute. See the [LQIP section](#lqip) for more information.
-| decorative | boolean          | optional | `false`  | When `true` the image will be treated as a [decorative image](https://www.w3.org/WAI/tutorials/images/decorative/) and an empty `alt` attribute will be added.
+| decorative | boolean          | optional | `false`  | When `true` the image will be treated as a [decorative image](https://www.w3.org/WAI/tutorials/images/decorative/) and an empty `alt` attribute will always be added.
 
 ### Image Data
 For retrieving the responsive `<img>` data in your theme, you can use the `get_image_data` function or the `responsive-pics/v1/image-data` API endpoint with the available parameters `id`, `sizes`, `crop`, `classes`, `lazyload`, `lqip` and `decorative`.
@@ -298,7 +298,7 @@ ResponsivePics::get_picture_data(id, sizes, classes, lazyload, intrinsic, img_cl
 GET /wp-json/responsive-pics/v1/picture-data/<id>?sizes=<sizes>&classes=<classes>&lazyload=<lazyload>&intrinsic=<intrinsic>&img_classes=<img_classes>
 ```
 
-This will return an array containing the available picture sources per breakpoint, alt text, mime type, boolean values for animated, alpha channel and intrinsic, an array for the picture css classes and an array for the img css classes.
+This will return an array containing the available picture sources per breakpoint, alt text, mime type, boolean values for alpha channel, animated, lazyload and intrinsic, an array for the picture css classes and an array for the img css classes.
 
 ```php
 [
