@@ -3,7 +3,7 @@
  * ResponsivePics
  * 
  * @author Clarify
- * @version 1.9.2
+ * @version 1.9.3
  * @link https://responsive.pics
  * @license UNLICENSED
  * 
