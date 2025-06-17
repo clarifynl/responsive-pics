@@ -286,13 +286,14 @@ class ResponsivePics
 	 * @param (string|array) $img_classes - requested image classes
 	 * @param (bool) $lazyload - lazyload option
 	 * @param (bool) $lqip - lqip option
+	 * @param (bool) $decorative - decorative image option
 	 * @param (string) $rest_route - rest route
 	 *
 	 * @return (string) <img> element as html markup
 	 */
-	public static function get_image($id = null, $sizes = null, $crop = false, $img_classes = null, $lazyload = false, $lqip = false, $rest_route = null) {
+	public static function get_image($id = null, $sizes = null, $crop = false, $img_classes = null, $lazyload = false, $lqip = false, $decorative = false, $rest_route = null) {
 		// get image sources
-		$definition = self::get_image_data($id, $sizes, $crop, $img_classes, $lazyload, $lqip, $rest_route);
+		$definition = self::get_image_data($id, $sizes, $crop, $img_classes, $lazyload, $lqip, $decorative, $rest_route);
 
 		// check for errors
 		if (count(self::$wp_error->get_error_messages()) > 0) {
@@ -314,7 +315,7 @@ class ResponsivePics
 			$definition['animated'])
 		{
 			$original_src = wp_get_attachment_image_src($id, 'original');
-			$alt          = (isset($definition['alt']) && $definition['alt']) ? ' alt="'. $definition['alt'] .'"' : '';
+			$alt          = ($decorative ? ' alt=""' : ((isset($definition['alt']) && $definition['alt']) ? ' alt="'. $definition['alt'] .'"' : '');
 			$width        = (isset($original_src[1]) && $original_src[1]) ? ' width="'. $original_src[1] .'"' : '';
 			$height       = (isset($original_src[2]) && $original_src[2]) ? ' height="'. $original_src[2] .'"' : '';
 			$image_html   = sprintf('<img%s %s="%s"%s%s%s%s/>', $classes, $src_attr, $original_src[0], $loading_attr, $width, $height, $alt);
@@ -329,7 +330,7 @@ class ResponsivePics
 
 		// start constructing <img> element
 		$sources = isset($definition['sources']) ? $definition['sources'] : [];
-		$alt     = (isset($definition['alt']) && $definition['alt']) ? ' alt="'. $definition['alt'] .'"' : '';
+		$alt     = ($decorative ? ' alt=""' : ((isset($definition['alt']) && $definition['alt']) ? ' alt="'. $definition['alt'] .'"' : '');
 		$width   = isset($sources[0]['width']) ? ' width="'. $sources[0]['width'] .'"' : '';
 		$height  = isset($sources[0]['height']) ? ' height="'. $sources[0]['height'] .'"' : '';
 
@@ -371,11 +372,12 @@ class ResponsivePics
 	 * @param (string|array) $img_classes - requested image classes
 	 * @param (bool) $lazyload - lazyload option
 	 * @param (bool) $lqip - lqip option
+	 * @param (bool) $decorative - decorative image option
 	 * @param (string) $rest_route - rest route
 	 *
 	 * @return (array) responsive image data
 	 */
-	public static function get_image_data($id = null, $sizes = null, $crop = false, $img_classes = null, $lazyload = false, $lqip = false, $rest_route = null) {
+	public static function get_image_data($id = null, $sizes = null, $crop = false, $img_classes = null, $lazyload = false, $lqip = false, $decorative = false, $rest_route = null) {
 		// init WP_Error
 		self::$wp_error = new WP_Error();
 
@@ -411,6 +413,12 @@ class ResponsivePics
 		// check for valid lqip value
 		if (isset($lqip)) {
 			$lqip = ResponsivePics()->process->process_boolean($lqip, 'lqip');
+		}
+
+		// check for valid decorative value
+		if (isset($decorative)) {
+			$decorative = ResponsivePics()->process->process_boolean($decorative, 'decorative');
+			$definition['decorative'] = $decorative;
 		}
 
 		// low quality image placeholder option
