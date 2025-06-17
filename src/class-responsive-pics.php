@@ -441,6 +441,7 @@ class ResponsivePics
 	 * @param (string|array) $picture_classes - requested picture classes
 	 * @param (bool) $lazyload - lazyload option
 	 * @param (bool) $intrinsic - intrinsic option
+	 * @param (string|array) $img_classes - requested picture img classes
 	 * @param (string) $rest_route - rest route
 	 *
 	 * @return (string) <picture> element as html markup
@@ -512,6 +513,7 @@ class ResponsivePics
 	 * @param (string|array) $picture_classes - requested picture classes
 	 * @param (bool) $lazyload - lazyload option
 	 * @param (bool) $intrinsic - intrinsic option
+	 * @param (string|array) $img_classes - requested picture img classes
 	 * @param (string) $rest_route - rest route
 	 *
 	 * @return (array) responsive picture data
